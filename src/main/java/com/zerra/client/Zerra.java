@@ -24,10 +24,6 @@ public class Zerra implements Runnable {
 		this.loop = Executors.newSingleThreadScheduledExecutor();
 	}
 
-	public static void schedule(Runnable runnable) {
-		Validate.notNull(runnable);
-	}
-
 	@Override
 	public void run() {
 		Display.createDisplay("Zerra", 1280, 720);
@@ -35,6 +31,11 @@ public class Zerra implements Runnable {
 			Display.update();
 		}
 		System.out.println("client");
+	}
+
+	public void schedule(Runnable runnable) {
+		Validate.notNull(runnable);
+		this.pool.execute(runnable);
 	}
 
 	public void onKeyPressed(int keyCode) {
