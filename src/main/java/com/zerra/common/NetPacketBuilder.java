@@ -19,7 +19,8 @@ public class NetPacketBuilder {
     }
 
 
-    public Packet fromString(String string){
+    @SuppressWarnings("unchecked")
+	public Packet fromString(String string){
         String[] parts = string.split(":|:", 2);
         String json = parts[0];
         try {
