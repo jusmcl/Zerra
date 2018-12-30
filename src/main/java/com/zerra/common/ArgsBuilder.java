@@ -67,14 +67,14 @@ public class ArgsBuilder {
             }
         }
         if(username == null){
-            if(IS_DEVELOPMENT_BUILD) {
+            if(IS_DEVELOPMENT_BUILD || isServer) {
                 username = "player";
             } else {
                 System.exit(-1);
             }
         }
         if(loginKey == null){
-            if(IS_DEVELOPMENT_BUILD) {
+            if(IS_DEVELOPMENT_BUILD || isServer) {
                 loginKey = "null";
             } else {
                 System.exit(-1);
