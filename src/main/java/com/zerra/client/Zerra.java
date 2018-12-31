@@ -26,7 +26,7 @@ public class Zerra implements Runnable {
 	private ScheduledExecutorService loop;
 	private TextureManager textureManager;
 
-	// TEMP
+	// temp
 	private Model model;
 
 	public Zerra() {
@@ -44,10 +44,12 @@ public class Zerra implements Runnable {
 			LOGGER.fatal("Failed to initialize game", e);
 			this.stop();
 		}
+
+		// temp
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			Display.update();
-			
+
 			GL30.glBindVertexArray(model.getVaoID());
 			GL20.glEnableVertexAttribArray(0);
 			GL11.glDrawArrays(GL11.GL_TRIANGLE_FAN, 0, model.getVertexCount());
@@ -84,9 +86,6 @@ public class Zerra implements Runnable {
 	}
 
 	public void stop() {
-		instance = null;
-		pool.shutdown();
-		loop.shutdown();
 		if (!Display.isCloseRequested()) {
 			Display.close();
 		}
@@ -94,6 +93,9 @@ public class Zerra implements Runnable {
 
 	public void dispose() {
 		Display.destroy();
+		pool.shutdown();
+		loop.shutdown();
+		instance = null;
 	}
 
 	public TextureManager getTextureManager() {
