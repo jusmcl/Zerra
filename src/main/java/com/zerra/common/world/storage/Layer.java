@@ -7,7 +7,7 @@ import org.joml.Vector2i;
 
 import java.io.File;
 
-public interface ILayer {
+public interface Layer {
 
     Tile getTileAt(Vector2i position, int y);
 

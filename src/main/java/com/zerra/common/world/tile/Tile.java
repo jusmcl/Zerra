@@ -2,10 +2,32 @@ package com.zerra.common.world.tile;
 
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.player.Player;
-import com.zerra.common.world.storage.ILayer;
+import com.zerra.common.world.storage.Layer;
 import org.joml.Vector2i;
 
 public abstract class Tile {
+
+    public static final Tile NONE = new Tile(DefaultTileTypes.AIR) {
+        @Override
+        public String getRegistryID() {
+            return "zerra:air_tile";
+        }
+
+        @Override
+        public int getColor() {
+            return 0;
+        }
+
+        @Override
+        public boolean canBeBrokenBy(Layer layer, Vector2i pos, Entity entity) {
+            return false;
+        }
+
+        @Override
+        public void spawnDropsInLayer(Layer layer) {
+            //nothing, can't drop
+        }
+    };
 
     public abstract String getRegistryID();
 
@@ -41,7 +63,7 @@ public abstract class Tile {
      * @param neighbourPos
      * @param tileLayer
      */
-    public void onNeighbourUpdate(Vector2i ownPos, Vector2i neighbourPos, ILayer tileLayer){
+    public void onNeighbourUpdate(Vector2i ownPos, Vector2i neighbourPos, Layer tileLayer){
 
     }
 
@@ -52,7 +74,7 @@ public abstract class Tile {
      * @param layer the layer in which the tile is placed
      * @return whether the player can place the block, and if it should be or not
      */
-    public boolean canbePlaced(Vector2i pos, ILayer layer){
+    public boolean canbePlaced(Vector2i pos, Layer layer){
         return true;
     }
 
@@ -65,7 +87,7 @@ public abstract class Tile {
      * @param player the player that is about to break this tile
      * @return whether the block's drops should be placed in the world
      */
-    public boolean canBeHarvestedBy(ILayer layer, Vector2i pos, Player player){
+    public boolean canBeHarvestedBy(Layer layer, Vector2i pos, Player player){
         return true;
     }
 
@@ -77,10 +99,12 @@ public abstract class Tile {
      * @param entity the breaking entity
      * @return true if the entity can break the tile, otherwise false
      */
-    public boolean canBeBrokenBy(ILayer layer, Vector2i pos, Entity entity){
+    public boolean canBeBrokenBy(Layer layer, Vector2i pos, Entity entity){
         return true;
     }
 
 
     public abstract int getColor();
+
+    public abstract void spawnDropsInLayer(Layer layer);
 }
