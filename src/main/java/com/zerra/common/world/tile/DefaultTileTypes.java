@@ -8,4 +8,5 @@ public class DefaultTileTypes {
 
     public static final TileType STONE = new TileType("type_stone", 2f, 2f, DefaultToolTypes.SHOVEL);
 
+
 }
