@@ -58,7 +58,7 @@ public class WindowManager {
 		}
 
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			Zerra.schedule(genRunnable(window, key, scancode, action, mods));
+			Zerra.getInstance().schedule(genRunnable(window, key, scancode, action, mods));
 		});
 
 		try (MemoryStack stack = MemoryStack.stackPush()) {

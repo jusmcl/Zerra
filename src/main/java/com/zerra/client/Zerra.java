@@ -35,10 +35,6 @@ public class Zerra implements Runnable {
 		this.loop = Executors.newSingleThreadScheduledExecutor();
 	}
 
-	public static void schedule(Runnable runnable) {
-		Validate.notNull(runnable);
-	}
-
 	@Override
 	public void run() {
 		Display.createDisplay("Zerra", 1280, 720);
@@ -65,6 +61,11 @@ public class Zerra implements Runnable {
 		GL11.glClearColor(1, 0, 1, 1);
 		this.model = Loader.loadToVAO(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, 2);
 		this.textureManager = new TextureManager();
+	}
+
+	public void schedule(Runnable runnable) {
+		Validate.notNull(runnable);
+		this.pool.execute(runnable);
 	}
 
 	public void onKeyPressed(int keyCode) {
