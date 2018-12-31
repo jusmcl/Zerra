@@ -376,7 +376,7 @@ public class Loader {
 	 * @param positions
 	 *            The positions to load
 	 * @param dimensions
-	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 1
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int dimensions) {
