@@ -17,6 +17,7 @@ import com.zerra.Launch;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.shader.TestQuadShader;
 import com.zerra.client.gfx.texture.TextureManager;
+import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
@@ -24,113 +25,127 @@ import com.zerra.client.view.Display;
 
 public class Zerra implements Runnable {
 
-    private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
+	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
 
-    private static Zerra instance;
+	private static Zerra instance;
 
-    private ExecutorService pool;
-    private ScheduledExecutorService loop;
-    private TextureManager textureManager;
+	private ExecutorService pool;
+	private ScheduledExecutorService loop;
+	private TextureManager textureManager;
+	private TextureMap textureMap;
 
-    // temp
-    private Model model;
-    private TestQuadShader shader;
-    private ResourceLocation test;
+	// temp
+	private Model model;
+	private TestQuadShader shader;
+	private ResourceLocation test;
 
-    public Zerra() {
-        instance = this;
-        this.pool = Executors.newCachedThreadPool();
-        this.loop = Executors.newSingleThreadScheduledExecutor();
-        this.schedule(() -> I18n.setLanguage(new Locale("en", "us")));
-    }
+	public Zerra() {
+		instance = this;
+		this.pool = Executors.newCachedThreadPool();
+		this.loop = Executors.newSingleThreadScheduledExecutor();
+		this.schedule(() -> I18n.setLanguage(new Locale("en", "us")));
+	}
 
-    @Override
-    public void run() {
-        Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
-        Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
+	@Override
+	public void run() {
+		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
+		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 
-        try {
-            this.init();
-        } catch (Exception e) {
-            LOGGER.fatal("Failed to initialize game", e);
-            this.stop();
-        }
+		try {
+			this.init();
+		} catch (Exception e) {
+			LOGGER.fatal("Failed to initialize game", e);
+			this.stop();
+		}
 
-        while (!Display.isCloseRequested()) {
-            Display.update();
-            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		while (!Display.isCloseRequested()) {
+			Display.update();
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-            // temp
-            {
-                this.textureManager.bind(this.test);
-                this.shader.start();
-                GL30.glBindVertexArray(this.model.getVaoID());
-                GL20.glEnableVertexAttribArray(0);
-                GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, this.model.getVertexCount());
-                GL20.glDisableVertexAttribArray(0);
-                GL30.glBindVertexArray(0);
-                this.shader.stop();
-            }
-        }
-        this.dispose();
-    }
+			// temp
+			{
+				this.textureManager.bind(this.test);
+				this.shader.start();
+				GL30.glBindVertexArray(this.model.getVaoID());
+				GL20.glEnableVertexAttribArray(0);
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, this.model.getVertexCount());
+				GL20.glDisableVertexAttribArray(0);
+				GL30.glBindVertexArray(0);
+				this.shader.stop();
+			}
+		}
+		this.dispose();
+	}
 
-    private void init() throws Exception {
-        GL11.glClearColor(1, 0, 1, 1);
-        this.textureManager = new TextureManager();
+	private void init() throws Exception {
+		GL11.glClearColor(1, 0, 1, 1);
+		this.textureManager = new TextureManager();
+		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
+		for (int i = 0; i < 100; i++) {
+			this.textureMap.register(new ResourceLocation("textures/test.png"));
+			this.textureMap.register(new ResourceLocation("textures/test_sword.png"));
+			this.textureMap.register(new ResourceLocation("textures/test_boots.png"));
+		}
+		this.textureMap.register(new ResourceLocation("noimagehere"));
+		this.textureMap.stitch();
 
-        this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
-        this.shader = new TestQuadShader();
-        this.shader.start();
-        this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
-        this.shader.stop();
-        this.test = new ResourceLocation("textures/test.png");
-    }
+		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
+		this.shader = new TestQuadShader();
+		this.shader.start();
+		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
+		this.shader.stop();
+		this.test = new ResourceLocation("textures/test.png");
+	}
 
-    public void schedule(Runnable runnable) {
-        Validate.notNull(runnable);
-        this.pool.execute(runnable);
-    }
+	public void schedule(Runnable runnable) {
+		Validate.notNull(runnable);
+		this.pool.execute(runnable);
+	}
 
-    public void onKeyPressed(int keyCode) {
-    }
+	public void onKeyPressed(int keyCode) {
+	}
 
-    public void onKeyReleased(int keyCode) {
-    }
+	public void onKeyReleased(int keyCode) {
+	}
 
-    public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
-    }
+	public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
+	}
 
-    public void onMouseReleased(double mouseX, double mouseY, int mouseButton) {
-    }
+	public void onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+	}
 
-    public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
-    }
+	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
+	}
 
-    public void stop() {
-        if (!Display.isCloseRequested()) {
-            Display.close();
-        }
-    }
+	public void stop() {
+		if (!Display.isCloseRequested()) {
+			Display.close();
+		}
+	}
 
-    public void dispose() {
-        Display.destroy();
-        Loader.cleanUp();
-        this.textureManager.dispose();
-        this.pool.shutdown();
-        this.loop.shutdown();
-        instance = null;
-    }
+	public void dispose() {
+		Display.destroy();
+		Loader.cleanUp();
+		this.textureManager.dispose();
+		this.textureMap.dispose();
+		this.pool.shutdown();
+		this.loop.shutdown();
+		instance = null;
+	}
 
-    public TextureManager getTextureManager() {
-        return textureManager;
-    }
+	public TextureManager getTextureManager() {
+		return textureManager;
+	}
 
-    public static Logger logger() {
-        return LOGGER;
-    }
+	public TextureMap getTextureMap() {
+		return textureMap;
+	}
 
-    public static Zerra getInstance() {
-        return instance;
-    }
+	public static Logger logger() {
+		return LOGGER;
+	}
+
+	public static Zerra getInstance() {
+		return instance;
+	}
 }
