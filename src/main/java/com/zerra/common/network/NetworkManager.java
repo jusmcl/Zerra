@@ -1,7 +1,4 @@
-package com.zerra.client.network;
-
-import com.zerra.common.NetPacketBuilder;
-import com.zerra.common.Packet;
+package com.zerra.common.network;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +7,14 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.zerra.common.Packet;
+
 public class NetworkManager {
+
+    private static final Logger LOGGER = LogManager.getLogger("Network Manager");
 
     private NetPacketBuilder builder = new NetPacketBuilder();
 
@@ -20,27 +24,22 @@ public class NetworkManager {
 
     InputStream in;
 
-    public void connect(String ip, int port){
+    public void connect(String ip, int port) {
         try {
             socket.connect(new InetSocketAddress(ip, port));
             in = socket.getInputStream();
             out = socket.getOutputStream();
         } catch (IOException e) {
             System.err.println("Failed to connect");
-            //TODO: send state to renderer
+            // TODO: send state to renderer
             return;
         }
 
-        //TODO: setup encryption
+        // TODO: setup encryption
 
-
-        /*TODO: follow protocol;
-        * 1. Send user to server (username, token, development build and so on)
-        * 2. Request acces to world
-        * (will return true or false; on true connect, on false show player 'server refused connection message')
-        * 3. If access provided, request world and playerdata
-        * 4. On data retrieve, setup update request loop and send a playerjoinworld packet
-        */
+        /*
+         * TODO: follow protocol; 1. Send user to server (username, token, development build and so on) 2. Request acces to world (will return true or false; on true connect, on false show player 'server refused connection message') 3. If access provided, request world and playerdata 4. On data retrieve, setup update request loop and send a playerjoinworld packet
+         */
     }
 
     public void sendPacket(Packet packet) throws IOException {
@@ -56,10 +55,16 @@ public class NetworkManager {
         }
     }
 
-    public static interface Callback{
+    public static interface Callback {
 
-        Callback EMPTY = packet -> {};
+        Callback EMPTY = packet -> {
+        };
+
         void onResponse(Packet packet);
 
+    }
+
+    public static Logger logger() {
+        return LOGGER;
     }
 }
