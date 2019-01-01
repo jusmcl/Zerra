@@ -37,7 +37,6 @@ public class Zerra implements Runnable {
 	// temp
 	private Model model;
 	private TestQuadShader shader;
-	private ResourceLocation test;
 
 	public Zerra() {
 		instance = this;
@@ -64,7 +63,7 @@ public class Zerra implements Runnable {
 
 			// temp
 			{
-				this.textureManager.bind(this.test);
+				this.textureManager.bind(this.textureMap.getLocation());
 				this.shader.start();
 				GL30.glBindVertexArray(this.model.getVaoID());
 				GL20.glEnableVertexAttribArray(0);
@@ -81,12 +80,6 @@ public class Zerra implements Runnable {
 		GL11.glClearColor(1, 0, 1, 1);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
-		for (int i = 0; i < 100; i++) {
-			this.textureMap.register(new ResourceLocation("textures/test.png"));
-			this.textureMap.register(new ResourceLocation("textures/test_sword.png"));
-			this.textureMap.register(new ResourceLocation("textures/test_boots.png"));
-		}
-		this.textureMap.register(new ResourceLocation("noimagehere"));
 		this.textureMap.stitch();
 
 		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
@@ -94,7 +87,6 @@ public class Zerra implements Runnable {
 		this.shader.start();
 		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
 		this.shader.stop();
-		this.test = new ResourceLocation("textures/test.png");
 	}
 
 	public void schedule(Runnable runnable) {
@@ -127,7 +119,6 @@ public class Zerra implements Runnable {
 		Display.destroy();
 		Loader.cleanUp();
 		this.textureManager.dispose();
-		this.textureMap.dispose();
 		this.pool.shutdown();
 		this.loop.shutdown();
 		instance = null;

@@ -57,12 +57,19 @@ public class ResourceLocation {
     public String getLocation() {
         return location;
     }
+    
+    /**
+     * @return The path to the resource
+     */
+    public String getPath() {
+    	return "/assets/" + this.domain + "/" + this.location;
+    }
 
     /**
      * @return An input stream that leads strait to the asset
      */
     public InputStream getInputStream() {
-        return ResourceLocation.class.getResourceAsStream("/assets/" + this.domain + "/" + this.location);
+        return ResourceLocation.class.getResourceAsStream(this.getPath());
     }
 
     @Override
