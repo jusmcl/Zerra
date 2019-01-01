@@ -27,7 +27,7 @@ public class LayerPlates implements Layer {
 
     @Override
     public Plate[] getLoadedPlates() {
-        return loadedPlates.toArray(new Plate[loadedPlates.size()]);
+        return loadedPlates.toArray(new Plate[0]);
     }
 
     @Override

@@ -69,6 +69,15 @@ public class ArgsBuilder {
 				}
 				username = name;
 				break;
+			case "--dir":
+				if(!iterator.hasNext()){
+					throw new IllegalArgumentException("after --dir a directory should be specified");
+				}
+				String path = iterator.next();
+				if(path.startsWith("--")){
+					throw new IllegalArgumentException("after --dir a directory should be specified");
+				}
+				break;
 			default:
 				break;
 			}
