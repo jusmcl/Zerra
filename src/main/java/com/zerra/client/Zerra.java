@@ -21,8 +21,10 @@ import com.zerra.client.view.Display;
 
 public class Zerra implements Runnable {
 
+	public static final String NAME = "Zerra";
+	public static final String VERSION = "0.0.1";
 	public static final String DOMAIN = "zerra";
-	private static final Logger LOGGER = LogManager.getLogger(DOMAIN);
+	private static final Logger LOGGER = LogManager.getLogger(NAME);
 
 	private static Zerra instance;
 
@@ -43,7 +45,7 @@ public class Zerra implements Runnable {
 
 	@Override
 	public void run() {
-		Display.createDisplay("Zerra", 1280, 720);
+		Display.createDisplay(NAME + " v" + VERSION, 1280, 720);
 		try {
 			this.init();
 		} catch (Exception e) {
