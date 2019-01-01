@@ -127,20 +127,29 @@ public class Display {
 	}
 
 	/**
-	 * Deletes the display and terminates GLFW.
+	 * Disposes of the window.
 	 */
-	public static void destroy() {
+	private static void dispose() {
 		if (cursorID != NULL) {
 			GLFW.glfwDestroyCursor(cursorID);
 			cursorID = NULL;
 		}
-		GLFW.glfwDestroyWindow(windowID);
-		windowID = NULL;
+		if (windowID != NULL) {
+			GLFW.glfwDestroyWindow(windowID);
+			windowID = NULL;
+		}
+		GLFW.glfwTerminate();
+	}
+
+	/**
+	 * Deletes the display and terminates GLFW.
+	 */
+	public static void destroy() {
+		dispose();
 		Listeners.KEY_CALLBACK.free();
 		Listeners.MOUSE_CALLBACK.free();
 		Listeners.SCROLL_CALLBACK.free();
 		Listeners.JOYSTICK_CALLBACK.free();
-		GLFW.glfwTerminate();
 	}
 
 	/**
@@ -196,7 +205,7 @@ public class Display {
 	 */
 	public static void setFullscreen() {
 		GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-		destroy();
+		dispose();
 		createDisplay(title, vidMode.width(), vidMode.height(), true);
 	}
 
@@ -204,7 +213,7 @@ public class Display {
 	 * Sets the window to be a moveable window again.
 	 */
 	public static void setWindowed() {
-		destroy();
+		dispose();
 		createDisplay(title, width, height);
 	}
 
