@@ -180,7 +180,7 @@ public class Display {
 	public static void setIcon(ResourceLocation... icons) {
 		GLFWImage.Buffer buffer = GLFWImage.create(icons.length);
 		for (int i = 0; i < icons.length; i++) {
-			BufferedImage image = LoadingUtils.loadImage("icon" + i, icons[i].getInputStream());
+			BufferedImage image = LoadingUtils.loadImage("displayIcon" + i, icons[i].getInputStream());
 			GLFWImage icon = GLFWImage.create();
 			icon.width(image.getWidth());
 			icon.height(image.getHeight());

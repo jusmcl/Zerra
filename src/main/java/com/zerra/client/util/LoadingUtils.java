@@ -155,7 +155,7 @@ public class LoadingUtils {
 		try {
 			image = ImageIO.read(input);
 		} catch (Exception e) {
-			Zerra.logger().warn(String.format("Missing image: %s", input));
+			Zerra.logger().warn(String.format("Missing image: %s", name));
 			image = defaultEmptyImage;
 		}
 
