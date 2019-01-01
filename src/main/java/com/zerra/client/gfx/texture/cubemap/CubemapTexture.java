@@ -1,6 +1,6 @@
-package com.zerra.client.renderer.texture.cubemap;
+package com.zerra.client.gfx.texture.cubemap;
 
-import com.zerra.client.renderer.texture.ITexture;
+import com.zerra.client.gfx.texture.ITexture;
 
 public class CubemapTexture implements ITexture {
 

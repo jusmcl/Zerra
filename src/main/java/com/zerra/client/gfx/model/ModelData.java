@@ -1,4 +1,4 @@
-package com.zerra.client.renderer.model;
+package com.zerra.client.gfx.model;
 
 public class ModelData {
 

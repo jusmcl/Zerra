@@ -1,4 +1,4 @@
-package com.zerra.client.renderer.shader;
+package com.zerra.client.gfx.shader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

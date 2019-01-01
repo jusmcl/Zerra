@@ -26,11 +26,11 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL33;
 
 import com.zerra.client.Zerra;
-import com.zerra.client.renderer.model.Model;
-import com.zerra.client.renderer.texture.BasicTexture;
-import com.zerra.client.renderer.texture.ITexture;
-import com.zerra.client.renderer.texture.cubemap.CubeMapTextureData;
-import com.zerra.client.renderer.texture.cubemap.CubemapTexture;
+import com.zerra.client.gfx.model.Model;
+import com.zerra.client.gfx.texture.BasicTexture;
+import com.zerra.client.gfx.texture.ITexture;
+import com.zerra.client.gfx.texture.cubemap.CubeMapTextureData;
+import com.zerra.client.gfx.texture.cubemap.CubemapTexture;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
@@ -43,8 +43,6 @@ import com.zerra.client.renderer.texture.cubemap.CubemapTexture;
  * @author Ocelot5836
  */
 public class Loader {
-
-	// TODO implement models and textures
 
 	private static List<Integer> vaos = new ArrayList<Integer>();
 	private static List<Integer> vbos = new ArrayList<Integer>();

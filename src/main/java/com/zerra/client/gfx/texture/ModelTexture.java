@@ -1,4 +1,4 @@
-package com.zerra.client.renderer.texture;
+package com.zerra.client.gfx.texture;
 
 import com.zerra.client.util.ResourceLocation;
 

@@ -13,9 +13,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.zerra.client.renderer.model.Model;
-import com.zerra.client.renderer.shader.TestQuadShader;
-import com.zerra.client.renderer.texture.TextureManager;
+import com.zerra.client.gfx.model.Model;
+import com.zerra.client.gfx.shader.TestQuadShader;
+import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;

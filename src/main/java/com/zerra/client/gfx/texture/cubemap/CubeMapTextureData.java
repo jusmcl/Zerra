@@ -1,4 +1,4 @@
-package com.zerra.client.renderer.texture.cubemap;
+package com.zerra.client.gfx.texture.cubemap;
 
 import java.nio.ByteBuffer;
 
