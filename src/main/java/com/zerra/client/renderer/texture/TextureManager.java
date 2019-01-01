@@ -17,11 +17,11 @@ public class TextureManager {
 
 	@Nonnull
 	private ResourceLocation boundTextureLocation;
-	private Map<String, ITexture> textures;
+	private Map<ResourceLocation, ITexture> textures;
 
 	public TextureManager() {
-		textures = new HashMap<String, ITexture>();
-		this.load(MISSING_TEXTURE_LOCATION, Loader.loadTexture(LoadingUtils.createMissingImage(256, 256)));
+		textures = new HashMap<ResourceLocation, ITexture>();
+		this.loadTexture(MISSING_TEXTURE_LOCATION, Loader.loadTexture(LoadingUtils.createMissingImage(256, 256)));
 		boundTextureLocation = MISSING_TEXTURE_LOCATION;
 	}
 
@@ -35,7 +35,7 @@ public class TextureManager {
 	 *            The texture to load.
 	 */
 	public void loadTexture(ResourceLocation location, ITexture texture) {
-		textures.put(location.toString(), texture);
+		textures.put(location, texture);
 	}
 
 	/**
@@ -47,11 +47,23 @@ public class TextureManager {
 	public void bind(ResourceLocation location) {
 		if (location == null)
 			return;
-		if (textures.get(location.toString()) == null) {
-			textures.put(location.toString(), Loader.loadTexture(location));
+		if (textures.get(location) == null) {
+			textures.put(location, Loader.loadTexture(location));
 		}
 		this.boundTextureLocation = location;
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.get(location.toString()).getId());
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.get(location).getId());
+	}
+	
+	/**
+	 * Deletes all textures that have been cached.
+	 */
+	public void dispose() {
+		for(ResourceLocation location : this.textures.keySet()) {
+			ITexture texture = this.textures.get(location);
+			if(texture != null) {
+				GL11.glDeleteTextures(texture.getId());
+			}
+		}
 	}
 
 	/**
@@ -66,7 +78,7 @@ public class TextureManager {
 		if (location == null)
 			location = MISSING_TEXTURE_LOCATION;
 		bind(location);
-		return textures.get(location.toString());
+		return textures.get(location);
 	}
 
 	/**
@@ -74,18 +86,5 @@ public class TextureManager {
 	 */
 	public ResourceLocation getBoundTextureLocation() {
 		return boundTextureLocation;
-	}
-
-	/**
-	 * Loads a texture into the texture manager from a resource location.
-	 * 
-	 * @param location
-	 *            The resource location to load the texture from.
-	 * 
-	 * @param texture
-	 *            The texture to load.
-	 */
-	public void load(ResourceLocation location, ITexture texture) {
-		textures.put(location.toString(), texture);
 	}
 }

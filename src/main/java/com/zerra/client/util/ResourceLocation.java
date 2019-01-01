@@ -2,6 +2,8 @@ package com.zerra.client.util;
 
 import java.io.InputStream;
 
+import com.zerra.client.Zerra;
+
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
  * 
@@ -23,7 +25,7 @@ public class ResourceLocation {
 			this.domain = resourceLocationRaw[0];
 			this.location = resourceLocationRaw[1];
 		} else {
-			this.domain = "zerra";
+			this.domain = Zerra.DOMAIN;
 			this.location = location;
 		}
 	}
@@ -60,7 +62,27 @@ public class ResourceLocation {
 	 * @return An input stream that leads strait to the asset
 	 */
 	public InputStream getInputStream() {
-		return ResourceLocation.class.getResourceAsStream("/assets/" + domain + "/" + location);
+		return ResourceLocation.class.getResourceAsStream("/assets/" + this.domain + "/" + this.location);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 1;
+		result = 31 * result + (this.domain == null ? 0 : this.domain.hashCode());
+		result = 31 * result + (this.location == null ? 0 : this.location.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (!(obj instanceof ResourceLocation)) {
+			return false;
+		} else {
+			ResourceLocation resourcelocation = (ResourceLocation) obj;
+			return this.domain.equals(resourcelocation.domain) && this.location.equals(resourcelocation.location);
+		}
 	}
 
 	@Override
