@@ -6,7 +6,7 @@ import com.zerra.server.ZerraServer;
 
 public class Launch {
 
-    public static final boolean IS_DEVELOPMENT_BUILD = true;
+	public static final boolean IS_DEVELOPMENT_BUILD = true;
 
 	public static void main(String[] args) {
 		ArgsBuilder builder = ArgsBuilder.deserialize(args);

@@ -1,5 +1,6 @@
 package com.zerra.client;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,7 +16,9 @@ import org.lwjgl.opengl.GL30;
 import com.zerra.client.renderer.model.Model;
 import com.zerra.client.renderer.shader.TestQuadShader;
 import com.zerra.client.renderer.texture.TextureManager;
+import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Display;
 
@@ -41,11 +44,14 @@ public class Zerra implements Runnable {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 		this.loop = Executors.newSingleThreadScheduledExecutor();
+		this.schedule(() -> I18n.setLanguage(new Locale("en", "us")));
 	}
 
 	@Override
 	public void run() {
 		Display.createDisplay(NAME + " v" + VERSION, 1280, 720);
+		Display.setIcon(LoadingUtils.loadImage("icon", new ResourceLocation("icons/32.png").getInputStream()));
+
 		try {
 			this.init();
 		} catch (Exception e) {
