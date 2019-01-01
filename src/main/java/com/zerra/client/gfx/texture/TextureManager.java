@@ -47,7 +47,7 @@ public class TextureManager {
 	public void bind(ResourceLocation location) {
 		if (location == null)
 			return;
-		if (textures.get(location) == null) {
+		if (textures.get(location) == null || (textures.get(location).getId() == -1)) {
 			textures.put(location, Loader.loadTexture(location));
 		}
 		this.boundTextureLocation = location;
@@ -61,7 +61,7 @@ public class TextureManager {
 		for (ResourceLocation location : this.textures.keySet()) {
 			ITexture texture = this.textures.get(location);
 			if (texture != null) {
-				GL11.glDeleteTextures(texture.getId());
+				texture.delete();
 			}
 		}
 	}
