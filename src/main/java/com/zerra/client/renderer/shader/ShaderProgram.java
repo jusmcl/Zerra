@@ -14,6 +14,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import com.zerra.client.Zerra;
 import com.zerra.client.util.ResourceLocation;
 
 /**
@@ -82,6 +83,10 @@ public abstract class ShaderProgram {
 	}
 
 	protected int getUniformLocation(String uniformName) {
+		int location = GL20.glGetUniformLocation(programID, uniformName);
+		if (location < 0) {
+			Zerra.logger().warn("Could not find uniform \'" + uniformName + "\' in shader \'" + this.getClass().getName() + "\'");
+		}
 		return GL20.glGetUniformLocation(programID, uniformName);
 	}
 
