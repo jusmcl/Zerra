@@ -11,14 +11,18 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.zerra.client.renderer.Renderer;
 import com.zerra.client.renderer.model.Model;
+import com.zerra.client.renderer.shader.TestQuadShader;
 import com.zerra.client.renderer.texture.TextureManager;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Display;
 
 public class Zerra implements Runnable {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	public static final String DOMAIN = "zerra";
+	private static final Logger LOGGER = LogManager.getLogger(DOMAIN);
 
 	private static Zerra instance;
 
@@ -28,6 +32,8 @@ public class Zerra implements Runnable {
 
 	// temp
 	private Model model;
+	private TestQuadShader shader;
+	private ResourceLocation test;
 
 	public Zerra() {
 		instance = this;
@@ -45,24 +51,35 @@ public class Zerra implements Runnable {
 			this.stop();
 		}
 
-		// temp
 		while (!Display.isCloseRequested()) {
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			Display.update();
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-			GL30.glBindVertexArray(model.getVaoID());
-			GL20.glEnableVertexAttribArray(0);
-			GL11.glDrawArrays(GL11.GL_TRIANGLE_FAN, 0, model.getVertexCount());
-			GL20.glDisableVertexAttribArray(0);
-			GL30.glBindVertexArray(0);
+			// temp
+			{
+				this.textureManager.bind(this.test);
+				this.shader.start();
+				GL30.glBindVertexArray(this.model.getVaoID());
+				GL20.glEnableVertexAttribArray(0);
+				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, this.model.getVertexCount());
+				GL20.glDisableVertexAttribArray(0);
+				GL30.glBindVertexArray(0);
+				this.shader.stop();
+			}
 		}
 		this.dispose();
 	}
 
 	private void init() throws Exception {
 		GL11.glClearColor(1, 0, 1, 1);
-		this.model = Loader.loadToVAO(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, 2);
 		this.textureManager = new TextureManager();
+
+		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
+		this.shader = new TestQuadShader();
+		this.shader.start();
+		this.shader.loadProjectionMatrix(Renderer.getProjectionMatrix());
+		this.shader.stop();
+		this.test = new ResourceLocation("textures/test.png");
 	}
 
 	public void schedule(Runnable runnable) {
@@ -93,8 +110,10 @@ public class Zerra implements Runnable {
 
 	public void dispose() {
 		Display.destroy();
-		pool.shutdown();
-		loop.shutdown();
+		Loader.cleanUp();
+		this.textureManager.dispose();
+		this.pool.shutdown();
+		this.loop.shutdown();
 		instance = null;
 	}
 
