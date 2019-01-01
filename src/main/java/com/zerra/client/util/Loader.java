@@ -325,7 +325,7 @@ public class Loader {
 		storeDataInAttributeList(1, 2, textureCoords);
 		storeDataInAttributeList(2, 3, normals);
 		GL30.glBindVertexArray(0);
-		return new Model(vaoID, indices.length);
+		return new Model(vaoID, indices.length, true);
 	}
 
 	/**
@@ -336,7 +336,7 @@ public class Loader {
 	 * @param textureCoords
 	 *            The texture coords to load
 	 * @param dimensions
-	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 1
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, float[] textureCoords, int dimensions) {
@@ -346,7 +346,7 @@ public class Loader {
 		storeDataInAttributeList(0, dimensions, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
 		GL30.glBindVertexArray(0);
-		return new Model(vaoID, positions.length / dimensions);
+		return new Model(vaoID, positions.length / dimensions, false);
 	}
 
 	/**
@@ -357,7 +357,7 @@ public class Loader {
 	 * @param indices
 	 *            The indices to load
 	 * @param dimensions
-	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 1
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, int dimensions) {
@@ -367,7 +367,7 @@ public class Loader {
 		bindIndicesBuffer(vaoID, indices);
 		storeDataInAttributeList(0, dimensions, positions);
 		GL30.glBindVertexArray(0);
-		return new Model(vaoID, indices.length);
+		return new Model(vaoID, indices.length, true);
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class Loader {
 		GL30.glBindVertexArray(vaoID);
 		storeDataInAttributeList(0, dimensions, positions);
 		GL30.glBindVertexArray(0);
-		return new Model(vaoID, positions.length / dimensions);
+		return new Model(vaoID, positions.length / dimensions, false);
 	}
 
 	/**

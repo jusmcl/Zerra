@@ -53,14 +53,14 @@ public class TextureManager {
 		this.boundTextureLocation = location;
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textures.get(location).getId());
 	}
-	
+
 	/**
-	 * Deletes all textures that have been cached.
+	 * Deletes all textures that have been cached and uploaded into memory.
 	 */
 	public void dispose() {
-		for(ResourceLocation location : this.textures.keySet()) {
+		for (ResourceLocation location : this.textures.keySet()) {
 			ITexture texture = this.textures.get(location);
-			if(texture != null) {
+			if (texture != null) {
 				GL11.glDeleteTextures(texture.getId());
 			}
 		}
