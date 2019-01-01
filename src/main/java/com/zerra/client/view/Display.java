@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.LoadingUtils;
+import com.zerra.client.util.ResourceLocation;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
@@ -172,15 +174,21 @@ public class Display {
 	/**
 	 * Sets the icon for the window.
 	 * 
-	 * @param icon
-	 *            The image that will become the icon
+	 * @param icons
+	 *            The locations of the images that will become the icon
 	 */
-	public static void setIcon(BufferedImage icon) {
-		GLFWImage image = GLFWImage.create();
-		image.width(icon.getWidth());
-		image.height(icon.getHeight());
-		image.pixels(Loader.loadToByteBuffer(icon));
-		GLFW.nglfwSetWindowIcon(windowID, 1, image.address());
+	public static void setIcon(ResourceLocation... icons) {
+		GLFWImage.Buffer buffer = GLFWImage.create(icons.length);
+		for (int i = 0; i < icons.length; i++) {
+			BufferedImage image = LoadingUtils.loadImage("icon" + i, icons[i].getInputStream());
+			GLFWImage icon = GLFWImage.create();
+			icon.width(image.getWidth());
+			icon.height(image.getHeight());
+			icon.pixels(Loader.loadToByteBuffer(image));
+			buffer.put(icon);
+		}
+		buffer.flip();
+		GLFW.glfwSetWindowIcon(windowID, buffer);
 	}
 
 	/**
