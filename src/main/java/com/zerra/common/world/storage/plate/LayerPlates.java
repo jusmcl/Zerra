@@ -5,19 +5,21 @@ import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import org.joml.Vector2i;
 
-import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 public class LayerPlates implements Layer {
 
-    Plate[] plates;
+    List<Plate> loadedPlates;
+    Plate dummy = new Plate(0, this);
 
     @Override
     public Tile getTileAt(Vector2i position, int y) {
-        return null;
-    }
+        Optional<Plate> plate = loadedPlates.stream().filter(plate1 -> plate1.isInsidePlate(position)).findAny();
+        if(!plate.isPresent()){
+            plate = Optional.of(generate());
+        }
 
-    @Override
-    public Plate readFile(File file) {
         return null;
     }
 
@@ -29,5 +31,10 @@ public class LayerPlates implements Layer {
     @Override
     public Entity[] getEntities() {
         return new Entity[0];
+    }
+
+    public Plate generate(){
+
+        return null;
     }
 }

@@ -11,8 +11,6 @@ public interface Layer {
 
     Tile getTileAt(Vector2i position, int y);
 
-    Plate readFile(File file);
-
     Plate[] getLoadedPlates();
 
     Entity[] getEntities();

@@ -8,6 +8,8 @@ public class Plate {
 
     private Tile[][] tiles;
 
+    Vector2i platePos;
+
     int size;
 
     Layer layerIn;
@@ -16,6 +18,28 @@ public class Plate {
         this.tiles = new Tile[size][size];
         this.size = size - 1;
         this.layerIn = layer;
+    }
+
+    public void setPlatePos(Vector2i platePos) {
+        this.platePos = platePos;
+    }
+
+    public Vector2i getPlatePos() {
+        return platePos;
+    }
+
+    public boolean isInsidePlate(Vector2i tilePos){
+        int x = tilePos.x / 100;
+        int y = tilePos.y / 100;
+        return platePos.x == x && platePos.y == y;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Layer getLayerIn() {
+        return layerIn;
     }
 
     public Tile getTileAt(Vector2i position){
