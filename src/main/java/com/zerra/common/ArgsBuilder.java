@@ -1,8 +1,10 @@
 package com.zerra.common;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.zerra.common.world.storage.IOManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,6 +79,11 @@ public class ArgsBuilder {
 				if(path.startsWith("--")){
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
+				File folder = new File(path);
+				if(!folder.isDirectory()){
+					throw new IllegalArgumentException("after --dir a directory should be specified");
+				}
+				IOManager.init(folder);
 				break;
 			default:
 				break;
