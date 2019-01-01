@@ -7,11 +7,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.zerra.client.renderer.Renderer;
 import com.zerra.client.renderer.model.Model;
 import com.zerra.client.renderer.shader.TestQuadShader;
 import com.zerra.client.renderer.texture.TextureManager;
@@ -77,7 +77,7 @@ public class Zerra implements Runnable {
 		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
 		this.shader = new TestQuadShader();
 		this.shader.start();
-		this.shader.loadProjectionMatrix(Renderer.getProjectionMatrix());
+		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
 		this.shader.stop();
 		this.test = new ResourceLocation("textures/test.png");
 	}
