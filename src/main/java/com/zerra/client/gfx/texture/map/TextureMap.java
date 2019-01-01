@@ -14,10 +14,12 @@ import javax.imageio.ImageIO;
 
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.gfx.texture.ITexture;
 import com.zerra.client.gfx.texture.TextureManager;
+import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
 
@@ -28,6 +30,7 @@ public class TextureMap implements ITexture {
 	private int width;
 	private int height;
 	private List<ResourceLocation> spriteLocations;
+	private Map<ResourceLocation, TextureMapSprite> sprites;
 
 	public TextureMap(ResourceLocation location, TextureManager textureManager) {
 		this.location = location;
@@ -35,18 +38,26 @@ public class TextureMap implements ITexture {
 		this.width = 128;
 		this.height = 128;
 		this.spriteLocations = new ArrayList<ResourceLocation>();
+		this.sprites = new HashMap<ResourceLocation, TextureMapSprite>();
 		textureManager.loadTexture(location, this);
 	}
 
-	public void dispose() {
-		this.spriteLocations.clear();
+	@Override
+	public void delete() {
+		if (this.textureId != -1) {
+			GL11.glDeleteTextures(this.textureId);
+			this.textureId = -1;
+		}
 	}
 
 	public void stitch() {
 		int startingSize = 128;
 		Map<Vector2i, List<BufferedImage>> imageBatch = new HashMap<Vector2i, List<BufferedImage>>();
-		Map<ResourceLocation, BufferedImage> foundImages = new HashMap<ResourceLocation, BufferedImage>();
-		this.addImage(LoadingUtils.createMissingImage(16, 16), imageBatch);
+		Map<BufferedImage, ResourceLocation> foundImages = new HashMap<BufferedImage, ResourceLocation>();
+
+		BufferedImage missingImage = LoadingUtils.createMissingImage(16, 16);
+		this.addImage(missingImage, imageBatch);
+		foundImages.put(missingImage, TextureManager.MISSING_TEXTURE_LOCATION);
 
 		long startTime = System.currentTimeMillis();
 		Zerra.logger().info("Stitching " + this.spriteLocations.size() + " into atlas \'" + this.location.toString() + "\'");
@@ -54,7 +65,7 @@ public class TextureMap implements ITexture {
 			try {
 				BufferedImage image = ImageIO.read(location.getInputStream());
 				this.addImage(image, imageBatch);
-				foundImages.put(location, image);
+				foundImages.put(image, location);
 				if (image.getWidth() > startingSize)
 					startingSize = image.getWidth();
 				if (image.getHeight() > startingSize)
@@ -117,6 +128,7 @@ public class TextureMap implements ITexture {
 						g = atlas.createGraphics();
 					}
 					g.drawImage(image, xPointer, yPointer, null);
+					this.sprites.put(foundImages.get(image), new TextureMapSprite(xPointer, yPointer, image.getWidth(), image.getHeight()));
 					xPointer += image.getWidth();
 					previousSize.x = image.getWidth();
 					previousSize.y = image.getHeight();
@@ -124,7 +136,20 @@ public class TextureMap implements ITexture {
 			}
 		}
 		g.dispose();
-		
+
+		this.width = atlas.getWidth();
+		this.height = atlas.getHeight();
+		for (ResourceLocation location : this.sprites.keySet()) {
+			this.sprites.get(location).setAtlasSize(this.width, this.height);
+		}
+
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.textureId);
+		// GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, Loader.loadToByteBuffer(atlas));
+
 		Zerra.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 		try {
 			File folder = new File("debug/atlas");
@@ -136,8 +161,6 @@ public class TextureMap implements ITexture {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		Zerra.getInstance().stop();
 	}
 
 	private void addImage(BufferedImage image, Map<Vector2i, List<BufferedImage>> imageBatch) {
@@ -152,6 +175,10 @@ public class TextureMap implements ITexture {
 
 	public void register(ResourceLocation location) {
 		this.spriteLocations.add(location);
+	}
+
+	public TextureMapSprite getSprite(ResourceLocation location) {
+		return this.sprites.getOrDefault(location, this.sprites.get(TextureManager.MISSING_TEXTURE_LOCATION));
 	}
 
 	public ResourceLocation getLocation() {
