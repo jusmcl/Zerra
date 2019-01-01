@@ -4,6 +4,7 @@ import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 import org.joml.Vector2i;
+import org.joml.Vector3i;
 
 import java.io.File;
 
@@ -15,4 +16,5 @@ public interface Layer {
 
     Entity[] getEntities();
 
+    Plate getPlate(Vector3i pos);
 }

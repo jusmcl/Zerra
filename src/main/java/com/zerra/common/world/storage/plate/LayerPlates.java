@@ -3,29 +3,31 @@ package com.zerra.common.world.storage.plate;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 import org.joml.Vector2i;
+import org.joml.Vector3i;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class LayerPlates implements Layer {
 
-    List<Plate> loadedPlates;
-    Plate dummy = new Plate(0, this);
+    private static Random random = new Random();
+    private List<Plate> loadedPlates = new ArrayList<>();
 
     @Override
     public Tile getTileAt(Vector2i position, int y) {
-        Optional<Plate> plate = loadedPlates.stream().filter(plate1 -> plate1.isInsidePlate(position)).findAny();
-        if(!plate.isPresent()){
-            plate = Optional.of(generate());
-        }
-
-        return null;
+        Optional<Plate> optionalPlate = loadedPlates.stream().filter(plate -> plate.isInsidePlate(position, y))
+                .findAny();
+        Plate plate = optionalPlate.orElse(generate(new Vector3i(position.x / 100, y, position.y / 100)));
+        return plate.getTileAt(position);
     }
 
     @Override
     public Plate[] getLoadedPlates() {
-        return new Plate[0];
+        return loadedPlates.toArray(new Plate[loadedPlates.size()]);
     }
 
     @Override
@@ -33,8 +35,22 @@ public class LayerPlates implements Layer {
         return new Entity[0];
     }
 
-    public Plate generate(){
+    @Deprecated
+    /**
+     * @deprecated
+     * placeholder for generating plates, just for testing purposes
+     * @return
+     */
+    public Plate generate(Vector3i pos) {
+        Plate plate = new Plate(100, this);
+        plate.setPlatePos(pos);
+        plate.fill(0, () -> random.nextInt(4) > 1 ? Tiles.STONE : Tiles.GRASS);
+        return plate;
+    }
 
-        return null;
+    @Override
+    public Plate getPlate(Vector3i position) {
+        Optional<Plate> optionalPlate = loadedPlates.stream().filter(plate -> plate.platePos.equals(position)).findAny();
+        return optionalPlate.orElseGet(() -> generate(position));
     }
 }
