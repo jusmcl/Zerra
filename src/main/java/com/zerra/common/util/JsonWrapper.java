@@ -2,7 +2,7 @@ package com.zerra.common.util;
 
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 
@@ -32,18 +32,17 @@ public class JsonWrapper {
 	}
 
 	public JsonWrapper(String fileName) {
-		if (this.file == null || !this.file.exists()) {
-			try {
-				this.file = new File(fileName);
-				FileUtils.touch(file);
-				this.reader = new FileReader(file);
-				this.json = gson.fromJson(reader, JsonObject.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			this.file = new File(fileName);
+			FileUtils.touch(file);
+			this.reader = new FileReader(file);
+			this.json = gson.fromJson(reader, JsonObject.class);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void putForObject(String obj, String element, Object value) {
 		// TODO: Make it work automatically with nested objects.
 		String[] nests = obj.split("/");
@@ -142,7 +141,7 @@ public class JsonWrapper {
 
 	public void write() {
 		try {
-			FileUtils.writeStringToFile(this.file, gson.toJson(json), StandardCharsets.UTF_8.name());
+			FileUtils.writeStringToFile(this.file, gson.toJson(json), Charset.defaultCharset());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
