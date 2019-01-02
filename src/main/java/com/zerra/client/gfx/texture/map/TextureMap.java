@@ -60,7 +60,7 @@ public class TextureMap implements ITexture {
 		foundImages.put(missingImage, TextureManager.MISSING_TEXTURE_LOCATION);
 
 		long startTime = System.currentTimeMillis();
-		Zerra.logger().info("Stitching " + this.spriteLocations.size() + " into atlas \'" + this.location.toString() + "\'");
+		Zerra.logger().info("Stitching " + (this.spriteLocations.size() + 1) + " sprite(s) into atlas \'" + this.location.toString() + "\'");
 		for (ResourceLocation location : this.spriteLocations) {
 			try {
 				BufferedImage image = ImageIO.read(location.getInputStream());
@@ -91,49 +91,55 @@ public class TextureMap implements ITexture {
 		BufferedImage atlas = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = atlas.createGraphics();
 
-		for (Vector2i size : orderedSizes) {
-			List<BufferedImage> images = imageBatch.get(size);
-			if (images != null) {
-				for (BufferedImage image : images) {
-					if (xPointer + image.getWidth() > currentWidth) {
-						yPointer = yStart;
-						xPointer = xStart;
-						currentY = yStart;
-						yStart = 0;
-					} else {
-						if (yStart == 0 || image.getHeight() < yStart) {
-							yStart = currentY + image.getHeight();
-						}
-						if (previousSize.y > image.getHeight()) {
-							xStart = xPointer;
-						}
-					}
-					if (yPointer + image.getHeight() > currentHeight) {
-						xStart = (int) Math.pow(2, startingExponent + 1);
-						xPointer = xStart;
-						yPointer = 0;
-						yStart = 0;
-						currentY = 0;
-						startingExponent++;
-						currentWidth = (int) Math.pow(2, startingExponent + 1);
-						currentHeight = (int) Math.pow(2, startingExponent + 1);
-						BufferedImage newImage = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
-						for (int y = 0; y < atlas.getHeight(); y++) {
-							for (int x = 0; x < atlas.getWidth(); x++) {
-								newImage.setRGB(x, y, atlas.getRGB(x, y));
+		try {
+			for (Vector2i size : orderedSizes) {
+				List<BufferedImage> images = imageBatch.get(size);
+				if (images != null) {
+					for (BufferedImage image : images) {
+						if (xPointer + image.getWidth() > currentWidth) {
+							yPointer = yStart;
+							xPointer = xStart;
+							currentY = yStart;
+							yStart = 0;
+						} else {
+							if (yStart == 0 || image.getHeight() < yStart) {
+								yStart = currentY + image.getHeight();
+							}
+							if (previousSize.y > image.getHeight()) {
+								xStart = xPointer;
 							}
 						}
-						atlas = newImage;
-						g.dispose();
-						g = atlas.createGraphics();
+						if (yPointer + image.getHeight() > currentHeight) {
+							xStart = (int) Math.pow(2, startingExponent + 1);
+							xPointer = xStart;
+							yPointer = 0;
+							yStart = 0;
+							currentY = 0;
+							startingExponent++;
+							currentWidth = (int) Math.pow(2, startingExponent + 1);
+							currentHeight = (int) Math.pow(2, startingExponent + 1);
+							BufferedImage newImage = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
+							for (int y = 0; y < atlas.getHeight(); y++) {
+								for (int x = 0; x < atlas.getWidth(); x++) {
+									newImage.setRGB(x, y, atlas.getRGB(x, y));
+								}
+							}
+							atlas = newImage;
+							g.dispose();
+							g = atlas.createGraphics();
+						}
+						g.drawImage(image, xPointer, yPointer, null);
+						this.sprites.put(foundImages.get(image), new TextureMapSprite(xPointer, yPointer, image.getWidth(), image.getHeight()));
+						xPointer += image.getWidth();
+						previousSize.x = image.getWidth();
+						previousSize.y = image.getHeight();
 					}
-					g.drawImage(image, xPointer, yPointer, null);
-					this.sprites.put(foundImages.get(image), new TextureMapSprite(xPointer, yPointer, image.getWidth(), image.getHeight()));
-					xPointer += image.getWidth();
-					previousSize.x = image.getWidth();
-					previousSize.y = image.getHeight();
 				}
 			}
+		} catch (Throwable t) {
+			Zerra.logger().fatal("Could not create texture atlas \'" + this.location + "\'!", t);
+			Zerra.getInstance().stop();
+			return;
 		}
 		g.dispose();
 

@@ -52,7 +52,7 @@ public class Zerra implements Runnable {
 
 		try {
 			this.init();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			LOGGER.fatal("Failed to initialize game", e);
 			this.stop();
 		}
@@ -76,10 +76,16 @@ public class Zerra implements Runnable {
 		this.dispose();
 	}
 
-	private void init() throws Exception {
+	private void init() throws Throwable {
 		GL11.glClearColor(1, 0, 1, 1);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
+		this.textureMap.register(new ResourceLocation("textures/crate.png"));
+		this.textureMap.register(new ResourceLocation("textures/crate256.png"));
+		this.textureMap.register(new ResourceLocation("textures/test_boots.png"));
+		this.textureMap.register(new ResourceLocation("textures/test_sword.png"));
+		this.textureMap.register(new ResourceLocation("textures/test.png"));
+		this.textureMap.register(new ResourceLocation("textures/test4.png"));
 		this.textureMap.stitch();
 
 		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
@@ -110,18 +116,21 @@ public class Zerra implements Runnable {
 	}
 
 	public void stop() {
+		LOGGER.info("Stopping!");
 		if (!Display.isCloseRequested()) {
 			Display.close();
 		}
 	}
 
 	public void dispose() {
+		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
 		this.textureManager.dispose();
 		this.pool.shutdown();
 		this.loop.shutdown();
 		instance = null;
+		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 	}
 
 	public TextureManager getTextureManager() {
