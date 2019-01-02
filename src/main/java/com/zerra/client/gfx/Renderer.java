@@ -1,4 +1,4 @@
-package com.zerra.client.gfx.renderer;
+package com.zerra.client.gfx;
 
 import org.joml.Matrix4f;
 
