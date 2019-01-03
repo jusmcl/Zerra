@@ -5,6 +5,8 @@ import org.joml.Matrix4f;
 import com.zerra.Launch;
 import com.zerra.client.gfx.Light;
 import com.zerra.client.gfx.renderer.Renderer;
+import com.zerra.client.util.Maths;
+import com.zerra.client.view.ICamera;
 
 public class TileShader extends ShaderProgram {
 
@@ -41,7 +43,7 @@ public class TileShader extends ShaderProgram {
 			this.location_lightBrightness[i] = super.getUniformLocation("lightBrightness[" + i + "]");
 		}
 	}
-	
+
 	@Override
 	protected void setCompileParameters() {
 		super.setCompileParameter("@maxLights", Renderer.MAX_LIGHTS);
@@ -55,8 +57,8 @@ public class TileShader extends ShaderProgram {
 		super.loadMatrix(this.location_transformationMatrix, transformationMatrix);
 	}
 
-	public void loadViewMatrix(Matrix4f viewMatrix) {
-		super.loadMatrix(this.location_viewMatrix, viewMatrix);
+	public void loadViewMatrix(ICamera camera) {
+		super.loadMatrix(this.location_viewMatrix, Maths.createViewMatrix(camera));
 	}
 
 	public void loadLights(Light... lights) {

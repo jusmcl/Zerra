@@ -9,7 +9,9 @@ import com.zerra.client.Zerra;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.shader.TileShader;
+import com.zerra.client.util.Maths;
 import com.zerra.client.view.Display;
+import com.zerra.client.view.ICamera;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
@@ -25,11 +27,12 @@ public class TileRenderer {
 		this.shader = new TileShader();
 		this.shader.start();
 		this.shader.loadProjectionMatrix(this.projectionMatrix);
+		this.shader.loadLights();
 		this.shader.stop();
 		this.meshCreator = new TileMeshCreator();
 	}
 
-	public void renderTiles(World world, int layer) {
+	public void renderTiles(ICamera camera, World world, int layer) {
 		this.meshCreator.prepare();
 		Layer worldLayer = world.getLayer(layer);
 		if (worldLayer != null) {
@@ -40,6 +43,8 @@ public class TileRenderer {
 					Model model = this.meshCreator.getModel(plate);
 					Zerra.getInstance().getTextureManager().bind(Zerra.getInstance().getTextureMap().getLocation());
 					this.shader.start();
+					this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x, plate.getPlatePos().z, 0, 0, 1, 1));
+					this.shader.loadViewMatrix(camera);
 					GL30.glBindVertexArray(model.getVaoID());
 					GL20.glEnableVertexAttribArray(0);
 					GL20.glEnableVertexAttribArray(1);

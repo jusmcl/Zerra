@@ -23,6 +23,7 @@ import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tile;
@@ -39,6 +40,7 @@ public class Zerra implements Runnable {
 	private TextureManager textureManager;
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
+	private Camera camera;
 
 	// temp
 	private Model model;
@@ -65,6 +67,7 @@ public class Zerra implements Runnable {
 		}
 
 		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
+		this.world.getLayer(0).getPlate(new Vector3i(-1, 0, 0));
 		while (!Display.isCloseRequested()) {
 			Display.update();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -81,7 +84,7 @@ public class Zerra implements Runnable {
 				this.shader.stop();
 			}
 
-			this.tileRenderer.renderTiles(this.world, 0);
+			this.tileRenderer.renderTiles(this.camera, this.world, 0);
 		}
 		this.dispose();
 	}
@@ -104,6 +107,7 @@ public class Zerra implements Runnable {
 		this.shader.stop();
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
+		this.camera = new Camera();
 	}
 
 	public void schedule(Runnable runnable) {
@@ -112,9 +116,11 @@ public class Zerra implements Runnable {
 	}
 
 	public void onKeyPressed(int keyCode) {
+		this.camera.onKeyPressed(keyCode);
 	}
 
 	public void onKeyReleased(int keyCode) {
+		this.camera.onKeyReleased(keyCode);
 	}
 
 	public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
