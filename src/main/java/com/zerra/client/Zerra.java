@@ -3,8 +3,6 @@ package com.zerra.client;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +22,7 @@ import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.world.World;
@@ -36,12 +35,14 @@ public class Zerra implements Runnable {
 
 	private static Zerra instance;
 
+	private Timer timer;
 	private ExecutorService pool;
-	private ScheduledExecutorService loop;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
 	private Camera camera;
+
+	private boolean running;
 
 	// temp
 	private Model model;
@@ -51,35 +52,71 @@ public class Zerra implements Runnable {
 	public Zerra() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
-		this.loop = Executors.newSingleThreadScheduledExecutor();
+		this.start();
 	}
 
+	/**
+	 * Sets the game's running status to true.
+	 */
+	public synchronized void start() {
+		if (this.running)
+			return;
+
+		LOGGER.info("Starting...");
+		this.running = true;
+	}
+
+	/**
+	 * Sets the game's running status to false.
+	 */
+	public synchronized void stop() {
+		if (!this.running)
+			return;
+
+		LOGGER.info("Stopping...");
+		this.running = false;
+	}
+
+	// TODO improve loop
 	@Override
 	public void run() {
-		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
-		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-
 		try {
 			this.init();
-		} catch (Throwable e) {
-			LOGGER.fatal("Failed to initialize game", e);
-			this.stop();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 
-		this.world.getLayer(0).getPlate(new Vector3i(1, 0, 0));
-		while (!Display.isCloseRequested()) {
-			Display.update();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			this.render();
+		while (true) {
+			try {
+				while (this.running) {
+					if (!Display.isCloseRequested())
+						Display.update();
+					else
+						running = false;
+
+					this.timer.updateTimer();
+
+					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
+						update();
+					}
+
+					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+					this.render(this.timer.renderPartialTicks);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				this.stop();
+			}
+			this.dispose();
+			break;
 		}
-		this.dispose();
 	}
-	
+
 	private void update() {
 		this.camera.update();
 	}
-	
-	private void render() {
+
+	private void render(float partialTicks) {
 		// temp
 		{
 			this.textureManager.bind(this.textureMap.getLocation());
@@ -95,7 +132,10 @@ public class Zerra implements Runnable {
 	}
 
 	private void init() throws Throwable {
+		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
+		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 		GL11.glClearColor(0, 0, 0, 1);
+
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.textureManager = new TextureManager();
@@ -114,7 +154,8 @@ public class Zerra implements Runnable {
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
 		this.camera = new Camera();
-		this.loop.scheduleAtFixedRate(() -> this.update(), 0, 17, TimeUnit.MILLISECONDS);
+		this.timer = new Timer(20);
+		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 	}
 
 	public void schedule(Runnable runnable) {
@@ -124,6 +165,9 @@ public class Zerra implements Runnable {
 
 	public void onKeyPressed(int keyCode) {
 		this.camera.onKeyPressed(keyCode);
+	}
+
+	public void onKeyHeld(int keyCode) {
 	}
 
 	public void onKeyReleased(int keyCode) {
@@ -139,22 +183,18 @@ public class Zerra implements Runnable {
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
 	}
 
-	public void stop() {
-		LOGGER.info("Stopping!");
-		if (!Display.isCloseRequested()) {
-			Display.close();
-		}
-	}
-
 	public void dispose() {
 		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
 		this.textureManager.dispose();
 		this.pool.shutdown();
-		this.loop.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+	}
+
+	public float getRenderPartialTicks() {
+		return timer.renderPartialTicks;
 	}
 
 	public TextureManager getTextureManager() {

@@ -18,5 +18,4 @@ public interface ICamera {
 
 	Vector3f getRotation();
 
-	Vector3f getDirection();
 }

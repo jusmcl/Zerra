@@ -31,6 +31,10 @@ public class Listeners {
 			if (action == GLFW.GLFW_PRESS) {
 				Zerra.getInstance().onKeyPressed(key);
 			}
+			
+			if (action == GLFW.GLFW_REPEAT) {
+				Zerra.getInstance().onKeyHeld(key);
+			}
 
 			if (action == GLFW.GLFW_RELEASE) {
 				Zerra.getInstance().onKeyReleased(key);
