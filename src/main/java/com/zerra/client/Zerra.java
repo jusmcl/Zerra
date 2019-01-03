@@ -161,11 +161,9 @@ public class Zerra implements Runnable {
 	}
 
 	public void onJoystickButtonPressed(int jid, int button) {
-		System.out.println(button + " Pressed");
 	}
 
 	public void onJoystickButtonReleased(int jid, int button) {
-		System.out.println(button + " Released");
 	}
 
 	public void onJoystickConnected(int jid) {
