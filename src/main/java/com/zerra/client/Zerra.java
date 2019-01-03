@@ -111,14 +111,6 @@ public class Zerra implements Runnable {
 	private void update() {
 		this.camera.update();
 		this.inputHandler.updateGamepad();
-
-		if (this.inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
-			Gamepad gamepad = this.inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
-			Joystick joystick = gamepad.getJoystick(2);
-			if (joystick != null) {
-				System.out.println(joystick.getX() + "," + joystick.getY());
-			}
-		}
 	}
 
 	private void render(float partialTicks) {
@@ -156,9 +148,6 @@ public class Zerra implements Runnable {
 		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 
-	public void onKeyHeld(int keyCode) {
-	}
-
 	public void onKeyReleased(int keyCode) {
 		this.inputHandler.setKeyPressed(keyCode, false);
 	}
@@ -172,6 +161,14 @@ public class Zerra implements Runnable {
 	}
 
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
+	}
+
+	public void onJoystickButtonPressed(int jid, int button) {
+		System.out.println(button + " Pressed");
+	}
+
+	public void onJoystickButtonReleased(int jid, int button) {
+		System.out.println(button + " Released");
 	}
 
 	public void onJoystickConnected(int jid) {
