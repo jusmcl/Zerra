@@ -114,8 +114,10 @@ public class Zerra implements Runnable {
 
 		if (this.inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
 			Gamepad gamepad = this.inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
-			Joystick joystick = gamepad.getJoystick(1);
-			System.out.println(joystick.getX() + "," + joystick.getY());
+			Joystick joystick = gamepad.getJoystick(2);
+			if (joystick != null) {
+				System.out.println(joystick.getX() + "," + joystick.getY());
+			}
 		}
 	}
 

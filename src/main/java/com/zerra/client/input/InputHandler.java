@@ -3,6 +3,8 @@ package com.zerra.client.input;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.input.gamepad.Gamepad;
@@ -68,6 +70,7 @@ public class InputHandler {
 		return this.gamepads.containsKey(jid);
 	}
 
+	@Nullable
 	public Gamepad getGamepad(int jid) {
 		return this.gamepads.get(jid);
 	}

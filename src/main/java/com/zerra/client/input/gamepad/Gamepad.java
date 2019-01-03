@@ -35,10 +35,14 @@ public class Gamepad {
 	public boolean isValid() {
 		return this.jid != -1;
 	}
+	
+	public boolean isJoystickPresent(int joystick) {
+		return joystick >= 0 && joystick < this.joysticks.length;
+	}
 
 	@Nullable
 	public Joystick getJoystick(int joystick) {
-		if (joystick < 0 || joystick >= this.joysticks.length)
+		if (!this.isJoystickPresent(joystick))
 			return null;
 		return joysticks[joystick];
 	}
