@@ -26,7 +26,8 @@ public class TestLayerPlates {
     }
 
 
-    public static void test() throws IOException {
+    @SuppressWarnings({ "resource", "serial" })
+	public static void test() throws IOException {
 
         LayerPlate layerPlates = new LayerPlate();
         Scanner scanner = new Scanner(System.in);
