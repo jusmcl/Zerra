@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -51,7 +52,6 @@ public class Zerra implements Runnable {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 		this.loop = Executors.newSingleThreadScheduledExecutor();
-		this.schedule(() -> I18n.setLanguage(new Locale("en", "us")));
 	}
 
 	@Override
@@ -66,31 +66,37 @@ public class Zerra implements Runnable {
 			this.stop();
 		}
 
-		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
-		this.world.getLayer(0).getPlate(new Vector3i(-1, 0, 0));
+		this.world.getLayer(0).getPlate(new Vector3i(1, 0, 0));
 		while (!Display.isCloseRequested()) {
 			Display.update();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-			// temp
-			{
-				this.textureManager.bind(this.textureMap.getLocation());
-				this.shader.start();
-				GL30.glBindVertexArray(this.model.getVaoID());
-				GL20.glEnableVertexAttribArray(0);
-				GL11.glDrawElements(GL11.GL_TRIANGLES, this.model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-				GL20.glDisableVertexAttribArray(0);
-				GL30.glBindVertexArray(0);
-				this.shader.stop();
-			}
-
-			this.tileRenderer.renderTiles(this.camera, this.world, 0);
+			this.render();
 		}
 		this.dispose();
+	}
+	
+	private void update() {
+		this.camera.update();
+	}
+	
+	private void render() {
+		// temp
+		{
+			this.textureManager.bind(this.textureMap.getLocation());
+			this.shader.start();
+			GL30.glBindVertexArray(this.model.getVaoID());
+			GL20.glEnableVertexAttribArray(0);
+			GL11.glDrawElements(GL11.GL_TRIANGLES, this.model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+			GL20.glDisableVertexAttribArray(0);
+			GL30.glBindVertexArray(0);
+			this.shader.stop();
+		}
+		this.tileRenderer.renderTiles(this.camera, this.world, 0);
 	}
 
 	private void init() throws Throwable {
 		GL11.glClearColor(0, 0, 0, 1);
+		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
@@ -108,6 +114,7 @@ public class Zerra implements Runnable {
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
 		this.camera = new Camera();
+		this.loop.scheduleAtFixedRate(() -> this.update(), 0, 17, TimeUnit.MILLISECONDS);
 	}
 
 	public void schedule(Runnable runnable) {

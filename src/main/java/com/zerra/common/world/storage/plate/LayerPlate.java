@@ -41,7 +41,7 @@ public class LayerPlate implements Layer {
 	public Plate generate(Vector3i pos) {
 		Plate plate = new Plate(100, this);
 		plate.setPlatePos(pos);
-		plate.fill(0, () -> random.nextInt(4) > 1 ? Tiles.STONE : Tiles.GRASS);
+		plate.fill(0, () -> random.nextInt(3) == 0 ? Tiles.STONE : random.nextInt(3) == 1 ? Tiles.GRASS : Tiles.SAND);
 		this.loadedPlates.add(plate);
 		return plate;
 	}
