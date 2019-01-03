@@ -10,7 +10,7 @@ import org.joml.Vector3f;
 import com.zerra.client.view.ICamera;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>

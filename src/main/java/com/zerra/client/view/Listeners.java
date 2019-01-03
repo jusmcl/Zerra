@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 import com.zerra.client.Zerra;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>

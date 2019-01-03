@@ -12,6 +12,16 @@ import org.lwjgl.opengl.GL30;
 
 import com.zerra.client.view.Display;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
+ * 
+ * <br>
+ * </br>
+ * 
+ * A render target that can be rendered to and sampled from.
+ * 
+ * @author Ocelot5836
+ */
 public class Fbo {
 
 	public static final int NONE = 0;

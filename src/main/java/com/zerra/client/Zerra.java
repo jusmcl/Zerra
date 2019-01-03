@@ -25,6 +25,16 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
+ * 
+ * <br>
+ * </br>
+ * 
+ * The main client game class.
+ * 
+ * @author Ocelot5836, tebreca
+ */
 public class Zerra implements Runnable {
 
 	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
@@ -167,11 +177,11 @@ public class Zerra implements Runnable {
 	}
 
 	public void onJoystickConnected(int jid) {
-		this.inputHandler.onJoystickConnected(jid);
+		this.inputHandler.onGamepadConnected(jid);
 	}
 
 	public void onJoystickDisconnected(int jid) {
-		this.inputHandler.onJoystickDisconnected(jid);
+		this.inputHandler.onGamepadDisconnected(jid);
 	}
 
 	public void dispose() {

@@ -33,7 +33,7 @@ import com.zerra.client.gfx.texture.cubemap.CubeMapTextureData;
 import com.zerra.client.gfx.texture.cubemap.CubemapTexture;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>

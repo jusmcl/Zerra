@@ -5,7 +5,7 @@ import java.io.InputStream;
 import com.zerra.Launch;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>

@@ -6,6 +6,16 @@ import org.lwjgl.glfw.GLFW;
 import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
+ * 
+ * <br>
+ * </br>
+ * 
+ * A simple implementation of {@link ICamera}.
+ * 
+ * @author Ocelot5836
+ */
 public class Camera implements ICamera {
 
 	private Vector3f renderPosition;
@@ -24,6 +34,9 @@ public class Camera implements ICamera {
 		this.rotation = new Vector3f();
 	}
 
+	/**
+	 * Updates the camera's position and rotation.
+	 */
 	public void update() {
 		this.lastPosition.set(this.position);
 		this.lastRotation.set(this.rotation);
