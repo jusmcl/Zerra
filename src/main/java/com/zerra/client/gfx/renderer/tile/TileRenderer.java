@@ -23,7 +23,7 @@ public class TileRenderer {
 	private TileMeshCreator meshCreator;
 
 	public TileRenderer() {
-		this.projectionMatrix = new Matrix4f().ortho(0, Display.getWidth() / (Renderer.SCALE * 16), 0, Display.getHeight() / (Renderer.SCALE * 16), 0.3f, 1000.0f);
+		this.projectionMatrix = new Matrix4f().ortho(0, Display.getWidth() / (Renderer.SCALE * 16), Display.getHeight() / (Renderer.SCALE * 16), 0, 0.3f, 1000.0f);
 		this.shader = new TileShader();
 		this.shader.start();
 		this.shader.loadProjectionMatrix(this.projectionMatrix);

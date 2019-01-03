@@ -1,6 +1,7 @@
 package com.zerra.client.view;
 
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 
 public class Camera implements ICamera {
 
@@ -14,12 +15,38 @@ public class Camera implements ICamera {
 		this.direction = new Vector3f();
 	}
 
-	public void onKeyPressed(int keyCode) {
+	public void update() {
+		this.position.add(this.direction);
+	}
 
+	public void onKeyPressed(int keyCode) {
+		if (keyCode == GLFW.GLFW_KEY_W) {
+			this.direction.y = -1;
+		}
+		if (keyCode == GLFW.GLFW_KEY_S) {
+			this.direction.y = 1;
+		}
+		if (keyCode == GLFW.GLFW_KEY_A) {
+			this.direction.x = -1;
+		}
+		if (keyCode == GLFW.GLFW_KEY_D) {
+			this.direction.x = 1;
+		}
 	}
 
 	public void onKeyReleased(int keyCode) {
-
+		if (keyCode == GLFW.GLFW_KEY_W) {
+			this.direction.y = 0;
+		}
+		if (keyCode == GLFW.GLFW_KEY_S) {
+			this.direction.y = 0;
+		}
+		if (keyCode == GLFW.GLFW_KEY_A) {
+			this.direction.x = 0;
+		}
+		if (keyCode == GLFW.GLFW_KEY_D) {
+			this.direction.x = 0;
+		}
 	}
 
 	@Override
