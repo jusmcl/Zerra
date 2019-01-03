@@ -302,6 +302,17 @@ public class Loader {
 	}
 
 	/**
+	 * Generates a new vertex array.
+	 * 
+	 * @return The id of the array
+	 */
+	public static int generateVertexArray() {
+		int vaoID = GL30.glGenVertexArrays();
+		vaos.add(vaoID);
+		return vaoID;
+	}
+
+	/**
 	 * Loads the supplied data to a VAO.
 	 *
 	 * @param positions
@@ -315,10 +326,9 @@ public class Loader {
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, float[] textureCoords, float[] normals) {
-		int vaoID = GL30.glGenVertexArrays();
-		vaos.add(vaoID);
+		int vaoID = generateVertexArray();
 		GL30.glBindVertexArray(vaoID);
-		bindIndicesBuffer(vaoID, indices);
+		bindIndicesBuffer(indices);
 		storeDataInAttributeList(0, 3, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
 		storeDataInAttributeList(2, 3, normals);
@@ -338,8 +348,7 @@ public class Loader {
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, float[] textureCoords, int dimensions) {
-		int vaoID = GL30.glGenVertexArrays();
-		vaos.add(vaoID);
+		int vaoID = generateVertexArray();
 		GL30.glBindVertexArray(vaoID);
 		storeDataInAttributeList(0, dimensions, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
@@ -354,15 +363,37 @@ public class Loader {
 	 *            The positions to load
 	 * @param indices
 	 *            The indices to load
+	 * @param textureCoords
+	 *            The texture coords to load
+	 * @param dimensions
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
+	 * @return The model created
+	 */
+	public static Model loadToVAO(float[] positions, int[] indices, float[] textureCoords, int dimensions) {
+		int vaoID = generateVertexArray();
+		GL30.glBindVertexArray(vaoID);
+		bindIndicesBuffer(indices);
+		storeDataInAttributeList(0, dimensions, positions);
+		storeDataInAttributeList(1, 2, textureCoords);
+		GL30.glBindVertexArray(0);
+		return new Model(vaoID, indices.length, true);
+	}
+
+	/**
+	 * Loads different dimensions of positions to memory.
+	 *
+	 * @param positions
+	 *            The positions to load
+	 * @param indices
+	 *            The indices to load
 	 * @param dimensions
 	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, int dimensions) {
-		int vaoID = GL30.glGenVertexArrays();
-		vaos.add(vaoID);
+		int vaoID = generateVertexArray();
 		GL30.glBindVertexArray(vaoID);
-		bindIndicesBuffer(vaoID, indices);
+		bindIndicesBuffer(indices);
 		storeDataInAttributeList(0, dimensions, positions);
 		GL30.glBindVertexArray(0);
 		return new Model(vaoID, indices.length, true);
@@ -378,8 +409,7 @@ public class Loader {
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int dimensions) {
-		int vaoID = GL30.glGenVertexArrays();
-		vaos.add(vaoID);
+		int vaoID = generateVertexArray();
 		GL30.glBindVertexArray(vaoID);
 		storeDataInAttributeList(0, dimensions, positions);
 		GL30.glBindVertexArray(0);
@@ -467,13 +497,11 @@ public class Loader {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 
-	private static void bindIndicesBuffer(int vao, int[] indices) {
+	private static void bindIndicesBuffer(int[] indices) {
 		int vboID = GL15.glGenBuffers();
 		vbos.add(vboID);
-		GL30.glBindVertexArray(vao);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
 		IntBuffer buffer = Buffers.storeDataInIntBuffer(indices);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-		GL30.glBindVertexArray(0);
 	}
 }
