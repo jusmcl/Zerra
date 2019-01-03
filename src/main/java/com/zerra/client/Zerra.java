@@ -9,12 +9,14 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
+import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.zerra.Launch;
 import com.zerra.client.gfx.model.Model;
+import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.shader.TestQuadShader;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
@@ -22,6 +24,9 @@ import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Display;
+import com.zerra.common.world.World;
+import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
 public class Zerra implements Runnable {
 
@@ -33,10 +38,12 @@ public class Zerra implements Runnable {
 	private ScheduledExecutorService loop;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
+	private TileRenderer tileRenderer;
 
 	// temp
 	private Model model;
 	private TestQuadShader shader;
+	private World world;
 
 	public Zerra() {
 		instance = this;
@@ -57,6 +64,7 @@ public class Zerra implements Runnable {
 			this.stop();
 		}
 
+		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 		while (!Display.isCloseRequested()) {
 			Display.update();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -67,32 +75,35 @@ public class Zerra implements Runnable {
 				this.shader.start();
 				GL30.glBindVertexArray(this.model.getVaoID());
 				GL20.glEnableVertexAttribArray(0);
-				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, this.model.getVertexCount());
+				GL11.glDrawElements(GL11.GL_TRIANGLES, this.model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 				GL20.glDisableVertexAttribArray(0);
 				GL30.glBindVertexArray(0);
 				this.shader.stop();
 			}
+
+			this.tileRenderer.renderTiles(this.world, 0);
 		}
 		this.dispose();
 	}
 
 	private void init() throws Throwable {
-		GL11.glClearColor(1, 0, 1, 1);
+		GL11.glClearColor(0, 0, 0, 1);
+		Tiles.registerTiles();
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
-		this.textureMap.register(new ResourceLocation("textures/crate.png"));
-		this.textureMap.register(new ResourceLocation("textures/crate256.png"));
-		this.textureMap.register(new ResourceLocation("textures/test_boots.png"));
-		this.textureMap.register(new ResourceLocation("textures/test_sword.png"));
-		this.textureMap.register(new ResourceLocation("textures/test.png"));
-		this.textureMap.register(new ResourceLocation("textures/test4.png"));
+		Tile[] tiles = Tiles.getTiles();
+		for (Tile tile : tiles) {
+			this.textureMap.register(tile.getTexture());
+		}
 		this.textureMap.stitch();
 
-		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
+		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0 }, new int[] { 0, 1, 3, 3, 1, 2 }, 3);
 		this.shader = new TestQuadShader();
 		this.shader.start();
 		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
 		this.shader.stop();
+		this.world = new World();
+		this.tileRenderer = new TileRenderer();
 	}
 
 	public void schedule(Runnable runnable) {

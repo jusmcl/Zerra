@@ -35,19 +35,19 @@ public class TextureMapSprite {
 	}
 	
 	public double getXMin() {
-		return this.x / this.atlasWidth;
+		return (double)this.x / (double)this.atlasWidth;
 	}
 	
 	public double getXMax() {
-		return (this.x + this.width) / this.atlasWidth;
+		return (double)(this.x + this.width) / (double)this.atlasWidth;
 	}
 	
 	public double getYMin() {
-		return this.y / this.atlasHeight;
+		return (double)this.y / (double)this.atlasHeight;
 	}
 	
 	public double getYMax() {
-		return (this.y + this.height) / this.atlasHeight;
+		return (double)(this.y + this.height) / (double)this.atlasHeight;
 	}
 
 	protected void setAtlasSize(int atlasWidth, int atlasHeight) {
