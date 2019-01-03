@@ -46,11 +46,11 @@ public class Listeners {
 		@Override
 		public void invoke(long window, int button, int action, int mods) {
 			if (action == GLFW.GLFW_PRESS) {
-				Zerra.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), Display.getMouseButton());
+				Zerra.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), button);
 			}
 
 			if (action == GLFW.GLFW_RELEASE) {
-				Zerra.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), Display.getMouseButton());
+				Zerra.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), button);
 			}
 		}
 	}

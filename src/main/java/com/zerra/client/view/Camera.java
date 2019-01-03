@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.Zerra;
+import com.zerra.client.util.InputHandler;
 
 public class Camera implements ICamera {
 
@@ -13,7 +14,6 @@ public class Camera implements ICamera {
 	private Vector3f renderRotation;
 	private Vector3f lastRotation;
 	private Vector3f rotation;
-	private Vector3f direction;
 
 	public Camera() {
 		this.renderPosition = new Vector3f();
@@ -22,42 +22,24 @@ public class Camera implements ICamera {
 		this.renderRotation = new Vector3f();
 		this.lastRotation = new Vector3f();
 		this.rotation = new Vector3f();
-		this.direction = new Vector3f();
 	}
 
 	public void update() {
 		this.lastPosition.set(this.position);
 		this.lastRotation.set(this.rotation);
-		this.position.add(this.direction);
-	}
 
-	public void onKeyPressed(int keyCode) {
-		if (keyCode == GLFW.GLFW_KEY_W) {
-			this.direction.y = -1;
+		InputHandler inputHandler = Zerra.getInstance().getInputHandler();
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W)) {
+			this.position.y--;
 		}
-		if (keyCode == GLFW.GLFW_KEY_S) {
-			this.direction.y = 1;
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S)) {
+			this.position.y++;
 		}
-		if (keyCode == GLFW.GLFW_KEY_A) {
-			this.direction.x = -1;
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A)) {
+			this.position.x--;
 		}
-		if (keyCode == GLFW.GLFW_KEY_D) {
-			this.direction.x = 1;
-		}
-	}
-
-	public void onKeyReleased(int keyCode) {
-		if (keyCode == GLFW.GLFW_KEY_W) {
-			this.direction.y = 0;
-		}
-		if (keyCode == GLFW.GLFW_KEY_S) {
-			this.direction.y = 0;
-		}
-		if (keyCode == GLFW.GLFW_KEY_A) {
-			this.direction.x = 0;
-		}
-		if (keyCode == GLFW.GLFW_KEY_D) {
-			this.direction.x = 0;
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D)) {
+			this.position.x++;
 		}
 	}
 

@@ -7,19 +7,15 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joml.Matrix4f;
 import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import com.zerra.Launch;
-import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
-import com.zerra.client.gfx.shader.TestQuadShader;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.I18n;
+import com.zerra.client.util.InputHandler;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.util.Timer;
@@ -41,13 +37,10 @@ public class Zerra implements Runnable {
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
 	private Camera camera;
+	private InputHandler inputHandler;
+	private World world;
 
 	private boolean running;
-
-	// temp
-	private Model model;
-	private TestQuadShader shader;
-	private World world;
 
 	public Zerra() {
 		instance = this;
@@ -117,17 +110,6 @@ public class Zerra implements Runnable {
 	}
 
 	private void render(float partialTicks) {
-		// temp
-		{
-			this.textureManager.bind(this.textureMap.getLocation());
-			this.shader.start();
-			GL30.glBindVertexArray(this.model.getVaoID());
-			GL20.glEnableVertexAttribArray(0);
-			GL11.glDrawElements(GL11.GL_TRIANGLES, this.model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-			GL20.glDisableVertexAttribArray(0);
-			GL30.glBindVertexArray(0);
-			this.shader.stop();
-		}
 		this.tileRenderer.renderTiles(this.camera, this.world, 0);
 	}
 
@@ -138,6 +120,7 @@ public class Zerra implements Runnable {
 
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
+		this.timer = new Timer(20);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
 		Tile[] tiles = Tiles.getTiles();
@@ -145,16 +128,10 @@ public class Zerra implements Runnable {
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
-
-		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0 }, new int[] { 0, 1, 3, 3, 1, 2 }, 3);
-		this.shader = new TestQuadShader();
-		this.shader.start();
-		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
-		this.shader.stop();
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
 		this.camera = new Camera();
-		this.timer = new Timer(20);
+		this.inputHandler = new InputHandler();
 		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 	}
 
@@ -164,20 +141,22 @@ public class Zerra implements Runnable {
 	}
 
 	public void onKeyPressed(int keyCode) {
-		this.camera.onKeyPressed(keyCode);
+		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 
 	public void onKeyHeld(int keyCode) {
 	}
 
 	public void onKeyReleased(int keyCode) {
-		this.camera.onKeyReleased(keyCode);
+		this.inputHandler.setKeyPressed(keyCode, false);
 	}
 
 	public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
+		this.inputHandler.setMouseButtonPressed(mouseButton, true);
 	}
 
 	public void onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		this.inputHandler.setMouseButtonPressed(mouseButton, false);
 	}
 
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
@@ -203,6 +182,10 @@ public class Zerra implements Runnable {
 
 	public TextureMap getTextureMap() {
 		return textureMap;
+	}
+
+	public InputHandler getInputHandler() {
+		return inputHandler;
 	}
 
 	public static Logger logger() {
