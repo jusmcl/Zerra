@@ -27,4 +27,7 @@ public class InputHandler {
 	public void setMouseButtonPressed(int mouseButton, boolean pressed) {
 		this.mouseButtons[mouseButton] = (byte) (pressed ? 1 : 0);
 	}
+
+	public void updateGamepad() {
+	}
 }

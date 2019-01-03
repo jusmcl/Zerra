@@ -107,6 +107,7 @@ public class Zerra implements Runnable {
 
 	private void update() {
 		this.camera.update();
+		this.inputHandler.updateGamepad();
 	}
 
 	private void render(float partialTicks) {
