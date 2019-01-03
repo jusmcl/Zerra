@@ -1,33 +1,40 @@
 package com.zerra.common.world.tile.impl;
 
+import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.TileType;
 
 public class TileGround extends Tile {
 
-    String name;
+	private ResourceLocation name;
+	private int color;
+	private ResourceLocation texture;
 
-    int color;
+	public TileGround(TileType type, int color, ResourceLocation texture, String name) {
+		super(type);
+		this.color = color;
+		this.texture = texture;
+		this.name = new ResourceLocation("tile_ground_" + name);
+	}
 
-    public TileGround(TileType type, int color, String name) {
-        super(type);
-        this.name = "zerra:tile_ground_" + name;
-        this.color = color;
-    }
+	@Override
+	public ResourceLocation getRegistryID() {
+		return name;
+	}
 
-    @Override
-    public String getRegistryID() {
-        return name;
-    }
+	@Override
+	public int getColor() {
+		return color;
+	}
 
-    @Override
-    public int getColor() {
-        return color;
-    }
+	@Override
+	public void spawnDropsInLayer(Layer layer) {
 
-    @Override
-    public void spawnDropsInLayer(Layer layer) {
+	}
 
-    }
+	@Override
+	public ResourceLocation getTexture() {
+		return texture;
+	}
 }
