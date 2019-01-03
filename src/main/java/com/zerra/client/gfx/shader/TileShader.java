@@ -14,9 +14,9 @@ public class TileShader extends ShaderProgram {
 	private int location_transformationMatrix;
 	private int location_viewMatrix;
 
-	private int[] location_lightPositions;
-	private int[] location_lightColors;
-	private int[] location_lightBrightness;
+	// private int[] location_lightPositions;
+	// private int[] location_lightColors;
+	// private int[] location_lightBrightness;
 
 	public TileShader() {
 		super(Launch.DOMAIN, "tile");
