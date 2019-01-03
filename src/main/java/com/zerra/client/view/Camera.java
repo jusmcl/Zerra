@@ -5,6 +5,8 @@ import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.input.gamepad.Gamepad;
+import com.zerra.client.input.gamepad.Joystick;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -42,17 +44,26 @@ public class Camera implements ICamera {
 		this.lastRotation.set(this.rotation);
 
 		InputHandler inputHandler = Zerra.getInstance().getInputHandler();
-		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W)) {
-			this.position.y--;
-		}
-		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S)) {
-			this.position.y++;
-		}
-		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A)) {
-			this.position.x--;
-		}
-		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D)) {
-			this.position.x++;
+		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
+			Gamepad gamepad = inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
+			Joystick joystick = gamepad.getJoystick(0);
+			if (joystick != null) {
+				this.position.y += joystick.getY();
+				this.position.x += joystick.getX();
+			}
+		} else {
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W)) {
+				this.position.y--;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S)) {
+				this.position.y++;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A)) {
+				this.position.x--;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D)) {
+				this.position.x++;
+			}
 		}
 	}
 
