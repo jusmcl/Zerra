@@ -4,7 +4,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.Zerra;
-import com.zerra.client.util.InputHandler;
+import com.zerra.client.input.InputHandler;
 
 public class Camera implements ICamera {
 
