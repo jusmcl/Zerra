@@ -158,10 +158,11 @@ public class TextureMap implements ITexture {
 
 		Zerra.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 		try {
-			File folder = new File("debug/atlas");
+			File folder = new File(Zerra.getInstance().getDebugDataDirectory(), "atlas");
 			if (!folder.exists()) {
 				folder.mkdirs();
 			}
+			
 			File file = new File(folder, this.location.getDomain() + "-" + this.location.getLocation() + ".png");
 			ImageIO.write(atlas, "PNG", new FileOutputStream(file));
 		} catch (Exception e) {

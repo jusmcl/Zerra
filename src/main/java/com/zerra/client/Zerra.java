@@ -1,5 +1,6 @@
 package com.zerra.client;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,8 +42,12 @@ public class Zerra implements Runnable {
 
 	private static Zerra instance;
 
-	private Timer timer;
+	private File dataDirectory;
+	private File debugDataDirectory;
 	private ExecutorService pool;
+	private boolean running;
+
+	private Timer timer;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
@@ -50,10 +55,10 @@ public class Zerra implements Runnable {
 	private InputHandler inputHandler;
 	private World world;
 
-	private boolean running;
-
-	public Zerra() {
+	public Zerra(File dataDirectory) {
 		instance = this;
+		this.dataDirectory = dataDirectory;
+		this.debugDataDirectory = new File(dataDirectory, "debug");
 		this.pool = Executors.newCachedThreadPool();
 		this.start();
 	}
@@ -192,6 +197,14 @@ public class Zerra implements Runnable {
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+	}
+
+	public File getDataDirectory() {
+		return dataDirectory;
+	}
+	
+	public File getDebugDataDirectory() {
+		return debugDataDirectory;
 	}
 
 	public float getRenderPartialTicks() {
