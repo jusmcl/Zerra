@@ -1,6 +1,5 @@
 package com.zerra.client;
 
-import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,7 +56,7 @@ public class Zerra implements Runnable {
 	private World world;
 	private Fbo fbo;
 
-	public Zerra(File dataDirectory) {
+	public Zerra() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 		this.start();
