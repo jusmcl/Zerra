@@ -13,11 +13,13 @@ public class Tiles {
 	public static final Tile STONE = new TileGround(DefaultTileTypes.STONE, 0x9a8a71, new ResourceLocation("textures/stone.png"), "stone");
 	public static final Tile GRASS = new TileGround(DefaultTileTypes.GRASS, 0x577240, new ResourceLocation("textures/grass.png"), "grass");
 	public static final Tile SAND = new TileGround(DefaultTileTypes.SAND, 0xf9d699, new ResourceLocation("textures/sand.png"), "sand");
+	public static final Tile COBBLESTONE = new TileGround(DefaultTileTypes.STONE, 0x9a8a71, new ResourceLocation("textures/cobblestone.png"), "cobblestone");
 
 	public static void registerTiles() {
 		register(STONE);
 		register(GRASS);
 		register(SAND);
+		register(COBBLESTONE);
 	}
 
 	private static void register(Tile tile) {
@@ -30,5 +32,9 @@ public class Tiles {
 
 	public static Tile[] getTiles() {
 		return TILES.values().toArray(new Tile[0]);
+	}
+
+	public static Tile byId(ResourceLocation id) {
+		return TILES.getOrDefault(id, Tile.NONE);
 	}
 }

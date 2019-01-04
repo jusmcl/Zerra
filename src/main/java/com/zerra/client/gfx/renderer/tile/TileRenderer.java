@@ -33,6 +33,8 @@ public class TileRenderer {
 	}
 
 	public void renderTiles(ICamera camera, World world, int layer) {
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
 		this.meshCreator.prepare();
 		Layer worldLayer = world.getLayer(layer);
 		if (worldLayer != null) {
@@ -56,5 +58,6 @@ public class TileRenderer {
 				}
 			}
 		}
+		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 }

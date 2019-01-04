@@ -9,51 +9,47 @@ import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 
 public class Plate {
+	
+	public static final int SIZE = 64;
 
 	private Tile[] tiles;
 	private Vector3i platePos;
-	private int size;
 	private Layer layer;
 	private boolean requiresRenderUpdate;
 
-	public Plate(int size, Layer layer) {
-		this.tiles = new Tile[size * size];
-		for (int z = 0; z < size; z++) {
-			for (int x = 0; x < size; x++) {
-				tiles[x + z * size] = Tile.NONE;
+	public Plate(Layer layer) {
+		this.tiles = new Tile[SIZE * SIZE];
+		for (int z = 0; z < SIZE; z++) {
+			for (int x = 0; x < SIZE; x++) {
+				tiles[x + z * SIZE] = Tile.NONE;
 			}
 		}
-		this.size = size;
 		this.layer = layer;
 		this.requiresRenderUpdate = false;
 	}
 
 	public void fill(int y, Supplier<Tile> toFill) {
-		for (int x = 0; x < size; x++) {
-			for (int z = 0; z < size; z++) {
+		for (int x = 0; x < SIZE; x++) {
+			for (int z = 0; z < SIZE; z++) {
 				setTileAt(new Vector2i(x, z), toFill.get());
 			}
 		}
 	}
 
 	public boolean isInsidePlate(Vector2i tilePos, int y) {
-		int x = tilePos.x / 100;
-		int z = tilePos.y / 100;
+		int x = tilePos.x / SIZE;
+		int z = tilePos.y / SIZE;
 		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == y;
 	}
 
 	public Tile getTileAt(Vector2i position) {
-		int x = position.x % size;
-		int z = position.y % size;
-		return tiles[x + z * this.size];
+		int x = position.x % SIZE;
+		int z = position.y % SIZE;
+		return tiles[x + z * SIZE];
 	}
 
 	public Vector3i getPlatePos() {
 		return platePos;
-	}
-
-	public int getSize() {
-		return size;
 	}
 
 	public Layer getLayer() {
@@ -69,13 +65,13 @@ public class Plate {
 	}
 
 	public void setTileAt(Vector2i position, Tile toPlace) {
-		int x = position.x % size;
-		int z = position.y % size;
+		int x = position.x % SIZE;
+		int z = position.y % SIZE;
 		Tile toReplace = getTileAt(position);
 		if (toPlace != Tile.NONE) {
 			toReplace.spawnDropsInLayer(layer);
 		}
-		this.tiles[x + z * this.size] = toPlace;
+		this.tiles[x + z * SIZE] = toPlace;
 	}
 
 	public void setRequiresRenderUpdate() {

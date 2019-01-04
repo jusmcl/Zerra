@@ -84,12 +84,11 @@ public class ResourceLocation {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (!(obj instanceof ResourceLocation)) {
-            return false;
-        } else {
+        } else if (obj instanceof ResourceLocation) {
             ResourceLocation resourcelocation = (ResourceLocation) obj;
             return this.domain.equals(resourcelocation.domain) && this.location.equals(resourcelocation.location);
         }
+        return false;
     }
 
     @Override

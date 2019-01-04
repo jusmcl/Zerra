@@ -21,14 +21,14 @@ public class ArgsBuilder {
 
 	private final boolean isServer;
 	private final boolean isClient;
-	private final String username;
-	private final String loginKey;
+	private final String id;
+	private final String workingDir;
 
-	public ArgsBuilder(boolean isServer, String username, String loginKey) {
+	public ArgsBuilder(boolean isServer, String id, String workingDir) {
 		this.isServer = isServer;
 		this.isClient = !isServer;
-		this.username = username;
-		this.loginKey = loginKey;
+		this.id = id;
+		this.workingDir = workingDir;
 	}
 
 	/**
@@ -36,7 +36,6 @@ public class ArgsBuilder {
 	 *            the args given by the runtime environment
 	 * @return an new instance of the {@link ArgsBuilder} which contains the values of the parsed args
 	 */
-	@SuppressWarnings("unused")
 	public static ArgsBuilder deserialize(String[] args) {
 		// check if zerra is in a development environment
 		if (Launch.IS_DEVELOPMENT_BUILD) {
@@ -50,12 +49,12 @@ public class ArgsBuilder {
 				return new ArgsBuilder(false, "player", "null");
 			} else {
 				LAUNCH.fatal("Missing required parameters");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
+				System.exit(CrashCodes.INVALID_ARGUMENTS);
 			}
 		}
 		// default assignments
 		boolean isServer = false;
-		String username = null, loginKey = null;
+		String id = null, workingDir = null;
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
 		// iterating trough strings as args; to add args: just add another case statement to the switch.
@@ -68,7 +67,7 @@ public class ArgsBuilder {
 				isServer = true;
 				break;
 			case "--client":
-				// TODO
+				isServer = false;
 				break;
 			case "--id":
 				if(!iterator.hasNext()) {
@@ -87,36 +86,21 @@ public class ArgsBuilder {
 				}
 				File dataDirectory = new File(path);
 				if (!dataDirectory.isDirectory()) {
-					throw new IllegalArgumentException("after --dir a directory should be specified");
+					throw new IllegalArgumentException("path specified is not a directory!");
 				}
 				if(!dataDirectory.exists()){
-					throw new IllegalArgumentException("after --dir an existing directory should be specified");
+					throw new IllegalArgumentException("directory specified does not exist!");
 				}
-				//instead of saving it, we preinit the io manager before we start zerra
 				IOManager.init(dataDirectory);
+				//instead of saving it, we preinit the io manager before we start zerra
 				break;
 			default:
 				break;
 			}
 		}
+
 		// test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
-		if (username == null) {
-			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
-				username = "player";
-			} else {
-				LAUNCH.fatal("Username cannot be null");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
-			}
-		}
-		if (loginKey == null) {
-			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
-				loginKey = "null";
-			} else {
-				LAUNCH.fatal("Login key cannot be null");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
-			}
-		}
-		return new ArgsBuilder(isServer, username, loginKey);
+		return new ArgsBuilder(isServer, id, workingDir);
 	}
 
 	public boolean isClient() {
@@ -127,11 +111,11 @@ public class ArgsBuilder {
 		return isServer;
 	}
 
-	public String getLoginKey() {
-		return loginKey;
+	public String getId() {
+		return id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getWorkingDirectory() {
+		return workingDir;
 	}
 }

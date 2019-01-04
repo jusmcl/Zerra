@@ -151,7 +151,7 @@ public class Zerra implements Runnable {
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
-		this.world = new World();
+		this.world = new World("test");
 		this.tileRenderer = new TileRenderer();
 		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
@@ -159,6 +159,8 @@ public class Zerra implements Runnable {
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 
 		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
+		// Temp
+		this.world.save();
 	}
 
 	public void schedule(Runnable runnable) {
