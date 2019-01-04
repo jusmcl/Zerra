@@ -56,6 +56,7 @@ public class ArgsBuilder {
 		// default assignments
 		boolean isServer = false;
 		String username = null, loginKey = null;
+		File dataDirectory = new File("data");
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
 		// iterating trough strings as args; to add args: just add another case statement to the switch.
@@ -85,7 +86,7 @@ public class ArgsBuilder {
 				if (path.startsWith("--")) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
-				File dataDirectory = new File(path);
+				dataDirectory = new File(path);
 				if (!dataDirectory.isDirectory()) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
@@ -93,12 +94,12 @@ public class ArgsBuilder {
 					throw new IllegalArgumentException("after --dir an existing directory should be specified");
 				}
 				//instead of saving it, we preinit the io manager before we start zerra
-				IOManager.init(dataDirectory);
 				break;
 			default:
 				break;
 			}
 		}
+		IOManager.init(dataDirectory);
 		// test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
 		if (username == null) {
 			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
