@@ -25,7 +25,7 @@ public class Launch {
 		if (builder.isServer()) {
 			new Thread(new ZerraServer(), "server").start();
 		} else {
-			new Thread(new Zerra(builder.getDataDirectory()), "main").start();
+			new Thread(new Zerra(), "main").start();
 		}
 	}
 }

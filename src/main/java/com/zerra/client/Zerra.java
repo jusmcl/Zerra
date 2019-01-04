@@ -44,8 +44,6 @@ public class Zerra implements Runnable {
 
 	private static Zerra instance;
 
-	private File dataDirectory;
-	private File debugDataDirectory;
 	private ExecutorService pool;
 	private boolean running;
 
@@ -61,8 +59,6 @@ public class Zerra implements Runnable {
 
 	public Zerra(File dataDirectory) {
 		instance = this;
-		this.dataDirectory = dataDirectory;
-		this.debugDataDirectory = new File(dataDirectory, "debug");
 		this.pool = Executors.newCachedThreadPool();
 		this.start();
 	}
@@ -212,14 +208,6 @@ public class Zerra implements Runnable {
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
-	}
-
-	public File getDataDirectory() {
-		return dataDirectory;
-	}
-
-	public File getDebugDataDirectory() {
-		return debugDataDirectory;
 	}
 
 	public float getRenderPartialTicks() {
