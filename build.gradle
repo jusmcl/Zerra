@@ -14,7 +14,7 @@ project.ext.log4jVersion = "2.11.0"
 project.ext.jomlVersion = "1.9.12"
 
 group 'com.zerra'
-version '0.0.2'
+version '0.0.3'
 
 repositories {
     mavenCentral()
@@ -67,6 +67,9 @@ dependencies {
 
 	// JUNIT
 	testCompile group: 'junit', name: 'junit', version: '4.12'
+	
+	// PLAYFAB
+	compile "com.playfab:combo-sdk:0.82.181218"
 }
 
 jar {

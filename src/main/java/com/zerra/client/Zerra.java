@@ -11,10 +11,12 @@ import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
+import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
@@ -41,16 +43,18 @@ public class Zerra implements Runnable {
 
 	private static Zerra instance;
 
-	private Timer timer;
 	private ExecutorService pool;
+	private boolean running;
+
+	private Timer timer;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
+	private GuiRenderer guiRenderer;
 	private Camera camera;
 	private InputHandler inputHandler;
 	private World world;
-
-	private boolean running;
+	private Fbo fbo;
 
 	public Zerra() {
 		instance = this;
@@ -121,7 +125,15 @@ public class Zerra implements Runnable {
 	}
 
 	private void render(float partialTicks) {
+		this.fbo.bindFrameBuffer();
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		this.tileRenderer.renderTiles(this.camera, this.world, 0);
+		this.fbo.unbindFrameBuffer();
+
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fbo.getColorTexture(0));
+		this.guiRenderer.setProjectionMatrix(GuiRenderer.FBO_MATRIX);
+		this.guiRenderer.renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
+		this.guiRenderer.restoreProjectionMatrix();
 	}
 
 	private void init() throws Throwable {
@@ -141,8 +153,11 @@ public class Zerra implements Runnable {
 		this.textureMap.stitch();
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
+		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
+		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
+
 		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 	}
 

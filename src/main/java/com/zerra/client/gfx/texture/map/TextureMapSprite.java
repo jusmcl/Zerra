@@ -49,6 +49,14 @@ public class TextureMapSprite {
 	public double getYMax() {
 		return (double)(this.y + this.height) / (double)this.atlasHeight;
 	}
+	
+	public int getAtlasWidth() {
+		return atlasWidth;
+	}
+	
+	public int getAtlasHeight() {
+		return atlasHeight;
+	}
 
 	protected void setAtlasSize(int atlasWidth, int atlasHeight) {
 		this.atlasWidth = atlasWidth;

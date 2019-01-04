@@ -81,7 +81,6 @@ public class TileMeshCreator {
 	public void prepare() {
 		Map<Plate, PlateMeshData> map = new HashMap<Plate, PlateMeshData>(this.generatedPlates);
 		for (Plate plate : map.keySet()) {
-			System.out.println(map);
 			PlateMeshData data = map.get(plate);
 			this.platesMesh.put(plate, Loader.loadToVAO(data.getPositions(), data.getTextureCoords(), 2));
 			this.requestedPlates.remove(plate);
