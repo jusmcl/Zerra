@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.zerra.Launch;
-import com.zerra.common.world.storage.IOManager;
 
 /**
  * @author Tebreca Class that takes the String[] given as arg and deserializes it into an object holding the launch args vice versa
@@ -70,35 +69,16 @@ public class ArgsBuilder {
 				isServer = true;
 				break;
 			case "--client":
-				//TODO
+				// TODO
 				break;
 			/*
-			case "--loginkey":
-				if (!iterator.hasNext()) {
-					throw new IllegalArgumentException("after --loginkey a login key should be specified");
-				}
-				String key = iterator.next();
-				if (key.startsWith("--")) {
-					throw new IllegalArgumentException("after --loginkey a login key should be specified");
-				}
-				loginKey = key;
-				break;
-			case "--username":
-				if (!iterator.hasNext()) {
-					throw new IllegalArgumentException("after --username a username should be specified");
-				}
-				String name = iterator.next();
-				if (name.startsWith("--")) {
-					throw new IllegalArgumentException("after --username a username should be specified");
-				}
-				username = name;
-				break;
-			*/
+			 * case "--loginkey": if (!iterator.hasNext()) { throw new IllegalArgumentException("after --loginkey a login key should be specified"); } String key = iterator.next(); if (key.startsWith("--")) { throw new IllegalArgumentException("after --loginkey a login key should be specified"); } loginKey = key; break; case "--username": if (!iterator.hasNext()) { throw new IllegalArgumentException("after --username a username should be specified"); } String name = iterator.next(); if (name.startsWith("--")) { throw new IllegalArgumentException("after --username a username should be specified"); } username = name; break;
+			 */
 			case "--id":
-				if(!iterator.hasNext()){
+				if (!iterator.hasNext()) {
 					throw new IllegalArgumentException("after --id a directory should be specified");
 				}
-				//TODO: Set id here.
+				// TODO: Set id here.
 				break;
 			case "--dir":
 				if (!iterator.hasNext()) {
@@ -113,7 +93,6 @@ public class ArgsBuilder {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
 				// instead of saving it, we preinit the io manager before we start zerra
-				IOManager.init(dataDirectory);
 				break;
 			default:
 				break;
@@ -154,7 +133,7 @@ public class ArgsBuilder {
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public File getDataDirectory() {
 		return dataDirectory;
 	}
