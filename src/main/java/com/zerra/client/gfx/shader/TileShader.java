@@ -14,9 +14,9 @@ public class TileShader extends ShaderProgram {
 	private int location_transformationMatrix;
 	private int location_viewMatrix;
 
-	// private int[] location_lightPositions;
-	// private int[] location_lightColors;
-	// private int[] location_lightBrightness;
+	private int[] location_lightPosition;
+	private int[] location_lightColor;
+	private int[] location_lightBrightness;
 
 	public TileShader() {
 		super(Launch.DOMAIN, "tile");
@@ -34,14 +34,14 @@ public class TileShader extends ShaderProgram {
 		this.location_transformationMatrix = super.getUniformLocation("transformationMatrix");
 		this.location_viewMatrix = super.getUniformLocation("viewMatrix");
 
-		// this.location_lightPositions = new int[Renderer.MAX_LIGHTS];
-		// this.location_lightColors = new int[Renderer.MAX_LIGHTS];
-		// this.location_lightBrightness = new int[Renderer.MAX_LIGHTS];
-		// for (int i = 0; i < Renderer.MAX_LIGHTS; i++) {
-		// this.location_lightPositions[i] = super.getUniformLocation("lightPositions[" + i + "]");
-		// this.location_lightColors[i] = super.getUniformLocation("lightColors[" + i + "]");
-		// this.location_lightBrightness[i] = super.getUniformLocation("lightBrightness[" + i + "]");
-		// }
+		this.location_lightPosition = new int[Renderer.MAX_LIGHTS];
+		this.location_lightColor = new int[Renderer.MAX_LIGHTS];
+		this.location_lightBrightness = new int[Renderer.MAX_LIGHTS];
+		for (int i = 0; i < Renderer.MAX_LIGHTS; i++) {
+			this.location_lightPosition[i] = super.getUniformLocation("lightPosition[" + i + "]");
+			this.location_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
+			this.location_lightBrightness[i] = super.getUniformLocation("lightBrightness[" + i + "]");
+		}
 	}
 
 	@Override
@@ -62,17 +62,17 @@ public class TileShader extends ShaderProgram {
 	}
 
 	public void loadLights(Light... lights) {
-		// for (int i = 0; i < Renderer.MAX_LIGHTS; i++) {
-		// if (i >= lights.length) {
-		// super.loadVector(this.location_lightPositions[i], 0, 0);
-		// super.loadVector(this.location_lightColors[i], 0, 0, 0);
-		// super.loadFloat(this.location_lightBrightness[i], 0);
-		// } else {
-		// Light light = lights[i];
-		// super.loadVector(this.location_lightPositions[i], light.getPosition());
-		// super.loadVector(this.location_lightColors[i], light.getColor());
-		// super.loadFloat(this.location_lightBrightness[i], light.getBrightness());
-		// }
-		// }
+		for (int i = 0; i < Renderer.MAX_LIGHTS; i++) {
+			if (i >= lights.length) {
+				super.loadVector(this.location_lightPosition[i], 0, 0);
+				super.loadVector(this.location_lightColor[i], 0, 0, 0);
+				super.loadFloat(this.location_lightBrightness[i], 0);
+			} else {
+				Light light = lights[i];
+				super.loadVector(this.location_lightPosition[i], light.getPosition());
+				super.loadVector(this.location_lightColor[i], light.getColor());
+				super.loadFloat(this.location_lightBrightness[i], light.getBrightness());
+			}
+		}
 	}
 }
