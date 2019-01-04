@@ -10,7 +10,6 @@ public class World {
         for(int i = 0; i < 6; i++){
             layers[i] = new LayerPlates();
         }
-
     }
 
 
