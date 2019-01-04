@@ -31,7 +31,7 @@ public class TileMeshCreator {
 
 	// TODO use indices where possible perhaps
 	private void generatePlateMesh(Plate plate, int index) {
-		int size = 256 + 1;
+		int size = Plate.SIZE + 1;
 		float[] vertices = new float[size * size * 12];
 		float[] textureCoords = new float[size * size * 12];
 		Map<Tile, ResourceLocation> textureCache = new HashMap<Tile, ResourceLocation>();
@@ -73,7 +73,7 @@ public class TileMeshCreator {
 				vertexPointer++;
 			}
 		}
-		Zerra.logger().info("Generated " + plate.getSize() + "x" + plate.getSize() + " mesh in " + (System.currentTimeMillis() - lastTime) / 1000.0 + " seconds");
+		Zerra.logger().info("Generated " + Plate.SIZE + "x" + Plate.SIZE + " mesh in " + (System.currentTimeMillis() - lastTime) / 1000.0 + " seconds");
 
 		this.generatedPlates.put(plate, new PlateMeshData(vertices, textureCoords));
 	}

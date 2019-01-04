@@ -21,7 +21,7 @@ public class LayerPlate implements Layer {
 	@Override
 	public Tile getTileAt(Vector2i position, int y) {
 		Optional<Plate> optionalPlate = this.loadedPlates.stream().filter(plate -> plate.isInsidePlate(position, y)).findAny();
-		Plate plate = optionalPlate.orElse(generate(new Vector3i(position.x / 100, y, position.y / 100)));
+		Plate plate = optionalPlate.orElse(generate(new Vector3i(position.x / Plate.SIZE, y, position.y / Plate.SIZE)));
 		return plate.getTileAt(position);
 	}
 
@@ -39,7 +39,7 @@ public class LayerPlate implements Layer {
 	 * @deprecated placeholder for generating plates, just for testing purposes
 	 */
 	public Plate generate(Vector3i pos) {
-		Plate plate = new Plate(100, this);
+		Plate plate = new Plate(this);
 		plate.setPlatePos(pos);
 		plate.fill(0, () -> random.nextInt(3) == 0 ? Tiles.STONE : random.nextInt(3) == 1 ? Tiles.GRASS : Tiles.SAND);
 		this.loadedPlates.add(plate);
