@@ -70,7 +70,9 @@ public class ArgsBuilder {
 				isServer = true;
 				break;
 			case "--client":
+				//TODO
 				break;
+			/*
 			case "--loginkey":
 				if (!iterator.hasNext()) {
 					throw new IllegalArgumentException("after --loginkey a login key should be specified");
@@ -90,6 +92,13 @@ public class ArgsBuilder {
 					throw new IllegalArgumentException("after --username a username should be specified");
 				}
 				username = name;
+				break;
+			*/
+			case "--id":
+				if(!iterator.hasNext()){
+					throw new IllegalArgumentException("after --id a directory should be specified");
+				}
+				//TODO: Set id here.
 				break;
 			case "--dir":
 				if (!iterator.hasNext()) {
