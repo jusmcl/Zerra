@@ -10,7 +10,13 @@ import org.apache.logging.log4j.Logger;
 
 import com.zerra.Launch;
 
+/**
+ * @author Tebreca
+ * Class that takes the String[] given as arg and deserializes it into an object holding the launch args vice versa
+ */
 public class ArgsBuilder {
+
+	//TODO: make a toString to make this class able to produce args
 
 	public static final Logger LAUNCH = LogManager.getLogger("Launch");
 
@@ -26,12 +32,17 @@ public class ArgsBuilder {
 		this.loginKey = loginKey;
 	}
 
-	@SuppressWarnings("unused")
+	/**
+	 * @param args the args given by the runtime environment
+	 * @return an new instance of the {@link ArgsBuilder} which contains the values of the parsed args
+	 */
 	public static ArgsBuilder deserialize(String[] args) {
+		//check if zerra is in a development environment
 		if (Launch.IS_DEVELOPMENT_BUILD) {
 			LAUNCH.info("Launching from development environment");
 		}
 
+		//checks if there are enough args, unless in development build, it'll exit with a negative exit code
 		if (args.length == 0) {
 			if (Launch.IS_DEVELOPMENT_BUILD) {
 				return new ArgsBuilder(false, "player", "null");
@@ -40,9 +51,14 @@ public class ArgsBuilder {
 				System.exit(-1);
 			}
 		}
+		//default assignments
 		boolean isServer = false;
 		String username = null, loginKey = null;
 		Iterator<String> iterator = Arrays.asList(args).iterator();
+
+		//iterating trough strings as args; to add args: just add another case statement to the switch.
+		//then, when you need the next string, check if the iterator has a next arg, and that it doesn't start
+		//with "--" for an example look at the case for loginKey, username and dir
 		while (iterator.hasNext()) {
 			String value = iterator.next();
 			switch (value) {
@@ -83,12 +99,14 @@ public class ArgsBuilder {
 				if(!folder.isDirectory()){
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
+				//instead of saving it, we preinit the io manager before we start zerra
 				IOManager.init(folder);
 				break;
 			default:
 				break;
 			}
 		}
+		//test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
 		if (username == null) {
 			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
 				username = "player";
