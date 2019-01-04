@@ -100,7 +100,9 @@ public class ArgsBuilder {
 				if(!folder.isDirectory()){
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
-				if(folder.exists())
+				if(!folder.exists()){
+					throw new IllegalArgumentException("after --dir an existing directory should be specified");
+				}
 				//instead of saving it, we preinit the io manager before we start zerra
 				IOManager.init(folder);
 				break;
