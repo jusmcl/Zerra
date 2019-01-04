@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.joml.Vector2i;
 
 import com.zerra.client.Zerra;
@@ -77,14 +79,18 @@ public class TileMeshCreator {
 	}
 
 	public void prepare() {
-		for (Plate plate : this.generatedPlates.keySet()) {
-			PlateMeshData data = this.generatedPlates.get(plate);
+		Map<Plate, PlateMeshData> map = new HashMap<Plate, PlateMeshData>(this.generatedPlates);
+		for (Plate plate : map.keySet()) {
+			System.out.println(map);
+			PlateMeshData data = map.get(plate);
 			this.platesMesh.put(plate, Loader.loadToVAO(data.getPositions(), data.getTextureCoords(), 2));
 			this.requestedPlates.remove(plate);
+			this.generatedPlates.remove(plate);
 		}
-		this.generatedPlates.clear();
+		map.clear();
 	}
 
+	@Nullable
 	public Model getModel(Plate plate) {
 		return !this.ready(plate) ? null : this.platesMesh.get(plate);
 	}
