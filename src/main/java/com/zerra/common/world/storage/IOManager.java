@@ -29,6 +29,7 @@ public class IOManager {
 	}
 
 	public static void init(@Nonnull File folder) {
+		folder.mkdirs();
 		File saves = new File(folder.getAbsolutePath() + "saves/");
 		if (!saves.exists()) {
 			try {
