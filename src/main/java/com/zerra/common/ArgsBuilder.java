@@ -21,14 +21,14 @@ public class ArgsBuilder {
 
 	private final boolean isServer;
 	private final boolean isClient;
-	private final String username;
-	private final String loginKey;
+	private final String id;
+	private final String workingDir;
 
-	public ArgsBuilder(boolean isServer, String username, String loginKey) {
+	public ArgsBuilder(boolean isServer, String id, String workingDir) {
 		this.isServer = isServer;
 		this.isClient = !isServer;
-		this.username = username;
-		this.loginKey = loginKey;
+		this.id = id;
+		this.workingDir = workingDir;
 	}
 
 	/**
@@ -49,12 +49,12 @@ public class ArgsBuilder {
 				return new ArgsBuilder(false, "player", "null");
 			} else {
 				LAUNCH.fatal("Missing required parameters");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
+				System.exit(CrashCodes.INVALID_ARGUMENTS);
 			}
 		}
 		// default assignments
 		boolean isServer = false;
-		String username = null, loginKey = null;
+		String id = null, workingDir = null;
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
 		// iterating trough strings as args; to add args: just add another case statement to the switch.
@@ -86,10 +86,10 @@ public class ArgsBuilder {
 				}
 				File dataDirectory = new File(path);
 				if (!dataDirectory.isDirectory()) {
-					throw new IllegalArgumentException("after --dir a directory should be specified");
+					throw new IllegalArgumentException("path specified is not a directory!");
 				}
 				if(!dataDirectory.exists()){
-					throw new IllegalArgumentException("after --dir an existing directory should be specified");
+					throw new IllegalArgumentException("directory specified does not exist!");
 				}
 				IOManager.init(dataDirectory);
 				//instead of saving it, we preinit the io manager before we start zerra
@@ -100,7 +100,7 @@ public class ArgsBuilder {
 		}
 
 		// test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
-		return new ArgsBuilder(isServer, username, loginKey);
+		return new ArgsBuilder(isServer, id, workingDir);
 	}
 
 	public boolean isClient() {
@@ -111,11 +111,11 @@ public class ArgsBuilder {
 		return isServer;
 	}
 
-	public String getLoginKey() {
-		return loginKey;
+	public String getId() {
+		return id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getWorkingDirectory() {
+		return workingDir;
 	}
 }
