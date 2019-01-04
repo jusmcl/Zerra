@@ -3,7 +3,7 @@ package com.zerra.client.util;
 import javax.annotation.Nullable;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>

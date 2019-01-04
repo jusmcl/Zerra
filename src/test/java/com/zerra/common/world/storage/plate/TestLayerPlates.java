@@ -26,9 +26,10 @@ public class TestLayerPlates {
     }
 
 
-    public static void test() throws IOException {
+    @SuppressWarnings({ "resource", "serial" })
+	public static void test() throws IOException {
 
-        LayerPlates layerPlates = new LayerPlates();
+        LayerPlate layerPlates = new LayerPlate();
         Scanner scanner = new Scanner(System.in);
         System.out.println("please specify the x coordinate of the plate");
         int x = scanner.nextInt();
@@ -56,7 +57,7 @@ public class TestLayerPlates {
     }
 
     private static BufferedImage makeIMG(Plate plate) {
-        BufferedImage bufferedImage = new BufferedImage(plate.size, plate.size, TYPE_INT_RGB);
+        BufferedImage bufferedImage = new BufferedImage(plate.getSize(), plate.getSize(), TYPE_INT_RGB);
         for (int x = 0; x < plate.getSize(); x++) {
             for (int z = 0; z < plate.getSize(); z++) {
                 Tile tile = plate.getTileAt(new Vector2i(x, z));

@@ -3,96 +3,147 @@ package com.zerra.client;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joml.Matrix4f;
+import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 import com.zerra.Launch;
-import com.zerra.client.gfx.model.Model;
-import com.zerra.client.gfx.shader.TestQuadShader;
+import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
+import com.zerra.client.input.InputHandler;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.client.util.Timer;
+import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
+import com.zerra.common.world.World;
+import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
+ * 
+ * <br>
+ * </br>
+ * 
+ * The main client game class.
+ * 
+ * @author Ocelot5836, tebreca
+ */
 public class Zerra implements Runnable {
 
 	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
 
 	private static Zerra instance;
 
+	private Timer timer;
 	private ExecutorService pool;
-	private ScheduledExecutorService loop;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
+	private TileRenderer tileRenderer;
+	private Camera camera;
+	private InputHandler inputHandler;
+	private World world;
 
-	// temp
-	private Model model;
-	private TestQuadShader shader;
+	private boolean running;
 
 	public Zerra() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
-		this.loop = Executors.newSingleThreadScheduledExecutor();
-		this.schedule(() -> I18n.setLanguage(new Locale("en", "us")));
+		this.start();
 	}
 
+	/**
+	 * Sets the game's running status to true.
+	 */
+	public synchronized void start() {
+		if (this.running)
+			return;
+
+		LOGGER.info("Starting...");
+		this.running = true;
+	}
+
+	/**
+	 * Sets the game's running status to false.
+	 */
+	public synchronized void stop() {
+		if (!this.running)
+			return;
+
+		LOGGER.info("Stopping...");
+		this.running = false;
+	}
+
+	// TODO improve loop
 	@Override
 	public void run() {
-		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
-		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-
 		try {
 			this.init();
-		} catch (Throwable e) {
-			LOGGER.fatal("Failed to initialize game", e);
-			this.stop();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 
-		while (!Display.isCloseRequested()) {
-			Display.update();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		while (true) {
+			try {
+				while (this.running) {
+					if (!Display.isCloseRequested())
+						Display.update();
+					else
+						running = false;
 
-			// temp
-			{
-				this.textureManager.bind(this.textureMap.getLocation());
-				this.shader.start();
-				GL30.glBindVertexArray(this.model.getVaoID());
-				GL20.glEnableVertexAttribArray(0);
-				GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, this.model.getVertexCount());
-				GL20.glDisableVertexAttribArray(0);
-				GL30.glBindVertexArray(0);
-				this.shader.stop();
+					this.timer.updateTimer();
+
+					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
+						update();
+					}
+
+					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+					this.render(this.timer.renderPartialTicks);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				this.stop();
 			}
+			this.dispose();
+			break;
 		}
-		this.dispose();
+	}
+
+	private void update() {
+		this.camera.update();
+		this.inputHandler.updateGamepad();
+	}
+
+	private void render(float partialTicks) {
+		this.tileRenderer.renderTiles(this.camera, this.world, 0);
 	}
 
 	private void init() throws Throwable {
-		GL11.glClearColor(1, 0, 1, 1);
+		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
+		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
+		GL11.glClearColor(0, 0, 0, 1);
+
+		I18n.setLanguage(new Locale("en", "us"));
+		Tiles.registerTiles();
+		this.timer = new Timer(20);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
-		this.textureMap.register(new ResourceLocation("textures/crate.png"));
-		this.textureMap.register(new ResourceLocation("textures/crate256.png"));
-		this.textureMap.register(new ResourceLocation("textures/test_boots.png"));
-		this.textureMap.register(new ResourceLocation("textures/test_sword.png"));
-		this.textureMap.register(new ResourceLocation("textures/test.png"));
-		this.textureMap.register(new ResourceLocation("textures/test4.png"));
+		Tile[] tiles = Tiles.getTiles();
+		for (Tile tile : tiles) {
+			this.textureMap.register(tile.getTexture());
+		}
 		this.textureMap.stitch();
-
-		this.model = Loader.loadToVAO(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, 2);
-		this.shader = new TestQuadShader();
-		this.shader.start();
-		this.shader.loadProjectionMatrix(new Matrix4f().ortho(0, 1, 1, 0, 0.3f, 1000.0f));
-		this.shader.stop();
+		this.world = new World();
+		this.tileRenderer = new TileRenderer();
+		this.camera = new Camera();
+		this.inputHandler = new InputHandler();
+		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 	}
 
 	public void schedule(Runnable runnable) {
@@ -101,25 +152,36 @@ public class Zerra implements Runnable {
 	}
 
 	public void onKeyPressed(int keyCode) {
+		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 
 	public void onKeyReleased(int keyCode) {
+		this.inputHandler.setKeyPressed(keyCode, false);
 	}
 
 	public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
+		this.inputHandler.setMouseButtonPressed(mouseButton, true);
 	}
 
 	public void onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		this.inputHandler.setMouseButtonPressed(mouseButton, false);
 	}
 
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
 	}
 
-	public void stop() {
-		LOGGER.info("Stopping!");
-		if (!Display.isCloseRequested()) {
-			Display.close();
-		}
+	public void onJoystickButtonPressed(int jid, int button) {
+	}
+
+	public void onJoystickButtonReleased(int jid, int button) {
+	}
+
+	public void onJoystickConnected(int jid) {
+		this.inputHandler.onGamepadConnected(jid);
+	}
+
+	public void onJoystickDisconnected(int jid) {
+		this.inputHandler.onGamepadDisconnected(jid);
 	}
 
 	public void dispose() {
@@ -128,9 +190,12 @@ public class Zerra implements Runnable {
 		Loader.cleanUp();
 		this.textureManager.dispose();
 		this.pool.shutdown();
-		this.loop.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+	}
+
+	public float getRenderPartialTicks() {
+		return timer.renderPartialTicks;
 	}
 
 	public TextureManager getTextureManager() {
@@ -139,6 +204,10 @@ public class Zerra implements Runnable {
 
 	public TextureMap getTextureMap() {
 		return textureMap;
+	}
+
+	public InputHandler getInputHandler() {
+		return inputHandler;
 	}
 
 	public static Logger logger() {

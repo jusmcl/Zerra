@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFWScrollCallback;
 import com.zerra.client.Zerra;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
  * <br>
  * </br>
@@ -42,11 +42,11 @@ public class Listeners {
 		@Override
 		public void invoke(long window, int button, int action, int mods) {
 			if (action == GLFW.GLFW_PRESS) {
-				Zerra.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), Display.getMouseButton());
+				Zerra.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), button);
 			}
 
 			if (action == GLFW.GLFW_RELEASE) {
-				Zerra.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), Display.getMouseButton());
+				Zerra.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), button);
 			}
 		}
 	}
@@ -61,10 +61,12 @@ public class Listeners {
 	private static class JoystickCallback extends GLFWJoystickCallback {
 		@Override
 		public void invoke(int jid, int event) {
-			Display.joystickPresent[jid] = GLFW.glfwJoystickPresent(jid);
-			if (Display.joystickPresent[jid]) {
+			Display.joysticksPresent[jid] = (byte) (GLFW.glfwJoystickPresent(jid) ? 1 : 0);
+			if (event == GLFW.GLFW_CONNECTED) {
+				Zerra.getInstance().onJoystickConnected(jid);
 				Zerra.logger().info("Controller " + jid + " was connected");
 			} else {
+				Zerra.getInstance().onJoystickDisconnected(jid);
 				Zerra.logger().info("Controller " + jid + " was disconnected");
 			}
 		}

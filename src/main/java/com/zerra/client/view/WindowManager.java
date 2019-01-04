@@ -31,6 +31,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.zerra.client.Zerra;
 
+@Deprecated
 public class WindowManager {
 
 	private static long window;

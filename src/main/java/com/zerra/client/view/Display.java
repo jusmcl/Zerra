@@ -32,8 +32,8 @@ public class Display {
 	private static int width;
 	private static int height;
 	private static boolean fullscreen;
-
-	public static boolean[] joystickPresent;
+	
+	protected static byte[] joysticksPresent;
 
 	private static DoubleBuffer mouseXBuffer = BufferUtils.createDoubleBuffer(1);
 	private static DoubleBuffer mouseYBuffer = BufferUtils.createDoubleBuffer(1);
@@ -75,7 +75,7 @@ public class Display {
 		Display.width = width;
 		Display.height = height;
 		Display.fullscreen = borderless;
-		Display.joystickPresent = new boolean[16];
+		Display.joysticksPresent = new byte[GLFW.GLFW_JOYSTICK_LAST + 1];
 
 		if (!GLFW.glfwInit()) {
 			throw new RuntimeException("Failed to initialize GLFW");
@@ -104,10 +104,10 @@ public class Display {
 		GLFW.glfwSetScrollCallback(windowID, Listeners.SCROLL_CALLBACK);
 		GLFW.glfwSetJoystickCallback(Listeners.JOYSTICK_CALLBACK);
 
-		for (int i = 0; i < 16; i++) {
-			Display.joystickPresent[i] = GLFW.glfwJoystickPresent(GLFW.GLFW_JOYSTICK_1 + i);
-			if (Display.joystickPresent[i]) {
-				Zerra.logger().info("Controller " + i + 1 + " was detected");
+		for (int jid = 0; jid < Display.joysticksPresent.length; jid++) {
+			Display.joysticksPresent[jid] = (byte) (GLFW.glfwJoystickPresent(GLFW.GLFW_JOYSTICK_1 + jid) ? 1 : 0);
+			if (Display.joysticksPresent[jid] == 1) {
+				Zerra.logger().info("Controller " + jid + " was connected");
 			}
 		}
 
@@ -297,7 +297,14 @@ public class Display {
 	 * @return Whether or not there was a joystick detected
 	 */
 	public static boolean isJoystickPresent(int joystick) {
-		return joystickPresent[joystick];
+		return joysticksPresent[joystick] == 1;
+	}
+
+	/**
+	 * @return All of the joysticks that may or may not be detected
+	 */
+	public static byte[] getAllPresentJoysticks() {
+		return joysticksPresent;
 	}
 
 	/**
