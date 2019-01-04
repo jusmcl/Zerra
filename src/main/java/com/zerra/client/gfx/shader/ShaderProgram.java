@@ -221,7 +221,7 @@ public abstract class ShaderProgram {
 						compiledLine = line.replaceAll(key, this.compileParameters.get(key));
 					}
 				}
-				shaderSource.append(compiledLine).append("//\n");
+				shaderSource.append(compiledLine).append("\n");
 			}
 			reader.close();
 		} catch (Exception e) {
@@ -233,7 +233,7 @@ public abstract class ShaderProgram {
 		GL20.glCompileShader(shaderID);
 		if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
 			System.out.println();
-			System.err.println("Could not compile \'" + this.getClass().getSimpleName() + "\' shader!");
+			System.err.println("Could not compile \'" + this.getClass().getSimpleName() + "\' " + location + " shader!");
 			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
 			Zerra.getInstance().stop();
 		}

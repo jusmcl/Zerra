@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -158,11 +159,8 @@ public class TextureMap implements ITexture {
 
 		Zerra.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 		try {
-			File folder = new File("debug/atlas");
-			if (!folder.exists()) {
-				folder.mkdirs();
-			}
-			File file = new File(folder, this.location.getDomain() + "-" + this.location.getLocation() + ".png");
+			File file = new File(Zerra.getInstance().getDebugDataDirectory(), "atlas/" + this.location.getDomain() + "-" + this.location.getLocation() + ".png");
+			FileUtils.touch(file);
 			ImageIO.write(atlas, "PNG", new FileOutputStream(file));
 		} catch (Exception e) {
 			e.printStackTrace();
