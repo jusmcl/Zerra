@@ -1,14 +1,15 @@
-package com.zerra.common;
+package com.zerra.common.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.zerra.common.Packet;
 
 public class NetPacketBuilder {
 
     private static final Gson gson = new GsonBuilder().create();
 
-    public String buildPacket(Packet packet){
+    public String buildPacket(Packet packet) {
         JsonObject object = packet.toJson();
         StringBuilder packetBuilder = new StringBuilder();
         packetBuilder.append(object.getAsString());
@@ -18,9 +19,8 @@ public class NetPacketBuilder {
         return packetBuilder.toString();
     }
 
-
     @SuppressWarnings("unchecked")
-	public Packet fromString(String string){
+    public Packet fromString(String string) {
         String[] parts = string.split(":|:", 2);
         String json = parts[0];
         try {
@@ -28,7 +28,7 @@ public class NetPacketBuilder {
             return gson.fromJson(json, c);
         } catch (ClassNotFoundException | ClassCastException e) {
             e.printStackTrace();
-            //TODO: Report FATAL to Zerra
+            NetworkManager.logger().fatal("Could not retrieve packet from \'" + string + "\'", e);
             return null;
         }
     }

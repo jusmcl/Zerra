@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.LoadingUtils;
+import com.zerra.client.util.ResourceLocation;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
@@ -125,20 +127,29 @@ public class Display {
 	}
 
 	/**
-	 * Deletes the display and terminates GLFW.
+	 * Disposes of the window.
 	 */
-	public static void destroy() {
+	private static void dispose() {
 		if (cursorID != NULL) {
 			GLFW.glfwDestroyCursor(cursorID);
 			cursorID = NULL;
 		}
-		GLFW.glfwDestroyWindow(windowID);
-		windowID = NULL;
+		if (windowID != NULL) {
+			GLFW.glfwDestroyWindow(windowID);
+			windowID = NULL;
+		}
+		GLFW.glfwTerminate();
+	}
+
+	/**
+	 * Deletes the display and terminates GLFW.
+	 */
+	public static void destroy() {
+		dispose();
 		Listeners.KEY_CALLBACK.free();
 		Listeners.MOUSE_CALLBACK.free();
 		Listeners.SCROLL_CALLBACK.free();
 		Listeners.JOYSTICK_CALLBACK.free();
-		GLFW.glfwTerminate();
 	}
 
 	/**
@@ -172,15 +183,21 @@ public class Display {
 	/**
 	 * Sets the icon for the window.
 	 * 
-	 * @param icon
-	 *            The image that will become the icon
+	 * @param icons
+	 *            The locations of the images that will become the icon
 	 */
-	public static void setIcon(BufferedImage icon) {
-		GLFWImage image = GLFWImage.create();
-		image.width(icon.getWidth());
-		image.height(icon.getHeight());
-		image.pixels(Loader.loadToByteBuffer(icon));
-		GLFW.nglfwSetWindowIcon(windowID, 1, image.address());
+	public static void setIcon(ResourceLocation... icons) {
+		GLFWImage.Buffer buffer = GLFWImage.create(icons.length);
+		for (int i = 0; i < icons.length; i++) {
+			BufferedImage image = LoadingUtils.loadImage("displayIcon" + i, icons[i].getInputStream());
+			GLFWImage icon = GLFWImage.create();
+			icon.width(image.getWidth());
+			icon.height(image.getHeight());
+			icon.pixels(Loader.loadToByteBuffer(image));
+			buffer.put(icon);
+		}
+		buffer.flip();
+		GLFW.glfwSetWindowIcon(windowID, buffer);
 	}
 
 	/**
@@ -188,7 +205,7 @@ public class Display {
 	 */
 	public static void setFullscreen() {
 		GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-		destroy();
+		dispose();
 		createDisplay(title, vidMode.width(), vidMode.height(), true);
 	}
 
@@ -196,7 +213,7 @@ public class Display {
 	 * Sets the window to be a moveable window again.
 	 */
 	public static void setWindowed() {
-		destroy();
+		dispose();
 		createDisplay(title, width, height);
 	}
 
