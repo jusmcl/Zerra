@@ -11,10 +11,12 @@ import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
+import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
@@ -46,9 +48,11 @@ public class Zerra implements Runnable {
 	private TextureManager textureManager;
 	private TextureMap textureMap;
 	private TileRenderer tileRenderer;
+	private GuiRenderer guiRenderer;
 	private Camera camera;
 	private InputHandler inputHandler;
 	private World world;
+	private Fbo fbo;
 
 	private boolean running;
 
@@ -121,7 +125,14 @@ public class Zerra implements Runnable {
 	}
 
 	private void render(float partialTicks) {
+		// this.fbo.bindFrameBuffer();
 		this.tileRenderer.renderTiles(this.camera, this.world, 0);
+		// this.fbo.unbindFrameBuffer();
+
+		// GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fbo.getColorTexture(0));
+		
+		
+
 	}
 
 	private void init() throws Throwable {
@@ -131,7 +142,7 @@ public class Zerra implements Runnable {
 
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
-		this.timer = new Timer(20);
+		this.timer = new Timer(1);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
 		Tile[] tiles = Tiles.getTiles();
@@ -141,8 +152,11 @@ public class Zerra implements Runnable {
 		this.textureMap.stitch();
 		this.world = new World();
 		this.tileRenderer = new TileRenderer();
+		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
+		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
+
 		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
 	}
 
