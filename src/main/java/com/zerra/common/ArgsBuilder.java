@@ -49,7 +49,7 @@ public class ArgsBuilder {
 				return new ArgsBuilder(false, "player", "null");
 			} else {
 				LAUNCH.fatal("Missing required parameters");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
 		//default assignments
@@ -100,6 +100,7 @@ public class ArgsBuilder {
 				if(!folder.isDirectory()){
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
+				if(folder.exists())
 				//instead of saving it, we preinit the io manager before we start zerra
 				IOManager.init(folder);
 				break;
@@ -113,7 +114,7 @@ public class ArgsBuilder {
 				username = "player";
 			} else {
 				LAUNCH.fatal("Username cannot be null");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
 		if (loginKey == null) {
@@ -121,7 +122,7 @@ public class ArgsBuilder {
 				loginKey = "null";
 			} else {
 				LAUNCH.fatal("Login key cannot be null");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
 		return new ArgsBuilder(isServer, username, loginKey);
