@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.zerra.Launch;
+import com.zerra.common.world.storage.IOManager;
 
 /**
  * @author Tebreca Class that takes the String[] given as arg and deserializes it into an object holding the launch args vice versa
@@ -22,14 +23,12 @@ public class ArgsBuilder {
 	private final boolean isClient;
 	private final String username;
 	private final String loginKey;
-	private final File dataDirectory;
 
-	public ArgsBuilder(boolean isServer, String username, String loginKey, File dataDirectory) {
+	public ArgsBuilder(boolean isServer, String username, String loginKey) {
 		this.isServer = isServer;
 		this.isClient = !isServer;
 		this.username = username;
 		this.loginKey = loginKey;
-		this.dataDirectory = dataDirectory;
 	}
 
 	/**
@@ -47,16 +46,16 @@ public class ArgsBuilder {
 		// checks if there are enough args, unless in development build, it'll exit with a negative exit code
 		if (args.length == 0) {
 			if (Launch.IS_DEVELOPMENT_BUILD) {
-				return new ArgsBuilder(false, "player", "null", new File("data"));
+				IOManager.init(new File("data"));
+				return new ArgsBuilder(false, "player", "null");
 			} else {
 				LAUNCH.fatal("Missing required parameters");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
 		// default assignments
 		boolean isServer = false;
 		String username = null, loginKey = null;
-		File dataDirectory = new File("data");
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
 		// iterating trough strings as args; to add args: just add another case statement to the switch.
@@ -86,11 +85,15 @@ public class ArgsBuilder {
 				if (path.startsWith("--")) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
-				dataDirectory = new File(path);
+				File dataDirectory = new File(path);
 				if (!dataDirectory.isDirectory()) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
-				// instead of saving it, we preinit the io manager before we start zerra
+				if(!dataDirectory.exists()){
+					throw new IllegalArgumentException("after --dir an existing directory should be specified");
+				}
+				//instead of saving it, we preinit the io manager before we start zerra
+				IOManager.init(dataDirectory);
 				break;
 			default:
 				break;
@@ -102,7 +105,7 @@ public class ArgsBuilder {
 				username = "player";
 			} else {
 				LAUNCH.fatal("Username cannot be null");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
 		if (loginKey == null) {
@@ -110,10 +113,10 @@ public class ArgsBuilder {
 				loginKey = "null";
 			} else {
 				LAUNCH.fatal("Login key cannot be null");
-				System.exit(-1);
+				System.exit(CrashCodes.INVALID_ARGUMENT);
 			}
 		}
-		return new ArgsBuilder(isServer, username, loginKey, dataDirectory);
+		return new ArgsBuilder(isServer, username, loginKey);
 	}
 
 	public boolean isClient() {
@@ -130,9 +133,5 @@ public class ArgsBuilder {
 
 	public String getUsername() {
 		return username;
-	}
-
-	public File getDataDirectory() {
-		return dataDirectory;
 	}
 }
