@@ -71,14 +71,12 @@ public class ArgsBuilder {
 			case "--client":
 				// TODO
 				break;
-			/*
-			 * case "--loginkey": if (!iterator.hasNext()) { throw new IllegalArgumentException("after --loginkey a login key should be specified"); } String key = iterator.next(); if (key.startsWith("--")) { throw new IllegalArgumentException("after --loginkey a login key should be specified"); } loginKey = key; break; case "--username": if (!iterator.hasNext()) { throw new IllegalArgumentException("after --username a username should be specified"); } String name = iterator.next(); if (name.startsWith("--")) { throw new IllegalArgumentException("after --username a username should be specified"); } username = name; break;
-			 */
 			case "--id":
-				if (!iterator.hasNext()) {
+				if(!iterator.hasNext()) {
 					throw new IllegalArgumentException("after --id a directory should be specified");
 				}
-				// TODO: Set id here.
+				AccountProcessor proc = new AccountProcessor(iterator.next());
+				proc.process();
 				break;
 			case "--dir":
 				if (!iterator.hasNext()) {
