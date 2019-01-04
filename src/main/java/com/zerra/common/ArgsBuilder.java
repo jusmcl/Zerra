@@ -56,7 +56,6 @@ public class ArgsBuilder {
 		// default assignments
 		boolean isServer = false;
 		String username = null, loginKey = null;
-		File dataDirectory = new File("data");
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
 		// iterating trough strings as args; to add args: just add another case statement to the switch.
@@ -69,7 +68,7 @@ public class ArgsBuilder {
 				isServer = true;
 				break;
 			case "--client":
-				// TODO
+				isServer = false;
 				break;
 			case "--id":
 				if(!iterator.hasNext()) {
@@ -86,37 +85,22 @@ public class ArgsBuilder {
 				if (path.startsWith("--")) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
-				dataDirectory = new File(path);
+				File dataDirectory = new File(path);
 				if (!dataDirectory.isDirectory()) {
 					throw new IllegalArgumentException("after --dir a directory should be specified");
 				}
 				if(!dataDirectory.exists()){
 					throw new IllegalArgumentException("after --dir an existing directory should be specified");
 				}
+				IOManager.init(dataDirectory);
 				//instead of saving it, we preinit the io manager before we start zerra
 				break;
 			default:
 				break;
 			}
 		}
-		IOManager.init(dataDirectory);
+
 		// test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
-		if (username == null) {
-			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
-				username = "player";
-			} else {
-				LAUNCH.fatal("Username cannot be null");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
-			}
-		}
-		if (loginKey == null) {
-			if (Launch.IS_DEVELOPMENT_BUILD || isServer) {
-				loginKey = "null";
-			} else {
-				LAUNCH.fatal("Login key cannot be null");
-				System.exit(CrashCodes.INVALID_ARGUMENT);
-			}
-		}
 		return new ArgsBuilder(isServer, username, loginKey);
 	}
 

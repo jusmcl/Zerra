@@ -7,9 +7,12 @@ import com.zerra.common.world.storage.plate.LayerPlate;
 
 public class World {
 
+	public String name;
+
 	private final Layer[] layers;
 
-	public World() {
+	public World(String name) {
+		this.name = name;
 		this.layers = new Layer[6];
 		for (int i = 0; i < 6; i++) {
 			layers[i] = new LayerPlate();

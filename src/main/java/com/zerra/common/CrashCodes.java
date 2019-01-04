@@ -8,4 +8,5 @@ public class CrashCodes {
 
     public static int INVALID_ARGUMENT = - 2;
 
+    public static int IO_EXCEPTION = - 3;
 }
