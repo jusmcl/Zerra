@@ -151,7 +151,7 @@ public class Zerra implements Runnable {
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
-		this.world = new World();
+		this.world = new World("test");
 		this.tileRenderer = new TileRenderer();
 		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
