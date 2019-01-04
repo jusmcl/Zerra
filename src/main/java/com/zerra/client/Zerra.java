@@ -130,14 +130,15 @@ public class Zerra implements Runnable {
 	}
 
 	private void render(float partialTicks) {
-		// this.fbo.bindFrameBuffer();
+		this.fbo.bindFrameBuffer();
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		this.tileRenderer.renderTiles(this.camera, this.world, 0);
-		// this.fbo.unbindFrameBuffer();
+		this.fbo.unbindFrameBuffer();
 
-		// GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fbo.getColorTexture(0));
-		
-		
-
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fbo.getColorTexture(0));
+		this.guiRenderer.setProjectionMatrix(GuiRenderer.FBO_MATRIX);
+		this.guiRenderer.renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
+		this.guiRenderer.restoreProjectionMatrix();
 	}
 
 	private void init() throws Throwable {
@@ -147,7 +148,7 @@ public class Zerra implements Runnable {
 
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
-		this.timer = new Timer(1);
+		this.timer = new Timer(20);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
 		Tile[] tiles = Tiles.getTiles();
@@ -216,7 +217,7 @@ public class Zerra implements Runnable {
 	public File getDataDirectory() {
 		return dataDirectory;
 	}
-	
+
 	public File getDebugDataDirectory() {
 		return debugDataDirectory;
 	}
