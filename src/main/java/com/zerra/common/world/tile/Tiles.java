@@ -33,4 +33,8 @@ public class Tiles {
 	public static Tile[] getTiles() {
 		return TILES.values().toArray(new Tile[0]);
 	}
+
+	public static Tile byId(ResourceLocation id) {
+		return TILES.getOrDefault(id, Tile.NONE);
+	}
 }

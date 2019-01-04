@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -90,7 +89,7 @@ public class IOManager {
 		public Plate readPlateSafe(int layer, Vector3i pos) {
 			try {
 				return this.readPlate(layer, pos);
-			} catch (FileNotFoundException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -117,6 +116,22 @@ public class IOManager {
 			FileUtils.touch(tileLookupFile);
 		}
 
+		private void writeTileIndexes() throws IOException {
+			/** Write tile lookup */
+			File tileLookupFile = new File(IOManager.saves, this.world.getName() + "/tiles.dat");
+			FileUtils.touch(tileLookupFile);
+
+			{
+				DataOutputStream os = new DataOutputStream(new FileOutputStream(tileLookupFile));
+				/** Write all tiles to the lookup file */
+				for (Pair<Integer, ResourceLocation> pair : this.tileIndexes) {
+					os.writeShort(pair.getLeft());
+					os.writeUTF(pair.getRight().toString());
+				}
+				os.close();
+			}
+		}
+
 		private void populateTileIndexes() {
 			/** Add missing tiles to map */
 			for (Tile tile : Tiles.getTiles()) {
@@ -134,6 +149,12 @@ public class IOManager {
 					this.tileMapper.put(tile.getRegistryID(), this.tileIndexes.size() - 1);
 				}
 			}
+
+			try {
+				this.writeTileIndexes();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public void writePlate(int layer, Plate plate) throws IOException {
@@ -142,20 +163,6 @@ public class IOManager {
 			/** Create plate file */
 			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "-" + pos.y + "-" + pos.z + ".zpl");
 			FileUtils.touch(plateFile);
-
-			/** Write */
-			File tileLookupFile = new File(IOManager.saves, this.world.getName() + "/tiles.dat");
-			FileUtils.touch(tileLookupFile);
-
-			{
-				DataOutputStream os = new DataOutputStream(new FileOutputStream(tileLookupFile));
-				/** Write all tiles to the lookup file */
-				for (Pair<Integer, ResourceLocation> pair : this.tileIndexes) {
-					os.writeShort(pair.getLeft());
-					os.writeUTF(pair.getRight().toString());
-				}
-				os.close();
-			}
 
 			{
 				DataOutputStream os = new DataOutputStream(new FileOutputStream(plateFile));
@@ -172,9 +179,25 @@ public class IOManager {
 			}
 		}
 
-		public Plate readPlate(int layer, Vector3i pos) throws FileNotFoundException {
-			// TODO @Ocelot
-			return null;
+		@Nullable
+		public Plate readPlate(int layer, Vector3i pos) throws IOException {
+			/** Create plate file */
+			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "-" + pos.y + "-" + pos.z + ".zpl");
+			if (plateFile.exists()) {
+				DataInputStream is = new DataInputStream(new FileInputStream(plateFile));
+				Plate plate = new Plate(this.world.getLayer(layer));
+				for (int x = 0; x < Plate.SIZE; x++) {
+					for (int z = 0; z < Plate.SIZE; z++) {
+						Vector2i tilePos = new Vector2i(x, z);
+						plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readInt()).getRight()));
+					}
+				}
+				plate.setPlatePos(pos);
+				is.close();
+				return plate;
+			} else {
+				return null;
+			}
 		}
 
 		public boolean isPlateGenerated(int layer, Vector3i pos) {
