@@ -1,5 +1,8 @@
 package com.zerra.client.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
@@ -79,7 +82,19 @@ public class Camera implements ICamera {
 		if (!this.platePosition.equals(this.lastPlatePosition)) {
 			World world = Zerra.getInstance().getWorld();
 			Layer layer = world.getLayer(0);
-			Plate[] plates = layer.getLoadedPlates();
+			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
+			for (int x = 0; x < 3; x++) {
+				for (int z = 0; z < 3; z++) {
+					Vector3i newPos = this.platePosition.add(x - 1, 0, z - 1, new Vector3i());
+					layer.loadPlate(newPos);
+					loadedPositions.add(newPos);
+				}
+			}
+			for(Plate plate : layer.getLoadedPlates()) {
+				if(!loadedPositions.contains(plate.getPlatePos())) {
+					layer.unloadPlate(plate.getPlatePos());
+				}
+			}
 		}
 	}
 

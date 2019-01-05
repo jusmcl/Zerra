@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import org.joml.Vector2i;
+import org.lwjgl.opengl.GL30;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.gfx.model.Model;
@@ -22,6 +23,7 @@ public class TileMeshCreator {
 	private Map<Plate, PlateMeshData> generatedPlates;
 	private Map<Plate, Model> platesMesh;
 	private List<Plate> requestedPlates;
+	private List<Plate> deletedPlates;
 
 	public TileMeshCreator() {
 		this.generatedPlates = new HashMap<Plate, PlateMeshData>();
@@ -79,14 +81,18 @@ public class TileMeshCreator {
 	}
 
 	public void prepare() {
-		Map<Plate, PlateMeshData> map = new HashMap<Plate, PlateMeshData>(this.generatedPlates);
-		for (Plate plate : map.keySet()) {
-			PlateMeshData data = map.get(plate);
-			this.platesMesh.put(plate, Loader.loadToVAO(data.getPositions(), data.getTextureCoords(), 2));
-			this.requestedPlates.remove(plate);
-			this.generatedPlates.remove(plate);
+		if (this.generatedPlates.size() > 0) {
+			Map<Plate, PlateMeshData> map = new HashMap<Plate, PlateMeshData>(this.generatedPlates);
+			for (Plate plate : map.keySet()) {
+				PlateMeshData data = map.get(plate);
+				if (plate.isLoaded()) {
+					this.platesMesh.put(plate, Loader.loadToVAO(data.getPositions(), data.getTextureCoords(), 2));
+				}
+				this.requestedPlates.remove(plate);
+				this.generatedPlates.remove(plate);
+			}
+			map.clear();
 		}
-		map.clear();
 	}
 
 	@Nullable
@@ -95,15 +101,21 @@ public class TileMeshCreator {
 	}
 
 	public boolean ready(Plate plate) {
-		if (this.platesMesh.containsKey(plate)) {
-			if (plate.requiresRenderUpdate() && !this.requestedPlates.contains(plate)) {
-				this.requestedPlates.add(plate);
+		if (!plate.isLoaded()) {
+			if (this.platesMesh.containsKey(plate)) {
+				GL30.glDeleteVertexArrays(this.platesMesh.remove(plate).getVaoID());
 			}
-			return true;
-		}
-		if (!this.requestedPlates.contains(plate)) {
-			this.requestedPlates.add(plate);
-			Zerra.getInstance().schedule(() -> this.generatePlateMesh(plate, this.requestedPlates.size() - 1));
+		} else {
+			if (this.platesMesh.containsKey(plate)) {
+				if (plate.requiresRenderUpdate() && !this.requestedPlates.contains(plate)) {
+					this.requestedPlates.add(plate);
+				}
+				return true;
+			}
+			if (!this.requestedPlates.contains(plate)) {
+				this.requestedPlates.add(plate);
+				Zerra.getInstance().schedule(() -> this.generatePlateMesh(plate, this.requestedPlates.size() - 1));
+			}
 		}
 		return false;
 	}

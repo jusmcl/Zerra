@@ -12,12 +12,17 @@ public interface Layer {
 	/**
 	 * Loads a plate either from file or creates a new one.
 	 */
-	void loadPlate();
+	void loadPlate(Vector3i pos);
 
 	/**
 	 * Unloads the plate and writes it to file.
 	 */
-	void unloadPlate();
+	void unloadPlate(Vector3i pos);
+	
+	/**
+	 * @return The layer this is in the world
+	 */
+	int getLayer();
 
 	/**
 	 * @return All of the plates currently loaded

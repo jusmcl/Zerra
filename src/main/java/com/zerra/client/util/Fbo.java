@@ -44,11 +44,11 @@ public class Fbo {
 	 * Creates an FBO of a specified width and height, with the desired type of depth buffer attachment.
 	 * 
 	 * @param width
-	 *            - the width of the FBO.
+	 *            The width of the FBO.
 	 * @param height
-	 *            - the height of the FBO.
+	 *            The height of the FBO.
 	 * @param depthBufferType
-	 *            - an int indicating the type of depth buffer attachment that this FBO should use.
+	 *            An int indicating the type of depth buffer attachment that this FBO should use.
 	 */
 	public Fbo(int width, int height, int depthBufferType) {
 		this(width, height, depthBufferType, 1);
@@ -58,11 +58,13 @@ public class Fbo {
 	 * Creates an FBO of a specified width and height, with the desired type of depth buffer attachment.
 	 * 
 	 * @param width
-	 *            - the width of the FBO.
+	 *            The width of the FBO.
 	 * @param height
-	 *            - the height of the FBO.
+	 *            The height of the FBO.
 	 * @param depthBufferType
-	 *            - an int indicating the type of depth buffer attachment that this FBO should use.
+	 *            An int indicating the type of depth buffer attachment that this FBO should use.
+	 * @param numAttachments
+	 *            The number of color buffers to attach to this FBO
 	 */
 	public Fbo(int width, int height, int depthBufferType, int numAttachments) {
 		if (numAttachments <= 0 || numAttachments >= 32)

@@ -16,6 +16,7 @@ public class Plate {
 	private Vector3i platePos;
 	private Layer layer;
 	private boolean requiresRenderUpdate;
+	private boolean loaded;
 
 	public Plate(Layer layer) {
 		this.tiles = new Tile[SIZE * SIZE];
@@ -26,6 +27,7 @@ public class Plate {
 		}
 		this.layer = layer;
 		this.requiresRenderUpdate = false;
+		this.loaded = true;
 	}
 
 	public void fill(int y, Supplier<Tile> toFill) {
@@ -59,6 +61,10 @@ public class Plate {
 	public boolean requiresRenderUpdate() {
 		return requiresRenderUpdate;
 	}
+	
+	public boolean isLoaded() {
+		return loaded;
+	}
 
 	public void setPlatePos(Vector3i platePos) {
 		this.platePos = platePos;
@@ -77,10 +83,18 @@ public class Plate {
 	public void setRequiresRenderUpdate() {
 		this.requiresRenderUpdate = true;
 	}
+	
+	public void load() {
+		this.loaded = true;
+	}
+	
+	public void unload() {
+		this.loaded = false;
+	}
 
 	@Override
 	public int hashCode() {
-		return 31 + this.platePos.hashCode();
+		return 31 * 1 + Integer.hashCode(this.layer.getLayer()) + 31 * this.platePos.hashCode();
 	}
 
 	@Override

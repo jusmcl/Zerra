@@ -24,6 +24,7 @@ import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.world.World;
+import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 
@@ -82,7 +83,7 @@ public class Zerra implements Runnable {
 
 		LOGGER.info("Stopping...");
 		this.running = false;
-		this.world.save();
+		this.world.stop();
 	}
 
 	// TODO improve loop
@@ -152,14 +153,20 @@ public class Zerra implements Runnable {
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
-		this.world = new World("test");
+		this.world = new World("world");
 		this.tileRenderer = new TileRenderer();
 		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 
-		this.world.getLayer(0).getPlate(new Vector3i());
+		World world = Zerra.getInstance().getWorld();
+		Layer layer = world.getLayer(0);
+		for (int x = 0; x < 3; x++) {
+			for (int z = 0; z < 3; z++) {
+				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
+			}
+		}
 	}
 
 	public void schedule(Runnable runnable) {
