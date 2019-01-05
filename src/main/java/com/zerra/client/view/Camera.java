@@ -80,11 +80,6 @@ public class Camera implements ICamera {
 			World world = Zerra.getInstance().getWorld();
 			Layer layer = world.getLayer(0);
 			Plate[] plates = layer.getLoadedPlates();
-			for (Plate plate : plates) {
-				layer.unloadPlate(plate.getPlatePos());
-			}
-			layer.loadOrGeneratePlate(this.platePosition);
-			layer.loadOrGeneratePlate(this.platePosition.add(1, 0, 0));
 		}
 	}
 

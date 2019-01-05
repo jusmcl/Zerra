@@ -159,7 +159,7 @@ public class Zerra implements Runnable {
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 
-		this.world.getLayer(0).loadOrGeneratePlate(new Vector3i());
+		this.world.getLayer(0).getPlate(new Vector3i());
 	}
 
 	public void schedule(Runnable runnable) {

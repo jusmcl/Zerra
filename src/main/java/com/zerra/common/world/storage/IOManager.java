@@ -162,7 +162,7 @@ public class IOManager {
 			Vector3i pos = plate.getPlatePos();
 
 			/** Create plate file */
-			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+			File plateFile = this.getPlateFile(layer, pos);
 			FileUtils.touch(plateFile);
 
 			{
@@ -183,7 +183,7 @@ public class IOManager {
 		@Nullable
 		public Plate readPlate(int layer, Vector3i pos) throws IOException {
 			/** Create plate file */
-			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+			File plateFile = this.getPlateFile(layer, pos);
 			if (plateFile.exists()) {
 				DataInputStream is = new DataInputStream(new FileInputStream(plateFile));
 				Plate plate = new Plate(this.world.getLayer(layer));
@@ -204,9 +204,9 @@ public class IOManager {
 		public void backupPlate(int layer, Vector3i pos) {
 			try {
 				/** Look for the plate file to back up */
-				File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+				File plateFile = this.getPlateFile(layer, pos);
 				if (plateFile.exists()) {
-					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl_backup");
+					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
 					FileUtils.touch(backupPlateFile);
 					IOUtils.copyLarge(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
@@ -216,7 +216,11 @@ public class IOManager {
 		}
 
 		public boolean isPlateGenerated(int layer, Vector3i pos) {
-			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl").exists();
+			return this.getPlateFile(layer, pos).exists();
+		}
+		
+		private File getPlateFile(int layer, Vector3i pos) {
+			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
 		}
 
 		public World getWorld() {
