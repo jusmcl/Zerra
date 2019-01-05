@@ -45,7 +45,7 @@ public class TileRenderer {
 					Model model = this.meshCreator.getModel(plate);
 					Zerra.getInstance().getTextureManager().bind(Zerra.getInstance().getTextureMap().getLocation());
 					this.shader.start();
-					this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x, plate.getPlatePos().z, 0, 0, 1, 1));
+					this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x * (Plate.SIZE + 1), plate.getPlatePos().z * (Plate.SIZE + 1), 0, 0, 1, 1));
 					this.shader.loadViewMatrix(camera);
 					GL30.glBindVertexArray(model.getVaoID());
 					GL20.glEnableVertexAttribArray(0);

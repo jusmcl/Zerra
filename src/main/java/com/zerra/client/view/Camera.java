@@ -1,12 +1,16 @@
 package com.zerra.client.view;
 
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
+import com.zerra.common.world.World;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.storage.plate.Plate;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -20,6 +24,8 @@ import com.zerra.client.input.gamepad.Joystick;
  */
 public class Camera implements ICamera {
 
+	private Vector3i lastPlatePosition;
+	private Vector3i platePosition;
 	private Vector3f renderPosition;
 	private Vector3f lastPosition;
 	private Vector3f position;
@@ -28,6 +34,8 @@ public class Camera implements ICamera {
 	private Vector3f rotation;
 
 	public Camera() {
+		this.lastPlatePosition = new Vector3i();
+		this.platePosition = new Vector3i();
 		this.renderPosition = new Vector3f();
 		this.lastPosition = new Vector3f();
 		this.position = new Vector3f();
@@ -40,6 +48,7 @@ public class Camera implements ICamera {
 	 * Updates the camera's position and rotation.
 	 */
 	public void update() {
+		this.lastPlatePosition.set(this.platePosition);
 		this.lastPosition.set(this.position);
 		this.lastRotation.set(this.rotation);
 
@@ -64,6 +73,18 @@ public class Camera implements ICamera {
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D)) {
 				this.position.x++;
 			}
+		}
+
+		this.platePosition.set((int) (this.position.x / (float) Plate.SIZE), (int) this.position.z, (int) (this.position.y / (float) Plate.SIZE));
+		if (!this.platePosition.equals(this.lastPlatePosition)) {
+			World world = Zerra.getInstance().getWorld();
+			Layer layer = world.getLayer(0);
+			Plate[] plates = layer.getLoadedPlates();
+			for (Plate plate : plates) {
+				layer.unloadPlate(plate.getPlatePos());
+			}
+			layer.loadOrGeneratePlate(this.platePosition);
+			layer.loadOrGeneratePlate(this.platePosition.add(1, 0, 0));
 		}
 	}
 

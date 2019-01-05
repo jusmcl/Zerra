@@ -82,6 +82,7 @@ public class Zerra implements Runnable {
 
 		LOGGER.info("Stopping...");
 		this.running = false;
+		this.world.save();
 	}
 
 	// TODO improve loop
@@ -99,7 +100,7 @@ public class Zerra implements Runnable {
 					if (!Display.isCloseRequested())
 						Display.update();
 					else
-						running = false;
+						this.stop();
 
 					this.timer.updateTimer();
 
@@ -158,9 +159,7 @@ public class Zerra implements Runnable {
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 
-		this.world.getLayer(0).getPlate(new Vector3i(0, 0, 0));
-		// Temp
-		this.world.save();
+		this.world.getLayer(0).loadOrGeneratePlate(new Vector3i());
 	}
 
 	public void schedule(Runnable runnable) {
@@ -225,6 +224,10 @@ public class Zerra implements Runnable {
 
 	public InputHandler getInputHandler() {
 		return inputHandler;
+	}
+
+	public World getWorld() {
+		return world;
 	}
 
 	public static Logger logger() {

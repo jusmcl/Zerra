@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector2i;
@@ -161,7 +162,7 @@ public class IOManager {
 			Vector3i pos = plate.getPlatePos();
 
 			/** Create plate file */
-			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "-" + pos.y + "-" + pos.z + ".zpl");
+			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
 			FileUtils.touch(plateFile);
 
 			{
@@ -182,14 +183,14 @@ public class IOManager {
 		@Nullable
 		public Plate readPlate(int layer, Vector3i pos) throws IOException {
 			/** Create plate file */
-			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "-" + pos.y + "-" + pos.z + ".zpl");
+			File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
 			if (plateFile.exists()) {
 				DataInputStream is = new DataInputStream(new FileInputStream(plateFile));
 				Plate plate = new Plate(this.world.getLayer(layer));
 				for (int x = 0; x < Plate.SIZE; x++) {
 					for (int z = 0; z < Plate.SIZE; z++) {
 						Vector2i tilePos = new Vector2i(x, z);
-						plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readInt()).getRight()));
+						plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readShort()).getRight()));
 					}
 				}
 				plate.setPlatePos(pos);
@@ -200,8 +201,22 @@ public class IOManager {
 			}
 		}
 
+		public void backupPlate(int layer, Vector3i pos) {
+			try {
+				/** Look for the plate file to back up */
+				File plateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+				if (plateFile.exists()) {
+					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl_backup");
+					FileUtils.touch(backupPlateFile);
+					IOUtils.copyLarge(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		public boolean isPlateGenerated(int layer, Vector3i pos) {
-			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "-" + pos.y + "-" + pos.z + ".zpl").exists();
+			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl").exists();
 		}
 
 		public World getWorld() {
