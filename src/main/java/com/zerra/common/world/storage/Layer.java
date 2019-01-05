@@ -1,19 +1,47 @@
 package com.zerra.common.world.storage;
 
-import org.joml.Vector2i;
+import javax.annotation.Nullable;
+
 import org.joml.Vector3i;
 
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
-import com.zerra.common.world.tile.Tile;
 
 public interface Layer {
 
-	Tile getTileAt(Vector2i position, int y);
+	/**
+	 * Loads a plate either from file or creates a new one.
+	 */
+	void loadPlate();
 
+	/**
+	 * Unloads the plate and writes it to file.
+	 */
+	void unloadPlate();
+
+	/**
+	 * @return All of the plates currently loaded
+	 */
 	Plate[] getLoadedPlates();
 
 	Entity[] getEntities();
 
+	/**
+	 * Checks the loaded plates for the plate with the specified pos and loads it if it can not be found.
+	 * 
+	 * @param pos
+	 *            The pos to check
+	 * @return The plate found or null if it is loading
+	 */
+	@Nullable
 	Plate getPlate(Vector3i pos);
+
+	/**
+	 * Checks to see it a plate is loaded at the specified pos.
+	 * 
+	 * @param pos
+	 *            The pos to check
+	 * @return Whether or not the plate is loaded at the pos
+	 */
+	boolean isPlateLoaded(Vector3i pos);
 }
