@@ -206,7 +206,7 @@ public class IOManager {
 				/** Look for the plate file to back up */
 				File plateFile = this.getPlateFile(layer, pos);
 				if (plateFile.exists()) {
-					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x + "_" + pos.y + "_" + pos.z + ".zpl");
 					FileUtils.touch(backupPlateFile);
 					IOUtils.copyLarge(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
@@ -220,7 +220,7 @@ public class IOManager {
 		}
 		
 		private File getPlateFile(int layer, Vector3i pos) {
-			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "" + pos.y + "" + pos.z + ".zpl");
+			return new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "/" + pos.x + "_" + pos.y + "_" + pos.z + ".zpl");
 		}
 
 		public World getWorld() {

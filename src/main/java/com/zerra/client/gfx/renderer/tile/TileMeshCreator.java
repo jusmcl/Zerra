@@ -23,7 +23,6 @@ public class TileMeshCreator {
 	private Map<Plate, PlateMeshData> generatedPlates;
 	private Map<Plate, Model> platesMesh;
 	private List<Plate> requestedPlates;
-	private List<Plate> deletedPlates;
 
 	public TileMeshCreator() {
 		this.generatedPlates = new HashMap<Plate, PlateMeshData>();
