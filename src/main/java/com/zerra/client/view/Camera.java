@@ -78,7 +78,7 @@ public class Camera implements ICamera {
 			}
 		}
 
-		this.platePosition.set((int) (this.position.x / (float) Plate.SIZE), (int) this.position.z, (int) (this.position.y / (float) Plate.SIZE));
+		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition)) {
 			World world = Zerra.getInstance().getWorld();
 			Layer layer = world.getLayer(0);
