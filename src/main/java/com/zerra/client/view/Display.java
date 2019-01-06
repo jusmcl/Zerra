@@ -32,7 +32,7 @@ public class Display {
 	private static int width;
 	private static int height;
 	private static boolean fullscreen;
-	
+
 	protected static byte[] joysticksPresent;
 
 	private static DoubleBuffer mouseXBuffer = BufferUtils.createDoubleBuffer(1);
