@@ -24,17 +24,21 @@ public class TileMeshCreator {
 	private Map<Plate, PlateMeshData> generatedPlates;
 	private Map<Plate, Model> platesMesh;
 	private List<Plate> requestedPlates;
-	private Map<Tile, ResourceLocation> textureCache;
 	
+	private Map<Tile, ResourceLocation> textureCache;
 	private PlateMeshData meshCache;
+	
+	private Map<Plate, PlateMeshData> map;
 
 	public TileMeshCreator() {
 		this.generatedPlates = new ConcurrentHashMap<Plate, PlateMeshData>();
 		this.platesMesh = new ConcurrentHashMap<Plate, Model>();
 		this.requestedPlates = new ArrayList<Plate>();
-		this.textureCache = new HashMap<Tile, ResourceLocation>();
 		
+		this.textureCache = new HashMap<Tile, ResourceLocation>();
 		meshCache = new PlateMeshData(null, null);
+		
+		map = new ConcurrentHashMap<Plate, PlateMeshData>(this.generatedPlates);
 	}
 
 	// TODO use indices where possible perhaps
@@ -92,7 +96,8 @@ public class TileMeshCreator {
 
 	public void prepare() {
 		if (this.generatedPlates.size() > 0) {
-			Map<Plate, PlateMeshData> map = new ConcurrentHashMap<Plate, PlateMeshData>(this.generatedPlates);
+			map.clear();
+			map.putAll(this.generatedPlates);
 			for (Plate plate : map.keySet()) {
 				PlateMeshData data = map.get(plate);
 				if (plate.isLoaded()) {
@@ -101,7 +106,6 @@ public class TileMeshCreator {
 				this.requestedPlates.remove(plate);
 				this.generatedPlates.remove(plate);
 			}
-			map.clear();
 		}
 	}
 
