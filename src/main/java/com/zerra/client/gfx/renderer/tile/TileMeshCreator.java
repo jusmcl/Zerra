@@ -24,11 +24,13 @@ public class TileMeshCreator {
 	private Map<Plate, PlateMeshData> generatedPlates;
 	private Map<Plate, Model> platesMesh;
 	private List<Plate> requestedPlates;
+	private Map<Tile, ResourceLocation> textureCache;
 
 	public TileMeshCreator() {
 		this.generatedPlates = new ConcurrentHashMap<Plate, PlateMeshData>();
 		this.platesMesh = new ConcurrentHashMap<Plate, Model>();
 		this.requestedPlates = new ArrayList<Plate>();
+		this.textureCache = new HashMap<Tile, ResourceLocation>();
 	}
 
 	// TODO use indices where possible perhaps
@@ -36,7 +38,6 @@ public class TileMeshCreator {
 		int size = Plate.SIZE + 1;
 		float[] vertices = new float[size * size * 12];
 		float[] textureCoords = new float[size * size * 12];
-		Map<Tile, ResourceLocation> textureCache = new HashMap<Tile, ResourceLocation>();
 
 		long lastTime = System.currentTimeMillis();
 		int vertexPointer = 0;
@@ -78,6 +79,8 @@ public class TileMeshCreator {
 		Zerra.logger().info("Generated " + Plate.SIZE + "x" + Plate.SIZE + " mesh in " + (System.currentTimeMillis() - lastTime) / 1000.0 + " seconds");
 
 		this.generatedPlates.put(plate, new PlateMeshData(vertices, textureCoords));
+		
+		textureCache.clear();
 	}
 
 	public void prepare() {
