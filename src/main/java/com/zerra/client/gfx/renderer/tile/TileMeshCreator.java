@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
@@ -25,8 +26,8 @@ public class TileMeshCreator {
 	private List<Plate> requestedPlates;
 
 	public TileMeshCreator() {
-		this.generatedPlates = new HashMap<Plate, PlateMeshData>();
-		this.platesMesh = new HashMap<Plate, Model>();
+		this.generatedPlates = new ConcurrentHashMap<Plate, PlateMeshData>();
+		this.platesMesh = new ConcurrentHashMap<Plate, Model>();
 		this.requestedPlates = new ArrayList<Plate>();
 	}
 
@@ -81,7 +82,7 @@ public class TileMeshCreator {
 
 	public void prepare() {
 		if (this.generatedPlates.size() > 0) {
-			Map<Plate, PlateMeshData> map = new HashMap<Plate, PlateMeshData>(this.generatedPlates);
+			Map<Plate, PlateMeshData> map = new ConcurrentHashMap<Plate, PlateMeshData>(this.generatedPlates);
 			for (Plate plate : map.keySet()) {
 				PlateMeshData data = map.get(plate);
 				if (plate.isLoaded()) {

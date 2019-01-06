@@ -1,9 +1,9 @@
 package com.zerra.common.world.storage.plate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joml.Vector3i;
 
@@ -22,7 +22,7 @@ public class WorldLayer implements Layer {
 	public WorldLayer(World world, int layer) {
 		this.world = world;
 		this.layer = layer;
-		this.loadedPlates = new HashMap<Vector3i, Plate>();
+		this.loadedPlates = new ConcurrentHashMap<Vector3i, Plate>();
 		this.loadingPlates = new ArrayList<Vector3i>();
 	}
 
