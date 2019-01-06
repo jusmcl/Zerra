@@ -68,7 +68,7 @@ public class WorldLayer implements Layer {
 
 	@Override
 	public Plate[] getLoadedPlates() {
-		return loadedPlates.values().toArray(new Plate[0]);
+		return new HashMap<Vector3i, Plate>(this.loadedPlates).values().toArray(new Plate[0]);
 	}
 
 	@Override
