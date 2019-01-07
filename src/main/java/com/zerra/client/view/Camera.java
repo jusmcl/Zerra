@@ -69,7 +69,7 @@ public class Camera implements ICamera {
 			
 			if (joystick != null) {
 
-				if(!this.controllerIsOffset && joystick.getX() != 0 && joystick.getY() != 0) {
+				if(!this.controllerIsOffset && joystick.getX() != 0 && joystick.getY() != 0 && Display.isCreated()) {
 					xOffset = joystick.getX();
 					yOffset = joystick.getY();
 					this.controllerIsOffset = true;
