@@ -96,29 +96,16 @@ public class Camera implements ICamera {
 				}
 			}
 		} else {
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W)) {
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP)) {
 				this.position.y -= 1 + this.speedAdjust;
 			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S)) {
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
 				this.position.y += 1 + this.speedAdjust;
 			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A)) {
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
 				this.position.x -= 1 + this.speedAdjust;
 			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D)) {
-				this.position.x += 1 + this.speedAdjust;
-			}
-			
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-				this.position.y -= 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-				this.position.y += 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
-				this.position.x -= 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
 				this.position.x += 1 + this.speedAdjust;
 			}
 			
