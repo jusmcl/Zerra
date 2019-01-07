@@ -28,6 +28,7 @@ public class World {
 		this.logger = LogManager.getLogger("World-" + name);
 		this.name = name;
 		this.random = new Random();
+		this.random.setSeed(random.nextLong());
 		this.layers = new Layer[6];
 		for (int i = 0; i < 6; i++) {
 			this.layers[i] = new WorldLayer(this, i);
