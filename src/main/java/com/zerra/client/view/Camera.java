@@ -109,6 +109,19 @@ public class Camera implements ICamera {
 				this.position.x += 1 + this.speedAdjust;
 			}
 			
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP)) {
+				this.position.y -= 1 + this.speedAdjust;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
+				this.position.y += 1 + this.speedAdjust;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT)) {
+				this.position.x -= 1 + this.speedAdjust;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
+				this.position.x += 1 + this.speedAdjust;
+			}
+			
 			// Useful keys to adjust the movement speed of the camera when not locked to the player.
 			if(Launch.IS_DEVELOPMENT_BUILD) {
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL)) {
