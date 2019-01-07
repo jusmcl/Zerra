@@ -38,6 +38,10 @@ public class Camera implements ICamera {
 	private Vector3f rotation;
 	
 	private float speedAdjust = 0f;
+	
+	private boolean controllerIsOffset = false;
+	private double xOffset;
+	private double yOffset;
 
 	public Camera() {
 		this.lastPlatePosition = new Vector3i();
@@ -62,9 +66,34 @@ public class Camera implements ICamera {
 		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
 			Gamepad gamepad = inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
 			Joystick joystick = gamepad.getJoystick(0);
+			
 			if (joystick != null) {
-				this.position.y += joystick.getY();
-				this.position.x += joystick.getX();
+
+				if(!this.controllerIsOffset && joystick.getX() != 0 && joystick.getY() != 0) {
+					xOffset = joystick.getX();
+					yOffset = joystick.getY();
+					this.controllerIsOffset = true;
+				}
+				
+				if(joystick.getX() < 0) {
+					if(!(joystick.getX() > -xOffset - 0.01f)) {
+						this.position.x += joystick.getX();
+					}
+				}else {
+					if(!(joystick.getX() < xOffset + 0.01f)) {
+						this.position.x += joystick.getX();
+					}
+				}
+				
+				if(joystick.getY() < 0) {
+					if(!(joystick.getY() > -yOffset - 0.01f)) {
+						this.position.y += joystick.getY();
+					}
+				}else {
+					if(!(joystick.getY() < yOffset + 0.01f)) {
+						this.position.y += joystick.getY();
+					}
+				}
 			}
 		} else {
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W)) {
