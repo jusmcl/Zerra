@@ -11,6 +11,7 @@ import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
+import com.zerra.Presence;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
@@ -56,9 +57,12 @@ public class Zerra implements Runnable {
 	private InputHandler inputHandler;
 	private World world;
 	private Fbo fbo;
+	
+	private Presence presence;
 
 	public Zerra() {
 		instance = this;
+		this.presence = new Presence();
 		this.pool = Executors.newCachedThreadPool();
 		this.start();
 	}
@@ -247,5 +251,10 @@ public class Zerra implements Runnable {
 	
 	public boolean isRunning() {
 		return running;
+	}
+
+	public Presence getPresence()
+	{
+		return presence;
 	}
 }
