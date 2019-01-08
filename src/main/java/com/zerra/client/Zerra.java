@@ -244,4 +244,8 @@ public class Zerra implements Runnable {
 	public static Zerra getInstance() {
 		return instance;
 	}
+	
+	public boolean isRunning() {
+		return running;
+	}
 }
