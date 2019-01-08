@@ -21,9 +21,10 @@ public class ItemWeapon extends BaseTool implements Weapon
 	}
 
 	@Override
-	public void setDamage(float damage)
+	public Weapon setDamage(float damage)
 	{
 		this.damage = damage;
+		return this;
 	}
 
 }

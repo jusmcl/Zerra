@@ -23,9 +23,10 @@ public abstract class BaseTool extends BaseItem implements Tool
 	}
 
 	@Override
-	public void setSwingSpeed(float swingSpeed)
+	public Tool setSwingSpeed(float swingSpeed)
 	{
 		this.swingSpeed = swingSpeed;
+		return this;
 	}
 
 	@Override
@@ -35,9 +36,10 @@ public abstract class BaseTool extends BaseItem implements Tool
 	}
 
 	@Override
-	public void setReach(float reach)
+	public Tool setReach(float reach)
 	{
 		this.reach = reach;
+		return this;
 	}
 
 	@Override
@@ -47,9 +49,10 @@ public abstract class BaseTool extends BaseItem implements Tool
 	}
 
 	@Override
-	public void setDurability(int durability)
+	public Tool setDurability(int durability)
 	{
 		this.durability = durability;
+		return this;
 	}
 
 	@Override
@@ -59,9 +62,10 @@ public abstract class BaseTool extends BaseItem implements Tool
 	}
 
 	@Override
-	public void setToolType(String toolType)
+	public Tool setToolType(String toolType)
 	{
 		this.toolType = toolType;
+		return this;
 	}
 
 }

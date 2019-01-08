@@ -14,5 +14,5 @@ public interface Weapon extends Tool
 	 */
 	public float getDamage();
 	
-	public void setDamage(float damage);
+	public Weapon setDamage(float damage);
 }

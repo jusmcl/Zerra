@@ -13,26 +13,26 @@ public interface Tool
 	 */
 	public float getSwingSpeed();
 
-	public void setSwingSpeed(float swingSpeed);
+	public Tool setSwingSpeed(float swingSpeed);
 
 	/**
 	 * @return The reach of the tool.
 	 */
 	public float getReach();
 
-	public void setReach(float reach);
+	public Tool setReach(float reach);
 
 	/**
 	 * @return The durability of the tool.
 	 */
 	public int getDurability();
 
-	public void setDurability(int durability);
+	public Tool setDurability(int durability);
 
 	/**
 	 * @return The type of tool this is.
 	 */
 	public String getToolType();
 
-	public void setToolType(String toolType);
+	public Tool setToolType(String toolType);
 }
