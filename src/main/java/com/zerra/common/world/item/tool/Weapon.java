@@ -12,5 +12,7 @@ public interface Weapon extends Tool
 	 * @return The damage the weapon deals. Note, this is combined with the base
 	 *         damage of the user.
 	 */
-	public float damage();
+	public float getDamage();
+	
+	public void setDamage(float damage);
 }

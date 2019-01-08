@@ -3,7 +3,7 @@ package com.zerra.common.world.item.impl;
 import com.zerra.common.world.item.tool.Tool;
 import com.zerra.common.world.item.tool.ZerraToolTypes;
 
-public class BaseTool extends BaseItem implements Tool
+public abstract class BaseTool extends BaseItem implements Tool
 {
 
 	private float swingSpeed = 1.5f;
