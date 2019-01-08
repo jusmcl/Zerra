@@ -37,7 +37,7 @@ public class World {
 		this.storageManager = new WorldStorageManager(this);
 		this.pool = Executors.newCachedThreadPool();
 		
-		Zerra.getInstance().getPresence().setPresence("Playing In World " + name, "512x512", "512x512");
+		Zerra.getInstance().getPresence().setPresence("Playing In World " + name, "512x512", "none");
 	}
 
 	public void schedule(Runnable command) {
