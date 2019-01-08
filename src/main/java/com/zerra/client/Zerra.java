@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
+import com.sun.glass.events.KeyEvent;
 import com.zerra.Launch;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
@@ -24,6 +25,8 @@ import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.world.World;
+import com.zerra.common.world.gamevents.EventHandler;
+import com.zerra.common.world.gamevents.events.KeyPressedEvent;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
@@ -56,6 +59,7 @@ public class Zerra implements Runnable {
 	private InputHandler inputHandler;
 	private World world;
 	private Fbo fbo;
+	private EventHandler eventHandler;
 
 	public Zerra() {
 		instance = this;
@@ -159,7 +163,6 @@ public class Zerra implements Runnable {
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
-
 		World world = Zerra.getInstance().getWorld();
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++) {
@@ -167,6 +170,13 @@ public class Zerra implements Runnable {
 				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
 			}
 		}
+		this.eventHandler = new EventHandler();
+		this.eventHandler.registerCallback(KeyPressedEvent.class, e -> {
+			if(e.getKeyCode() == KeyEvent.VK_A) {
+				logger().info("The left movement key was pressed, stopping movement.");
+				e.cancel();
+			}
+		});
 	}
 
 	public void schedule(Runnable runnable) {
@@ -175,6 +185,10 @@ public class Zerra implements Runnable {
 	}
 
 	public void onKeyPressed(int keyCode) {
+		KeyPressedEvent event = new KeyPressedEvent(keyCode);
+		event.call();
+		if(event.isCancelled())
+			return;
 		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 
@@ -235,6 +249,10 @@ public class Zerra implements Runnable {
 
 	public World getWorld() {
 		return world;
+	}
+	
+	public EventHandler getEventHandler() {
+		return eventHandler;
 	}
 
 	public static Logger logger() {
