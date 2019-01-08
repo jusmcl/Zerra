@@ -8,9 +8,17 @@ public class Item
 {
 	private String registryName;
 
+	private final ItemRarity RARITY;
+
 	public Item(String registryName)
 	{
+		this(registryName, ItemRarity.COMMON);
+	}
+
+	public Item(String registryName, ItemRarity rarity)
+	{
 		this.registryName = registryName;
+		this.RARITY = rarity;
 	}
 
 	public String getRegistryName()
@@ -46,5 +54,10 @@ public class Item
 	public boolean oRightClickTile(Tile tile, World world, ItemGroup group)
 	{
 		return true;
+	}
+
+	public ItemRarity getRARITY()
+	{
+		return RARITY;
 	}
 }
