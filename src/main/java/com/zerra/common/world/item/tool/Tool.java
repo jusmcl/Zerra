@@ -9,28 +9,30 @@ public interface Tool
 {
 
 	/**
-	 * @return The swing speed of the tool.
+	 * @return The swing speed of the tool (calculated as swings per second).
 	 */
-	public float swingSpeed();
+	public float getSwingSpeed();
 
-	/**
-	 * @return The cooldown in seconds for the tool to swing again.
-	 */
-	public int swingCooldown();
+	public void setSwingSpeed(float swingSpeed);
 
 	/**
 	 * @return The reach of the tool.
 	 */
-	public float reach();
+	public float getReach();
+
+	public void setReach(float reach);
 
 	/**
-	 * @return The durability of the tool. This also sets the max durability of the
-	 *         tool.
+	 * @return The durability of the tool.
 	 */
-	public int durability();
+	public int getDurability();
+
+	public void setDurability(int durability);
 
 	/**
 	 * @return The type of tool this is.
 	 */
 	public String getToolType();
+
+	public void setToolType(String toolType);
 }
