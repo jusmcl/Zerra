@@ -66,7 +66,7 @@ public interface Entity
 	 * All entities should have a facing direction.
 	 */
 	public Direction getFacingDirection();
-	
+
 	/**
 	 * Get how far the entity is from another entity.
 	 * 
@@ -74,7 +74,7 @@ public interface Entity
 	 * @return The distance in tiles.
 	 */
 	public float getDistanceTo(Entity entity);
-	
+
 	/**
 	 * Get how far the entity is from another entity.
 	 * 
@@ -82,4 +82,8 @@ public interface Entity
 	 * @return The distance in tiles.
 	 */
 	public float getDistanceTo(int xPos, int yPos, int zPos);
+
+	public void spawn();
+
+	public void despawn();
 }

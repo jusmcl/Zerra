@@ -147,4 +147,16 @@ public abstract class EntityBase implements Entity
 	{
 		return (float) Math.sqrt(Math.pow(xPos - this.entityPosition.x, 2) + Math.pow(yPos - this.entityPosition.y, 2) + Math.pow(zPos - this.entityPosition.z, 2));
 	}
+	
+	@Override
+	public void spawn()
+	{
+		
+	}
+	
+	@Override
+	public void despawn()
+	{
+		
+	}
 }
