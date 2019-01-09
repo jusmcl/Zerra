@@ -9,6 +9,8 @@ public class Item
 	private String registryName;
 
 	private final ItemRarity RARITY;
+	
+	private boolean canBeGrouped = true;
 
 	public Item(String registryName)
 	{
@@ -59,5 +61,15 @@ public class Item
 	public ItemRarity getRARITY()
 	{
 		return RARITY;
+	}
+
+	public boolean canBeGrouped()
+	{
+		return canBeGrouped;
+	}
+
+	public void setCanBeGrouped(boolean canBeGrouped)
+	{
+		this.canBeGrouped = canBeGrouped;
 	}
 }

@@ -8,5 +8,6 @@ public abstract class BaseItem extends Item
 	public BaseItem(String registryName)
 	{
 		super(registryName);
+		this.setCanBeGrouped(true);
 	}
 }
