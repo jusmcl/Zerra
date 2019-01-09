@@ -29,7 +29,10 @@ public class World {
 		this.logger = LogManager.getLogger("World-" + name);
 		this.name = name;
 		this.random = new Random();
+
+		// TODO: Make this also accept user-inputed seeds.
 		this.random.setSeed(random.nextLong());
+
 		this.layers = new Layer[6];
 		for (int i = 0; i < 6; i++) {
 			this.layers[i] = new WorldLayer(this, i);
