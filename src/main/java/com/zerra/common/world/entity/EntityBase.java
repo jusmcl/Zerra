@@ -12,6 +12,8 @@ public abstract class EntityBase implements Entity
 
 	World world;
 
+	private int ticksExisted = 0;
+
 	private Vector3f entityPosition = new Vector3f();
 	private Vector3i tilePosition = new Vector3i();
 	private Vector3f velocity = new Vector3f();
@@ -37,6 +39,20 @@ public abstract class EntityBase implements Entity
 
 		// Set velocity.
 		this.velocity.set(0f, 0f, 0f);
+
+		this.init();
+	}
+
+	@Override
+	public void update()
+	{
+		this.ticksExisted++;
+	}
+	
+	@Override
+	public void init()
+	{
+		
 	}
 
 	@Override
@@ -134,29 +150,34 @@ public abstract class EntityBase implements Entity
 	{
 		return this.velocity;
 	}
-	
+
 	@Override
 	public float getDistanceTo(Entity entity)
 	{
 		return (float) Math.sqrt(Math.pow(entity.getXEntityPos() - this.entityPosition.x, 2) + Math.pow(entity.getYEntityPos() - this.entityPosition.y, 2)
 				+ Math.pow(entity.getZEntityPos() - this.entityPosition.z, 2));
 	}
-	
+
 	@Override
 	public float getDistanceTo(int xPos, int yPos, int zPos)
 	{
 		return (float) Math.sqrt(Math.pow(xPos - this.entityPosition.x, 2) + Math.pow(yPos - this.entityPosition.y, 2) + Math.pow(zPos - this.entityPosition.z, 2));
 	}
-	
+
 	@Override
 	public void spawn()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void despawn()
 	{
-		
+
+	}
+
+	public int getTicksExisted()
+	{
+		return ticksExisted;
 	}
 }
