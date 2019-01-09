@@ -12,7 +12,7 @@ public class EntityLivingBase extends EntityBase
 	public EntityLivingBase(World world)
 	{
 		super(world);
-		
+
 		this.attributes = new LivingAttributes();
 	}
 

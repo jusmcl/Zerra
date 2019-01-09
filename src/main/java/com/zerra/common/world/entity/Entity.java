@@ -67,6 +67,8 @@ public interface Entity
 	 */
 	public Direction getFacingDirection();
 
+	public void setFacingDirection(Direction direction);
+
 	/**
 	 * Get how far the entity is from another entity.
 	 * 
@@ -86,4 +88,18 @@ public interface Entity
 	public void spawn();
 
 	public void despawn();
+
+	public boolean isInvisible();
+
+	public boolean canBePushed();
+
+	public boolean isInWater();
+
+	public void setInWater(boolean inWater);
+
+	public boolean isOnFire();
+
+	public void setOnFire(boolean onFire);
+
+	public boolean canSpawnHere();
 }

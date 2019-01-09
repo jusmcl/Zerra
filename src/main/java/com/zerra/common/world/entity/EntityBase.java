@@ -18,6 +18,9 @@ public abstract class EntityBase implements Entity
 
 	private Vector2f entitySize = new Vector2f();
 
+	private boolean isInWater;
+	private boolean isOnFire;
+
 	// Used in determining starting point of collision box sizing.
 	private float anchorPoint = 0f;
 
@@ -94,6 +97,12 @@ public abstract class EntityBase implements Entity
 	}
 
 	@Override
+	public void setFacingDirection(Direction direction)
+	{
+		this.direction = direction;
+	}
+
+	@Override
 	public void setSize(float width, float height, float anchorPoint)
 	{
 		this.entitySize.x = width;
@@ -134,29 +143,68 @@ public abstract class EntityBase implements Entity
 	{
 		return this.velocity;
 	}
-	
+
 	@Override
 	public float getDistanceTo(Entity entity)
 	{
 		return (float) Math.sqrt(Math.pow(entity.getXEntityPos() - this.entityPosition.x, 2) + Math.pow(entity.getYEntityPos() - this.entityPosition.y, 2)
 				+ Math.pow(entity.getZEntityPos() - this.entityPosition.z, 2));
 	}
-	
+
 	@Override
 	public float getDistanceTo(int xPos, int yPos, int zPos)
 	{
 		return (float) Math.sqrt(Math.pow(xPos - this.entityPosition.x, 2) + Math.pow(yPos - this.entityPosition.y, 2) + Math.pow(zPos - this.entityPosition.z, 2));
 	}
-	
+
 	@Override
 	public void spawn()
 	{
-		
 	}
-	
+
 	@Override
 	public void despawn()
 	{
-		
+		// TODO: Save entity to data on spawn IF it should be saved.
+	}
+
+	@Override
+	public boolean isInvisible()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isInWater()
+	{
+		return this.isInWater;
+	}
+
+	public void setInWater(boolean isInWater)
+	{
+		this.isInWater = isInWater;
+	}
+
+	@Override
+	public boolean isOnFire()
+	{
+		return this.isOnFire;
+	}
+
+	public void setOnFire(boolean isOnFire)
+	{
+		this.isOnFire = isOnFire;
+	}
+
+	@Override
+	public boolean canBePushed()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean canSpawnHere()
+	{
+		return true;
 	}
 }
