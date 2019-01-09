@@ -9,21 +9,6 @@ public interface Entity
 {
 
 	/**
-	 * Updates the entity per tick.
-	 */
-	public void update();
-
-	/**
-	 * @return How long the entity has existed in ticks.
-	 */
-	public int getTicksExisted();
-	
-	/**
-	 * Called during entity construction.
-	 */
-	public void init();
-
-	/**
 	 * Getters and setters for tile positions of entities.
 	 * 
 	 * @return Coordinate point along the respective axis.
