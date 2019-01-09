@@ -9,6 +9,21 @@ public interface Entity
 {
 
 	/**
+	 * Updates the entity per tick.
+	 */
+	public void update();
+
+	/**
+	 * @return How long the entity has existed in ticks.
+	 */
+	public int getTicksExisted();
+
+	/**
+	 * Called during entity construction.
+	 */
+	public void init();
+
+	/**
 	 * Getters and setters for tile positions of entities.
 	 * 
 	 * @return Coordinate point along the respective axis.
@@ -67,6 +82,8 @@ public interface Entity
 	 */
 	public Direction getFacingDirection();
 
+	public void setFacingDirection(Direction direction);
+
 	/**
 	 * Get how far the entity is from another entity.
 	 * 
@@ -86,4 +103,18 @@ public interface Entity
 	public void spawn();
 
 	public void despawn();
+
+	public boolean isInvisible();
+
+	public boolean canBePushed();
+
+	public boolean isInWater();
+
+	public void setInWater(boolean inWater);
+
+	public boolean isOnFire();
+
+	public void setOnFire(boolean onFire);
+
+	public boolean canSpawnHere();
 }
