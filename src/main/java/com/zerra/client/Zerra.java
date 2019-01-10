@@ -62,6 +62,8 @@ public class Zerra implements Runnable {
 	private Fbo fbo;
 	
 	private Presence presence;
+	
+	private EventHandler eventHandler;
 
 	public Zerra() {
 		instance = this;
