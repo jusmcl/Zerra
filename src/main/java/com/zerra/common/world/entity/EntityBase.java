@@ -4,6 +4,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
+import com.zerra.common.event.events.EntityEvent;
+import com.zerra.common.event.events.EntityUpdateEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.facing.Direction;
 
@@ -49,6 +51,10 @@ public abstract class EntityBase implements Entity
 	@Override
 	public void update()
 	{
+		EntityUpdateEvent updateEvent = EntityEvent.onEntityUpdate(this);
+		updateEvent.call();
+		if (updateEvent.isCancelled())
+			return;
 		this.ticksExisted++;
 	}
 

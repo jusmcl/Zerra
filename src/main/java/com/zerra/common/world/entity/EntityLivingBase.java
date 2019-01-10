@@ -1,5 +1,7 @@
 package com.zerra.common.world.entity;
 
+import com.zerra.common.event.events.EntityDeathEvent;
+import com.zerra.common.event.events.EntityLivingEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.attrib.SharedLivingAttributes;
 
@@ -24,5 +26,13 @@ public class EntityLivingBase extends EntityBase
 	public SharedLivingAttributes getSharedAttributes()
 	{
 		return attributes;
+	}
+
+	public void death()
+	{
+		EntityDeathEvent deathEvent = EntityLivingEvent.onEntityDeath(this);
+		deathEvent.call();
+		if (deathEvent.isCancelled())
+			return;
 	}
 }

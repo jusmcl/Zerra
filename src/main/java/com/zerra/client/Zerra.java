@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
-import com.sun.glass.events.KeyEvent;
 import com.zerra.Launch;
 import com.zerra.Presence;
 import com.zerra.client.gfx.renderer.GuiRenderer;
@@ -25,9 +24,8 @@ import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
+import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
-import com.zerra.common.world.gamevents.EventHandler;
-import com.zerra.common.world.gamevents.events.KeyPressedEvent;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
@@ -176,12 +174,6 @@ public class Zerra implements Runnable {
 			}
 		}
 		this.eventHandler = new EventHandler();
-		this.eventHandler.registerCallback(KeyPressedEvent.class, e -> {
-			if(e.getKeyCode() == KeyEvent.VK_A) {
-				logger().info("The left movement key was pressed, stopping movement.");
-				e.cancel();
-			}
-		});
 	}
 
 	public void schedule(Runnable runnable) {
@@ -190,10 +182,6 @@ public class Zerra implements Runnable {
 	}
 
 	public void onKeyPressed(int keyCode) {
-		KeyPressedEvent event = new KeyPressedEvent(keyCode);
-		event.call();
-		if(event.isCancelled())
-			return;
 		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 

@@ -1,4 +1,4 @@
-package com.zerra.common.world.gamevents;
+package com.zerra.common.event;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
