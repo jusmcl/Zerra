@@ -1,15 +1,15 @@
 package com.zerra.api.mod;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+
+import com.google.common.collect.Iterables;
 
 public class ModLoader
 {
@@ -26,24 +26,17 @@ public class ModLoader
 			{
 				System.out.println("Attempting to load " + jar.getName());
 
-				ClassLoader mainLoader = ModLoader.class.getClassLoader();
+				Reflections reflections = new Reflections(new URLClassLoader(new URL[]
+						{ jar.toURI().toURL() }, ModLoader.class.getClassLoader()), new SubTypesScanner());
 
-				URLClassLoader modLoader = new URLClassLoader(new URL[]
-				{ jar.toURI().toURL() }, mainLoader);
+				Class<? extends Mod> mod = Iterables.getFirst(reflections.getSubTypesOf(Mod.class), null);
 
-				Reflections reflections = new Reflections(modLoader, new SubTypesScanner());
-
-				Set<Class<? extends Mod>> subTypes = reflections.getSubTypesOf(Mod.class);
-
-				List<Class<? extends Mod>> mainList = new ArrayList<>(subTypes);
-
-				Class<?> clazz = mainList.get(0);
-
-				Class<? extends Mod> newClass = clazz.asSubclass(Mod.class);
-
-				Constructor<? extends Mod> constructor = newClass.getConstructor();
-
-				mods.add(constructor.newInstance());
+				if(mod != null)
+				{
+					mods.add(mod.getConstructor().newInstance());
+				}else {
+					System.out.println("Failed to load " + jar.getName() + " , mod does not have a valid class implementing Mod.class. The mod will not be loaded.");
+				}
 			} catch (Exception e)
 			{
 				e.printStackTrace();
