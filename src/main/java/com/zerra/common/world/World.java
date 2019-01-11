@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Vector3i;
 
-import com.zerra.client.Zerra;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
@@ -39,8 +38,6 @@ public class World {
 		}
 		this.storageManager = new WorldStorageManager(this);
 		this.pool = Executors.newCachedThreadPool();
-		
-		Zerra.getInstance().getPresence().setPresence("Playing on World \'" + name + "\'", "512x512", "none");
 	}
 
 	public void schedule(Runnable command) {
