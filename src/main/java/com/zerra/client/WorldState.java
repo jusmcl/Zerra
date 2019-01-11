@@ -4,25 +4,27 @@ import org.lwjgl.opengl.GL11;
 
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.view.Display;
-import com.zerra.common.world.World;
 
 public class WorldState extends State
 {
 
-	public WorldState(World world)
+	private Zerra zerra;
+
+	public WorldState()
 	{
-		Zerra.getInstance().getPresence().setPresence("Playing on World \'" + world.getName() + "\'", "512x512", "none");
+		zerra = Zerra.getInstance();
+		zerra.getPresence().setPresence("Playing on World \'" + zerra.getWorld().getName() + "\'", "512x512", "none");
 	}
 
 	@Override
-	public void update(Zerra zerra)
+	public void update()
 	{
 		zerra.camera.update();
 		zerra.inputHandler.updateGamepad();
 	}
 
 	@Override
-	public void render(Zerra zerra)
+	public void render()
 	{
 		zerra.fbo.bindFrameBuffer();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

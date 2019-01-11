@@ -130,12 +130,12 @@ public class Zerra implements Runnable {
 
 	private void update()
 	{
-		StateManager.getActiveState().update(this);
+		StateManager.getActiveState().update();
 	}
 
 	private void render(float partialTicks)
 	{
-		StateManager.getActiveState().render(this);
+		StateManager.getActiveState().render();
 	}
 
 	private void init() throws Throwable {
@@ -168,7 +168,8 @@ public class Zerra implements Runnable {
 		}
 		this.eventHandler = new EventHandler();
 		
-		StateManager.setActiveState(new WorldState(this.world));
+		//TODO: Eventually set the first state of the game to the game loading state.
+		StateManager.setActiveState(new WorldState());
 	}
 
 	public void schedule(Runnable runnable) {
