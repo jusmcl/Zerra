@@ -74,6 +74,10 @@ dependencies {
 	
 	// DISCORD RICH PRESENCE
 	compile "club.minnced:java-discord-rpc:2.0.2"
+	
+	// REFLECTIONS
+	compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+	
 }
 
 jar {

@@ -1,31 +1,45 @@
 package com.zerra;
 
+import java.util.List;
+
+import com.zerra.api.mod.Mod;
+import com.zerra.api.mod.ModLoader;
 import com.zerra.client.Zerra;
 import com.zerra.common.ArgsBuilder;
 import com.zerra.server.ZerraServer;
 
 /**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * 
  * The main starting point for the game.
- * 
  */
-public class Launch {
+public class Launch
+{
 
 	public static final String NAME = "Zerra";
 	public static final String VERSION = "0.0.3";
 	public static final String DOMAIN = "zerra";
 	public static final boolean IS_DEVELOPMENT_BUILD = true;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
+
 		ArgsBuilder builder = ArgsBuilder.deserialize(args);
-		if (builder.isServer()) {
+		if (builder.isServer())
+		{
 			new Thread(new ZerraServer(), "server").start();
-		} else {
+		} else
+		{
 			new Thread(new Zerra(), "main").start();
+		}
+
+		// Demonstration of mod loading. This is obviously not in the right spot, I know. But we'll move it later.
+		ModLoader ModLoader = new ModLoader();
+		List<Mod> mods = ModLoader.loadMods("data/mods/");
+
+		for (Mod mod : mods)
+		{
+			mod.init();
 		}
 	}
 }
