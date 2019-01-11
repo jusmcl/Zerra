@@ -8,6 +8,9 @@ import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.Launch;
+import com.zerra.client.MenuState;
+import com.zerra.client.StateManager;
+import com.zerra.client.WorldState;
 import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
@@ -107,6 +110,14 @@ public class Camera implements ICamera {
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT)) {
 				this.position.x += 1 + this.speedAdjust;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
+			{
+				if (StateManager.getActiveState() instanceof WorldState)
+				{
+					System.out.println("Switching to menu state...");
+					StateManager.setActiveState(new MenuState());
+				}
 			}
 			
 			// Useful keys to adjust the movement speed of the camera when not locked to the player.

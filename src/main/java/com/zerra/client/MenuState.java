@@ -6,12 +6,13 @@ public class MenuState extends State
 	@Override
 	public void update()
 	{
-		//TODO: Update menu!
+		Zerra.getInstance().camera.update();
+		Zerra.getInstance().inputHandler.updateGamepad();
 	}
 
 	@Override
 	public void render()
 	{
-		//TODO: Render a background and buttons here!
+		// TODO: Render a background and buttons here!
 	}
 }
