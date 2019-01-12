@@ -1,9 +1,8 @@
 package com.zerra;
 
-import java.util.List;
-
 import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.ModLoader;
+import com.zerra.api.mod.ModManager;
 import com.zerra.client.Zerra;
 import com.zerra.common.ArgsBuilder;
 import com.zerra.server.ZerraServer;
@@ -35,11 +34,13 @@ public class Launch
 
 		// Demonstration of mod loading. This is obviously not in the right spot, I know. But we'll move it later.
 		ModLoader ModLoader = new ModLoader();
-		List<Mod> mods = ModLoader.loadMods("data/mods/");
+		ModLoader.loadMods("data/mods/");
 
-		for (Mod mod : mods)
+		for (String modDomain : ModManager.loadedMods.keySet())
 		{
+			Mod mod = ModManager.loadedMods.get(modDomain);
 			mod.init();
+			mod.postInit();
 		}
 	}
 }
