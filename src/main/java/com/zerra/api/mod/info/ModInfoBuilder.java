@@ -52,6 +52,11 @@ public class ModInfoBuilder
 
 	public ModInfo build(String domain, String modName, String modVersion, String zerraVersion)
 	{
+		this.domain = domain;
+		this.modName = modName;
+		this.modVersion = modVersion;
+		this.zerraVersion = zerraVersion;
+
 		return new ModInfo(this);
 	}
 }
