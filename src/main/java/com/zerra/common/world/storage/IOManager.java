@@ -241,13 +241,22 @@ public class IOManager {
 		}
 
 		public void writeEntities(int layer, Vector3i platePos, Set<Entity> entities) throws IOException {
-			File file = getEntityFile(layer, platePos);
+            File file = getEntityFile(layer, platePos);
+		    if (entities.isEmpty()) {
+		        if (file.exists()) {
+		            file.delete();
+                }
+		        return;
+            }
 			FileUtils.touch(file);
 			//TODO: Write entities to file
 		}
 
 		public Set<Entity> readEntities(int layer, Vector3i platePos) throws IOException {
 			File file = getEntityFile(layer, platePos);
+			if (!file.exists()) {
+			    return Collections.emptySet();
+            }
 			//TODO: Read entities from file
 
 			return new HashSet<>();
