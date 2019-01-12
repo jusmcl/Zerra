@@ -13,10 +13,17 @@ import java.util.Map;
 public class ModManager
 {
 
-	public static Map<String, Mod> loadedMods = new HashMap<>();
-	public static Map<Integer, Mod> modGroupOrder = new HashMap<>();
+	public Map<String, Mod> loadedMods = new HashMap<>();
+	public Map<Integer, Mod> modGroupOrder = new HashMap<>();
 
 	public List<String> initializedMods = new ArrayList<>();
+
+	public ModLoader loader;
+
+	public ModManager()
+	{
+		loader = new ModLoader(this);
+	}
 
 	public void process(String domain)
 	{
@@ -41,10 +48,26 @@ public class ModManager
 			{
 				loadedMods.get(dependencies[i]).init();
 				initializedMods.add(dependencies[i]);
+			} else
+			{
+
 			}
 		}
 
 		loadedMods.get(domain).init();
 		initializedMods.add(domain);
+	}
+
+	public void setupMods()
+	{
+		loader.loadMods("data/mods/");
+
+		for (String modDomain : this.loadedMods.keySet())
+		{
+			Mod mod = this.loadedMods.get(modDomain);
+			mod.init();
+			mod.postInit();
+		}
+
 	}
 }
