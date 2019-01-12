@@ -12,6 +12,13 @@ import com.google.common.collect.Iterables;
 public class ModLoader
 {
 
+	private ModManager modManager;
+	
+	public ModLoader(ModManager modManager)
+	{
+		this.modManager = modManager;
+	}
+	
 	public void loadMods(String directory)
 	{
 		File modDir = new File(directory);
@@ -31,7 +38,7 @@ public class ModLoader
 				{
 					Mod instance = mod.getConstructor().newInstance();
 
-					ModManager.loadedMods.put(instance.getModInfo().getDomain(), instance);
+					modManager.loadedMods.put(instance.getModInfo().getDomain(), instance);
 				} else
 				{
 					System.out.println("Failed to load " + jar.getName() + " , mod does not have a valid class implementing Mod.class. The mod will not be loaded.");
