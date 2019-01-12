@@ -68,12 +68,13 @@ public class Zerra implements Runnable {
 
 	public Zerra() {
 		instance = this;
-		this.presence = new Presence();
 		this.pool = Executors.newCachedThreadPool();
 		
 		//TODO: Move this eventually to the game load state, or wherever is deemed necessary.
 		modManager = new ModManager();
 		modManager.setupMods();
+
+		this.presence = new Presence();
 		
 		this.start();
 	}
