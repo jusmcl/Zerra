@@ -8,20 +8,23 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import com.google.common.collect.Iterables;
+import com.zerra.client.Zerra;
 
 public class ModLoader
 {
-
 	private ModManager modManager;
-	
+
 	public ModLoader(ModManager modManager)
 	{
 		this.modManager = modManager;
 	}
-	
+
 	public void loadMods(String directory)
 	{
 		File modDir = new File(directory);
+
+		long snapshot = System.currentTimeMillis();
+
 		for (File jar : modDir.listFiles())
 		{
 
@@ -41,13 +44,16 @@ public class ModLoader
 					modManager.loadedMods.put(instance.getModInfo().getDomain(), instance);
 				} else
 				{
-					System.out.println("Failed to load " + jar.getName() + " , mod does not have a valid class implementing Mod.class. The mod will not be loaded.");
+					Zerra.logger().error("Failed to load " + jar.getName() + " , mod does not have a valid class implementing Mod.class. The mod will not be loaded.");
 				}
 			} catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-
 		}
+		
+		long calc = (System.currentTimeMillis() - snapshot) / 1000;
+		Zerra.logger().info("Finished loading mods in " + calc + " seconds.");
+
 	}
 }
