@@ -1,17 +1,15 @@
-package com.zerra.api.mod;
+package com.zerra.api.mod.example;
 
+import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 
-public class ExampleMod implements Mod
+public class AnotherExampleDependency implements Mod
 {
 
-	ModInfoBuilder builder = new ModInfoBuilder();
-	
 	@Override
 	public void init()
 	{
-		this.getLogger().info("Initializing mod...");
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 
@@ -23,13 +21,12 @@ public class ExampleMod implements Mod
 	@Override
 	public ModInfo getModInfo()
 	{
-		return builder
+		return new ModInfoBuilder()
 				.setAuthors("Arpaesis")
 				.setCredits("Credits to the Zerra development team for making the game!")
-				.setDependencies("dependencyDomain")
-				.setModDescription("A simple example mod.")
+				.setModDescription("A simple example dependency.")
 				.setWebsiteURL("https://www.example.com")
-				.build("examplemod", "Example Mod", "1.0", "0.0.4");
+				.build("anotherexampledependency", "Another Example Dependency", "1.0", "0.0.4");
 	}
 }
 
