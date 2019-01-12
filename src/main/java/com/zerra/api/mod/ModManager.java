@@ -30,28 +30,19 @@ public class ModManager
 
 		String[] dependencies = loadedMods.get(domain).getModInfo().getDependencies();
 
-		for (int i = 0; i < dependencies.length; i++)
+		if (dependencies != null)
 		{
-
-			boolean isInitialized = false;
-			for (int j = 0; j < dependencies.length; j++)
-			{
-				if (initializedMods.contains(dependencies[j]))
-				{
-					isInitialized = true;
-					break;
-				}
-			}
-
-			if (!isInitialized)
+			for (int i = 0; i < dependencies.length; i++)
 			{
 				this.process(dependencies[i]);
-
 			}
 		}
 
-		loadedMods.get(domain).init();
-		initializedMods.add(domain);
+		if (!initializedMods.contains(domain))
+		{
+			loadedMods.get(domain).init();
+			initializedMods.add(domain);
+		}
 	}
 
 	public void setupMods()
@@ -60,9 +51,7 @@ public class ModManager
 
 		for (String modDomain : this.loadedMods.keySet())
 		{
-			Mod mod = this.loadedMods.get(modDomain);
-			mod.init();
-			mod.postInit();
+			this.process(modDomain);
 		}
 
 	}
