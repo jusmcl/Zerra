@@ -31,7 +31,7 @@ public class ModLoader
 				{
 					Mod instance = mod.getConstructor().newInstance();
 
-					ModManager.loadedMods.put(instance.modInfo().getDomain(), instance);
+					ModManager.loadedMods.put(instance.getModInfo().getDomain(), instance);
 				} else
 				{
 					System.out.println("Failed to load " + jar.getName() + " , mod does not have a valid class implementing Mod.class. The mod will not be loaded.");

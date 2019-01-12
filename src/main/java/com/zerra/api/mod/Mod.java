@@ -1,5 +1,7 @@
 package com.zerra.api.mod;
 
+import com.zerra.api.mod.info.ModInfo;
+
 public interface Mod
 {
 
@@ -7,5 +9,5 @@ public interface Mod
 
 	public void postInit();
 
-	public ModInfo modInfo();
+	public ModInfo getModInfo();
 }
