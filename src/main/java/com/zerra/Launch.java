@@ -1,8 +1,5 @@
 package com.zerra;
 
-import com.zerra.api.mod.Mod;
-import com.zerra.api.mod.ModLoader;
-import com.zerra.api.mod.ModManager;
 import com.zerra.client.Zerra;
 import com.zerra.common.ArgsBuilder;
 import com.zerra.server.ZerraServer;
@@ -19,8 +16,6 @@ public class Launch
 	public static final String VERSION = "0.0.4";
 	public static final String DOMAIN = "zerra";
 	public static final boolean IS_DEVELOPMENT_BUILD = true;
-	
-	public static ModManager modManager = new ModManager();
 
 	public static void main(String[] args)
 	{
@@ -32,17 +27,6 @@ public class Launch
 		} else
 		{
 			new Thread(new Zerra(), "main").start();
-		}
-
-		// Demonstration of mod loading. This is obviously not in the right spot, I know. But we'll move it later.
-		ModLoader ModLoader = new ModLoader();
-		ModLoader.loadMods("data/mods/");
-
-		for (String modDomain : ModManager.loadedMods.keySet())
-		{
-			Mod mod = ModManager.loadedMods.get(modDomain);
-			mod.init();
-			mod.postInit();
 		}
 	}
 }
