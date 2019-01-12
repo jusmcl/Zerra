@@ -13,4 +13,5 @@ public class ModManager
 {
 	
 	public static Map<String, Mod> loadedMods = new HashMap<>();
+	public static Map<Integer, Mod> modGroupOrder = new HashMap<>();
 }
