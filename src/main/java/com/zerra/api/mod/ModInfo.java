@@ -15,6 +15,8 @@ public class ModInfo
 	private String[] authors = null;
 	
 	private String[] dependencies = null;
+	
+	private transient boolean isInitialized = false;
 
 	public ModInfo(String domain, String modName, String modVersion, String zerraVersion)
 	{
@@ -97,5 +99,15 @@ public class ModInfo
 	{
 		this.credits = credits;
 		return this;
+	}
+
+	protected boolean isInitialized()
+	{
+		return isInitialized;
+	}
+
+	protected void setInitialized(boolean isInitialized)
+	{
+		this.isInitialized = isInitialized;
 	}
 }
