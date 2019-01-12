@@ -6,7 +6,7 @@ import com.zerra.api.mod.info.ModInfoBuilder;
 public class ExampleMod implements Mod
 {
 
-	ModInfoBuilder builder;
+	ModInfoBuilder builder = new ModInfoBuilder();
 	
 	@Override
 	public void init()
