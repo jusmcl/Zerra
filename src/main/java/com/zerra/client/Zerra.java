@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
 import com.zerra.Presence;
+import com.zerra.api.mod.ModManager;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
@@ -62,11 +63,18 @@ public class Zerra implements Runnable {
 	private Presence presence;
 	
 	private EventHandler eventHandler;
+	
+	private ModManager modManager;
 
 	public Zerra() {
 		instance = this;
 		this.presence = new Presence();
 		this.pool = Executors.newCachedThreadPool();
+		
+		//TODO: Move this eventually to the game load state, or wherever is deemed necessary.
+		modManager = new ModManager();
+		modManager.setupMods();
+		
 		this.start();
 	}
 
