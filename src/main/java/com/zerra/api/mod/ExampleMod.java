@@ -12,12 +12,12 @@ public class ExampleMod implements Mod
 	public void init()
 	{
 		this.getLogger().info("Initializing mod...");
+		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 
 	@Override
 	public void postInit()
 	{
-		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 
 	@Override
