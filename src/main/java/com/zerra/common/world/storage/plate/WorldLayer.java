@@ -1,16 +1,14 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.joml.Vector3i;
-
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
+import org.joml.Vector3i;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class WorldLayer implements Layer {
 
@@ -18,12 +16,14 @@ public class WorldLayer implements Layer {
 	private int layer;
 	private Map<Vector3i, Plate> loadedPlates;
 	private List<Vector3i> loadingPlates;
+	private Set<Entity> loadedEntities;
 
 	public WorldLayer(World world, int layer) {
 		this.world = world;
 		this.layer = layer;
 		this.loadedPlates = new ConcurrentHashMap<Vector3i, Plate>();
 		this.loadingPlates = new ArrayList<Vector3i>();
+		this.loadedEntities = new HashSet<>();
 	}
 
 	private Plate generate(Vector3i pos) {
@@ -41,6 +41,7 @@ public class WorldLayer implements Layer {
 			this.loadingPlates.add(platePos);
 			if (this.world.getStorageManager().isPlateGenerated(this.layer, platePos)) {
 				this.world.schedule(() -> {
+					this.loadedEntities.addAll(this.world.getStorageManager().readEntitiesSafe(this.layer, platePos));
 					this.loadedPlates.put(platePos, this.world.getStorageManager().readPlateSafe(this.layer, platePos));
 					this.loadingPlates.remove(platePos);
 				});
@@ -61,6 +62,7 @@ public class WorldLayer implements Layer {
 			plate.unload();
 			this.world.schedule(() -> {
 				this.world.save(this.layer, plate.getPlatePos());
+				this.loadedEntities.removeIf(entity -> plate.isInsidePlate(entity.getTilePosition()));
 				this.loadedPlates.remove(pos);
 			});
 		}
@@ -72,12 +74,18 @@ public class WorldLayer implements Layer {
 	}
 
 	@Override
-	public Entity[] getEntities() {
-		return new Entity[0];
+	public Set<Entity> getEntities() {
+		return loadedEntities;
 	}
 
 	@Override
-	public int getLayer() {
+	public Set<Entity> getEntities(Plate plate)
+	{
+		return loadedEntities.stream().filter(entity -> plate.isInsidePlate(entity.getTilePosition())).collect(Collectors.toSet());
+	}
+
+	@Override
+	public int getLayerId() {
 		return layer;
 	}
 

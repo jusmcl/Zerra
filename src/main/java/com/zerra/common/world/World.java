@@ -1,20 +1,22 @@
 package com.zerra.common.world;
 
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3i;
-
 import com.zerra.client.Zerra;
+import com.zerra.common.util.MiscUtils;
+import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.storage.plate.WorldLayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector3i;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class World {
 
@@ -60,28 +62,43 @@ public class World {
 		Layer layer = this.getLayer(layerId);
 		if (layer != null) {
 			for (Plate plate : layer.getLoadedPlates()) {
-				this.storageManager.writePlateSafe(layerId, plate);
+				if (plate != null) {
+					save(layer, plate);
+				}
 			}
 		}
-		this.logger.info("Saved layer \'" + layerId + "\' in " + (double) (System.currentTimeMillis() - startTime) / 1000.0 + "s");
+		this.logger.info("Saved layer '{}' in {}", layerId, MiscUtils.secondsSinceTime(startTime));
 	}
 
 	public void save(int layerId, Vector3i pos) {
 		Layer layer = this.getLayer(layerId);
 		if (layer != null) {
 			if (layer.isPlateLoaded(pos)) {
-				this.storageManager.writePlateSafe(layerId, layer.getPlate(pos));
+				save(layer, layer.getPlate(pos));
 			}
 		}
 	}
 
+	private void save(@Nonnull Layer layer, @Nonnull Plate plate) {
+		int layerId = layer.getLayerId();
+		this.storageManager.writeEntitiesSafe(layerId, plate.getPlatePos(), layer.getEntities(plate));
+		this.storageManager.writePlateSafe(layerId, plate);
+	}
+
 	@Nullable
-	public Plate load(int layerId, Vector3i pos) {
+	public Plate loadPlate(int layerId, Vector3i pos) {
 		Layer layer = this.getLayer(layerId);
-		if (layer != null) {
-			if (layer.isPlateLoaded(pos)) {
-				return this.storageManager.readPlateSafe(layerId, pos);
-			}
+		if (layer != null && layer.isPlateLoaded(pos)) {
+			return this.storageManager.readPlateSafe(layerId, pos);
+		}
+		return null;
+	}
+
+	@Nullable
+	public Set<Entity> loadEntities(int layerId, Vector3i platePos) {
+		Layer layer = this.getLayer(layerId);
+		if(layer != null && layer.isPlateLoaded(platePos)) {
+			return this.storageManager.readEntitiesSafe(layer.getLayerId(), platePos);
 		}
 		return null;
 	}
