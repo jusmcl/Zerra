@@ -37,7 +37,7 @@ public abstract class EntityBase implements Entity
 
 		// Set to origin.
 		this.entityPosition.set(0f, 0f, 0f);
-		this.tilePosition.set(Math.round(this.entityPosition.x()), Math.round(this.entityPosition.z()), Math.round(this.entityPosition.z()));
+		this.tilePosition.set(Math.round(this.entityPosition.x()), Math.round(this.entityPosition.y()), Math.round(this.entityPosition.z()));
 
 		// Set direction.
 		this.direction = Direction.SOUTH;

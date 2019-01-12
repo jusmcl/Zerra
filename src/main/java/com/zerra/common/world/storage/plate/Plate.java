@@ -1,12 +1,12 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.function.Supplier;
-
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tile;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
 
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.tile.Tile;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class Plate {
 	
@@ -20,34 +20,31 @@ public class Plate {
 
 	public Plate(Layer layer) {
 		this.tiles = new Tile[SIZE * SIZE];
-		for (int z = 0; z < SIZE; z++) {
-			for (int x = 0; x < SIZE; x++) {
-				tiles[x + z * SIZE] = Tile.NONE;
-			}
-		}
+		Arrays.fill(tiles, Tile.NONE);
 		this.layer = layer;
 		this.requiresRenderUpdate = false;
 		this.loaded = true;
 	}
 
+	private static int posToIndex(Vector2i position)
+	{
+		return (position.x % SIZE) + (position.y % SIZE) * SIZE;
+	}
+
 	public void fill(int y, Supplier<Tile> toFill) {
-		for (int x = 0; x < SIZE; x++) {
-			for (int z = 0; z < SIZE; z++) {
-				setTileAt(new Vector2i(x, z), toFill.get());
-			}
+		for (int i = 0; i < tiles.length; i++) {
+			setTileAt(i, toFill.get());
 		}
 	}
 
-	public boolean isInsidePlate(Vector2i tilePos, int y) {
+	public boolean isInsidePlate(Vector3i tilePos) {
 		int x = tilePos.x / SIZE;
-		int z = tilePos.y / SIZE;
-		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == y;
+		int z = tilePos.z / SIZE;
+		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == tilePos.y;
 	}
 
 	public Tile getTileAt(Vector2i position) {
-		int x = position.x % SIZE;
-		int z = position.y % SIZE;
-		return tiles[x + z * SIZE];
+		return tiles[posToIndex(position)];
 	}
 
 	public Vector3i getPlatePos() {
@@ -71,13 +68,14 @@ public class Plate {
 	}
 
 	public void setTileAt(Vector2i position, Tile toPlace) {
-		int x = position.x % SIZE;
-		int z = position.y % SIZE;
-		Tile toReplace = getTileAt(position);
+		setTileAt(posToIndex(position), toPlace);
+	}
+
+	private void setTileAt(int index, Tile toPlace) {
 		if (toPlace != Tile.NONE) {
-			toReplace.spawnDropsInLayer(layer);
+			tiles[index].spawnDropsInLayer(layer);
 		}
-		this.tiles[x + z * SIZE] = toPlace;
+		tiles[index] = toPlace;
 	}
 
 	public void setRequiresRenderUpdate() {
@@ -94,7 +92,7 @@ public class Plate {
 
 	@Override
 	public int hashCode() {
-		return 31 * 1 + Integer.hashCode(this.layer.getLayer()) + 31 * this.platePos.hashCode();
+		return 31 * 1 + Integer.hashCode(this.layer.getLayerId()) + 31 * this.platePos.hashCode();
 	}
 
 	@Override
