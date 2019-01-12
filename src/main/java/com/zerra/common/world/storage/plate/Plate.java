@@ -1,13 +1,12 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tile;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
 
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.tile.Tile;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class Plate {
 	
@@ -38,10 +37,10 @@ public class Plate {
 		}
 	}
 
-	public boolean isInsidePlate(Vector2i tilePos, int y) {
+	public boolean isInsidePlate(Vector3i tilePos) {
 		int x = tilePos.x / SIZE;
-		int z = tilePos.y / SIZE;
-		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == y;
+		int z = tilePos.z / SIZE;
+		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == tilePos.y;
 	}
 
 	public Tile getTileAt(Vector2i position) {
@@ -93,7 +92,7 @@ public class Plate {
 
 	@Override
 	public int hashCode() {
-		return 31 * 1 + Integer.hashCode(this.layer.getLayer()) + 31 * this.platePos.hashCode();
+		return 31 * 1 + Integer.hashCode(this.layer.getLayerId()) + 31 * this.platePos.hashCode();
 	}
 
 	@Override
