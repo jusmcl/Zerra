@@ -1,9 +1,9 @@
 package com.zerra.api.mod;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The class where mods loaded onto the classpath will be handled and managed.
@@ -16,7 +16,7 @@ public class ModManager
 	public Map<String, Mod> loadedMods = new HashMap<>();
 	public Map<Integer, Mod> modGroupOrder = new HashMap<>();
 
-	public List<String> initializedMods = new ArrayList<>();
+	public Set<String> initializedMods = new HashSet<>();
 
 	public ModLoader loader;
 
@@ -32,12 +32,11 @@ public class ModManager
 
 		for (int i = 0; i < dependencies.length; i++)
 		{
-			this.process(dependencies[i]);
 
 			boolean isInitialized = false;
-			for (String initializedMod : initializedMods)
+			for (int j = 0; j < dependencies.length; j++)
 			{
-				if (dependencies[i].matches(initializedMod))
+				if (initializedMods.contains(dependencies[j]))
 				{
 					isInitialized = true;
 					break;
@@ -46,10 +45,7 @@ public class ModManager
 
 			if (!isInitialized)
 			{
-				loadedMods.get(dependencies[i]).init();
-				initializedMods.add(dependencies[i]);
-			} else
-			{
+				this.process(dependencies[i]);
 
 			}
 		}
