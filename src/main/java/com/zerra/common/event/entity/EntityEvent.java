@@ -1,4 +1,4 @@
-package com.zerra.common.event.events;
+package com.zerra.common.event.entity;
 
 import com.zerra.common.world.entity.Entity;
 

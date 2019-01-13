@@ -1,7 +1,7 @@
 package com.zerra.common.world.entity;
 
-import com.zerra.common.event.events.EntityDeathEvent;
-import com.zerra.common.event.events.EntityLivingEvent;
+import com.zerra.common.event.entity.EntityDeathEvent;
+import com.zerra.common.event.entity.EntityLivingEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.attrib.SharedLivingAttributes;
 
