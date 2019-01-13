@@ -7,7 +7,7 @@ import com.zerra.api.mod.info.ModInfoBuilder;
 public class ExampleMod implements Mod
 {
 
-	ModInfoBuilder builder = new ModInfoBuilder();
+	ModInfoBuilder builder = new ModInfoBuilder("examplemod", "Example Mod", "1.0", "0.0.4");
 	
 	@Override
 	public void init()
@@ -29,7 +29,7 @@ public class ExampleMod implements Mod
 				.setDependencies("exampledependency")
 				.setModDescription("A simple example mod.")
 				.setWebsiteURL("https://www.example.com")
-				.build("examplemod", "Example Mod", "1.0", "0.0.4");
+				.build();
 	}
 }
 

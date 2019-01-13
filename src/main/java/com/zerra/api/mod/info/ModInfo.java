@@ -1,57 +1,22 @@
 package com.zerra.api.mod.info;
 
-public class ModInfo
+public interface ModInfo
 {
+	String getDomain();
 
-	ModInfoBuilder builder;
+	String getModName();
 
-	public ModInfo(ModInfoBuilder builder)
-	{
-		this.builder = builder;
-	}
+	String getModVersion();
 
-	public String getDomain()
-	{
-		return builder.domain;
-	}
+	String getZerraVersion();
 
-	public String getModName()
-	{
-		return builder.modName;
-	}
+	String[] getAuthors();
 
-	public String getModVersion()
-	{
-		return builder.modVersion;
-	}
+	String[] getDependencies();
 
-	public String getZerraVersion()
-	{
-		return builder.zerraVersion;
-	}
+	String getModDescription();
 
-	public String[] getAuthors()
-	{
-		return builder.authors;
-	}
+	String getWebsiteURL();
 
-	public String[] getDependencies()
-	{
-		return builder.dependencies;
-	}
-
-	public String getModDescription()
-	{
-		return builder.modDescription;
-	}
-
-	public String getWebsiteURL()
-	{
-		return builder.websiteURL;
-	}
-
-	public String getCredits()
-	{
-		return builder.credits;
-	}
+	String getCredits();
 }

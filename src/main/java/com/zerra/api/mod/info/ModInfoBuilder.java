@@ -1,62 +1,177 @@
 package com.zerra.api.mod.info;
 
-public class ModInfoBuilder
-{
-	String domain;
+import com.google.gson.JsonObject;
+import com.zerra.common.util.JsonWrapper;
+import org.apache.log4j.Logger;
 
-	String modName;
+import javax.annotation.Nullable;
+import java.io.FileInputStream;
 
-	String modVersion;
+public class ModInfoBuilder {
 
-	String zerraVersion;
+    public static String[] optionalJsonKeys = {
+            "modDescription",
+            "websiteURL",
+            "credits",
+            "authors",
+            "dependencies"
+    };
 
-	String modDescription;
+    public static String[] requiredJsonKeys = {
+            "domain",
+            "modname",
+            "modVersion",
+            "zerraVersion"
+    };
 
-	String websiteURL;
+    private static Logger logger = Logger.getLogger("ModInfoBuilder");
 
-	String credits;
+    private String domain;
 
-	String[] authors, dependencies;
+    private String modName;
 
-	boolean isInitialized = false;
+    private String modVersion;
 
-	public ModInfoBuilder setModDescription(String modDescription)
-	{
-		this.modDescription = modDescription;
-		return this;
-	}
+    private String zerraVersion;
 
-	public ModInfoBuilder setWebsiteURL(String websiteURL)
-	{
-		this.websiteURL = websiteURL;
-		return this;
-	}
+    private String modDescription;
 
-	public ModInfoBuilder setCredits(String credits)
-	{
-		this.credits = credits;
-		return this;
-	}
+    private String websiteURL;
 
-	public ModInfoBuilder setAuthors(String... authors)
-	{
-		this.authors = authors;
-		return this;
-	}
+    private String credits;
 
-	public ModInfoBuilder setDependencies(String... dependencies)
-	{
-		this.dependencies = dependencies;
-		return this;
-	}
+    private String[] authors;
 
-	public ModInfo build(String domain, String modName, String modVersion, String zerraVersion)
-	{
-		this.domain = domain;
-		this.modName = modName;
-		this.modVersion = modVersion;
-		this.zerraVersion = zerraVersion;
+    private String[] dependencies;
 
-		return new ModInfo(this);
-	}
+    public ModInfoBuilder(String domain, String modName, String modVersion, String zerraVersion) {
+        this.domain = domain;
+        this.modName = modName;
+        this.modVersion = modVersion;
+        this.zerraVersion = zerraVersion;
+    }
+
+    @Nullable
+    public static ModInfo fromFile(FileInputStream fileInputStream) {
+        JsonWrapper jsonWrapper = new JsonWrapper(fileInputStream);
+        JsonObject object = jsonWrapper.getJson();
+        boolean flag = true;
+        for (String key : requiredJsonKeys) {
+            flag &= object.has(key);
+        }
+        if (!flag) {
+            logger.error("The file doesn't contain the required parameters");
+            return null;
+        }
+
+        String domain = jsonWrapper.getString("domain");
+        String modName = jsonWrapper.getString("modName");
+        String modVersion = jsonWrapper.getString("modVersion");
+        String zerraVersion = jsonWrapper.getString("zerraVersion");
+
+        ModInfoBuilder builder = new ModInfoBuilder(domain, modName, modVersion, zerraVersion);
+
+        for (String key : optionalJsonKeys) {
+            if (object.has(key)) {
+                builder.set(key, (String[]) jsonWrapper.get(key));
+            }
+        }
+        return builder.build();
+    }
+
+    public ModInfoBuilder set(String name, String... value) {
+        if (value.length < 1) {
+            return this;
+        }
+        switch (name) {
+            case "modDescription":
+                return setModDescription(value[0]);
+            case "websiteURL":
+                return setWebsiteURL(value[0]);
+            case "credits":
+                return setCredits(value[0]);
+            case "authors":
+                return setAuthors(value);
+            case "dependencies":
+                return setDependencies(value);
+            default:
+                return this;
+        }
+
+    }
+
+    public ModInfoBuilder setModDescription(String modDescription) {
+        this.modDescription = modDescription;
+        return this;
+    }
+
+    public ModInfoBuilder setWebsiteURL(String websiteURL) {
+        this.websiteURL = websiteURL;
+        return this;
+    }
+
+    public ModInfoBuilder setCredits(String credits) {
+        this.credits = credits;
+        return this;
+    }
+
+    public ModInfoBuilder setAuthors(String... authors) {
+        this.authors = authors;
+        return this;
+    }
+
+    public ModInfoBuilder setDependencies(String... dependencies) {
+        this.dependencies = dependencies;
+        return this;
+    }
+
+    public ModInfo build() {
+
+        return new ModInfo() {
+            @Override
+            public String getDomain() {
+                return domain;
+            }
+
+            @Override
+            public String getModName() {
+                return modName;
+            }
+
+            @Override
+            public String getModVersion() {
+                return modVersion;
+            }
+
+            @Override
+            public String getZerraVersion() {
+                return zerraVersion;
+            }
+
+            @Override
+            public String[] getAuthors() {
+                return authors;
+            }
+
+            @Override
+            public String[] getDependencies() {
+                return dependencies;
+            }
+
+            @Override
+            public String getModDescription() {
+                return modDescription;
+            }
+
+            @Override
+            public String getWebsiteURL() {
+                return websiteURL;
+            }
+
+            @Override
+            public String getCredits() {
+                return credits;
+            }
+        };
+    }
 }
