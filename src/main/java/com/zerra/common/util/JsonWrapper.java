@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
@@ -18,7 +19,7 @@ import com.google.gson.stream.JsonReader;
 public class JsonWrapper
 {
 
-	private static final Gson gson = new Gson();
+	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	// means that file is null
 	boolean isReadOnly = false;
 	boolean isFileBased = true;
@@ -32,6 +33,7 @@ public class JsonWrapper
 		JsonReader jsonReader = gson.newJsonReader(reader);
 		mainJson = gson.fromJson(jsonReader, JsonObject.class);
 		isReadOnly = true;
+		isFileBased = false;
 	}
 
 	public JsonWrapper(File file)
@@ -50,9 +52,9 @@ public class JsonWrapper
 		}
 	}
 
-	public JsonWrapper(String string, boolean isFile)
+	public JsonWrapper(String string, boolean isFileBased)
 	{
-		if (isFile)
+		if (isFileBased)
 		{
 			try
 			{
@@ -69,7 +71,23 @@ public class JsonWrapper
 			this.mainJson = gson.fromJson(string, JsonObject.class);
 			this.isFileBased = false;
 		}
+	}
 
+	public String fetch()
+	{
+		return fetch(true);
+	}
+
+	public String fetch(boolean format)
+	{
+		GsonBuilder builder = new GsonBuilder();
+
+		if (format)
+		{
+			return builder.setPrettyPrinting().create().toJson(this.mainJson);
+		}
+
+		return builder.create().toJson(this.mainJson);
 	}
 
 	public JsonObject getObjectFromPath(String path)
@@ -77,6 +95,7 @@ public class JsonWrapper
 		String[] objs = path.split("/");
 
 		JsonObject obj = this.mainJson;
+
 		for (int i = 0; i < objs.length; i++)
 		{
 			obj = obj.getAsJsonObject(objs[i]);
