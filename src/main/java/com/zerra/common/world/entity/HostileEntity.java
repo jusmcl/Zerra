@@ -1,8 +1,7 @@
 package com.zerra.common.world.entity;
 
-public interface Hostile extends Entity
+public interface HostileEntity
 {
-
 	/**
 	 * @return Gets the target this entity is attacking.
 	 */

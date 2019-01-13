@@ -1,23 +1,22 @@
 package com.zerra.common.world;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3i;
-
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.storage.plate.WorldLayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector3ic;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class World {
 
@@ -69,11 +68,11 @@ public class World {
 		this.logger.info("Saved layer '{}' in {}", layerId, MiscUtils.secondsSinceTime(startTime));
 	}
 
-	public void save(int layerId, Vector3i pos) {
+    public void save(int layerId, Vector3ic pos) {
 		Layer layer = this.getLayer(layerId);
 		if (layer != null) {
 			if (layer.isPlateLoaded(pos)) {
-				save(layer, layer.getPlate(pos));
+                save(layer, Objects.requireNonNull(layer.getPlate(pos)));
 			}
 		}
 	}
@@ -85,7 +84,7 @@ public class World {
 	}
 
 	@Nullable
-	public Plate loadPlate(int layerId, Vector3i pos) {
+    public Plate loadPlate(int layerId, Vector3ic pos) {
 		Layer layer = this.getLayer(layerId);
 		if (layer != null && layer.isPlateLoaded(pos)) {
 			return this.storageManager.readPlateSafe(layerId, pos);
@@ -94,7 +93,7 @@ public class World {
 	}
 
 	@Nullable
-	public Set<Entity> loadEntities(int layerId, Vector3i platePos) {
+    public Set<Entity> loadEntities(int layerId, Vector3ic platePos) {
 		Layer layer = this.getLayer(layerId);
 		if(layer != null && layer.isPlateLoaded(platePos)) {
 			return this.storageManager.readEntitiesSafe(layer.getLayerId(), platePos);

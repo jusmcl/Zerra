@@ -2,25 +2,17 @@ package com.zerra.common.world.entity;
 
 import com.zerra.common.event.entity.EntityDeathEvent;
 import com.zerra.common.event.entity.EntityLivingEvent;
-import com.zerra.common.world.World;
 import com.zerra.common.world.entity.attrib.SharedLivingAttributes;
+import com.zerra.common.world.storage.plate.WorldLayer;
 
-public class EntityLivingBase extends EntityBase
+public class EntityLivingBase extends Entity
 {
-	private World world;
-
 	private SharedLivingAttributes attributes;
 
-	public EntityLivingBase(World world)
-	{
-		super(world);
+    public EntityLivingBase(WorldLayer worldLayer) {
+        super(worldLayer);
 
 		this.attributes = new SharedLivingAttributes();
-	}
-
-	public World getWorld()
-	{
-		return world;
 	}
 
 	public SharedLivingAttributes getSharedAttributes()

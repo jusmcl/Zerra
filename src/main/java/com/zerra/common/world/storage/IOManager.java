@@ -1,34 +1,21 @@
 package com.zerra.common.world.storage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
-
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Vector2i;
+import org.joml.Vector3ic;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.*;
+import java.util.*;
 
 public class IOManager {
 
@@ -130,7 +117,7 @@ public class IOManager {
 		}
 
 		@Nullable
-		public Plate readPlateSafe(int layer, Vector3i pos) {
+        public Plate readPlateSafe(int layer, Vector3ic pos) {
 			try {
 				return this.readPlate(layer, pos);
 			} catch (IOException e) {
@@ -139,7 +126,7 @@ public class IOManager {
 			}
 		}
 
-		public void writeEntitiesSafe(int layer, Vector3i platePos, Set<Entity> entities) {
+        public void writeEntitiesSafe(int layer, Vector3ic platePos, Set<Entity> entities) {
 			try {
 				this.writeEntities(layer, platePos, entities);
 			} catch (IOException e) {
@@ -147,7 +134,7 @@ public class IOManager {
 			}
 		}
 
-		public Set<Entity> readEntitiesSafe(int layer, Vector3i platePos) {
+        public Set<Entity> readEntitiesSafe(int layer, Vector3ic platePos) {
 			try {
 				return this.readEntities(layer, platePos);
 			} catch (IOException e) {
@@ -233,7 +220,7 @@ public class IOManager {
 		}
 
 		@Nullable
-		public Plate readPlate(int layer, Vector3i platePos) throws IOException {
+        public Plate readPlate(int layer, Vector3ic platePos) throws IOException {
 			// Create plate file
 			File plateFile = this.getPlateFile(layer, platePos);
 			if (!plateFile.exists()) {
@@ -253,7 +240,7 @@ public class IOManager {
 			}
 		}
 
-		public void writeEntities(int layer, Vector3i platePos, Set<Entity> entities) throws IOException {
+        public void writeEntities(int layer, Vector3ic platePos, Set<Entity> entities) throws IOException {
             File file = getEntityFile(layer, platePos);
 		    if (entities.isEmpty()) {
 		        if (file.exists()) {
@@ -265,7 +252,7 @@ public class IOManager {
 			//TODO: Write entities to file
 		}
 
-		public Set<Entity> readEntities(int layer, Vector3i platePos) throws IOException {
+        public Set<Entity> readEntities(int layer, Vector3ic platePos) throws IOException {
 			File file = getEntityFile(layer, platePos);
 			if (!file.exists()) {
 			    return Collections.emptySet();
@@ -275,12 +262,12 @@ public class IOManager {
 			return new HashSet<>();
 		}
 
-		public void backupPlate(int layer, Vector3i pos) {
+        public void backupPlate(int layer, Vector3ic pos) {
 			try {
 				// Look for the plate file to back up
 				File plateFile = this.getPlateFile(layer, pos);
 				if (plateFile.exists()) {
-					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x + "_" + pos.y + "_" + pos.z + ".zpl");
+                    File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
 					FileUtils.touch(backupPlateFile);
 					org.apache.commons.io.IOUtils.copyLarge(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
@@ -289,19 +276,19 @@ public class IOManager {
 			}
 		}
 
-		public boolean isPlateGenerated(int layer, Vector3i pos) {
+        public boolean isPlateGenerated(int layer, Vector3ic pos) {
 			return this.getPlateFile(layer, pos).exists();
 		}
 
 		private File getLayerDir(int layer) {
 			return new File(this.worldDir, "plates-" + layer);
 		}
-		
-		private File getPlateFile(int layer, Vector3i pos) {
+
+        private File getPlateFile(int layer, Vector3ic pos) {
 			return new File(getLayerDir(layer), "plate_" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
 		}
 
-		private File getEntityFile(int layer, Vector3i platePos) {
+        private File getEntityFile(int layer, Vector3ic platePos) {
 			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".zen");
 		}
 

@@ -1,13 +1,14 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-
-import org.joml.Vector2i;
-import org.joml.Vector3i;
-
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
+
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class Plate {
 	
@@ -27,9 +28,8 @@ public class Plate {
 		this.loaded = true;
 	}
 
-	private static int posToIndex(Vector2i position)
-	{
-		return (position.x % SIZE) + (position.y % SIZE) * SIZE;
+	private static int posToIndex(Vector2ic position) {
+		return (position.x() % SIZE) + (position.y() % SIZE) * SIZE;
 	}
 
 	public void fill(int y, Supplier<Tile> toFill) {
@@ -38,17 +38,17 @@ public class Plate {
 		}
 	}
 
-	public boolean isInsidePlate(Vector3i tilePos) {
-		int x = tilePos.x / SIZE;
-		int z = tilePos.z / SIZE;
-		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == tilePos.y;
+	public boolean isInsidePlate(Vector2ic tilePos, int layer) {
+		int x = tilePos.x() / SIZE;
+		int z = tilePos.y() / SIZE;
+		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == layer;
 	}
 
-	public Tile getTileAt(Vector2i position) {
+	public Tile getTileAt(Vector2ic position) {
 		return tiles[posToIndex(position)];
 	}
 
-	public Vector3i getPlatePos() {
+	public Vector3ic getPlatePos() {
 		return platePos;
 	}
 
@@ -64,8 +64,12 @@ public class Plate {
 		return loaded;
 	}
 
-	public void setPlatePos(Vector3i platePos) {
-		this.platePos = platePos;
+	public void setPlatePos(Vector3ic platePos) {
+		if (this.platePos == null) {
+			this.platePos = new Vector3i(platePos);
+		} else {
+			this.platePos.set(platePos);
+		}
 	}
 
 	public void setTileAt(Vector2i position, Tile toPlace) {

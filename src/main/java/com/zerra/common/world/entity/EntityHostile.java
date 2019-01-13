@@ -1,15 +1,14 @@
 package com.zerra.common.world.entity;
 
-import com.zerra.common.world.World;
+import com.zerra.common.world.storage.plate.WorldLayer;
 
-public abstract class EntityHostile extends EntityLivingBase implements Hostile
+public abstract class EntityHostile extends EntityLivingBase implements HostileEntity
 {
 
 	private Entity attackTarget;
 
-	public EntityHostile(World world)
-	{
-		super(world);
+    public EntityHostile(WorldLayer worldLayer) {
+        super(worldLayer);
 	}
 
 	@Override
