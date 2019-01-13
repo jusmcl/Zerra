@@ -12,6 +12,7 @@ public class WorldState extends State
 
 	public WorldState()
 	{
+		super("world");
 		zerra = Zerra.getInstance();
 		zerra.getPresence().setPresence("Playing on World \'" + zerra.getWorld().getName() + "\'", "512x512", "none");
 	}

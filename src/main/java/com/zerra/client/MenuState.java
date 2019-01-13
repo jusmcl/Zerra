@@ -3,6 +3,15 @@ package com.zerra.client;
 public class MenuState extends State
 {
 
+	private Zerra zerra;
+
+	public MenuState()
+	{
+		super("menu");
+		zerra = Zerra.getInstance();
+		zerra.getPresence().setPresence("In Menu", "512x512", "none");
+	}
+	
 	@Override
 	public void update()
 	{
