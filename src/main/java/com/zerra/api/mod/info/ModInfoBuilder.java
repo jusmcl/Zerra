@@ -1,11 +1,13 @@
 package com.zerra.api.mod.info;
 
-import com.google.gson.JsonObject;
-import com.zerra.common.util.JsonWrapper;
-import org.apache.log4j.Logger;
+import java.io.FileInputStream;
 
 import javax.annotation.Nullable;
-import java.io.FileInputStream;
+
+import org.apache.log4j.Logger;
+
+import com.google.gson.JsonObject;
+import com.zerra.common.util.JsonWrapper;
 
 public class ModInfoBuilder {
 

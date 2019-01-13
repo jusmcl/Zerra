@@ -1,11 +1,13 @@
 package com.zerra.common.world.storage;
 
-import com.zerra.common.world.entity.Entity;
-import com.zerra.common.world.storage.plate.Plate;
-import org.joml.Vector3i;
+import java.util.Set;
 
 import javax.annotation.Nullable;
-import java.util.Set;
+
+import org.joml.Vector3i;
+
+import com.zerra.common.world.entity.Entity;
+import com.zerra.common.world.storage.plate.Plate;
 
 public interface Layer {
 
