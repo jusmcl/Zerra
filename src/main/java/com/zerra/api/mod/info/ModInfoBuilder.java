@@ -61,6 +61,7 @@ public class ModInfoBuilder {
         }
         if (!flag) {
             logger.error("The file doesn't contain the required parameters");
+            jsonWrapper.close();
             return null;
         }
 
@@ -76,6 +77,7 @@ public class ModInfoBuilder {
                 builder.set(key, (String[]) jsonWrapper.get(key));
             }
         }
+        jsonWrapper.close();
         return builder.build();
     }
 
@@ -83,13 +85,16 @@ public class ModInfoBuilder {
         if (value.length < 1) {
             return this;
         }
+
+    	String joined = String.join(" ", value);
+    	
         switch (name) {
             case "modDescription":
-                return setModDescription(value[0]);
+                return setModDescription(joined);
             case "websiteURL":
-                return setWebsiteURL(value[0]);
+                return setWebsiteURL(joined);
             case "credits":
-                return setCredits(value[0]);
+                return setCredits(joined);
             case "authors":
                 return setAuthors(value);
             case "dependencies":
