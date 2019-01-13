@@ -269,4 +269,14 @@ public class Zerra implements Runnable {
 	{
 		return presence;
 	}
+	
+	public float getTicksPerSecond()
+	{
+		return timer.getTicksPerSecond();
+	}
+	
+	public float renderPartialTicks()
+	{
+		return this.timer.renderPartialTicks;
+	}
 }

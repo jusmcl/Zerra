@@ -11,12 +11,15 @@ public class Timer {
 
 	private long lastSyncSysClock;
 	private float tickLength;
+	
+	private float tps;
 
 	/**
 	 * @param tps
 	 *            The amount of times the timer will update per update
 	 */
 	public Timer(float tps) {
+		this.tps = tps;
 		this.tickLength = 1000.0f / tps;
 		this.lastSyncSysClock = System.currentTimeMillis();
 	}
@@ -32,5 +35,10 @@ public class Timer {
 	
 	public float getTickLength() {
 		return tickLength;
+	}
+	
+	public float getTicksPerSecond()
+	{
+		return this.tps;
 	}
 }
