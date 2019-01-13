@@ -1,22 +1,23 @@
 package com.zerra.common.world;
 
-import com.zerra.client.Zerra;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector3i;
+
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.storage.plate.WorldLayer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3i;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class World {
 
@@ -41,8 +42,6 @@ public class World {
 		}
 		this.storageManager = new WorldStorageManager(this);
 		this.pool = Executors.newCachedThreadPool();
-		
-		Zerra.getInstance().getPresence().setPresence("Playing on World \'" + name + "\'", "512x512", "none");
 	}
 
 	public void schedule(Runnable command) {

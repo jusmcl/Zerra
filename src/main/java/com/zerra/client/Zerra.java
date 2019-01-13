@@ -53,12 +53,12 @@ public class Zerra implements Runnable {
 	private Timer timer;
 	private TextureManager textureManager;
 	private TextureMap textureMap;
-	private TileRenderer tileRenderer;
-	private GuiRenderer guiRenderer;
-	private Camera camera;
-	private InputHandler inputHandler;
-	private World world;
-	private Fbo fbo;
+	protected TileRenderer tileRenderer;
+	protected GuiRenderer guiRenderer;
+	protected Camera camera;
+	protected InputHandler inputHandler;
+	protected World world;
+	protected Fbo fbo;
 	
 	private Presence presence;
 	
@@ -137,21 +137,14 @@ public class Zerra implements Runnable {
 		}
 	}
 
-	private void update() {
-		this.camera.update();
-		this.inputHandler.updateGamepad();
+	private void update()
+	{
+		StateManager.getActiveState().update();
 	}
 
-	private void render(float partialTicks) {
-		this.fbo.bindFrameBuffer();
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		this.tileRenderer.renderTiles(this.camera, this.world, 0);
-		this.fbo.unbindFrameBuffer();
-
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.fbo.getColorTexture(0));
-		this.guiRenderer.setProjectionMatrix(GuiRenderer.FBO_MATRIX);
-		this.guiRenderer.renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
-		this.guiRenderer.restoreProjectionMatrix();
+	private void render(float partialTicks)
+	{
+		StateManager.getActiveState().render();
 	}
 
 	private void init() throws Throwable {
@@ -183,6 +176,9 @@ public class Zerra implements Runnable {
 			}
 		}
 		this.eventHandler = new EventHandler();
+		
+		//TODO: Eventually set the first state of the game to the game loading state.
+		StateManager.setActiveState(new WorldState());
 	}
 
 	public void schedule(Runnable runnable) {
