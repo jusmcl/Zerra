@@ -1,4 +1,4 @@
-package com.zerra;
+package com.zerra.client.presence;
 
 import com.zerra.client.Zerra;
 
