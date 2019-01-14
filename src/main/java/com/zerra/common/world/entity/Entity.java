@@ -4,12 +4,14 @@ import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.facing.Direction;
+import com.zerra.common.world.storage.Serialisable;
+import com.zerra.common.world.storage.SimpleDataFormat;
 import com.zerra.common.world.storage.plate.WorldLayer;
 import org.joml.*;
 
 import java.lang.Math;
 
-public abstract class Entity {
+public abstract class Entity implements Serialisable {
 
     protected World world;
 
@@ -350,5 +352,61 @@ public abstract class Entity {
      */
     public int getTicksExisted() {
         return ticksExisted;
+    }
+
+    @Override
+    public SimpleDataFormat serialise() {
+        SimpleDataFormat sdf = new SimpleDataFormat();
+
+        //Registry Name
+        sdf.setString("name", registryName);
+
+        //Position
+        SimpleDataFormat sdfPos = new SimpleDataFormat();
+        sdfPos.setFloat("x", entityPosition.x());
+        sdfPos.setFloat("y", entityPosition.y());
+        sdfPos.setFloat("z", entityPosition.z());
+        sdf.setData("position", sdfPos);
+
+        //Layer
+        sdf.setInt("layer", layer);
+
+        //Direction
+        sdf.setByte("direction", (byte) direction.ordinal());
+
+        //Misc
+        sdf.setBoolean("invisible", isInvisible);
+        sdf.setBoolean("inWater", isInWater);
+        sdf.setBoolean("onFire", isOnFire);
+
+        return sdf;
+    }
+
+    @Override
+    public void deserialise(SimpleDataFormat sdf) {
+        //Registry Name
+        registryName = sdf.getString("name");
+        if (registryName == null && world != null) {
+            world.logger().warn("Entity {} get a null registry name from deserialisation!", this);
+        }
+
+        //Position
+        SimpleDataFormat sdfPos = sdf.getData("position");
+        if (sdfPos == null) {
+            setPosition(new Vector3f(0F, 0F, 0F));
+        } else {
+            setPosition(new Vector3f(sdfPos.getFloatSafe("x"), sdfPos.getFloatSafe("y"), sdfPos.getFloatSafe("z")));
+        }
+
+        //Direction
+        direction = Direction.getFromIndex(sdf.getByteSafe("direction"));
+
+        //Layer
+        layer = sdf.getIntSafe("layer");
+
+        //Misc
+        isInvisible = sdf.getBooleanSafe("invisible");
+        isInWater = sdf.getBooleanSafe("inWater");
+        isOnFire = sdf.getBooleanSafe("onFire");
     }
 }

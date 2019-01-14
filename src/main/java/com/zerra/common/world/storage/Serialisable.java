@@ -1,9 +1,18 @@
 package com.zerra.common.world.storage;
 
-//TODO: Need to create the object we serialise the data to/from
 public interface Serialisable {
 
-    void serialise();
+    /**
+     * Serialises any data that needs persisting into a SimpleDataFormat object
+     *
+     * @return SimpleDataFormat object containing serialised data
+     */
+    SimpleDataFormat serialise();
 
-    void deserialise();
+    /**
+     * Deserialises the data within a SimpleDataFormat object
+     *
+     * @param sdf SimpleDataFormat object with serialised data
+     */
+    void deserialise(SimpleDataFormat sdf);
 }
