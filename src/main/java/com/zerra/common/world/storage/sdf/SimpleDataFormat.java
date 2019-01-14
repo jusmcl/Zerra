@@ -17,7 +17,8 @@ public class SimpleDataFormat {
 
     }
 
-    private void set(String key, Object value) {
+    // Package private method only to be used by SDFFileParser and internal methods in this class
+    void set(String key, Object value) {
         if (!KEY_PATTERN.matcher(key).matches()) {
             throw new RuntimeException("The key '%s' is invalid! It must only contain letters, numbers and underscores");
         }
