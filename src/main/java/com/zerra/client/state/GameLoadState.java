@@ -1,4 +1,4 @@
-package com.zerra.client;
+package com.zerra.client.state;
 
 public class GameLoadState extends State
 {
