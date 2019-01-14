@@ -5,16 +5,16 @@ import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.Serialisable;
-import com.zerra.common.world.storage.SimpleDataFormat;
 import com.zerra.common.world.storage.plate.WorldLayer;
+import com.zerra.common.world.storage.sdf.SimpleDataFormat;
+import com.zerra.common.world.storage.sdf.Storable;
 import org.joml.*;
 
 import javax.annotation.Nullable;
 import java.lang.Math;
 import java.util.UUID;
 
-public abstract class Entity implements Serialisable {
+public abstract class Entity implements Storable {
 
     protected World world;
     private String registryName;
@@ -388,7 +388,7 @@ public abstract class Entity implements Serialisable {
     }
 
     @Override
-    public SimpleDataFormat serialise() {
+    public SimpleDataFormat writeToSDF() {
         SimpleDataFormat sdf = new SimpleDataFormat();
 
         //Registry Name
@@ -419,7 +419,7 @@ public abstract class Entity implements Serialisable {
     }
 
     @Override
-    public void deserialise(SimpleDataFormat sdf) {
+    public void readFromSDF(SimpleDataFormat sdf) {
         //Registry Name
         this.registryName = sdf.getString("name");
         if (this.registryName == null && this.world != null) {

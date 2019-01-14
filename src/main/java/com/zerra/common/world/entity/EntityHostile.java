@@ -1,8 +1,8 @@
 package com.zerra.common.world.entity;
 
 import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.SimpleDataFormat;
 import com.zerra.common.world.storage.plate.WorldLayer;
+import com.zerra.common.world.storage.sdf.SimpleDataFormat;
 
 import java.util.UUID;
 
@@ -27,15 +27,15 @@ public abstract class EntityHostile extends EntityLivingBase implements HostileE
 	}
 
     @Override
-    public SimpleDataFormat serialise() {
-        SimpleDataFormat sdf = super.serialise();
+    public SimpleDataFormat writeToSDF() {
+        SimpleDataFormat sdf = super.writeToSDF();
         sdf.setUUID("attackTarget", attackTarget.getUuid());
         return sdf;
     }
 
     @Override
-    public void deserialise(SimpleDataFormat sdf) {
-        super.deserialise(sdf);
+    public void readFromSDF(SimpleDataFormat sdf) {
+        super.readFromSDF(sdf);
         UUID targetUuid = sdf.getUUID("attackTarget");
         if (targetUuid == null) {
             attackTarget = null;
