@@ -9,21 +9,29 @@ Zerra is a 2D top down survival sandbox game in which the player walks a fine li
 There is currently no set release date for the game at the time of writing this. For up to date information on releases, it is strongly recommended that you visit the discord for the game linked above.
 
 ## Developers
-* Ocelot#2614
-* Arpaesis#8924
-* BitCrack#6374
-* Bloody#0484
-* bright_spark#9873
-* Hayden#7709
-* Jammy#2822
-* Kirbocabana#0811
-* NerdyNoobGamer#1851
-* Paul#8221
-* Ruthless#5405
-* Shindu 👬#5388
-* SizableShrimp#0755
-* Spotwich#1227
-* tebreca#7091
-* Viperfish2000#6709
-* Warfield#5002
-* wundrweapon#4856
+Here are the discord tags for the developers of Zerra:
+
+* Ocelot#2614 (Project Lead, Lead Developer)
+* Arpaesis#8924 (Team Manager, Lead Developer)
+* BitCrack#6374 (Launcher Developer)
+* Bloody#0484 (Website Developer)
+* bright_spark#9873 (Game Developer)
+* Hayden#7709 (Game Developer)
+* Jammy#2822 (Texturer)
+* Kirbocabana#0811 (Texturer)
+* NerdyNoobGamer#1851 (Sound Design)
+* Paul#8221 (Planning, Story Writing)
+* Ruthless#5405 (Game/Launcher Developer)
+* Shindu 👬#5388 (Texturer)
+* SizableShrimp#0755 (Game Developer)
+* Spotwich#1227 (Launcher Developer)
+* tebreca#7091 (Game/Launcher/Website Developer, Sound Design)
+* Viperfish2000#6709 (Texturer)
+* Warfield#5002 (Planning, Story Writing)
+* wundrweapon#4856 (Planning, Linguistics)
+
+## Contact:
+You can contact us in the following ways:
+
+* By [Email](zerrateam@gmail.com)
+* Through [Discord](https://discord.gg/5CUa6qv)
