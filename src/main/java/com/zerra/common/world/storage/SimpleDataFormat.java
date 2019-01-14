@@ -2,6 +2,7 @@ package com.zerra.common.world.storage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A rather generic and simple data structure used for holding any kind of data
@@ -50,6 +51,11 @@ public class SimpleDataFormat {
         set(key, value);
     }
 
+    public void setUUID(String key, UUID value) {
+        set(key + "_most", value.getMostSignificantBits());
+        set(key + "_least", value.getLeastSignificantBits());
+    }
+
     public void setData(String key, SimpleDataFormat sdf) {
         set(key, sdf);
     }
@@ -92,6 +98,12 @@ public class SimpleDataFormat {
 
     public String getString(String key) {
         return get(key, String.class);
+    }
+
+    public UUID getUUID(String key) {
+        Long most = get(key + "_most", Long.class);
+        Long least = get(key + "_least", Long.class);
+        return most == null || least == null ? null : new UUID(most, least);
     }
 
     public SimpleDataFormat getData(String key) {

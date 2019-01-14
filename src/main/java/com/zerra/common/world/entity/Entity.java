@@ -4,18 +4,21 @@ import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.facing.Direction;
+import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.Serialisable;
 import com.zerra.common.world.storage.SimpleDataFormat;
 import com.zerra.common.world.storage.plate.WorldLayer;
 import org.joml.*;
 
+import javax.annotation.Nullable;
 import java.lang.Math;
+import java.util.UUID;
 
 public abstract class Entity implements Serialisable {
 
     protected World world;
-
     private String registryName;
+    private UUID uuid;
 
     private int ticksExisted = 0;
 
@@ -56,6 +59,25 @@ public abstract class Entity implements Serialisable {
     }
 
     /**
+     * Gets the World
+     *
+     * @return World
+     */
+    public World getWorld() {
+        return world;
+    }
+
+    /**
+     * Gets the layer this entity is in from the world
+     *
+     * @return Layer for this entity
+     */
+    @Nullable
+    public Layer getLayer() {
+        return getWorld().getLayer(getLayerId());
+    }
+
+    /**
      * Sets the registry name for this entity
      *
      * @param name The registry name
@@ -71,6 +93,16 @@ public abstract class Entity implements Serialisable {
      */
     public String getRegistryName() {
         return registryName;
+    }
+
+    /**
+     * Gets the unique ID for this entity
+     * Will be null if the entity has not been spawned yet
+     *
+     * @return Unique ID
+     */
+    public UUID getUuid() {
+        return uuid;
     }
 
     /**
@@ -182,7 +214,7 @@ public abstract class Entity implements Serialisable {
      *
      * @return World layer
      */
-    public int getLayer() {
+    public int getLayerId() {
         return layer;
     }
 
@@ -267,6 +299,7 @@ public abstract class Entity implements Serialisable {
     }
 
     public void spawn() {
+        this.uuid = UUID.randomUUID();
     }
 
     public void despawn() {
@@ -359,25 +392,28 @@ public abstract class Entity implements Serialisable {
         SimpleDataFormat sdf = new SimpleDataFormat();
 
         //Registry Name
-        sdf.setString("name", registryName);
+        sdf.setString("name", this.registryName);
+
+        //UUID
+        sdf.setUUID("uuid", this.uuid);
 
         //Position
         SimpleDataFormat sdfPos = new SimpleDataFormat();
-        sdfPos.setFloat("x", entityPosition.x());
-        sdfPos.setFloat("y", entityPosition.y());
-        sdfPos.setFloat("z", entityPosition.z());
+        sdfPos.setFloat("x", this.entityPosition.x());
+        sdfPos.setFloat("y", this.entityPosition.y());
+        sdfPos.setFloat("z", this.entityPosition.z());
         sdf.setData("position", sdfPos);
 
         //Layer
-        sdf.setInt("layer", layer);
+        sdf.setInt("layer", this.layer);
 
         //Direction
-        sdf.setByte("direction", (byte) direction.ordinal());
+        sdf.setByte("direction", (byte) this.direction.ordinal());
 
         //Misc
-        sdf.setBoolean("invisible", isInvisible);
-        sdf.setBoolean("inWater", isInWater);
-        sdf.setBoolean("onFire", isOnFire);
+        sdf.setBoolean("invisible", this.isInvisible);
+        sdf.setBoolean("inWater", this.isInWater);
+        sdf.setBoolean("onFire", this.isOnFire);
 
         return sdf;
     }
@@ -385,10 +421,12 @@ public abstract class Entity implements Serialisable {
     @Override
     public void deserialise(SimpleDataFormat sdf) {
         //Registry Name
-        registryName = sdf.getString("name");
-        if (registryName == null && world != null) {
-            world.logger().warn("Entity {} get a null registry name from deserialisation!", this);
+        this.registryName = sdf.getString("name");
+        if (this.registryName == null && this.world != null) {
+            this.world.logger().warn("Entity {} get a null registry name from deserialisation!", this);
         }
+
+        this.uuid = sdf.getUUID("uuid");
 
         //Position
         SimpleDataFormat sdfPos = sdf.getData("position");
@@ -399,14 +437,14 @@ public abstract class Entity implements Serialisable {
         }
 
         //Direction
-        direction = Direction.getFromIndex(sdf.getByteSafe("direction"));
+        this.direction = Direction.getFromIndex(sdf.getByteSafe("direction"));
 
         //Layer
-        layer = sdf.getIntSafe("layer");
+        this.layer = sdf.getIntSafe("layer");
 
         //Misc
-        isInvisible = sdf.getBooleanSafe("invisible");
-        isInWater = sdf.getBooleanSafe("inWater");
-        isOnFire = sdf.getBooleanSafe("onFire");
+        this.isInvisible = sdf.getBooleanSafe("invisible");
+        this.isInWater = sdf.getBooleanSafe("inWater");
+        this.isOnFire = sdf.getBooleanSafe("onFire");
     }
 }

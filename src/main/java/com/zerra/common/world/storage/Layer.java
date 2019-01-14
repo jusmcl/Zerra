@@ -7,6 +7,7 @@ import org.joml.Vector3ic;
 
 import javax.annotation.Nullable;
 import java.util.Set;
+import java.util.UUID;
 
 public interface Layer {
 
@@ -51,6 +52,16 @@ public interface Layer {
 	 * @return All entities currently on the plate
 	 */
 	Set<Entity> getEntities(Plate plate);
+
+    /**
+     * Gets an entity by its UUID from this layer
+     * Retuns null if no entity exists with this UUID
+     *
+     * @param uuid Unique ID
+     * @return Entity with the UUID
+     */
+    @Nullable
+    Entity getEntityByUUID(UUID uuid);
 
 	/**
 	 * Checks the loaded plates for the plate with the specified pos and loads it if it can not be found.

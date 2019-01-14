@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -100,6 +101,17 @@ public class World {
 		}
 		return null;
 	}
+
+    @Nullable
+    public Entity getEntityByUUID(UUID uuid) {
+        for (Layer layer : getLayers()) {
+            Entity entity = layer.getEntityByUUID(uuid);
+            if (entity != null) {
+                return entity;
+            }
+        }
+        return null;
+    }
 
 	public Logger logger() {
 		return logger;

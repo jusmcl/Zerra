@@ -68,7 +68,7 @@ public class WorldLayer implements Layer {
 			plate.unload();
 			this.world.schedule(() -> {
 				this.world.save(this.layer, plate.getPlatePos());
-                this.loadedEntities.removeIf(entity -> plate.isInsidePlate(entity.getTilePosition(), entity.getLayer()));
+                this.loadedEntities.removeIf(entity -> plate.isInsidePlate(entity.getTilePosition(), entity.getLayerId()));
 				this.loadedPlates.remove(pos);
 			});
 		}
@@ -87,7 +87,12 @@ public class WorldLayer implements Layer {
 	@Override
 	public Set<Entity> getEntities(Plate plate)
 	{
-        return loadedEntities.stream().filter(entity -> plate.isInsidePlate(entity.getTilePosition(), entity.getLayer())).collect(Collectors.toSet());
+        return loadedEntities.stream().filter(entity -> plate.isInsidePlate(entity.getTilePosition(), entity.getLayerId())).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Entity getEntityByUUID(UUID uuid) {
+        return loadedEntities.stream().filter(entity -> entity.getUuid().equals(uuid)).findFirst().orElse(null);
 	}
 
 	@Override
