@@ -1,4 +1,6 @@
-package com.zerra.client;
+package com.zerra.client.state;
+
+import com.zerra.client.Zerra;
 
 public class MenuState extends State
 {
@@ -15,8 +17,8 @@ public class MenuState extends State
 	@Override
 	public void update()
 	{
-		Zerra.getInstance().camera.update();
-		Zerra.getInstance().inputHandler.updateGamepad();
+		Zerra.getInstance().getCamera().update();
+		Zerra.getInstance().getInputHandler().updateGamepad();
 	}
 
 	@Override
