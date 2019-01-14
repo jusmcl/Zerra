@@ -9,6 +9,7 @@ public class ArmorItem extends Item
 	{
 		super(registryName);
 		this.type = type;
+		this.setCanBeGrouped(false);
 	}
 
 	public ArmorType getType()

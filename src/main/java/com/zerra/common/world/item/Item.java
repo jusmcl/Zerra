@@ -21,6 +21,7 @@ public class Item
 	{
 		this.registryName = registryName;
 		this.RARITY = rarity;
+		this.setCanBeGrouped(true);
 	}
 
 	public String getRegistryName()

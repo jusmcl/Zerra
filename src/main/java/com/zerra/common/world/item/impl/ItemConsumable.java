@@ -2,14 +2,14 @@ package com.zerra.common.world.item.impl;
 
 import com.zerra.common.world.item.Item;
 
-public abstract class BaseConsumable extends Item
+public abstract class ItemConsumable extends Item
 {
 
 	private float healingAmount;
 
 	private float consumeSpeed;
 
-	public BaseConsumable(String registryName)
+	public ItemConsumable(String registryName)
 	{
 		super(registryName);
 	}

@@ -3,7 +3,7 @@ package com.zerra.common.world.item.impl;
 import com.zerra.common.world.item.tool.Weapon;
 import com.zerra.common.world.item.tool.ZerraToolTypes;
 
-public class ItemWeapon extends BaseTool implements Weapon
+public class ItemWeapon extends ItemTool implements Weapon
 {
 
 	private float damage = 1.0f;

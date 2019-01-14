@@ -1,9 +1,10 @@
 package com.zerra.common.world.item.impl;
 
+import com.zerra.common.world.item.Item;
 import com.zerra.common.world.item.tool.Tool;
 import com.zerra.common.world.item.tool.ZerraToolTypes;
 
-public abstract class BaseTool extends BaseItem implements Tool
+public abstract class ItemTool extends Item implements Tool
 {
 
 	private float swingSpeed = 1.5f;
@@ -11,9 +12,10 @@ public abstract class BaseTool extends BaseItem implements Tool
 	private int durability = 0;
 	private String toolType = ZerraToolTypes.NONE;
 
-	public BaseTool(String registryName)
+	public ItemTool(String registryName)
 	{
 		super(registryName);
+		this.setCanBeGrouped(false);
 	}
 
 	@Override

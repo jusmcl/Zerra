@@ -6,7 +6,7 @@ import com.zerra.common.world.storage.sdf.SimpleDataFormat;
 
 import java.util.UUID;
 
-public abstract class EntityHostile extends EntityLivingBase implements HostileEntity
+public abstract class EntityHostile extends EntityLiving implements HostileEntity
 {
 	private Entity attackTarget;
 

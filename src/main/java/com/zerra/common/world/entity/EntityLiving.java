@@ -5,11 +5,11 @@ import com.zerra.common.event.entity.EntityLivingEvent;
 import com.zerra.common.world.entity.attrib.SharedLivingAttributes;
 import com.zerra.common.world.storage.plate.WorldLayer;
 
-public class EntityLivingBase extends Entity
+public class EntityLiving extends Entity
 {
 	private SharedLivingAttributes attributes;
 
-    public EntityLivingBase(WorldLayer worldLayer) {
+    public EntityLiving(WorldLayer worldLayer) {
         super(worldLayer);
 
 		this.attributes = new SharedLivingAttributes();
