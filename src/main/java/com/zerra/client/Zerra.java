@@ -18,6 +18,8 @@ import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.state.StateManager;
+import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
@@ -279,4 +281,23 @@ public class Zerra implements Runnable {
 	{
 		return this.timer.renderPartialTicks;
 	}
+	
+	public Camera getCamera() 
+	{
+		return camera;
+	}
+
+	public Fbo getFbo() 
+	{
+		return fbo;
+	}
+	
+	public GuiRenderer getGuiRenderer() {
+		return guiRenderer;
+	}
+
+	public TileRenderer getTileRenderer() {
+		return tileRenderer;
+	}
+
 }

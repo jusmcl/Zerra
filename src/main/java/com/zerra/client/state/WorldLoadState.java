@@ -1,4 +1,6 @@
-package com.zerra.client;
+package com.zerra.client.state;
+
+import com.zerra.client.Zerra;
 
 public class WorldLoadState extends State
 {

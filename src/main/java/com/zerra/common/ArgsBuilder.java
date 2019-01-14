@@ -99,7 +99,7 @@ public class ArgsBuilder {
 			}
 		}
 
-		// test if all args are set, if not, assigning the data but nly if IS_DEVELOPMENT_BUILD is true
+		// test if all args are set, if not, assigning the data but only if IS_DEVELOPMENT_BUILD is true
 		return new ArgsBuilder(isServer, id, workingDir);
 	}
 

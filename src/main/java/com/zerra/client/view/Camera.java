@@ -8,13 +8,13 @@ import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.Launch;
-import com.zerra.client.MenuState;
-import com.zerra.client.StateManager;
-import com.zerra.client.WorldState;
 import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
+import com.zerra.client.state.MenuState;
+import com.zerra.client.state.StateManager;
+import com.zerra.client.state.WorldState;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
