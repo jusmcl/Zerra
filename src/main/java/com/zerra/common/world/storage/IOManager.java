@@ -317,7 +317,7 @@ public class IOManager {
 		}
 
         private File getEntityFile(int layer, Vector3ic platePos) {
-			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".zen");
+			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".ubj");
 		}
 
 		private File getVersionFile() {
