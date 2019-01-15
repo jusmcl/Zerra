@@ -1,8 +1,10 @@
 package com.zerra.api.mod.example;
 
 import com.zerra.api.mod.Mod;
+import com.zerra.api.mod.ModInit;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
+import com.zerra.common.world.item.Item;
 
 public class ExampleMod implements Mod
 {
@@ -10,8 +12,10 @@ public class ExampleMod implements Mod
 	ModInfoBuilder builder = new ModInfoBuilder("examplemod", "Example Mod", "1.0", "0.0.4");
 	
 	@Override
-	public void init()
-	{
+	public void init(ModInit modInit) {
+		Item item = new Item("testItem");
+		modInit.register(item);
+
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 

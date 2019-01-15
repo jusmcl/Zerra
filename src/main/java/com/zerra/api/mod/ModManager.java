@@ -40,7 +40,7 @@ public class ModManager
 
 		if (!initializedMods.contains(domain))
 		{
-			loadedMods.get(domain).init();
+			loadedMods.get(domain).init(new ModInit(domain));
 			initializedMods.add(domain);
 		}
 	}

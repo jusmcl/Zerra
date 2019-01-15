@@ -11,7 +11,7 @@ public interface Mod
 		return LogManager.getLogger(getModInfo().getModName());
 	}
 
-	void init();
+	void init(ModInit modInit);
 
 	void postInit();
 

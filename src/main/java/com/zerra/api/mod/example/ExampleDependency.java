@@ -1,6 +1,7 @@
 package com.zerra.api.mod.example;
 
 import com.zerra.api.mod.Mod;
+import com.zerra.api.mod.ModInit;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 
@@ -8,7 +9,7 @@ public class ExampleDependency implements Mod
 {
 
 	@Override
-	public void init()
+    public void init(ModInit modInit)
 	{
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
