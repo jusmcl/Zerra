@@ -10,6 +10,7 @@ import com.zerra.common.world.storage.Storable;
 import com.zerra.common.world.storage.plate.WorldLayer;
 import org.joml.*;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.Math;
 import java.util.UUID;
@@ -387,39 +388,40 @@ public abstract class Entity implements Storable {
         return ticksExisted;
     }
 
+	@Nonnull
+	@Override
+	public UBObjectWrapper writeToUBO() {
+		UBObjectWrapper ubo = new UBObjectWrapper();
+
+		//Registry Name
+		ubo.setString("name", this.registryName);
+
+		//UUID
+		ubo.setUUID("uuid", this.uuid);
+
+		//Position
+		UBObjectWrapper uboPos = new UBObjectWrapper();
+		uboPos.setFloat("x", this.entityPosition.x());
+		uboPos.setFloat("y", this.entityPosition.y());
+		uboPos.setFloat("z", this.entityPosition.z());
+		ubo.setUBObject("position", uboPos);
+
+		//Layer
+		ubo.setInt("layer", this.layer);
+
+		//Direction
+		ubo.setByte("direction", (byte) this.direction.ordinal());
+
+		//Misc
+		ubo.setBoolean("invisible", this.isInvisible);
+		ubo.setBoolean("inWater", this.isInWater);
+		ubo.setBoolean("onFire", this.isOnFire);
+
+		return ubo;
+	}
+
     @Override
-    public UBObjectWrapper writeToUBO() {
-        UBObjectWrapper ubo = new UBObjectWrapper();
-
-        //Registry Name
-        ubo.setString("name", this.registryName);
-
-        //UUID
-        ubo.setUUID("uuid", this.uuid);
-
-        //Position
-        UBObjectWrapper uboPos = new UBObjectWrapper();
-        uboPos.setFloat("x", this.entityPosition.x());
-        uboPos.setFloat("y", this.entityPosition.y());
-        uboPos.setFloat("z", this.entityPosition.z());
-        ubo.setUBObject("position", uboPos);
-
-        //Layer
-        ubo.setInt("layer", this.layer);
-
-        //Direction
-        ubo.setByte("direction", (byte) this.direction.ordinal());
-
-        //Misc
-        ubo.setBoolean("invisible", this.isInvisible);
-        ubo.setBoolean("inWater", this.isInWater);
-        ubo.setBoolean("onFire", this.isOnFire);
-
-        return ubo;
-    }
-
-    @Override
-    public void readFromUBO(UBObjectWrapper ubo) {
+	public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
         //Registry Name
         this.registryName = ubo.getString("name");
         if (this.registryName == null && this.world != null) {

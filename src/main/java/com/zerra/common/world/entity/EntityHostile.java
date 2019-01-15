@@ -4,6 +4,7 @@ import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.WorldLayer;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public abstract class EntityHostile extends EntityLivingBase implements HostileEntity
@@ -26,15 +27,16 @@ public abstract class EntityHostile extends EntityLivingBase implements HostileE
 		this.attackTarget = target;
 	}
 
-    @Override
-    public UBObjectWrapper writeToUBO() {
-        UBObjectWrapper ubo = super.writeToUBO();
-        ubo.setUUID("attackTarget", attackTarget.getUuid());
-        return ubo;
-    }
+	@Nonnull
+	@Override
+	public UBObjectWrapper writeToUBO() {
+		UBObjectWrapper ubo = super.writeToUBO();
+		ubo.setUUID("attackTarget", attackTarget.getUuid());
+		return ubo;
+	}
 
     @Override
-    public void readFromUBO(UBObjectWrapper ubo) {
+	public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
         super.readFromUBO(ubo);
         UUID targetUuid = ubo.getUUID("attackTarget");
         if (targetUuid == null) {

@@ -2,6 +2,8 @@ package com.zerra.common.world.storage;
 
 import com.zerra.common.util.UBObjectWrapper;
 
+import javax.annotation.Nonnull;
+
 public interface Storable {
 
     /**
@@ -9,6 +11,7 @@ public interface Storable {
      *
      * @return {@link UBObjectWrapper} object containing serialised data
      */
+	@Nonnull
     UBObjectWrapper writeToUBO();
 
     /**
@@ -16,5 +19,5 @@ public interface Storable {
      *
      * @param ubo {@link UBObjectWrapper} object with serialised data
      */
-    void readFromUBO(UBObjectWrapper ubo);
+	void readFromUBO(@Nonnull UBObjectWrapper ubo);
 }
