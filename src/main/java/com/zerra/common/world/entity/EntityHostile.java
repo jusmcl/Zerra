@@ -29,10 +29,9 @@ public abstract class EntityHostile extends EntityLivingBase implements HostileE
 
 	@Nonnull
 	@Override
-	public UBObjectWrapper writeToUBO() {
-		UBObjectWrapper ubo = super.writeToUBO();
+	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
 		ubo.setUUID("attackTarget", attackTarget.getUuid());
-		return ubo;
+		return super.writeToUBO(ubo);
 	}
 
     @Override

@@ -390,9 +390,7 @@ public abstract class Entity implements Storable {
 
 	@Nonnull
 	@Override
-	public UBObjectWrapper writeToUBO() {
-		UBObjectWrapper ubo = new UBObjectWrapper();
-
+	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
 		//Registry Name
 		ubo.setString("name", this.registryName);
 

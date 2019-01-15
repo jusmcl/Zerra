@@ -10,9 +10,10 @@ public interface Storable {
      * Serialises any data that needs persisting into a {@link UBObjectWrapper} object
      *
      * @return {@link UBObjectWrapper} object containing serialised data
+     * @param ubo
      */
 	@Nonnull
-    UBObjectWrapper writeToUBO();
+    UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo);
 
     /**
      * Deserialises the data within a {@link UBObjectWrapper} object

@@ -2,6 +2,7 @@ package com.zerra.common.world.storage;
 
 import com.devsmart.ubjson.*;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
@@ -254,7 +255,7 @@ public class IOManager {
 
 			//Write entities to file
 			Set<UBObject> entityObjects = entities.stream()
-				.map(entity -> entity.writeToUBO().getWrappedUBObject())
+				.map(entity -> entity.writeToUBO(new UBObjectWrapper()).getWrappedUBObject())
 				.collect(Collectors.toSet());
 			UBArray array = UBValueFactory.createArray(entityObjects);
 
