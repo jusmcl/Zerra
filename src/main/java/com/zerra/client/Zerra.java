@@ -1,15 +1,5 @@
 package com.zerra.client;
 
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3i;
-import org.lwjgl.opengl.GL11;
-
 import com.zerra.Launch;
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.gfx.renderer.GuiRenderer;
@@ -17,14 +7,10 @@ import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.presence.Presence;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
-import com.zerra.client.presence.Presence;
-import com.zerra.client.util.Fbo;
-import com.zerra.client.util.I18n;
-import com.zerra.client.util.Loader;
-import com.zerra.client.util.ResourceLocation;
-import com.zerra.client.util.Timer;
+import com.zerra.client.util.*;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.event.EventHandler;
@@ -32,6 +18,15 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
+import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector3i;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -300,4 +295,7 @@ public class Zerra implements Runnable {
 		return tileRenderer;
 	}
 
+    public ModManager getModManager() {
+        return modManager;
+    }
 }

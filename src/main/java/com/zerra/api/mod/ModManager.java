@@ -45,14 +45,16 @@ public class ModManager
 		}
 	}
 
-	public void setupMods()
-	{
-		loader.loadMods("data/mods/");
+	public void setupMods() {
+        loader.loadMods("data/mods/");
 
-		for (String modDomain : this.loadedMods.keySet())
-		{
-			this.process(modDomain);
-		}
+        for (String modDomain : this.loadedMods.keySet()) {
+            this.process(modDomain);
+        }
 
-	}
+    }
+
+    public boolean doesDomainExist(String domain) {
+        return loadedMods.keySet().contains(domain);
+    }
 }

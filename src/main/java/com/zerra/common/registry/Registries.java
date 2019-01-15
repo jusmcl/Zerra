@@ -1,61 +1,31 @@
 package com.zerra.common.registry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.zerra.client.Zerra;
 import com.zerra.common.world.item.Item;
-import com.zerra.common.world.tile.Tile;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Registries {
 
-	public static final IRegistry<Tile> TILES = new Tiles();
+    private static final Set<Registry<? extends RegistryNameable>> REGISTRIES = new HashSet<>();
 
-	public static final IRegistry<Item> ITEMS = new Items();
+    static {
+        addRegistry(new Registry<>(Item.class));
+    }
 
-	public static void addEntryHolder(IEntryHolder<?> holder) {
-		if (holder.getType() == Tile.class) {
-			TILES.getEntries().add((Tile) holder);
-		} else if (holder.getType() == Item.class) {
-			ITEMS.getEntries().add((Item) holder);
-		}
-	}
+    public static void addRegistry(Registry<? extends RegistryNameable> registry) {
+        REGISTRIES.add(registry);
+    }
 
-	private static class Tiles implements IRegistry<Tile> {
-
-		protected final List<IEntryHolder<Tile>> entryHolders = new ArrayList<>();
-
-		@Override
-		public List<IEntryHolder<Tile>> getEntryHolders() {
-			return entryHolders;
-		}
-
-		@Override
-		public List<Tile> getEntries() {
-			List<Tile> entries = new ArrayList<>();
-			for (IEntryHolder<Tile> entryHolder : entryHolders) {
-				entries.addAll(Arrays.asList(entryHolder.getEntries()));
+    public static <T extends RegistryNameable> void register(T object) {
+        for (Registry<? extends RegistryNameable> registry : REGISTRIES) {
+            Class<? extends RegistryNameable> type = registry.getType();
+            if (type.isInstance(object)) {
+                registry.add(object);
+                return;
 			}
-			return entries;
 		}
-	}
-
-	private static class Items implements IRegistry<Item> {
-
-		List<IEntryHolder<Item>> entryHolders = new ArrayList<>();
-
-		@Override
-		public List<IEntryHolder<Item>> getEntryHolders() {
-			return entryHolders;
-		}
-
-		@Override
-		public List<Item> getEntries() {
-			List<Item> entries = new ArrayList<>();
-			for (IEntryHolder<Item> entryHolder : entryHolders) {
-				entries.addAll(Arrays.asList(entryHolder.getEntries()));
-			}
-			return entries;
-		}
+        Zerra.logger().warn("There is no registry for the type " + object.getClass().getName());
 	}
 }

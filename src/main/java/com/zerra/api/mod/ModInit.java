@@ -1,5 +1,6 @@
 package com.zerra.api.mod;
 
+import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.RegistryNameable;
 
 public class ModInit {
@@ -12,6 +13,6 @@ public class ModInit {
 
     public <T extends RegistryNameable> void register(T object) {
         object.setDomain(domain);
-        //TODO: Register where necessary
+        Registries.register(object);
     }
 }
