@@ -1,23 +1,26 @@
 package com.zerra.common.world;
 
-import com.zerra.common.util.MiscUtils;
-import com.zerra.common.world.entity.Entity;
-import com.zerra.common.world.storage.IOManager.WorldStorageManager;
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.plate.Plate;
-import com.zerra.common.world.storage.plate.WorldLayer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3ic;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector2i;
+import org.joml.Vector3ic;
+
+import com.zerra.common.util.MiscUtils;
+import com.zerra.common.world.entity.Entity;
+import com.zerra.common.world.storage.IOManager.WorldStorageManager;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.storage.plate.Plate;
+import com.zerra.common.world.storage.plate.WorldLayer;
 
 public class World {
 
@@ -27,6 +30,8 @@ public class World {
 	private Layer[] layers;
 	private WorldStorageManager storageManager;
 	private ExecutorService pool;
+	
+	private Vector2i worldSpawnPoint;
 
 	public World(String name) {
 		this.logger = LogManager.getLogger("World-" + name);
@@ -36,6 +41,8 @@ public class World {
 		// TODO: Make this also accept user-inputed seeds.
 		this.random.setSeed(random.nextLong());
 
+		worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
+		
 		this.layers = new Layer[6];
 		for (int i = 0; i < 6; i++) {
 			this.layers[i] = new WorldLayer(this, i);
@@ -127,6 +134,10 @@ public class World {
 
 	public Layer[] getLayers() {
 		return layers;
+	}
+	
+	public Vector2i getWorldSpawnPoint() {
+		return this.worldSpawnPoint;
 	}
 
 	@Nullable
