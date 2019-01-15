@@ -50,8 +50,4 @@ public class Registry<T extends RegistryNameable> {
 
         entries.put(registryName, obj);
     }
-
-    public T remove(String registryName) {
-        return entries.remove(registryName);
-    }
 }
