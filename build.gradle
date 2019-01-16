@@ -16,6 +16,9 @@ project.ext.jomlVersion = "1.9.12"
 group 'com.zerra'
 version '0.0.3'
 
+targetCompatibility = '11'
+sourceCompatibility = '11'
+
 repositories {
     mavenCentral()
 	jcenter()
