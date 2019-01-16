@@ -1,4 +1,4 @@
-#<a href="https://discord.gg/5CUa6qv">
+<a href="https://discord.gg/5CUa6qv">
         <img src="https://img.shields.io/discord/308323056592486420.svg?logo=discord&colorB=8080ff"
             alt="chat on Discord"></a>
 
