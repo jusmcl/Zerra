@@ -2,6 +2,7 @@ package com.zerra.common.registry;
 
 import com.zerra.client.Zerra;
 import com.zerra.common.world.item.Item;
+import com.zerra.common.world.tile.TileType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ public class Registries {
 
     static {
         addRegistry(new Registry<>(Item.class));
+        addRegistry(new Registry<>(TileType.class));
     }
 
     public static void addRegistry(Registry<? extends RegistryNameable> registry) {
