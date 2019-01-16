@@ -54,7 +54,7 @@ public abstract class Tile {
 	}
 
 	public String getTypeName() {
-		return tileType.getTypeName();
+		return tileType.getRegistryName();
 	}
 
 	public String getToolType() {
