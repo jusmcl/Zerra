@@ -1,9 +1,10 @@
 package com.zerra.common.world.entity;
 
+import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.WorldLayer;
-import com.zerra.common.world.storage.sdf.SimpleDataFormat;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public abstract class EntityHostile extends EntityLiving implements HostileEntity
@@ -26,17 +27,17 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 		this.attackTarget = target;
 	}
 
-    @Override
-    public SimpleDataFormat writeToSDF() {
-        SimpleDataFormat sdf = super.writeToSDF();
-        sdf.setUUID("attackTarget", attackTarget.getUuid());
-        return sdf;
-    }
+	@Nonnull
+	@Override
+	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
+		ubo.setUUID("attackTarget", attackTarget.getUuid());
+		return super.writeToUBO(ubo);
+	}
 
     @Override
-    public void readFromSDF(SimpleDataFormat sdf) {
-        super.readFromSDF(sdf);
-        UUID targetUuid = sdf.getUUID("attackTarget");
+	public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
+        super.readFromUBO(ubo);
+        UUID targetUuid = ubo.getUUID("attackTarget");
         if (targetUuid == null) {
             attackTarget = null;
         } else {
