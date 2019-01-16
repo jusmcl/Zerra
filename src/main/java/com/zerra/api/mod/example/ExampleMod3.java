@@ -6,10 +6,10 @@ import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 import com.zerra.common.world.item.Item;
 
-public class ExampleMod implements Mod
+public class ExampleMod3 implements Mod
 {
 
-	ModInfoBuilder builder = new ModInfoBuilder("examplemod", "Example Mod", "1.0", "0.0.4");
+	ModInfoBuilder builder = new ModInfoBuilder("examplemod3", "Example Mod 3", "1.0", "0.0.4");
 	
 	@Override
 	public void init(ModInit modInit) {
@@ -20,7 +20,7 @@ public class ExampleMod implements Mod
 		for(int i = 0; i < 100000; i++)
 		{
 			progress = (float)i / 1000;
-			System.out.println("MOD 1 PROGRESS: " + progress + "%");
+			System.out.println("MOD 3 PROGRESS: " + progress + "%");
 		}
 		
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
