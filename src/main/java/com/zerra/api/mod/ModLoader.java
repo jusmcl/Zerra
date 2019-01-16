@@ -1,11 +1,12 @@
 package com.zerra.api.mod;
 
-import java.util.Set;
-
-import org.reflections.Reflections;
+import java.util.List;
 
 import com.zerra.client.Zerra;
 import com.zerra.common.util.MiscUtils;
+
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 
 public class ModLoader
 {
@@ -20,25 +21,25 @@ public class ModLoader
 	{
 		long snapshot = System.currentTimeMillis();
 
-		Reflections reflections = new Reflections();
+		String modInterface = "com.zerra.api.mod.Mod";
 
-		Set<Class<? extends Mod>> loadedMods = reflections.getSubTypesOf(Mod.class);
-
-		for (Class<? extends Mod> clazz : loadedMods)
+		try (ScanResult scanResult = new ClassGraph().enableAllInfo().scan())
 		{
-			Mod mod = null;
-			try
-			{
-				mod = clazz.getConstructor().newInstance();
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			List<Class<?>> widgetClasses = scanResult.getClassesImplementing(modInterface).loadClasses();
 
-			if (mod != null)
+			for (Class<?> modClass : widgetClasses)
 			{
-				modManager.loadedMods.put(mod.getModInfo().getDomain(), mod);
+				Mod mod = (Mod) modClass.getConstructor().newInstance();
+
+				if (mod != null)
+				{
+					System.out.println(mod.getModInfo().getDomain());
+					modManager.loadedMods.put(mod.getModInfo().getDomain(), mod);
+				}
 			}
+		} catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 
 		Zerra.logger().info("Finished loading mods in " + MiscUtils.secondsSinceTime(snapshot));
