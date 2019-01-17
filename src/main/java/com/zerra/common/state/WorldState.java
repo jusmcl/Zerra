@@ -9,12 +9,9 @@ import com.zerra.client.view.Display;
 public class WorldState extends State
 {
 
-	private Zerra zerra;
-
 	public WorldState()
 	{
 		super("world");
-		zerra = Zerra.getInstance();
 		zerra.getPresence().setPresence("Playing on World \'" + zerra.getWorld().getName() + "\'", "512x512", "none");
 	}
 
