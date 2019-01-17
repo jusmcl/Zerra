@@ -1,9 +1,5 @@
 package com.zerra.api.mod;
 
-import com.google.common.collect.Iterables;
-import com.zerra.client.Zerra;
-import com.zerra.common.util.MiscUtils;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,6 +8,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import com.google.common.collect.Iterables;
 import com.zerra.client.ZerraClient;
 import com.zerra.common.util.MiscUtils;
 
@@ -76,7 +74,7 @@ public class ModManager {
 		for (int currentLevel = this.deepestLevel; currentLevel >= 0; currentLevel--) {
 			Set<Mod> mods = layers.get(currentLevel);
 			int size = mods.size();
-			Zerra.logger().info("Loading {} mods on level {}...", size, currentLevel);
+			ZerraClient.logger().info("Loading {} mods on level {}...", size, currentLevel);
 
 			if (size == 1) {
 				Mod mod = Iterables.getOnlyElement(mods);

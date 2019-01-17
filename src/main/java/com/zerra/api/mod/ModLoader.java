@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.zerra.client.ZerraClient;
 import com.zerra.common.util.MiscUtils;
-import org.reflections.Reflections;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
@@ -18,7 +17,7 @@ public class ModLoader
 	}
 
 	public void loadMods(String directory) {
-		Zerra.logger().info("Started loading mods...");
+		ZerraClient.logger().info("Started loading mods...");
 
 		long snapshot = System.currentTimeMillis();
 
