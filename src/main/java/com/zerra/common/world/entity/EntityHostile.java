@@ -1,10 +1,10 @@
 package com.zerra.common.world.entity;
 
+import java.util.UUID;
+
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.WorldLayer;
 import com.zerra.common.world.storage.sdf.SimpleDataFormat;
-
-import java.util.UUID;
 
 public abstract class EntityHostile extends EntityLiving implements HostileEntity
 {

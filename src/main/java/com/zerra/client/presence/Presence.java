@@ -1,6 +1,6 @@
 package com.zerra.client.presence;
 
-import com.zerra.client.Zerra;
+import com.zerra.common.ZerraClient;
 
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
@@ -21,7 +21,7 @@ public class Presence
 
 		handlers = new DiscordEventHandlers();
 
-		handlers.ready = (user) -> { Zerra.logger().info("Discord Rich Presence is ready!"); };
+		handlers.ready = (user) -> { ZerraClient.logger().info("Discord Rich Presence is ready!"); };
 
 		lib.Discord_Initialize(appId, handlers, true, null);
 
@@ -32,7 +32,7 @@ public class Presence
 		// in a worker thread
 		new Thread(() ->
 		{
-			while (!Thread.currentThread().isInterrupted() && Zerra.getInstance() != null)
+			while (!Thread.currentThread().isInterrupted() && ZerraClient.getInstance() != null)
 			{
 				lib.Discord_RunCallbacks();
 				try

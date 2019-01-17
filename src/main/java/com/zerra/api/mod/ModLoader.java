@@ -2,7 +2,7 @@ package com.zerra.api.mod;
 
 import java.util.List;
 
-import com.zerra.client.Zerra;
+import com.zerra.common.ZerraClient;
 import com.zerra.common.util.MiscUtils;
 
 import io.github.classgraph.ClassGraph;
@@ -42,7 +42,7 @@ public class ModLoader
 			e.printStackTrace();
 		}
 
-		Zerra.logger().info("Finished loading mods in " + MiscUtils.secondsSinceTime(snapshot));
+		ZerraClient.logger().info("Finished loading mods in " + MiscUtils.secondsSinceTime(snapshot));
 
 	}
 }

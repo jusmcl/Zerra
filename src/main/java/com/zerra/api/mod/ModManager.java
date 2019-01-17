@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.zerra.client.Zerra;
+import com.zerra.common.ZerraClient;
 import com.zerra.common.util.MiscUtils;
 
 /**
@@ -68,7 +68,7 @@ public class ModManager
 
 		long snapshot = System.currentTimeMillis();
 		initialize();
-		Zerra.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
+		ZerraClient.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
 	}
 
 	public void initialize()
@@ -88,7 +88,7 @@ public class ModManager
 		for (int currentLevel = deepestLevel; currentLevel > -1; currentLevel--)
 		{
 
-			Zerra.logger().info("Loading mods on level " + currentLevel + "...");
+			ZerraClient.logger().info("Loading mods on level " + currentLevel + "...");
 			for (String domain2 : modGroupOrder.keySet())
 			{
 				if (modGroupOrder.get(domain2).getDepth() == currentLevel)

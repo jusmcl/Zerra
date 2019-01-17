@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 import com.google.common.collect.Maps;
 import com.zerra.Launch;
-import com.zerra.client.Zerra;
+import com.zerra.common.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -96,11 +96,11 @@ public class I18n {
         try {
             bundle = ResourceBundle.getBundle("assets/" + Launch.DOMAIN + "/lang/" + (locale.getLanguage() + "_" + locale.getCountry()).toLowerCase(), locale);
         } catch (Exception e) {
-            Zerra.logger().warn("Could not locate language file for \'" + Launch.DOMAIN + "\' locale \'" + locale.getLanguage() + "_" + locale.getCountry() + "\'. Defaulting to english language file.");
+            ZerraClient.logger().warn("Could not locate language file for \'" + Launch.DOMAIN + "\' locale \'" + locale.getLanguage() + "_" + locale.getCountry() + "\'. Defaulting to english language file.");
             try {
                 bundle = ResourceBundle.getBundle("assets/" + Launch.DOMAIN + "/lang/" + (english.getLanguage() + "_" + english.getCountry()).toLowerCase(), english);
             } catch (MissingResourceException e1) {
-                Zerra.logger().warn("Could not locate language file for \'" + Launch.DOMAIN + "\' locale \'" + english.getLanguage() + "_" + english.getCountry() + "\'");
+                ZerraClient.logger().warn("Could not locate language file for \'" + Launch.DOMAIN + "\' locale \'" + english.getLanguage() + "_" + english.getCountry() + "\'");
             }
         }
 

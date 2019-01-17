@@ -17,12 +17,12 @@ import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-import com.zerra.client.Zerra;
 import com.zerra.client.gfx.texture.ITexture;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.common.ZerraClient;
 import com.zerra.common.world.storage.IOManager;
 
 public class TextureMap implements ITexture {
@@ -62,7 +62,7 @@ public class TextureMap implements ITexture {
 		foundImages.put(missingImage, TextureManager.MISSING_TEXTURE_LOCATION);
 
 		long startTime = System.currentTimeMillis();
-		Zerra.logger().info("Stitching " + (this.spriteLocations.size() + 1) + " sprite(s) into atlas \'" + this.location.toString() + "\'");
+		ZerraClient.logger().info("Stitching " + (this.spriteLocations.size() + 1) + " sprite(s) into atlas \'" + this.location.toString() + "\'");
 		for (ResourceLocation location : this.spriteLocations) {
 			try {
 				BufferedImage image = ImageIO.read(location.getInputStream());
@@ -73,7 +73,7 @@ public class TextureMap implements ITexture {
 				if (image.getHeight() > startingSize)
 					startingSize = image.getHeight();
 			} catch (Exception e) {
-				Zerra.logger().warn("Could not find atlas sprite at \'" + location + "\'. Skipping!");
+				ZerraClient.logger().warn("Could not find atlas sprite at \'" + location + "\'. Skipping!");
 			}
 		}
 
@@ -139,8 +139,8 @@ public class TextureMap implements ITexture {
 				}
 			}
 		} catch (Throwable t) {
-			Zerra.logger().fatal("Could not create texture atlas \'" + this.location + "\'!", t);
-			Zerra.getInstance().stop();
+			ZerraClient.logger().fatal("Could not create texture atlas \'" + this.location + "\'!", t);
+			ZerraClient.getInstance().stop();
 			return;
 		}
 		g.dispose();
@@ -158,7 +158,7 @@ public class TextureMap implements ITexture {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, Loader.loadToByteBuffer(atlas));
 
-		Zerra.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+		ZerraClient.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 		try {
 			File file = new File(IOManager.getInstanceDirectory(), "debug/atlas/" + this.location.getDomain() + "-" + this.location.getLocation() + ".png");
 			FileUtils.touch(file);

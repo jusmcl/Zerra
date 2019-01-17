@@ -1,8 +1,9 @@
 package com.zerra.api.mod;
 
-import com.zerra.api.mod.info.ModInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.zerra.api.mod.info.ModInfo;
 
 public interface Mod
 {

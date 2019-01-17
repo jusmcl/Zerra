@@ -1,6 +1,6 @@
 package com.zerra.client.state;
 
-import com.zerra.client.Zerra;
+import com.zerra.common.ZerraClient;
 
 public class State
 {
@@ -10,7 +10,7 @@ public class State
 	public State(String name)
 	{
 		this.name = name;
-		Zerra.logger().info("Loading " + this.getName() + " state.");
+		ZerraClient.logger().info("Loading " + this.getName() + " state.");
 	}
 
 	public void update()

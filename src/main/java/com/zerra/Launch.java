@@ -1,8 +1,7 @@
 package com.zerra;
 
-import com.zerra.client.Zerra;
-import com.zerra.common.ArgsBuilder;
-import com.zerra.server.ZerraServer;
+import com.zerra.common.ZerraClient;
+import com.zerra.common.util.ArgsBuilder;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -21,12 +20,6 @@ public class Launch
 	{
 
 		ArgsBuilder builder = ArgsBuilder.deserialize(args);
-		if (builder.isServer())
-		{
-			new Thread(new ZerraServer(), "server").start();
-		} else
-		{
-			new Thread(new Zerra(), "main").start();
-		}
+		new Thread(new ZerraClient(), "Client").start();
 	}
 }

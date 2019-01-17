@@ -1,4 +1,4 @@
-package com.zerra.common;
+package com.zerra.common.util;
 
 import java.io.File;
 import java.util.Arrays;

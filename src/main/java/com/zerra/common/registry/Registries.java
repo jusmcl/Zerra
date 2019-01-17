@@ -1,11 +1,11 @@
 package com.zerra.common.registry;
 
-import com.zerra.client.Zerra;
-import com.zerra.common.world.item.Item;
-import com.zerra.common.world.tile.TileType;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import com.zerra.common.ZerraClient;
+import com.zerra.common.world.item.Item;
+import com.zerra.common.world.tile.TileType;
 
 public class Registries {
 
@@ -28,6 +28,6 @@ public class Registries {
                 return;
 			}
 		}
-        Zerra.logger().warn("There is no registry for the type " + object.getClass().getName());
+        ZerraClient.logger().warn("There is no registry for the type " + object.getClass().getName());
 	}
 }

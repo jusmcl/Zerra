@@ -1,4 +1,13 @@
-package com.zerra.client;
+package com.zerra.common;
+
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
 import com.zerra.api.mod.ModManager;
@@ -10,23 +19,17 @@ import com.zerra.client.input.InputHandler;
 import com.zerra.client.presence.Presence;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
-import com.zerra.client.util.*;
+import com.zerra.client.util.Fbo;
+import com.zerra.client.util.I18n;
+import com.zerra.client.util.Loader;
+import com.zerra.client.util.ResourceLocation;
+import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.event.EventHandler;
-import com.zerra.common.world.World;
-import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
-import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector3i;
-import org.lwjgl.opengl.GL11;
-
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -38,11 +41,11 @@ import java.util.concurrent.Executors;
  * 
  * @author Ocelot5836, tebreca
  */
-public class Zerra implements Runnable {
+public class ZerraClient implements Runnable {
 
 	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
 
-	private static Zerra instance;
+	private static ZerraClient instance;
 
 	private ExecutorService pool;
 	private boolean running;
@@ -54,7 +57,6 @@ public class Zerra implements Runnable {
 	protected GuiRenderer guiRenderer;
 	protected Camera camera;
 	protected InputHandler inputHandler;
-	protected World world;
 	protected Fbo fbo;
 	
 	private Presence presence;
@@ -63,7 +65,7 @@ public class Zerra implements Runnable {
 	
 	private ModManager modManager;
 
-	public Zerra() {
+	public ZerraClient() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 		
@@ -96,7 +98,6 @@ public class Zerra implements Runnable {
 
 		LOGGER.info("Stopping...");
 		this.running = false;
-		this.world.stop();
 	}
 
 	// TODO improve loop
@@ -104,6 +105,7 @@ public class Zerra implements Runnable {
 	public void run() {
 		try {
 			this.init();
+			new Thread(new ZerraServer(), "Server").start();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -118,10 +120,6 @@ public class Zerra implements Runnable {
 
 					this.timer.updateTimer();
 
-					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
-						update();
-					}
-
 					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 					this.render(this.timer.renderPartialTicks);
 				}
@@ -134,13 +132,9 @@ public class Zerra implements Runnable {
 		}
 	}
 
-	private void update()
-	{
-		StateManager.getActiveState().update();
-	}
-
 	private void render(float partialTicks)
 	{
+		System.out.println("rendering...");
 		StateManager.getActiveState().render();
 	}
 
@@ -159,21 +153,11 @@ public class Zerra implements Runnable {
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
-		this.world = new World("world");
 		this.tileRenderer = new TileRenderer();
 		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
-		World world = Zerra.getInstance().getWorld();
-		Layer layer = world.getLayer(0);
-		for (int x = 0; x < 3; x++) {
-			for (int z = 0; z < 3; z++) {
-				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
-			}
-		}
-		this.eventHandler = new EventHandler();
-		
 		//TODO: Eventually set the first state of the game to the game loading state.
 		StateManager.setActiveState(new WorldState());
 	}
@@ -241,10 +225,6 @@ public class Zerra implements Runnable {
 	public InputHandler getInputHandler() {
 		return inputHandler;
 	}
-
-	public World getWorld() {
-		return world;
-	}
 	
 	public EventHandler getEventHandler() {
 		return eventHandler;
@@ -254,7 +234,7 @@ public class Zerra implements Runnable {
 		return LOGGER;
 	}
 
-	public static Zerra getInstance() {
+	public static ZerraClient getInstance() {
 		return instance;
 	}
 	
