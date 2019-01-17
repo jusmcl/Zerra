@@ -17,9 +17,10 @@ import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.presence.Presence;
+import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
-import com.zerra.client.presence.Presence;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
@@ -51,6 +52,9 @@ public class Zerra implements Runnable {
 
 	private ExecutorService pool;
 	private boolean running;
+	
+	private int loadingProgress;
+	private int loadingSteps;
 
 	private Timer timer;
 	private TextureManager textureManager;
@@ -115,11 +119,9 @@ public class Zerra implements Runnable {
 
 		while (true) {
 			try {
+				
 				while (this.running) {
-					if (!Display.isCloseRequested())
-						Display.update();
-					else
-						this.stop();
+					checkRequestedExit();
 
 					this.timer.updateTimer();
 
@@ -152,8 +154,8 @@ public class Zerra implements Runnable {
 	private void init() throws Throwable {
 		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-		GL11.glClearColor(0, 0, 0, 1);
-
+		StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
+		completeLoadingStep();
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.timer = new Timer(20);
@@ -181,6 +183,20 @@ public class Zerra implements Runnable {
 		
 		//TODO: Eventually set the first state of the game to the game loading state.
 		StateManager.setActiveState(new WorldState());
+	}
+	
+	private void completeLoadingStep() {
+		this.loadingProgress++;
+		StateManager.getActiveState().update();
+		StateManager.getActiveState().render();
+	}
+	
+	
+	private void checkRequestedExit() {
+		if (!Display.isCloseRequested())
+			Display.update();
+		else
+			this.stop();
 	}
 
 	public void schedule(Runnable runnable) {
@@ -229,6 +245,10 @@ public class Zerra implements Runnable {
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+	}
+	
+	public float getLoadingPercentage() {
+		return loadingSteps / loadingProgress;
 	}
 
 	public float getRenderPartialTicks() {
