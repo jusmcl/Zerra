@@ -27,6 +27,7 @@ import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.util.Timer;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
+import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
@@ -42,7 +43,7 @@ import com.zerra.server.ZerraServer;
  * 
  * @author Ocelot5836, tebreca
  */
-public class ZerraClient implements Runnable {
+public class ZerraClient extends Zerra {
 
 	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
 
@@ -86,6 +87,7 @@ public class ZerraClient implements Runnable {
 	/**
 	 * Sets the game's running status to true.
 	 */
+	@Override
 	public synchronized void start() {
 		if (this.running)
 			return;
@@ -97,6 +99,7 @@ public class ZerraClient implements Runnable {
 	/**
 	 * Sets the game's running status to false.
 	 */
+	@Override
 	public synchronized void stop() {
 		if (!this.running)
 			return;
@@ -113,7 +116,7 @@ public class ZerraClient implements Runnable {
 			new Thread(new ZerraServer(), "Server").start();
 			while(!ZerraServer.getInstance().isReady())
 			{
-				//TODO: Make this better.
+				Thread.sleep(1000);
 				System.out.println("Waiting for server...");
 			}
 			this.client.connect();
@@ -148,7 +151,8 @@ public class ZerraClient implements Runnable {
 		StateManager.getActiveState().render();
 	}
 
-	private void init() throws Throwable {
+	@Override
+	protected void init() {
 		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 		GL11.glClearColor(0, 0, 0, 1);

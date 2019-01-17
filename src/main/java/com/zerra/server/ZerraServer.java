@@ -1,17 +1,14 @@
 package com.zerra.server;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.joml.Vector3i;
 
-import com.zerra.Launch;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Timer;
+import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
@@ -27,22 +24,7 @@ import com.zerra.server.network.ServerPacketManager;
  * 
  * @author Arpaesis
  */
-public class ZerraServer implements Runnable {
-
-	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
-
-	private static ZerraServer instance;
-
-	private ExecutorService pool;
-	private boolean running;
-	private boolean serverReady = false;
-
-	private Timer timer;
-	protected World world;
-	
-	private EventHandler eventHandler;
-	
-	private ServerPacketManager server;
+public class ZerraServer extends Zerra {
 
 	public ZerraServer() {
 		instance = this;
@@ -56,6 +38,7 @@ public class ZerraServer implements Runnable {
 	/**
 	 * Sets the game's running status to true.
 	 */
+	@Override
 	public synchronized void start() {
 		if (this.running)
 			return;
@@ -67,6 +50,7 @@ public class ZerraServer implements Runnable {
 	/**
 	 * Sets the game's running status to false.
 	 */
+	@Override
 	public synchronized void stop() {
 		if (!this.running)
 			return;
@@ -112,7 +96,8 @@ public class ZerraServer implements Runnable {
 		StateManager.getActiveState().update();
 	}
 
-	private void init() throws Throwable {
+	@Override
+	protected void init() {
 		
 		this.timer = new Timer(20);
 		
@@ -130,25 +115,14 @@ public class ZerraServer implements Runnable {
 		StateManager.setActiveState(new WorldState());
 	}
 
+	public static ZerraServer getInstance()
+	{
+		return (ZerraServer) instance;
+	}
+
 	public void schedule(Runnable runnable) {
 		Validate.notNull(runnable);
 		this.pool.execute(runnable);
-	}
-
-	public World getWorld() {
-		return world;
-	}
-	
-	public EventHandler getEventHandler() {
-		return eventHandler;
-	}
-
-	public static Logger logger() {
-		return LOGGER;
-	}
-
-	public static ZerraServer getInstance() {
-		return instance;
 	}
 	
 	public boolean isReady()
