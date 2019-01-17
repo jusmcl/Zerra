@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL30;
 
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
 import com.zerra.client.util.Loader;
@@ -56,7 +56,7 @@ public class TileMeshCreator {
 				if (!textureCache.containsKey(tile)) {
 					textureCache.put(tile, tile.getTexture());
 				}
-				TextureMapSprite sprite = Zerra.getInstance().getTextureMap().getSprite(textureCache.get(tile));
+				TextureMapSprite sprite = ZerraClient.getInstance().getTextureMap().getSprite(textureCache.get(tile));
 				vertices[vertexPointer * 12] = x;
 				vertices[vertexPointer * 12 + 1] = z;
 				vertices[vertexPointer * 12 + 2] = x;
@@ -84,7 +84,7 @@ public class TileMeshCreator {
 				vertexPointer++;
 			}
 		}
-		Zerra.logger().info("Generated " + Plate.SIZE + "x" + Plate.SIZE + " mesh in " + (System.currentTimeMillis() - lastTime) / 1000.0 + " seconds");
+		ZerraClient.logger().info("Generated " + Plate.SIZE + "x" + Plate.SIZE + " mesh in " + (System.currentTimeMillis() - lastTime) / 1000.0 + " seconds");
 
 		meshCache.setPositions(vertices);
 		meshCache.setTextureCoords(textureCoords);
@@ -128,7 +128,7 @@ public class TileMeshCreator {
 			}
 			if (!this.requestedPlates.contains(plate)) {
 				this.requestedPlates.add(plate);
-				Zerra.getInstance().schedule(() -> this.generatePlateMesh(plate, this.requestedPlates.size() - 1));
+				ZerraClient.getInstance().schedule(() -> this.generatePlateMesh(plate, this.requestedPlates.size() - 1));
 			}
 		}
 		return false;

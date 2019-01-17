@@ -8,15 +8,13 @@ import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.Launch;
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
 import com.zerra.client.state.MenuState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
-import com.zerra.common.world.World;
-import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 
 /**
@@ -65,7 +63,7 @@ public class Camera implements ICamera {
 		this.lastPosition.set(this.position);
 		this.lastRotation.set(this.rotation);
 
-		InputHandler inputHandler = Zerra.getInstance().getInputHandler();
+		InputHandler inputHandler = ZerraClient.getInstance().getInputHandler();
 		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
 			Gamepad gamepad = inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
 			Joystick joystick = gamepad.getJoystick(0);
@@ -134,31 +132,31 @@ public class Camera implements ICamera {
 
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition)) {
-			World world = Zerra.getInstance().getWorld();
-			Layer layer = world.getLayer(0);
+			//World world = Zerra.getInstance().getWorld();
+			//Layer layer = world.getLayer(0);
 			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
 			for (int x = 0; x < 3; x++) {
 				for (int z = 0; z < 3; z++) {
 					Vector3i newPos = this.platePosition.add(x - 1, 0, z - 1, new Vector3i());
-					layer.loadPlate(newPos);
+					//layer.loadPlate(newPos);
 					loadedPositions.add(newPos);
 				}
 			}
-			for(Plate plate : layer.getLoadedPlates()) {
-				if(!loadedPositions.contains(plate.getPlatePos())) {
-					layer.unloadPlate(plate.getPlatePos());
-				}
-			}
+			//for(Plate plate : layer.getLoadedPlates()) {
+				//if(!loadedPositions.contains(plate.getPlatePos())) {
+				//	layer.unloadPlate(plate.getPlatePos());
+				//}
+			//}
 		}
 	}
 
 	@Override
 	public Vector3f getPosition() {
-		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * Zerra.getInstance().getRenderPartialTicks(), this.lastPosition.y + (this.position.y - this.lastPosition.y) * Zerra.getInstance().getRenderPartialTicks(), this.lastPosition.z + (this.position.z - this.lastPosition.z) * Zerra.getInstance().getRenderPartialTicks());
+		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.y + (this.position.y - this.lastPosition.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.z + (this.position.z - this.lastPosition.z) * ZerraClient.getInstance().getRenderPartialTicks());
 	}
 
 	@Override
 	public Vector3f getRotation() {
-		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * Zerra.getInstance().getRenderPartialTicks(), this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * Zerra.getInstance().getRenderPartialTicks(), this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * Zerra.getInstance().getRenderPartialTicks());
+		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * ZerraClient.getInstance().getRenderPartialTicks());
 	}
 }

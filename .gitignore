@@ -14,3 +14,4 @@ debug/
 hs_err*.log
 data.json
 /target/*
+/target/

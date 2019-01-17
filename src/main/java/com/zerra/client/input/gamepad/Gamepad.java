@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 
 public class Gamepad {
 
@@ -47,9 +47,9 @@ public class Gamepad {
 				this.buttons[i] = buttons.get(i);
 				if (this.previousButtons[i] != this.buttons[i]) {
 					if (this.isButtonPressed(i)) {
-						Zerra.getInstance().onJoystickButtonPressed(this.jid, i);
+						ZerraClient.getInstance().onJoystickButtonPressed(this.jid, i);
 					} else {
-						Zerra.getInstance().onJoystickButtonReleased(this.jid, i);
+						ZerraClient.getInstance().onJoystickButtonReleased(this.jid, i);
 					}
 				}
 			}

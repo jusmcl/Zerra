@@ -1,4 +1,4 @@
-package com.zerra.common;
+package com.zerra.common.util;
 
 import java.util.Date;
 import java.util.Map;
@@ -14,7 +14,6 @@ import com.playfab.PlayFabClientModels.PlayerProfileViewConstraints;
 import com.playfab.PlayFabClientModels.UserDataRecord;
 import com.playfab.PlayFabErrors.PlayFabResult;
 import com.playfab.PlayFabSettings;
-import com.zerra.common.util.JsonWrapper;
 
 public class AccountProcessor {
 	private String id;

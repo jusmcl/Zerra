@@ -1,24 +1,24 @@
 package com.zerra.client.state;
 
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 
 public class MenuState extends State
 {
 
-	private Zerra zerra;
+	private ZerraClient zerra;
 
 	public MenuState()
 	{
 		super("menu");
-		zerra = Zerra.getInstance();
+		zerra = ZerraClient.getInstance();
 		zerra.getPresence().setPresence("In Menu", "512x512", "none");
 	}
 	
 	@Override
 	public void update()
 	{
-		Zerra.getInstance().getCamera().update();
-		Zerra.getInstance().getInputHandler().updateGamepad();
+		ZerraClient.getInstance().getCamera().update();
+		ZerraClient.getInstance().getInputHandler().updateGamepad();
 	}
 
 	@Override

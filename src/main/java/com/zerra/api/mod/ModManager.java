@@ -12,6 +12,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import com.zerra.client.ZerraClient;
+import com.zerra.common.util.MiscUtils;
 
 /**
  * The class where mods loaded onto the classpath will be handled and managed.
@@ -42,7 +44,7 @@ public class ModManager {
 		this.pool = Executors.newCachedThreadPool();
 		long snapshot = System.currentTimeMillis();
 		this.initialize();
-		Zerra.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
+		ZerraClient.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
 		this.pool.shutdown();
 	}
 

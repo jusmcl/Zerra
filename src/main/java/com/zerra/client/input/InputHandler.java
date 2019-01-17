@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.view.Display;
 
@@ -17,7 +17,7 @@ import com.zerra.client.view.Display;
  * <br>
  * </br>
  * 
- * Handles all input passed in from the {@link Display}'s handlers into {@link Zerra}.
+ * Handles all input passed in from the {@link Display}'s handlers into {@link ZerraClient}.
  * 
  * @author Ocelot5836
  */
