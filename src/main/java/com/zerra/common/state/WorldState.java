@@ -1,4 +1,4 @@
-package com.zerra.client.state;
+package com.zerra.common.state;
 
 import org.lwjgl.opengl.GL11;
 
