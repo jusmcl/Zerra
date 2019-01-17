@@ -1,7 +1,7 @@
 package com.zerra.common.registry;
 
 import com.zerra.client.Zerra;
-import com.zerra.common.world.data.WorldData;
+import com.zerra.common.world.data.WorldDataFactory;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.tile.TileType;
 
@@ -17,7 +17,7 @@ public class Registries {
     static {
         addRegistry(new Registry<>(Item.class));
         addRegistry(new Registry<>(TileType.class));
-		addRegistry(new Registry<>(WorldData.class));
+		addRegistry(new Registry<>(WorldDataFactory.class));
     }
 
     public static void addRegistry(Registry<? extends RegistryNameable> registry) {

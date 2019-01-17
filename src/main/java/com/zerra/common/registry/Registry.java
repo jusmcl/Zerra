@@ -5,6 +5,7 @@ import com.zerra.client.Zerra;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,13 @@ public class Registry<T extends RegistryNameable> {
 	 */
 	public Set<T> get(Predicate<T> predicate) {
 		return entries.values().stream().filter(predicate).collect(Collectors.toSet());
+	}
+
+	/**
+	 * Gets all entries matching the {@link Predicate} and then re-maps them using the {@link Function}
+	 */
+	public <R> Set<R> get(Predicate<T> predicate, Function<T, R> mapper) {
+		return entries.values().stream().filter(predicate).map(mapper).collect(Collectors.toSet());
 	}
 
 	/**

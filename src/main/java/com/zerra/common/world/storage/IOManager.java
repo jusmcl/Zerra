@@ -2,8 +2,11 @@ package com.zerra.common.world.storage;
 
 import com.devsmart.ubjson.*;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.common.registry.Registries;
 import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
+import com.zerra.common.world.data.WorldData;
+import com.zerra.common.world.data.WorldDataFactory;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
@@ -18,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class IOManager {
@@ -49,7 +53,7 @@ public class IOManager {
 
 	public static class WorldStorageManager {
 
-		private static final int VERSION = 1;
+		private static final int VERSION = 2;
 
 		private final World world;
 		private final File worldDir;
@@ -140,6 +144,23 @@ public class IOManager {
         public Set<Entity> readEntitiesSafe(int layer, Vector3ic platePos) {
 			try {
 				return this.readEntities(layer, platePos);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		public void writeWorldDataSafe(@Nullable Integer layer, Map<String, WorldData> worldDataMap) {
+			try {
+				this.writeWorldData(layer, worldDataMap);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public Map<String, WorldData> readWorldDataSafe(@Nullable Integer layer) {
+			try {
+				return this.readWorldData(layer);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
@@ -254,41 +275,59 @@ public class IOManager {
 			FileUtils.touch(file);
 
 			//Write entities to file
-			Set<UBObject> entityObjects = entities.stream()
-				.map(entity -> entity.writeToUBO(new UBObjectWrapper()).getWrappedUBObject())
-				.collect(Collectors.toSet());
-			UBArray array = UBValueFactory.createArray(entityObjects);
-
-			try (UBWriter writer = new UBWriter(new FileOutputStream(file))) {
-				writer.writeArray(array);
-			}
+			writeStorablesToFile(file, entities);
 		}
 
-        public Set<Entity> readEntities(int layer, Vector3ic platePos) throws IOException {
+		public Set<Entity> readEntities(int layer, Vector3ic platePos) throws IOException {
 			File file = getEntityFile(layer, platePos);
 			if (!file.exists()) {
-			    return Collections.emptySet();
-            }
+				return Collections.emptySet();
+			}
 
 			//Read entities from file
-			UBValue contents;
-			try (UBReader reader = new UBReader(new FileInputStream(file))) {
-				contents = reader.read();
-			}
-
-			if (contents == null || !contents.isArray()) {
-				throw new IOException("The contents of the file " + file.getAbsolutePath() + " was not a UBArray!");
-			}
-
-			UBArray array = (UBArray) contents;
-			Set<Entity> entities = new HashSet<>();
-			for (int i = 0; i < array.size(); i++) {
-				UBValue entityData = array.get(i);
+			/*Set<Entity> entities = readStorablesFromFile(file, object -> {
 				//TODO: Deserialise entity data!
+			});
+			return entities;*/
 
+			//TEMP
+			return Collections.emptySet();
+		}
+
+		public void writeWorldData(@Nullable Integer layer, Map<String, WorldData> worldDataMap) throws IOException {
+			File file = getWorldDataFile(layer);
+			if (worldDataMap.isEmpty()) {
+				if (file.exists() && !file.delete()) {
+					this.world.logger().warn("Couldn't delete the world data file {}", file.getAbsolutePath());
+				}
+				return;
+			}
+			FileUtils.touch(file);
+
+			//Write world data to file
+			writeStorablesToFile(file, worldDataMap.values());
+		}
+
+		public Map<String, WorldData> readWorldData(@Nullable Integer layer) throws IOException {
+			File file = getWorldDataFile(layer);
+			if (!file.exists()) {
+				return Collections.emptyMap();
 			}
 
-			return entities;
+			//Read world data from file
+			Set<WorldData> worldData = readStorablesFromFile(file, object -> {
+				String name = object.getString("name");
+				WorldDataFactory factory = Registries.getRegisteredObject(name, WorldDataFactory.class);
+				if (factory == null) {
+					return null;
+				}
+				WorldData data = factory.getNewInstance();
+				data.readFromUBO(object);
+				return data;
+			});
+			Map<String, WorldData> worldDataMap = new HashMap<>();
+			worldData.forEach(data -> worldDataMap.put(data.getRegistryName(), data));
+			return worldDataMap;
 		}
 
         public void backupPlate(int layer, Vector3ic pos) {
@@ -305,20 +344,76 @@ public class IOManager {
 			}
 		}
 
+		/**
+		 * Writes objects that implement {@link Storable} to the given file
+		 *
+		 * @param file      File to write to
+		 * @param storables Objects to write
+		 * @throws IOException If issues writing to file
+		 */
+		private static void writeStorablesToFile(File file, Collection<? extends Storable> storables) throws IOException {
+			Set<UBObject> objects = storables.stream()
+				.map(o -> o.writeToUBO(new UBObjectWrapper()).getWrappedUBObject())
+				.collect(Collectors.toSet());
+			UBArray array = UBValueFactory.createArray(objects);
+
+			try (UBWriter writer = new UBWriter(new FileOutputStream(file))) {
+				writer.writeArray(array);
+			}
+		}
+
+		/**
+		 * Reads objects that implement {@link Storable} from a given file that have been written by writeStorablesToFile
+		 *
+		 * @param file         File the read from
+		 * @param readFunction {@link Function} to read and parse the data
+		 * @param <T>          {@link Storable} type
+		 * @return {@link Set} of the collected objects
+		 * @throws IOException If issues reading the file
+		 */
+		private static <T extends Storable> Set<T> readStorablesFromFile(File file, Function<UBObjectWrapper, T> readFunction) throws IOException {
+			UBValue contents;
+			try (UBReader reader = new UBReader(new FileInputStream(file))) {
+				contents = reader.read();
+			}
+
+			if (contents == null || !contents.isArray()) {
+				throw new IOException("The contents of the file " + file.getAbsolutePath() + " was not a UBArray!");
+			}
+			UBArray array = contents.asArray();
+			Set<T> storables = new HashSet<>();
+			for (int i = 0; i < array.size(); i++) {
+				UBValue value = array.get(i);
+				if (!value.isObject()) {
+					throw new RuntimeException("A value in this array (file: " + file.getAbsolutePath() + ") is not a UBObject!");
+				}
+				T storable = readFunction.apply(new UBObjectWrapper(value.asObject()));
+				if (storable != null) {
+					storables.add(storable);
+				}
+			}
+			return storables;
+		}
+
         public boolean isPlateGenerated(int layer, Vector3ic pos) {
 			return this.getPlateFile(layer, pos).exists();
 		}
 
 		private File getLayerDir(int layer) {
-			return new File(this.worldDir, "plates-" + layer);
+			return new File(this.worldDir, "layer-" + layer);
 		}
 
         private File getPlateFile(int layer, Vector3ic pos) {
 			return new File(getLayerDir(layer), "plate_" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
 		}
 
-        private File getEntityFile(int layer, Vector3ic platePos) {
+		private File getEntityFile(int layer, Vector3ic platePos) {
 			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".ubj");
+		}
+
+		private File getWorldDataFile(Integer layer) {
+			File parent = layer == null ? this.worldDir : getLayerDir(layer);
+			return new File(parent, "world_data.ubj");
 		}
 
 		private File getVersionFile() {

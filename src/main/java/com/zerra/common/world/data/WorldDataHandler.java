@@ -3,7 +3,10 @@ package com.zerra.common.world.data;
 import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.Registry;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Used by {@link com.zerra.common.world.World}s and {@link com.zerra.common.world.storage.Layer}s to get any
@@ -11,13 +14,19 @@ import java.util.Set;
  */
 public class WorldDataHandler {
 
-	public static Set<WorldData> getDataForWorld() {
-		Registry<WorldData> registry = Registries.getRegistry(WorldData.class);
-		return registry.get(entry -> !entry.isPerLayer());
+	private static Map<String, WorldData> getData(Predicate<WorldDataFactory> predicate) {
+		Registry<WorldDataFactory> registry = Registries.getRegistry(WorldDataFactory.class);
+		Set<WorldData> data = registry.get(predicate, WorldDataFactory::getNewInstance);
+		Map<String, WorldData> map = new HashMap<>();
+		data.forEach(wd -> map.put(wd.getRegistryName(), wd));
+		return map;
 	}
 
-	public static Set<WorldData> getDataForLayer() {
-		Registry<WorldData> registry = Registries.getRegistry(WorldData.class);
-		return registry.get(WorldData::isPerLayer);
+	public static Map<String, WorldData> getDataForWorld() {
+		return getData(factory -> !factory.isPerLayer());
+	}
+
+	public static Map<String, WorldData> getDataForLayer(int layer) {
+		return getData(worldData -> worldData.isPerLayer() && worldData.isForLayer(layer));
 	}
 }
