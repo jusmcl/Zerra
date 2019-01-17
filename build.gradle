@@ -23,17 +23,6 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-compileJava {
-    inputs.property('moduleName', 'com.zerra')
-    doFirst {
-        println "One"
-        options.compilerArgs = [
-                '--module-path', classpath.asPath
-        ]
-        classpath = files()
-    }
-}
-
 dependencies {
 	// LWJGL
 	compile "org.lwjgl:lwjgl:${lwjglVersion}"
