@@ -1,124 +1,99 @@
 package com.zerra.api.mod;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
+import com.google.common.collect.Iterables;
 import com.zerra.client.Zerra;
 import com.zerra.common.util.MiscUtils;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
 /**
  * The class where mods loaded onto the classpath will be handled and managed.
- * 
+ *
  * @author Arpaesis
  */
-public class ModManager
-{
+public class ModManager {
 
 	public Map<String, Mod> loadedMods = new HashMap<>();
-	public Map<String, ModIndex> modGroupOrder = new HashMap<>();
+	public Map<String, Integer> modGroupOrder = new HashMap<>();
+	private int deepestLevel = 0;
 
 	public ModLoader loader;
 
 	private ExecutorService pool;
 
-	public ModManager()
-	{
-		loader = new ModLoader(this);
-		pool = Executors.newCachedThreadPool();
+	public ModManager() {
+		this.loader = new ModLoader(this);
 	}
 
-	public void process(String domain, int depth)
-	{
-		String[] dependencies = loadedMods.get(domain).getModInfo().getDependencies();
+	public void setupMods() {
+		this.loader.loadMods("data/mods/");
 
-		if (!modGroupOrder.containsKey(domain))
-		{
-			modGroupOrder.put(domain, new ModIndex(depth));
-		} else
-		{
-			// Check if this depth is lower than the current
-			if (modGroupOrder.get(domain).getDepth() < depth)
-			{
-				modGroupOrder.put(domain, new ModIndex(depth));
-			}
-		}
-
-		if (dependencies != null)
-		{
-			for (int i = 0; i < dependencies.length; i++)
-			{
-				this.process(dependencies[i], ++depth);
-			}
-		}
-	}
-
-	public void setupMods()
-	{
-		loader.loadMods("data/mods/");
-
-		for (String modDomain : this.loadedMods.keySet())
-		{
+		for (String modDomain : this.loadedMods.keySet()) {
 			this.process(modDomain, 0);
 		}
 
+		this.pool = Executors.newCachedThreadPool();
 		long snapshot = System.currentTimeMillis();
-		initialize();
+		this.initialize();
 		Zerra.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
-	}
-
-	public void initialize()
-	{
-		int deepestLevel = 0;
-
-		for (String domain : modGroupOrder.keySet())
-		{
-			if (modGroupOrder.get(domain).getDepth() > deepestLevel)
-			{
-				deepestLevel = modGroupOrder.get(domain).getDepth();
-			}
-		}
-
-		List<Callable<?>> tasks = new ArrayList<>();
-
-		for (int currentLevel = deepestLevel; currentLevel > -1; currentLevel--)
-		{
-
-			Zerra.logger().info("Loading mods on level " + currentLevel + "...");
-			for (String domain2 : modGroupOrder.keySet())
-			{
-				if (modGroupOrder.get(domain2).getDepth() == currentLevel)
-				{
-					Callable<?> future = () ->
-					{
-						loadedMods.get(domain2).init(new ModInit(domain2));
-						return true;
-					};
-
-					tasks.add(future);
-				}
-			}
-
-			try
-			{
-				this.pool.invokeAll(tasks);
-			} catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			}
-
-			tasks.clear();
-		}
-
 		this.pool.shutdown();
 	}
 
-	public boolean doesDomainExist(String domain)
-	{
-		return loadedMods.keySet().contains(domain);
+	private void process(String domain, final int depth) {
+		if (depth > this.deepestLevel) {
+			this.deepestLevel = depth;
+		}
+
+		this.modGroupOrder.compute(domain, (d, layer) -> layer == null ? depth : Math.max(layer, depth));
+
+		String[] dependencies = this.loadedMods.get(domain).getModInfo().getDependencies();
+		if (dependencies != null) {
+			for (int i = 0; i < dependencies.length; i++) {
+				this.process(dependencies[i], depth + 1);
+			}
+		}
+	}
+
+	private void initialize() {
+		//Sorts the mods into easy-to-grab layers
+		Map<Integer, Set<Mod>> layers = new HashMap<>();
+		for (Map.Entry<String, Integer> modEntry : modGroupOrder.entrySet()) {
+			int layer = modEntry.getValue();
+			Set<Mod> mods = layers.getOrDefault(layer, new HashSet<>());
+			mods.add(loadedMods.get(modEntry.getKey()));
+			layers.put(layer, mods);
+		}
+
+		for (int currentLevel = this.deepestLevel; currentLevel >= 0; currentLevel--) {
+			Set<Mod> mods = layers.get(currentLevel);
+			int size = mods.size();
+			Zerra.logger().info("Loading {} mods on level {}...", size, currentLevel);
+
+			if (size == 1) {
+				Mod mod = Iterables.getOnlyElement(mods);
+				mod.init(new ModInit(mod.getModInfo().getDomain()));
+			} else {
+				try {
+					this.pool.invokeAll(mods.stream().map(mod -> (Callable<Void>) () -> {
+						String d = mod.getModInfo().getDomain();
+						mod.init(new ModInit(d));
+						return null;
+					}).collect(Collectors.toSet()));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public boolean doesDomainExist(String domain) {
+		return this.loadedMods.keySet().contains(domain);
 	}
 }

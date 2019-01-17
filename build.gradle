@@ -78,6 +78,8 @@ dependencies {
 	// CLASSGRAPH
 	compile group: 'io.github.classgraph', name: 'classgraph', version: '4.6.18'
 	
+	// UBJSON -> https://github.com/dinocore1/ubjson
+	implementation 'com.dev-smart:ubjson:0.1.8'
 }
 
 jar {

@@ -1,6 +1,8 @@
 package com.zerra.common.world.storage;
 
+import com.devsmart.ubjson.*;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
@@ -16,6 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class IOManager {
 
@@ -243,13 +246,22 @@ public class IOManager {
         public void writeEntities(int layer, Vector3ic platePos, Set<Entity> entities) throws IOException {
             File file = getEntityFile(layer, platePos);
 		    if (entities.isEmpty()) {
-		        if (file.exists()) {
-		            file.delete();
+				if (file.exists() && !file.delete()) {
+					this.world.logger().warn("Couldn't delete the entity file {}", file.getAbsolutePath());
                 }
 		        return;
             }
 			FileUtils.touch(file);
-			//TODO: Write entities to file
+
+			//Write entities to file
+			Set<UBObject> entityObjects = entities.stream()
+				.map(entity -> entity.writeToUBO(new UBObjectWrapper()).getWrappedUBObject())
+				.collect(Collectors.toSet());
+			UBArray array = UBValueFactory.createArray(entityObjects);
+
+			try (UBWriter writer = new UBWriter(new FileOutputStream(file))) {
+				writer.writeArray(array);
+			}
 		}
 
         public Set<Entity> readEntities(int layer, Vector3ic platePos) throws IOException {
@@ -257,9 +269,26 @@ public class IOManager {
 			if (!file.exists()) {
 			    return Collections.emptySet();
             }
-			//TODO: Read entities from file
 
-			return new HashSet<>();
+			//Read entities from file
+			UBValue contents;
+			try (UBReader reader = new UBReader(new FileInputStream(file))) {
+				contents = reader.read();
+			}
+
+			if (contents == null || !contents.isArray()) {
+				throw new IOException("The contents of the file " + file.getAbsolutePath() + " was not a UBArray!");
+			}
+
+			UBArray array = (UBArray) contents;
+			Set<Entity> entities = new HashSet<>();
+			for (int i = 0; i < array.size(); i++) {
+				UBValue entityData = array.get(i);
+				//TODO: Deserialise entity data!
+
+			}
+
+			return entities;
 		}
 
         public void backupPlate(int layer, Vector3ic pos) {
@@ -269,7 +298,7 @@ public class IOManager {
 				if (plateFile.exists()) {
                     File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
 					FileUtils.touch(backupPlateFile);
-					org.apache.commons.io.IOUtils.copyLarge(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
+					org.apache.commons.io.IOUtils.copy(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -289,7 +318,7 @@ public class IOManager {
 		}
 
         private File getEntityFile(int layer, Vector3ic platePos) {
-			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".zen");
+			return new File(getLayerDir(layer), "entities_" + platePos.x() + "_" + platePos.y() + "_" + platePos.z() + ".ubj");
 		}
 
 		private File getVersionFile() {
