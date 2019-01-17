@@ -15,8 +15,7 @@ import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
-
-import simplenet.Server;
+import com.zerra.server.network.ServerPacketManager;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -43,41 +42,15 @@ public class ZerraServer implements Runnable {
 	
 	private EventHandler eventHandler;
 	
-	private Server server;
+	private ServerPacketManager server;
 
 	public ZerraServer() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 		
-		this.createServer();
+		server = new ServerPacketManager();
 		
 		this.start();
-	}
-	
-	public void createServer()
-	{
-		server = new Server();
-
-		// Register one connection listener.
-		server.onConnect(client -> {
-			System.out.println(client + " has connected!");
-
-		    client.readByteAlways(opcode -> {
-		        switch (opcode) {
-		            case 1:
-		                client.readInt(System.out::println);
-		        }
-		    });
-
-		    // Register an optional pre-disconnection listener.
-		    client.preDisconnect(() -> System.out.println(client + " is about to disconnect!"));
-
-		    // Register an optional post-disconnection listener.
-		    client.postDisconnect(() -> System.out.println(client + " has successfully disconnected!"));
-		});
-
-		// Bind the server to an address and port AFTER registering listeners.
-		server.bind("localhost", 43594);
 	}
 
 	/**
@@ -101,7 +74,6 @@ public class ZerraServer implements Runnable {
 		LOGGER.info("Stopping...");
 		this.running = false;
 		this.world.stop();
-		this.server.close();
 	}
 
 	// TODO improve loop
@@ -110,6 +82,8 @@ public class ZerraServer implements Runnable {
 		try {
 			this.init();
 			this.serverReady = true;
+			this.server.bind();
+			
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -135,8 +109,7 @@ public class ZerraServer implements Runnable {
 
 	private void update()
 	{
-		System.out.println("updating...");
-		//StateManager.getActiveState().update();
+		StateManager.getActiveState().update();
 	}
 
 	private void init() throws Throwable {
@@ -144,7 +117,7 @@ public class ZerraServer implements Runnable {
 		this.timer = new Timer(20);
 		
 		this.world = new World("world");
-		World world = ZerraServer.getServer().getWorld();
+		World world = ZerraServer.getInstance().getWorld();
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++) {
 			for (int z = 0; z < 3; z++) {
@@ -174,11 +147,11 @@ public class ZerraServer implements Runnable {
 		return LOGGER;
 	}
 
-	public static ZerraServer getServer() {
+	public static ZerraServer getInstance() {
 		return instance;
 	}
 	
-	public boolean isServerReady()
+	public boolean isReady()
 	{
 		return this.serverReady;
 	}

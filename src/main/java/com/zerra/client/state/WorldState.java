@@ -17,9 +17,8 @@ public class WorldState extends State
 	{
 		super("world");
 		zerraClient = ZerraClient.getInstance();
-		zerraServer = ZerraServer.getServer();
-		// zerraClient.getPresence().setPresence("Playing on World \'" +
-		// zerraServer.getWorld().getName() + "\'", "512x512", "none");
+		zerraServer = ZerraServer.getInstance();
+		//TODO: zerraClient.getPresence().setPresence("Playing on World \'" + zerraServer.getWorld().getName() + "\'", "512x512", "none");
 	}
 
 	@Override
@@ -34,7 +33,7 @@ public class WorldState extends State
 	{
 		zerraClient.getFbo().bindFrameBuffer();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		if (zerraServer != null)
+		if (zerraServer.isReady())
 		{
 			zerraClient.getTileRenderer().renderTiles(zerraClient.getCamera(), zerraServer.getWorld(), 0);
 		}

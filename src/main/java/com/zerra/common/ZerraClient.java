@@ -16,6 +16,7 @@ import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
+import com.zerra.client.network.ClientPacketManager;
 import com.zerra.client.presence.Presence;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
@@ -64,6 +65,8 @@ public class ZerraClient implements Runnable {
 	private EventHandler eventHandler;
 	
 	private ModManager modManager;
+	
+	private ClientPacketManager client;
 
 	public ZerraClient() {
 		instance = this;
@@ -74,6 +77,8 @@ public class ZerraClient implements Runnable {
 		modManager.setupMods();
 
 		this.presence = new Presence();
+
+		this.client = new ClientPacketManager();
 		
 		this.start();
 	}
@@ -106,6 +111,12 @@ public class ZerraClient implements Runnable {
 		try {
 			this.init();
 			new Thread(new ZerraServer(), "Server").start();
+			while(!ZerraServer.getInstance().isReady())
+			{
+				//TODO: Make this better.
+				System.out.println("Waiting for server...");
+			}
+			this.client.connect();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -134,7 +145,6 @@ public class ZerraClient implements Runnable {
 
 	private void render(float partialTicks)
 	{
-		System.out.println("rendering...");
 		StateManager.getActiveState().render();
 	}
 
