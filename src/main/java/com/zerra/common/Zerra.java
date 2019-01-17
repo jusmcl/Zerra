@@ -9,7 +9,6 @@ import com.zerra.Launch;
 import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
-import com.zerra.server.ZerraServer;
 import com.zerra.server.network.ServerPacketManager;
 
 public class Zerra implements Runnable
