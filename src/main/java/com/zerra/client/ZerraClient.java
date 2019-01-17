@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.Launch;
@@ -32,6 +33,13 @@ import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.ZerraServer;
+import com.zerra.common.state.GameLoadState;
+import com.zerra.common.state.StateManager;
+import com.zerra.common.state.WorldState;
+import com.zerra.common.world.World;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -51,6 +59,9 @@ public class ZerraClient extends Zerra {
 
 	private ExecutorService pool;
 	private boolean running;
+	
+	private int loadingProgress;
+	private int loadingSteps;
 
 	private Timer timer;
 	private TextureManager textureManager;
@@ -126,11 +137,9 @@ public class ZerraClient extends Zerra {
 
 		while (true) {
 			try {
+				
 				while (this.running) {
-					if (!Display.isCloseRequested())
-						Display.update();
-					else
-						this.stop();
+					checkRequestedExit();
 
 					this.timer.updateTimer();
 
@@ -155,8 +164,8 @@ public class ZerraClient extends Zerra {
 	protected void init() {
 		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-		GL11.glClearColor(0, 0, 0, 1);
-
+		StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
+		completeLoadingStep();
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.timer = new Timer(20);
@@ -174,6 +183,20 @@ public class ZerraClient extends Zerra {
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 		//TODO: Eventually set the first state of the game to the game loading state.
 		StateManager.setActiveState(new WorldState());
+	}
+	
+	private void completeLoadingStep() {
+		this.loadingProgress++;
+		StateManager.getActiveState().update();
+		StateManager.getActiveState().render();
+	}
+	
+	
+	private void checkRequestedExit() {
+		if (!Display.isCloseRequested())
+			Display.update();
+		else
+			this.stop();
 	}
 
 	public void schedule(Runnable runnable) {
@@ -222,6 +245,10 @@ public class ZerraClient extends Zerra {
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+	}
+	
+	public float getLoadingPercentage() {
+		return loadingSteps / loadingProgress;
 	}
 
 	public float getRenderPartialTicks() {

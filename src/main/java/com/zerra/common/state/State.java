@@ -1,4 +1,4 @@
-package com.zerra.client.state;
+package com.zerra.common.state;
 
 import com.zerra.client.ZerraClient;
 
@@ -6,13 +6,17 @@ public class State
 {
 
 	private String name;
+	
+	protected Zerra zerra;
 
 	public State(String name)
 	{
 		this.name = name;
+		this.zerra = Zerra.getInstance();
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
 	}
 
+	// No rendering can ever be done in this method
 	public void update()
 	{
 
