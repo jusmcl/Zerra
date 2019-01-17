@@ -320,4 +320,7 @@ public class Zerra implements Runnable {
 		return tileRenderer;
 	}
 
+    public ModManager getModManager() {
+        return modManager;
+    }
 }

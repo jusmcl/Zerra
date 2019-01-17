@@ -1,10 +1,11 @@
 package com.zerra.common.world.item;
 
+import com.zerra.common.registry.RegistryNameable;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.tile.Tile;
 
-public class Item
+public class Item implements RegistryNameable
 {
 	private String registryName;
 
@@ -24,8 +25,15 @@ public class Item
 		this.setCanBeGrouped(true);
 	}
 
-	public String getRegistryName()
-	{
+    @Override
+    public final void setDomain(String domain) {
+        if (!registryName.contains(":")) {
+            registryName = domain + ":" + registryName;
+        }
+    }
+
+    @Override
+    public String getRegistryName() {
 		return registryName;
 	}
 

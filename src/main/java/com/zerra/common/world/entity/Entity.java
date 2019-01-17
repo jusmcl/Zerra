@@ -2,14 +2,15 @@ package com.zerra.common.world.entity;
 
 import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
+import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.storage.Storable;
 import com.zerra.common.world.storage.plate.WorldLayer;
-import com.zerra.common.world.storage.sdf.SimpleDataFormat;
-import com.zerra.common.world.storage.sdf.Storable;
 import org.joml.*;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.Math;
 import java.util.UUID;
@@ -387,64 +388,63 @@ public abstract class Entity implements Storable {
         return ticksExisted;
     }
 
+	@Nonnull
+	@Override
+	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
+		//Registry Name
+		ubo.setString("name", this.registryName);
+
+		//UUID
+		ubo.setUUID("uuid", this.uuid);
+
+		//Position
+		UBObjectWrapper uboPos = new UBObjectWrapper();
+		uboPos.setFloat("x", this.entityPosition.x());
+		uboPos.setFloat("y", this.entityPosition.y());
+		uboPos.setFloat("z", this.entityPosition.z());
+		ubo.setUBObject("position", uboPos);
+
+		//Layer
+		ubo.setInt("layer", this.layer);
+
+		//Direction
+		ubo.setByte("direction", (byte) this.direction.ordinal());
+
+		//Misc
+		ubo.setBoolean("invisible", this.isInvisible);
+		ubo.setBoolean("inWater", this.isInWater);
+		ubo.setBoolean("onFire", this.isOnFire);
+
+		return ubo;
+	}
+
     @Override
-    public SimpleDataFormat writeToSDF() {
-        SimpleDataFormat sdf = new SimpleDataFormat();
-
+	public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
         //Registry Name
-        sdf.setString("name", this.registryName);
-
-        //UUID
-        sdf.setUUID("uuid", this.uuid);
-
-        //Position
-        SimpleDataFormat sdfPos = new SimpleDataFormat();
-        sdfPos.setFloat("x", this.entityPosition.x());
-        sdfPos.setFloat("y", this.entityPosition.y());
-        sdfPos.setFloat("z", this.entityPosition.z());
-        sdf.setData("position", sdfPos);
-
-        //Layer
-        sdf.setInt("layer", this.layer);
-
-        //Direction
-        sdf.setByte("direction", (byte) this.direction.ordinal());
-
-        //Misc
-        sdf.setBoolean("invisible", this.isInvisible);
-        sdf.setBoolean("inWater", this.isInWater);
-        sdf.setBoolean("onFire", this.isOnFire);
-
-        return sdf;
-    }
-
-    @Override
-    public void readFromSDF(SimpleDataFormat sdf) {
-        //Registry Name
-        this.registryName = sdf.getString("name");
+        this.registryName = ubo.getString("name");
         if (this.registryName == null && this.world != null) {
             this.world.logger().warn("Entity {} get a null registry name from deserialisation!", this);
         }
 
-        this.uuid = sdf.getUUID("uuid");
+        this.uuid = ubo.getUUID("uuid");
 
         //Position
-        SimpleDataFormat sdfPos = sdf.getData("position");
-        if (sdfPos == null) {
+        UBObjectWrapper uboPos = ubo.getUBObjectWrapped("position");
+        if (uboPos == null) {
             setPosition(new Vector3f(0F, 0F, 0F));
         } else {
-            setPosition(new Vector3f(sdfPos.getFloatSafe("x"), sdfPos.getFloatSafe("y"), sdfPos.getFloatSafe("z")));
+            setPosition(new Vector3f(uboPos.getFloatSafe("x"), uboPos.getFloatSafe("y"), uboPos.getFloatSafe("z")));
         }
 
         //Direction
-        this.direction = Direction.getFromIndex(sdf.getByteSafe("direction"));
+        this.direction = Direction.getFromIndex(ubo.getByteSafe("direction"));
 
         //Layer
-        this.layer = sdf.getIntSafe("layer");
+        this.layer = ubo.getIntSafe("layer");
 
         //Misc
-        this.isInvisible = sdf.getBooleanSafe("invisible");
-        this.isInWater = sdf.getBooleanSafe("inWater");
-        this.isOnFire = sdf.getBooleanSafe("onFire");
+        this.isInvisible = ubo.getBooleanSafe("invisible");
+        this.isInWater = ubo.getBooleanSafe("inWater");
+        this.isOnFire = ubo.getBooleanSafe("onFire");
     }
 }

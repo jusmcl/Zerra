@@ -78,6 +78,8 @@ dependencies {
 	// REFLECTIONS
 	compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 	
+	// UBJSON -> https://github.com/dinocore1/ubjson
+	implementation 'com.dev-smart:ubjson:0.1.8'
 }
 
 jar {

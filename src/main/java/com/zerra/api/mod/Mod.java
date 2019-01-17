@@ -1,20 +1,17 @@
 package com.zerra.api.mod;
 
+import com.zerra.api.mod.info.ModInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.zerra.api.mod.info.ModInfo;
-
-public interface Mod
-{
-	public default Logger getLogger()
-	{
+public interface Mod {
+	default Logger getLogger() {
 		return LogManager.getLogger(getModInfo().getModName());
 	}
 
-	public void init();
+	void init(ModInit modInit);
 
-	public void postInit();
+	void postInit();
 
-	public ModInfo getModInfo();
+	ModInfo getModInfo();
 }

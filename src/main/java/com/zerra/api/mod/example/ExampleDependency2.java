@@ -5,7 +5,7 @@ import com.zerra.api.mod.ModInit;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 
-public class ExampleDependency implements Mod
+public class ExampleDependency2 implements Mod
 {
 
 	@Override
@@ -22,7 +22,7 @@ public class ExampleDependency implements Mod
 	@Override
 	public ModInfo getModInfo()
 	{
-		return new ModInfoBuilder("exampledependency", "Example Dependency", "1.0", "0.0.4")
+		return new ModInfoBuilder("exampledependency2", "Example Dependency 2", "1.0", "0.0.4")
 				.setAuthors("Arpaesis")
 				.setCredits("Credits to the Zerra development team for making the game!")
 				.setModDescription("A simple example dependency.")
