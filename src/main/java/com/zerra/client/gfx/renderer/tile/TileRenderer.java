@@ -5,13 +5,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.shader.TileShader;
 import com.zerra.client.util.Maths;
 import com.zerra.client.view.Display;
 import com.zerra.client.view.ICamera;
-import com.zerra.common.ZerraClient;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;

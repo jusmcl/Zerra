@@ -11,11 +11,11 @@ import javax.annotation.Nullable;
 import org.joml.Vector2i;
 import org.lwjgl.opengl.GL30;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.common.ZerraClient;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 

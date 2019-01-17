@@ -29,7 +29,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 @Deprecated
 public class WindowManager {

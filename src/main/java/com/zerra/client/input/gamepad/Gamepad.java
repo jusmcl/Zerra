@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 public class Gamepad {
 

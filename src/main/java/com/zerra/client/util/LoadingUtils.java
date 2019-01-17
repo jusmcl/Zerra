@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>

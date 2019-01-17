@@ -3,7 +3,7 @@ package com.zerra.common.registry;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.tile.TileType;
 

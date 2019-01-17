@@ -1,6 +1,6 @@
 package com.zerra.common.event;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 public class Event {
 

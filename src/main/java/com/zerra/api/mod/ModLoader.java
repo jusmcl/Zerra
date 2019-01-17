@@ -2,7 +2,7 @@ package com.zerra.api.mod;
 
 import java.util.List;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 import com.zerra.common.util.MiscUtils;
 
 import io.github.classgraph.ClassGraph;

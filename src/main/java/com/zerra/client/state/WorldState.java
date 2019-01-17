@@ -2,9 +2,9 @@ package com.zerra.client.state;
 
 import org.lwjgl.opengl.GL11;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.view.Display;
-import com.zerra.common.ZerraClient;
 import com.zerra.server.ZerraServer;
 
 public class WorldState extends State

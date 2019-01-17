@@ -1,6 +1,6 @@
 package com.zerra.client.presence;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;

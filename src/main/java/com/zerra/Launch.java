@@ -1,6 +1,6 @@
 package com.zerra;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 import com.zerra.common.util.ArgsBuilder;
 
 /**

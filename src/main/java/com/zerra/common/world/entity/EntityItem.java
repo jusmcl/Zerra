@@ -1,6 +1,6 @@
 package com.zerra.common.world.entity;
 
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.item.ItemGroup;
 import com.zerra.common.world.storage.plate.WorldLayer;

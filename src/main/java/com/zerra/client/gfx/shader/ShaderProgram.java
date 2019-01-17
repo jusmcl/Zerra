@@ -15,8 +15,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.common.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>

@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 import com.google.common.collect.Maps;
 import com.zerra.Launch;
-import com.zerra.common.ZerraClient;
+import com.zerra.client.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>

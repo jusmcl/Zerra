@@ -17,12 +17,12 @@ import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.texture.ITexture;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.common.ZerraClient;
 import com.zerra.common.world.storage.IOManager;
 
 public class TextureMap implements ITexture {

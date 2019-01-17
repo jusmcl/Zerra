@@ -25,12 +25,12 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL33;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.texture.BasicTexture;
 import com.zerra.client.gfx.texture.ITexture;
 import com.zerra.client.gfx.texture.cubemap.CubeMapTextureData;
 import com.zerra.client.gfx.texture.cubemap.CubemapTexture;
-import com.zerra.common.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>

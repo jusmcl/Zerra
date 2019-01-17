@@ -11,10 +11,10 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.common.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
