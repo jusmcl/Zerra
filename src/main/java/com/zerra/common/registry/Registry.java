@@ -1,7 +1,5 @@
 package com.zerra.common.registry;
 
-import com.zerra.client.Zerra;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +8,8 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import com.zerra.client.ZerraClient;
 
 public class Registry<T extends RegistryNameable> {
 

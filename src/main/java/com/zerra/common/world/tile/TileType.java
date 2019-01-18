@@ -1,7 +1,8 @@
 package com.zerra.common.world.tile;
 
-import com.zerra.common.registry.RegistryNameable;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.zerra.common.registry.RegistryNameable;
 
 public class TileType implements RegistryNameable {
 

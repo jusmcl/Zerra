@@ -11,6 +11,10 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zerra.client.ZerraClient;
+import com.zerra.common.world.item.Item;
+import com.zerra.common.world.tile.TileType;
+
 public class Registries {
 
     private static final Set<Registry<? extends RegistryNameable>> REGISTRIES = new HashSet<>();

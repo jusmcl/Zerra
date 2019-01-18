@@ -1,4 +1,4 @@
-package com.zerra.client.state;
+package com.zerra.common.state;
 
 import java.util.ArrayList;
 import java.util.List;
