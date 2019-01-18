@@ -148,7 +148,6 @@ public class InputHandler {
 	 *            The id of the joystick
 	 * @return The gamepad or null if it is not connected
 	 */
-	@Nullable
 	public Gamepad getGamepad(int jid) {
 		return this.gamepads.get(jid);
 	}

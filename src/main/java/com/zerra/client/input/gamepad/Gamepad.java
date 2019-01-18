@@ -72,7 +72,6 @@ public class Gamepad {
 		return (button >= 0 && button < this.buttons.length ? this.buttons[button] : 0) == 1;
 	}
 
-	@Nullable
 	public Joystick getJoystick(int joystick) {
 		if (!this.isJoystickPresent(joystick))
 			return null;
