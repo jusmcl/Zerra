@@ -76,10 +76,6 @@ public class ZerraClient extends Zerra {
 	public ZerraClient() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
-		
-		//TODO: Move this eventually to the game load state, or wherever is deemed necessary.
-		modManager = new ModManager();
-		modManager.setupMods();
 
 		this.presence = new Presence();
 
@@ -180,6 +176,10 @@ public class ZerraClient extends Zerra {
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
+		
+		modManager = new ModManager();
+		modManager.setupMods();
+		
 		//TODO: Eventually set the first state of the game to the game loading state.
 		StateManager.setActiveState(new WorldState());
 	}
