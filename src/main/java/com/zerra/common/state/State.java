@@ -1,18 +1,20 @@
 package com.zerra.common.state;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.common.Zerra;
 
 public class State
 {
 
 	private String name;
-	
+
 	protected Zerra zerra;
 
 	public State(String name)
 	{
 		this.name = name;
-		this.zerra = Zerra.getInstance();
+		// TODO: Make sure this should use ZerraClient, and not ZerraServer.
+		this.zerra = ZerraClient.getInstance();
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
 	}
 
