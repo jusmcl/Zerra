@@ -1,58 +1,21 @@
 package com.zerra.common.world.data;
 
-import com.zerra.client.Zerra;
-import com.zerra.common.registry.RegistryNameable;
+import com.zerra.common.util.Factory;
 import com.zerra.common.world.World;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Predicate;
 
 /**
- * A factory class used to contain a getter for {@link WorldData} instances and some methods to determine what the
- * instances should be created and used for
+ * A factory class used to create new {@link WorldData} instances and some methods to determine what the instances
+ * should be created and used for
  */
-public class WorldDataFactory implements RegistryNameable {
+public class WorldDataFactory<T extends WorldData> extends Factory<T> {
 
-	private String registryName;
-	private final Class<? extends WorldData> worldDataClass;
 	private Predicate<Integer> layerPredicate = null;
 	private boolean perLayer = false;
 
-	public WorldDataFactory(String registryName, Class<? extends WorldData> worldDataClass) {
-		this.registryName = registryName;
-		this.worldDataClass = worldDataClass;
-	}
-
-	@Override
-	public void setDomain(String domain) {
-		this.registryName = RegistryNameable.injectDomain(this.registryName, domain);
-	}
-
-	@Override
-	public String getRegistryName() {
-		return registryName;
-	}
-
-	/**
-	 * Gets a new instance of the {@link WorldData}
-	 * Returns null if a new instance couldn't be created
-	 */
-	public WorldData getNewInstance() {
-		Constructor<? extends WorldData> constructor = null;
-		try {
-			constructor = worldDataClass.getConstructor(String.class);
-			return constructor.newInstance(registryName);
-		} catch (NoSuchMethodException e) {
-			Zerra.logger().error(String.format("The WorldData class %s does not have a constructor with a single String argument!", worldDataClass.getName()), e);
-		} catch (IllegalAccessException e) {
-			Zerra.logger().error(String.format("Cannot access the constructor %s!", constructor), e);
-		} catch (InstantiationException e) {
-			Zerra.logger().error(String.format("Cannot instantiate the class %s because it is abstract!", worldDataClass.getName()), e);
-		} catch (InvocationTargetException e) {
-			Zerra.logger().error(String.format("The constructor %s threw an exception!", constructor), e);
-		}
-		return null;
+	public WorldDataFactory(String registryName, Class<T> worldDataClass) {
+		super(registryName, worldDataClass);
 	}
 
 	/**

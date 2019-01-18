@@ -206,9 +206,9 @@ public class IOManager {
 			// Add missing tiles to map
 			for (Tile tile : Tiles.getTiles()) {
 				int id = -1;
-				for (int i = 0; i < this.tileIndexes.size(); i++) {
-					if (this.tileIndexes.get(i).getRight().equals(tile.getRegistryID())) {
-						id = this.tileIndexes.get(i).getLeft();
+				for (Pair<Integer, ResourceLocation> tileIndex : this.tileIndexes) {
+					if (tileIndex.getRight().equals(tile.getRegistryID())) {
+						id = tileIndex.getLeft();
 						this.tileMapper.put(tile.getRegistryID(), id);
 						break;
 					}
@@ -317,11 +317,8 @@ public class IOManager {
 			//Read world data from file
 			Set<WorldData> worldData = readStorablesFromFile(file, object -> {
 				String name = object.getString("name");
-				WorldDataFactory factory = Registries.getRegisteredObject(name, WorldDataFactory.class);
-				if (factory == null) {
-					return null;
-				}
-				WorldData data = factory.getNewInstance();
+				@SuppressWarnings("unchecked")
+				WorldData data = Registries.getNewInstanceFromFactory(name, WorldDataFactory.class);
 				data.readFromUBO(object);
 				return data;
 			});

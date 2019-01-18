@@ -16,16 +16,22 @@ public class WorldDataHandler {
 
 	private static Map<String, WorldData> getData(Predicate<WorldDataFactory> predicate) {
 		Registry<WorldDataFactory> registry = Registries.getRegistry(WorldDataFactory.class);
-		Set<WorldData> data = registry.get(predicate, WorldDataFactory::getNewInstance);
+		Set<WorldData> data = registry.get(predicate, factory -> (WorldData) factory.getNewInstance());
 		Map<String, WorldData> map = new HashMap<>();
 		data.forEach(wd -> map.put(wd.getRegistryName(), wd));
 		return map;
 	}
 
+	/**
+	 * Gets new {@link WorldData} instances for a {@link com.zerra.common.world.World}
+	 */
 	public static Map<String, WorldData> getDataForWorld() {
 		return getData(factory -> !factory.isPerLayer());
 	}
 
+	/**
+	 * Gets new {@link WorldData} instances for a {@link com.zerra.common.world.storage.Layer}
+	 */
 	public static Map<String, WorldData> getDataForLayer(int layer) {
 		return getData(worldData -> worldData.isPerLayer() && worldData.isForLayer(layer));
 	}

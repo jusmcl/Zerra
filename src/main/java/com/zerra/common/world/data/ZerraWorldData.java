@@ -8,8 +8,8 @@ public class ZerraWorldData extends WorldData {
 
 	//TODO: Store extra world data in ZerraWorldData
 
-	public ZerraWorldData() {
-		super("zerra");
+	public ZerraWorldData(String name) {
+		super(name);
 	}
 
 	@Nonnull
