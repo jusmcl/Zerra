@@ -140,7 +140,6 @@ public class World {
 		return this.worldSpawnPoint;
 	}
 
-	@Nullable
 	public Layer getLayer(int layer) {
 		if (layer < 0 || layer >= this.layers.length)
 			return null;
