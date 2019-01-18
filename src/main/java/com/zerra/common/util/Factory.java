@@ -5,13 +5,11 @@ import com.zerra.common.registry.RegistryNameable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
 public class Factory<T> implements RegistryNameable {
 
 	protected String registryName;
 	protected final Class<T> type;
-	protected Class<?>[] parameters = new Class[]{String.class};
 
 	public Factory(String registryName, Class<T> type) {
 		this.registryName = registryName;
@@ -33,24 +31,16 @@ public class Factory<T> implements RegistryNameable {
 	}
 
 	/**
-	 * Sets the constructor parameters to use when creating a new instance of this factory's {@link Factory#type}
-	 */
-	protected Factory setConstructorParameters(Class<?>... parameters) {
-		this.parameters = parameters;
-		return this;
-	}
-
-	/**
 	 * Gets a new instance of this factory's {@link Factory#type} using the given constructor {@link Factory#parameters}
 	 * Returns null if a new instance couldn't be created
 	 */
 	public T getNewInstance() {
 		Constructor<T> constructor = null;
 		try {
-			constructor = this.type.getConstructor(this.parameters);
+			constructor = this.type.getConstructor(String.class);
 			return constructor.newInstance(this.registryName);
 		} catch (NoSuchMethodException e) {
-			Zerra.logger().error(String.format("The class %s does not have a constructor with the parameters: %s", this.type.getName(), Arrays.toString(this.parameters)), e);
+			Zerra.logger().error(String.format("The class %s does not have a constructor with a single String paramter!", this.type.getName()), e);
 		} catch (IllegalAccessException e) {
 			Zerra.logger().error(String.format("Cannot access the constructor %s!", constructor), e);
 		} catch (InstantiationException e) {

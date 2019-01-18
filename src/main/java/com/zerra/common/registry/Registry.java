@@ -77,4 +77,17 @@ public class Registry<T extends RegistryNameable> {
 
 		entries.put(registryName, obj);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof Registry)) {
+			return false;
+		}
+		Registry r = (Registry) obj;
+		//noinspection unchecked
+		return type.isAssignableFrom(r.type) || r.type.isAssignableFrom(type);
+	}
 }

@@ -16,13 +16,15 @@ public class Registries {
     private static final Set<Registry<? extends RegistryNameable>> REGISTRIES = new HashSet<>();
 
     static {
-        addRegistry(new Registry<>(Item.class));
-        addRegistry(new Registry<>(TileType.class));
+		try {
+			addRegistry(new Registry<>(Item.class));
+			addRegistry(new Registry<>(TileType.class));
 
-		addRegistry(new Registry<>(WorldDataFactory.class));
-		addRegistry(new Registry<>(EntityFactory.class));
-
-		//getRegistry(WorldDataFactory.class).add(new WorldDataFactory<>("zerra", ZerraWorldData.class));
+			addRegistry(new Registry<>(WorldDataFactory.class));
+			addRegistry(new Registry<>(EntityFactory.class));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
 	/**
@@ -32,15 +34,10 @@ public class Registries {
 	 * @param registry New registry
 	 */
 	public static void addRegistry(Registry<? extends RegistryNameable> registry) {
-		//Check if a registry already exists with a conflicting type
-		Registry matchingRegistry = REGISTRIES.stream()
-			.filter(reg -> reg.getType().isAssignableFrom(registry.getType()) || registry.getType().isAssignableFrom(reg.getType()))
-			.findFirst().orElse(null);
-		if (matchingRegistry != null) {
-			throw new RuntimeException(String.format("A registry with type %s already exists for the type %s!",
-				matchingRegistry.getType().getName(), registry.getType().getName()));
+		if (!REGISTRIES.add(registry)) {
+			throw new RuntimeException(String.format("A registry with a conflicting type already exists for the type %s!",
+				registry.getType().getName()));
 		}
-        REGISTRIES.add(registry);
 	}
 
 	/**
