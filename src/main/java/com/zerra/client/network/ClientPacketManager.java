@@ -33,8 +33,8 @@ public class ClientPacketManager
 		client.postDisconnect(() -> System.out.println(client + " successfully disconnected from the server!"));
 	}
 	
-	public void sendToServer()
+	public void disconnect()
 	{
-		
+		this.client.close();
 	}
 }

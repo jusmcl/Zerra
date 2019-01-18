@@ -253,7 +253,7 @@ public class IOManager {
 				for (int x = 0; x < Plate.SIZE; x++) {
 					for (int z = 0; z < Plate.SIZE; z++) {
 						Vector2i tilePos = new Vector2i(x, z);
-						//plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readShort()).getRight()));
+						plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readShort()).getRight()));
 					}
 				}
 				plate.setPlatePos(platePos);

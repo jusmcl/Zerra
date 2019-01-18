@@ -109,6 +109,8 @@ public class ZerraClient extends Zerra {
 			return;
 
 		LOGGER.info("Stopping...");
+		this.client.disconnect();
+		ZerraServer.getInstance().stop();
 		this.running = false;
 	}
 
@@ -157,8 +159,9 @@ public class ZerraClient extends Zerra {
 	protected void init() {
 		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-		StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
-		completeLoadingStep();
+		//TODO:
+		//StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
+		//completeLoadingStep();
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.timer = new Timer(20);

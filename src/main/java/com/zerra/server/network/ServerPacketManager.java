@@ -41,4 +41,9 @@ public class ServerPacketManager
 	{
 		server.bind("localhost", 43594);
 	}
+
+	public void close()
+	{
+		this.server.close();
+	}
 }
