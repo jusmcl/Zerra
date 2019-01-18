@@ -15,7 +15,10 @@ import com.zerra.client.input.gamepad.Joystick;
 import com.zerra.common.state.MenuState;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
+import com.zerra.common.world.World;
+import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
+import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -117,7 +120,7 @@ public class Camera implements ICamera {
 					StateManager.setActiveState(new MenuState());
 				}
 			}
-			
+
 			// Useful keys to adjust the movement speed of the camera when not locked to the player.
 			if(ClientLaunch.IS_DEVELOPMENT_BUILD) {
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL)) {
@@ -132,21 +135,25 @@ public class Camera implements ICamera {
 
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition)) {
-			//World world = Zerra.getInstance().getWorld();
-			//Layer layer = world.getLayer(0);
+			World world = ZerraServer.getInstance().getWorld();
+			Layer layer = world.getLayer(0);
 			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
-			for (int x = 0; x < 3; x++) {
-				for (int z = 0; z < 3; z++) {
+			for (int x = 0; x < 3; x++)
+			{
+				for (int z = 0; z < 3; z++)
+				{
 					Vector3i newPos = this.platePosition.add(x - 1, 0, z - 1, new Vector3i());
-					//layer.loadPlate(newPos);
+					layer.loadPlate(newPos);
 					loadedPositions.add(newPos);
 				}
 			}
-			//for(Plate plate : layer.getLoadedPlates()) {
-				//if(!loadedPositions.contains(plate.getPlatePos())) {
-				//	layer.unloadPlate(plate.getPlatePos());
-				//}
-			//}
+			for (Plate plate : layer.getLoadedPlates())
+			{
+				if (!loadedPositions.contains(plate.getPlatePos()))
+				{
+					layer.unloadPlate(plate.getPlatePos());
+				}
+			}
 		}
 	}
 
