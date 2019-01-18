@@ -48,9 +48,7 @@ public class TileType implements RegistryNameable {
 
     @Override
     public void setDomain(String domain) {
-        if (!registryName.contains(":")) {
-            registryName = domain + ":" + registryName;
-        }
+		this.registryName = RegistryNameable.injectDomain(this.registryName, domain);
     }
 
     @Override
