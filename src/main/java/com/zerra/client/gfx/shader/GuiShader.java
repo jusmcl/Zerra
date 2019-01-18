@@ -2,7 +2,7 @@ package com.zerra.client.gfx.shader;
 
 import org.joml.Matrix4f;
 
-import com.zerra.Launch;
+import com.zerra.ClientLaunch;
 
 public class GuiShader extends ShaderProgram {
 
@@ -13,7 +13,7 @@ public class GuiShader extends ShaderProgram {
 	private int location_color;
 
 	public GuiShader() {
-		super(Launch.DOMAIN, "gui");
+		super(ClientLaunch.DOMAIN, "gui");
 	}
 
 	@Override

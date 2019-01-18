@@ -94,7 +94,10 @@ public class ZerraServer extends Zerra {
 
 	private void update()
 	{
-		StateManager.getActiveState().update();
+		if(StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().update();
+		}
 	}
 
 	@Override

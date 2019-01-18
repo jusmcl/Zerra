@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.zerra.Launch;
+import com.zerra.ClientLaunch;
 import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
@@ -13,7 +13,7 @@ import com.zerra.server.network.ServerPacketManager;
 
 public class Zerra implements Runnable
 {
-	protected static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
+	protected static final Logger LOGGER = LogManager.getLogger(ClientLaunch.NAME);
 
 	protected static Zerra instance;
 

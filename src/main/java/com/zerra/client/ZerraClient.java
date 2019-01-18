@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
-import com.zerra.Launch;
+import com.zerra.ClientLaunch;
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
@@ -46,7 +46,7 @@ import com.zerra.server.ZerraServer;
  */
 public class ZerraClient extends Zerra {
 
-	private static final Logger LOGGER = LogManager.getLogger(Launch.NAME);
+	private static final Logger LOGGER = LogManager.getLogger(ClientLaunch.NAME);
 
 	private static ZerraClient instance;
 
@@ -152,12 +152,15 @@ public class ZerraClient extends Zerra {
 
 	private void render(float partialTicks)
 	{
-		StateManager.getActiveState().render();
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().render();
+		}
 	}
 
 	@Override
 	protected void init() {
-		Display.createDisplay(Launch.NAME + " v" + Launch.VERSION, 1280, 720);
+		Display.createDisplay(ClientLaunch.NAME + " v" + ClientLaunch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 		//TODO:
 		//StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
