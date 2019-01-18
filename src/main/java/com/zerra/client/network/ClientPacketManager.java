@@ -1,5 +1,7 @@
 package com.zerra.client.network;
 
+import com.zerra.common.network.PacketSender;
+
 import simplenet.Client;
 import simplenet.packet.Packet;
 
@@ -7,10 +9,12 @@ public class ClientPacketManager
 {
 
 	Client client;
+	PacketSender sender;
 	
 	public ClientPacketManager()
 	{
 		client = new Client();
+		sender = new PacketSender(client);
 		
 		this.createListeners();
 	}
@@ -36,5 +40,10 @@ public class ClientPacketManager
 	public void disconnect()
 	{
 		this.client.close();
+	}
+	
+	public PacketSender getPacketSender()
+	{
+		return this.sender;
 	}
 }

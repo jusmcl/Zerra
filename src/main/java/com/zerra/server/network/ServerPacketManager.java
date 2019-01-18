@@ -1,5 +1,7 @@
 package com.zerra.server.network;
 
+import com.zerra.server.ZerraServer;
+
 import simplenet.Server;
 
 public class ServerPacketManager
@@ -24,6 +26,8 @@ public class ServerPacketManager
 			{
 				switch (opcode)
 				{
+				case -1:
+					ZerraServer.getInstance().stop();
 				case 0:
 					client.readString(System.out::println);
 				}
