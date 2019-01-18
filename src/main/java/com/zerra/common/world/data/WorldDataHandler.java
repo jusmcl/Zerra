@@ -1,12 +1,12 @@
 package com.zerra.common.world.data;
 
-import com.zerra.common.registry.Registries;
-import com.zerra.common.registry.Registry;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+
+import com.zerra.common.registry.Registries;
+import com.zerra.common.registry.Registry;
 
 /**
  * Used by {@link com.zerra.common.world.World}s and {@link com.zerra.common.world.storage.Layer}s to get any

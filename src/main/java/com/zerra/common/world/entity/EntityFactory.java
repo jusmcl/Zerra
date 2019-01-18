@@ -1,9 +1,9 @@
 package com.zerra.common.world.entity;
 
+import java.util.function.Predicate;
+
 import com.zerra.common.util.Factory;
 import com.zerra.common.world.tile.Tile;
-
-import java.util.function.Predicate;
 
 /**
  * A factory class used to create new {@link T} instances and some methods to determine when and where this entity

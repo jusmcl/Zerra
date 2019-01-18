@@ -1,9 +1,9 @@
 package com.zerra.common.world.data;
 
+import java.util.function.Predicate;
+
 import com.zerra.common.util.Factory;
 import com.zerra.common.world.World;
-
-import java.util.function.Predicate;
 
 /**
  * A factory class used to create new {@link WorldData} instances and some methods to determine what the instances

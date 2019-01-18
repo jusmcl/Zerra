@@ -3,8 +3,6 @@ package com.zerra.client.input;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.ZerraClient;

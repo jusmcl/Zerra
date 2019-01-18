@@ -70,7 +70,7 @@ public class Registry<T extends RegistryNameable> {
 		//Validate domain
 		String domain = matcher.group(1);
 		//TODO: Should probably find easier access to the loaded mods
-		if (!Zerra.getInstance().getModManager().doesDomainExist(domain)) {
+		if (!ZerraClient.getInstance().getModManager().doesDomainExist(domain)) {
 			throw new RuntimeException(String.format("The given %s has a domain that does not exist: %s",
 				obj.getClass().getName(), domain));
 		}

@@ -3,8 +3,6 @@ package com.zerra.client.input.gamepad;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import javax.annotation.Nullable;
-
 import org.lwjgl.glfw.GLFW;
 
 import com.zerra.client.ZerraClient;

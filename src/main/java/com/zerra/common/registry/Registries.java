@@ -1,17 +1,14 @@
 package com.zerra.common.registry;
 
-import com.zerra.common.util.Factory;
-import com.zerra.common.world.data.WorldDataFactory;
-import com.zerra.common.world.entity.EntityFactory;
-import com.zerra.common.world.item.Item;
-import com.zerra.common.world.tile.TileType;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.zerra.client.ZerraClient;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.zerra.common.util.Factory;
+import com.zerra.common.world.data.WorldDataFactory;
+import com.zerra.common.world.entity.EntityFactory;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.tile.TileType;
 

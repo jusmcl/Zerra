@@ -1,10 +1,10 @@
 package com.zerra.common.util;
 
-import com.zerra.client.Zerra;
-import com.zerra.common.registry.RegistryNameable;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import com.zerra.common.Zerra;
+import com.zerra.common.registry.RegistryNameable;
 
 public class Factory<T> implements RegistryNameable {
 
