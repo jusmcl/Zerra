@@ -5,7 +5,8 @@ public enum Opcodes
 
 	ERROR_BAD_REQUEST(-2),
 	CLIENT_SHUTDOWN_INTERNAL_SERVER(-1),
-	CLIENT_CONNECT(0);
+	CLIENT_CONNECT(0),
+	CLIENT_CHAT_MESSAGE(1);
 
 	private byte value;
 
