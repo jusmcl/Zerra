@@ -1,16 +1,13 @@
 package com.zerra.common.registry;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.zerra.common.util.Factory;
+import com.zerra.common.world.item.Item;
+import com.zerra.common.world.tile.TileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.zerra.common.util.Factory;
-import com.zerra.common.world.data.WorldDataFactory;
-import com.zerra.common.world.entity.EntityFactory;
-import com.zerra.common.world.item.Item;
-import com.zerra.common.world.tile.TileType;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Registries {
 
@@ -20,9 +17,7 @@ public class Registries {
 		try {
 			addRegistry(new Registry<>(Item.class));
 			addRegistry(new Registry<>(TileType.class));
-
-			addRegistry(new Registry<>(WorldDataFactory.class));
-			addRegistry(new Registry<>(EntityFactory.class));
+            addRegistry(new Registry<>(Factory.class));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,20 +89,36 @@ public class Registries {
 		return null;
 	}
 
-	/**
-	 * Gets a new instance from a registered {@link Factory}
-	 *
-	 * @param registryName The factory registry name
-	 * @param factoryType  Factory class
-	 * @param <T>          Factory type
-	 * @param <R>          Instance type
-	 * @return New instance from factory
-	 */
-	public static <T extends Factory<R>, R> R getNewInstanceFromFactory(String registryName, Class<T> factoryType) {
-		T factory = getRegisteredObject(registryName, factoryType);
-		if (factory == null) {
-			throw new RuntimeException(String.format("There is no factory instance registered for the factory class %s and registry name %s", factoryType.getName(), registryName));
+    /**
+     * Gets a new instance from the registered factory
+     * Will throw a {@link RuntimeException} if no registered factory could be found
+     *
+     * @param registryName Registry name of the factory
+     * @return New instance
+     */
+    public static Object getNewInstanceFromFactory(String registryName) {
+        Factory factory = getRegisteredObject(registryName, Factory.class);
+        if (factory != null) {
+            return factory.getNewInstance();
+        }
+        throw new RuntimeException(String.format("There is no factory registered with registry name %s", registryName));
+    }
+
+    /**
+     * Gets a new instance of the instance type specified if there's a factory for it registered
+     * Will throw a {@link RuntimeException} if no registered factory could be found
+     *
+     * @param registryName Registry name of the factory
+     * @param instanceType Factory new instance type
+     * @param <T> Type of the new instance
+     * @return New instance
+     */
+    public static <T> T getNewInstanceFromFactory(String registryName, Class<T> instanceType) {
+        Object instance = getNewInstanceFromFactory(registryName);
+        if (instanceType.isInstance(instance)) {
+            return instanceType.cast(instance);
+        } else {
+            throw new RuntimeException(String.format("Factory found for registry name '%s', but it's of the wrong type: %s", registryName, instance.getClass().getName()));
 		}
-		return factory.getNewInstance();
 	}
 }
