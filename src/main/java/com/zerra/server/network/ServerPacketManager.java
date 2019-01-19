@@ -1,9 +1,13 @@
 package com.zerra.server.network;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.zerra.common.network.Opcodes;
+import com.zerra.common.network.PacketSender;
 import com.zerra.server.ZerraServer;
 
 import simplenet.Client;
@@ -14,12 +18,13 @@ public class ServerPacketManager
 {
 
 	private Server server;
-	private static ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
+	private PacketSender sender;
+	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 
 	public ServerPacketManager()
 	{
 		server = new Server();
-
+		sender = new PacketSender(this);
 		this.createListeners();
 	}
 
@@ -45,7 +50,7 @@ public class ServerPacketManager
 						ZerraServer.getInstance().stop();
 					} else
 					{
-						Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST.value()).putString("Client attempted to shut down a remote server.").writeAndFlush(client);
+						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST.value()).putString("Client attempted to shut down a remote server."));
 					}
 				} else if (opcode == Opcodes.CLIENT_CONNECT.value())
 				{
@@ -99,5 +104,15 @@ public class ServerPacketManager
 	public void close()
 	{
 		this.server.close();
+	}
+
+	public ConcurrentHashMap<UUID, Client> getClients()
+	{
+		return this.clients;
+	}
+
+	public PacketSender getSender()
+	{
+		return this.sender;
 	}
 }
