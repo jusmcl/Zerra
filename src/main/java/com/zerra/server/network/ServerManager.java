@@ -21,9 +21,7 @@ public class ServerManager
 
 	public ServerManager()
 	{
-		server = new Server();
 		sender = new PacketSender(this);
-		this.createListeners();
 	}
 
 	public void createListeners()
@@ -71,6 +69,8 @@ public class ServerManager
 
 	public void bindInternally()
 	{
+		server = new Server();
+		this.createListeners();
 		server.bind("localhost", 43594);
 		ZerraServer.getInstance().setCurrentlyRemote(false);
 	}
@@ -104,6 +104,7 @@ public class ServerManager
 	public void close()
 	{
 		this.server.close();
+		this.server = null;
 	}
 
 	public ConcurrentHashMap<UUID, Client> getClients()
