@@ -27,6 +27,7 @@ import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
+import com.zerra.common.network.Opcodes;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
 import com.zerra.common.util.MiscUtils;
@@ -107,7 +108,7 @@ public class ZerraClient extends Zerra {
 			return;
 
 		LOGGER.info("Stopping...");
-		this.client.getPacketSender().sendToServer(Packet.builder().putByte(-1));
+		this.client.getPacketSender().sendToServer(Packet.builder().putByte(Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER.value()));
 		this.running = false;
 	}
 
