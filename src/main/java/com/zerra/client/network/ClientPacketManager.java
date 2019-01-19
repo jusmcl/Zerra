@@ -26,19 +26,11 @@ public class ClientPacketManager
 
 	public void switchToInternalServer()
 	{
-		if (client.getChannel().isOpen())
-		{
-			client.close();
-		}
 		client.connect("localhost", 43594);
 	}
 
 	public void switchToRemoteServer(String address, int port)
 	{
-		if (client.getChannel().isOpen())
-		{
-			client.close();
-		}
 		client.connect(address, port);
 	}
 
@@ -50,6 +42,17 @@ public class ClientPacketManager
 
 			this.uuid = UUID.randomUUID();
 			Packet.builder().putByte(Opcodes.CLIENT_CONNECT.value()).putString(uuid.toString()).writeAndFlush(client);
+		});
+
+		client.readByteAlways(opcode ->
+		{
+			if (opcode == Opcodes.ERROR_BAD_REQUEST.value())
+			{
+				client.readString(msg ->
+				{
+					ZerraClient.logger().warn("The client made a bad request: " + msg);
+				});
+			}
 		});
 
 		client.preDisconnect(() -> ZerraClient.logger().info(client + " is about to disconnect from the server!"));

@@ -3,10 +3,12 @@ package com.zerra.server.network;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.zerra.common.network.Opcodes;
 import com.zerra.server.ZerraServer;
 
 import simplenet.Client;
 import simplenet.Server;
+import simplenet.packet.Packet;
 
 public class ServerPacketManager
 {
@@ -30,10 +32,8 @@ public class ServerPacketManager
 
 			client.readByteAlways(opcode ->
 			{
-				switch (opcode)
+				if (opcode == Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER.value())
 				{
-				case -1:
-
 					// A client shouldn't be able to shut down a remote server.
 					if (!ZerraServer.getInstance().isCurrentlyRemote())
 					{
@@ -43,15 +43,16 @@ public class ServerPacketManager
 						}
 						this.server.close();
 						ZerraServer.getInstance().stop();
+					} else
+					{
+						Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST.value()).putString("Client attempted to shut down a remote server.").writeAndFlush(client);
 					}
-					break;
-
-				case 0:
+				} else if (opcode == Opcodes.CLIENT_CONNECT.value())
+				{
 					client.readString(uuid ->
 					{
 						clients.put(UUID.fromString(uuid), client);
 					});
-					break;
 				}
 			});
 
