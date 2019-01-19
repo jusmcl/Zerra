@@ -11,7 +11,6 @@ public class MenuState extends State
 	{
 		super("menu");
 		zerra = ZerraClient.getInstance();
-		zerra.getPresence().setPresence("In Menu", "512x512", "none");
 	}
 	
 	@Override

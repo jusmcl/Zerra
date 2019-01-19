@@ -11,7 +11,6 @@ public class WorldLoadState extends State
 	{
 		super("worldload");
 		zerra = ZerraClient.getInstance();
-		zerra.getPresence().setPresence("Loading World", "512x512", "none");
 	}
 
 	@Override

@@ -17,7 +17,6 @@ import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientManager;
-import com.zerra.client.presence.Presence;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
@@ -66,8 +65,6 @@ public class ZerraClient extends Zerra {
 	protected InputHandler inputHandler;
 	protected Fbo fbo;
 	
-	private Presence presence;
-	
 	private EventHandler eventHandler;
 	
 	private ModManager modManager;
@@ -77,8 +74,6 @@ public class ZerraClient extends Zerra {
 	public ZerraClient() {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
-
-		this.presence = new Presence();
 
 		this.client = new ClientManager();
 		
@@ -283,11 +278,6 @@ public class ZerraClient extends Zerra {
 	
 	public boolean isRunning() {
 		return running;
-	}
-
-	public Presence getPresence()
-	{
-		return presence;
 	}
 	
 	public float getTicksPerSecond()
