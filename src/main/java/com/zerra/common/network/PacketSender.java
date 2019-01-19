@@ -15,7 +15,7 @@ public class PacketSender
 
 	public void sendToServer(Packet packet)
 	{
-		Packet.builder().writeAndFlush(client);
+		packet.writeAndFlush(client);
 	}
 
 	public void sendToClient(Packet packet)
