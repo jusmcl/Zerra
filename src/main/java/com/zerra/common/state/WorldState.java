@@ -17,15 +17,26 @@ public class WorldState extends State
 	{
 		super("world");
 		zerraClient = ZerraClient.getInstance();
+
+		new Thread(new ZerraServer(false), "Server").start();
+		
 		zerraServer = ZerraServer.getInstance();
-		//TODO: zerraClient.getPresence().setPresence("Playing on World \'" + zerraServer.getWorld().getName() + "\'", "512x512", "none");
+		
+		try
+		{
+			Thread.sleep(2000);
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		zerraClient.getClientManager().switchToInternalServer();
 	}
 
 	@Override
 	public void update()
 	{
-		zerraClient.getCamera().update();
-		zerraClient.getInputHandler().updateGamepad();
+		
 	}
 
 	@Override
