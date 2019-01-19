@@ -29,6 +29,7 @@ import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
+import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.ZerraServer;
@@ -98,7 +99,7 @@ public class ZerraClient extends Zerra {
 	}
 
 	/**
-	 * Sets the game's running status to false.
+	 * Shuts down the internal server and stops the game loop.
 	 */
 	@Override
 	public synchronized void stop() {
@@ -107,7 +108,6 @@ public class ZerraClient extends Zerra {
 
 		LOGGER.info("Stopping...");
 		this.client.getPacketSender().sendToServer(Packet.builder().putByte(-1));
-		this.client.disconnect();
 		this.running = false;
 	}
 
@@ -142,7 +142,7 @@ public class ZerraClient extends Zerra {
 				e.printStackTrace();
 				this.stop();
 			}
-			this.dispose();
+			this.cleanupResources();
 			break;
 		}
 	}
@@ -237,14 +237,17 @@ public class ZerraClient extends Zerra {
 		this.inputHandler.onGamepadDisconnected(jid);
 	}
 
-	public void dispose() {
+	/**
+	 * Cleans up the resources when the game closes.
+	 */
+	public void cleanupResources() {
 		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
 		this.textureManager.dispose();
 		this.pool.shutdown();
 		instance = null;
-		logger().info("Disposed of all resources in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime) + " seconds");
 	}
 	
 	public float getLoadingPercentage() {

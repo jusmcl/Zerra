@@ -1,13 +1,18 @@
 package com.zerra.server.network;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.zerra.server.ZerraServer;
 
+import simplenet.Client;
 import simplenet.Server;
 
 public class ServerPacketManager
 {
 
 	private Server server;
+	private static ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 
 	public ServerPacketManager()
 	{
@@ -18,6 +23,7 @@ public class ServerPacketManager
 
 	public void createListeners()
 	{
+
 		server.onConnect(client ->
 		{
 			System.out.println(client + " has connected!");
@@ -27,17 +33,28 @@ public class ServerPacketManager
 				switch (opcode)
 				{
 				case -1:
+					for (UUID uuid : clients.keySet())
+					{
+						clients.get(uuid).close();
+					}
+					this.server.close();
 					ZerraServer.getInstance().stop();
+					break;
+
 				case 0:
-					client.readString(System.out::println);
+					client.readString(uuid ->
+					{
+						clients.put(UUID.fromString(uuid), client);
+					});
+					break;
 				}
 			});
 
 			// Register an optional pre-disconnection listener.
-			client.preDisconnect(() -> System.out.println(client + " is about to disconnect!"));
+			client.preDisconnect(() -> ZerraServer.logger().info(client + " is about to disconnect!"));
 
 			// Register an optional post-disconnection listener.
-			client.postDisconnect(() -> System.out.println(client + " has successfully disconnected!"));
+			client.postDisconnect(() -> ZerraServer.logger().info(client + " has successfully disconnected from the server!"));
 		});
 	}
 
