@@ -28,11 +28,9 @@ import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.msg.MessageShutdownInternalServer;
 import com.zerra.common.state.StateManager;
-import com.zerra.common.state.WorldState;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
-import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -110,13 +108,6 @@ public class ZerraClient extends Zerra {
 	public void run() {
 		try {
 			this.init();
-			new Thread(new ZerraServer(false), "Server").start();
-			while(!ZerraServer.getInstance().isReady())
-			{
-				Thread.sleep(1000);
-				ZerraClient.logger().info("Waiting for server...");
-			}
-			this.client.switchToInternalServer();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -129,6 +120,10 @@ public class ZerraClient extends Zerra {
 
 					this.timer.updateTimer();
 
+					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
+						update();
+					}
+					
 					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 					this.render(this.timer.renderPartialTicks);
 				}
@@ -147,6 +142,12 @@ public class ZerraClient extends Zerra {
 		{
 			StateManager.getActiveState().render();
 		}
+	}
+	
+	private void update()
+	{
+		this.camera.update();
+		this.inputHandler.updateGamepad();
 	}
 
 	@Override
@@ -174,9 +175,6 @@ public class ZerraClient extends Zerra {
 		
 		modManager = new ModManager();
 		modManager.setupMods();
-		
-		//TODO: Eventually set the first state of the game to the game loading state.
-		StateManager.setActiveState(new WorldState());
 	}
 	
 	private void completeLoadingStep() {
@@ -312,7 +310,7 @@ public class ZerraClient extends Zerra {
         return modManager;
     }
     
-    public ClientManager getPacketManager()
+    public ClientManager getClientManager()
     {
     	return this.client;
     }
