@@ -77,7 +77,7 @@ dependencies {
 	implementation 'com.dev-smart:ubjson:0.1.8'
 	
 	// SIMPLENET
-	compile 'com.github.jhg023:SimpleNet:1.2.8'
+	compile 'com.github.jhg023:SimpleNet:1.2.9'
 	
 }
 
