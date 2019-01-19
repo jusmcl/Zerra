@@ -48,15 +48,10 @@ public class ClientPacketManager
 		{
 			if (opcode == Opcodes.ERROR_BAD_REQUEST)
 			{
-				client.readString(msg ->
-				{
-					ZerraClient.logger().warn("The client made a bad request: " + msg);
-				});
-			} else if(opcode == Opcodes.CLIENT_PING)
+				client.readString(msg -> ZerraClient.logger().warn("The client made a bad request: " + msg));
+			} else if (opcode == Opcodes.CLIENT_PING)
 			{
-				client.readLong(time ->{
-					ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms");
-				});
+				client.readLong(time -> ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms"));
 			}
 		});
 

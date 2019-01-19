@@ -54,15 +54,10 @@ public class ServerPacketManager
 
 				else if (opcode == Opcodes.CLIENT_CONNECT)
 				{
-					client.readString(uuid ->
-					{
-						clients.put(UUID.fromString(uuid), client);
-					});
+					client.readString(uuid -> clients.put(UUID.fromString(uuid), client));
 				} else if (opcode == Opcodes.CLIENT_PING)
 				{
-					client.readLong(time ->{
-						this.sender.sendToClient(client, new MessagePing(time));
-					});
+					client.readLong(time -> this.sender.sendToClient(client, new MessagePing(time)));
 				}
 			});
 
