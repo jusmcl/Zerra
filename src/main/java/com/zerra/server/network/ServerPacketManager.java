@@ -58,9 +58,36 @@ public class ServerPacketManager
 		});
 	}
 
-	public void bind()
+	public void bindInternally()
 	{
 		server.bind("localhost", 43594);
+		ZerraServer.getInstance().setCurrentlyRemote(false);
+	}
+
+	/**
+	 * Try to bind to an address + port. If the server is by default remote (meaning
+	 * it's a standalone server), do not fall back to an internal server. If the
+	 * server is by default not remote (internal), it is a client + server combo and
+	 * should fall back to an internal if this fails.
+	 */
+	public void bindRemotely(String address, int port)
+	{
+
+		if (ZerraServer.getInstance().isNaturallyRemote())
+		{
+			server.bind(address, port);
+		} else
+		{
+			try
+			{
+				server.bind(address, port);
+				ZerraServer.getInstance().setCurrentlyRemote(true);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				ZerraServer.getInstance().setCurrentlyRemote(false);
+			}
+		}
 	}
 
 	public void close()

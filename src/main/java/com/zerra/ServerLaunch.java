@@ -19,6 +19,6 @@ public class ServerLaunch
 	public static void main(String[] args)
 	{
 		ArgsBuilder builder = ArgsBuilder.deserialize(args);
-		new Thread(new ZerraServer(), "Server").start();
+		new Thread(new ZerraServer(true), "Server").start();
 	}
 }

@@ -116,7 +116,7 @@ public class ZerraClient extends Zerra {
 	public void run() {
 		try {
 			this.init();
-			new Thread(new ZerraServer(), "Server").start();
+			new Thread(new ZerraServer(false), "Server").start();
 			while(!ZerraServer.getInstance().isReady())
 			{
 				Thread.sleep(1000);

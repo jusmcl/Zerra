@@ -26,9 +26,15 @@ import com.zerra.server.network.ServerPacketManager;
  */
 public class ZerraServer extends Zerra {
 
-	public ZerraServer() {
+	private boolean isNaturallyRemote;
+	private boolean isCurrentlyRemote;
+	
+	public ZerraServer(boolean isNaturallyRemote) {
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
+		
+		this.isNaturallyRemote = isNaturallyRemote;
+		this.isCurrentlyRemote = false;
 		
 		server = new ServerPacketManager();
 		
@@ -66,7 +72,7 @@ public class ZerraServer extends Zerra {
 		try {
 			this.init();
 			this.serverReady = true;
-			this.server.bind();
+			this.server.bindInternally();
 			
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -131,5 +137,20 @@ public class ZerraServer extends Zerra {
 	public boolean isReady()
 	{
 		return this.serverReady;
+	}
+
+	public boolean isNaturallyRemote()
+	{
+		return isNaturallyRemote;
+	}
+
+	public boolean isCurrentlyRemote()
+	{
+		return isCurrentlyRemote;
+	}
+
+	public void setCurrentlyRemote(boolean isCurrentlyRemote)
+	{
+		this.isCurrentlyRemote = isCurrentlyRemote;
 	}
 }
