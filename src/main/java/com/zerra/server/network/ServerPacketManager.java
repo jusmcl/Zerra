@@ -33,12 +33,17 @@ public class ServerPacketManager
 				switch (opcode)
 				{
 				case -1:
-					for (UUID uuid : clients.keySet())
+
+					// A client shouldn't be able to shut down a remote server.
+					if (!ZerraServer.getInstance().isCurrentlyRemote())
 					{
-						clients.get(uuid).close();
+						for (UUID uuid : clients.keySet())
+						{
+							clients.get(uuid).close();
+						}
+						this.server.close();
+						ZerraServer.getInstance().stop();
 					}
-					this.server.close();
-					ZerraServer.getInstance().stop();
 					break;
 
 				case 0:
