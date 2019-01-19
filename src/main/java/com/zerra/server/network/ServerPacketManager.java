@@ -1,8 +1,5 @@
 package com.zerra.server.network;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +34,7 @@ public class ServerPacketManager
 
 			client.readByteAlways(opcode ->
 			{
-				if (opcode == Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER.value())
+				if (opcode == Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER)
 				{
 					// A client shouldn't be able to shut down a remote server.
 					if (!ZerraServer.getInstance().isCurrentlyRemote())
@@ -50,13 +47,20 @@ public class ServerPacketManager
 						ZerraServer.getInstance().stop();
 					} else
 					{
-						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST.value()).putString("Client attempted to shut down a remote server."));
+						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST).putString("Client attempted to shut down a remote server."));
 					}
-				} else if (opcode == Opcodes.CLIENT_CONNECT.value())
+				}
+
+				else if (opcode == Opcodes.CLIENT_CONNECT)
 				{
 					client.readString(uuid ->
 					{
 						clients.put(UUID.fromString(uuid), client);
+					});
+				} else if (opcode == Opcodes.CLIENT_PING)
+				{
+					client.readLong(time ->{
+						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.CLIENT_PING).putLong(time));
 					});
 				}
 			});

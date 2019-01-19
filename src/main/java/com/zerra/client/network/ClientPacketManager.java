@@ -41,16 +41,21 @@ public class ClientPacketManager
 			ZerraClient.logger().info("Successfully connected to the server!");
 
 			this.uuid = UUID.randomUUID();
-			Packet.builder().putByte(Opcodes.CLIENT_CONNECT.value()).putString(uuid.toString()).writeAndFlush(client);
+			Packet.builder().putByte(Opcodes.CLIENT_CONNECT).putString(uuid.toString()).writeAndFlush(client);
 		});
 
 		client.readByteAlways(opcode ->
 		{
-			if (opcode == Opcodes.ERROR_BAD_REQUEST.value())
+			if (opcode == Opcodes.ERROR_BAD_REQUEST)
 			{
 				client.readString(msg ->
 				{
 					ZerraClient.logger().warn("The client made a bad request: " + msg);
+				});
+			} else if(opcode == Opcodes.CLIENT_PING)
+			{
+				client.readLong(time ->{
+					ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms");
 				});
 			}
 		});

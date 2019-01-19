@@ -108,7 +108,7 @@ public class ZerraClient extends Zerra {
 			return;
 
 		LOGGER.info("Stopping...");
-		this.client.getPacketSender().sendToServer(Packet.builder().putByte(Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER.value()));
+		this.client.getPacketSender().sendToServer(Packet.builder().putByte(Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER));
 		this.running = false;
 	}
 
@@ -322,5 +322,10 @@ public class ZerraClient extends Zerra {
 
     public ModManager getModManager() {
         return modManager;
+    }
+    
+    public ClientPacketManager getPacketManager()
+    {
+    	return this.client;
     }
 }

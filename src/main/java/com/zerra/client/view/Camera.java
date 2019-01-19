@@ -12,6 +12,7 @@ import com.zerra.client.ZerraClient;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
+import com.zerra.common.network.Opcodes;
 import com.zerra.common.state.MenuState;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
@@ -19,6 +20,8 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.server.ZerraServer;
+
+import simplenet.packet.Packet;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -128,6 +131,11 @@ public class Camera implements ICamera {
 				}
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_MINUS)) {
 					this.speedAdjust -= (this.speedAdjust > -0.75f) ? 0.07f : 0.0f;
+				}
+				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
+				{
+					Long snapshot = System.currentTimeMillis();
+					ZerraClient.getInstance().getPacketManager().getPacketSender().sendToServer(Packet.builder().putByte(Opcodes.CLIENT_PING).putLong(snapshot));
 				}
 			}
 			
