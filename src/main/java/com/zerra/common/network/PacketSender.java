@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.zerra.server.network.ServerPacketManager;
 
 import simplenet.Client;
-import simplenet.packet.Packet;
 
 public class PacketSender
 {
@@ -23,21 +22,21 @@ public class PacketSender
 		this.server = server;
 	}
 
-	public void sendToServer(Packet packet)
+	public void sendToServer(Message msg)
 	{
-		packet.writeAndFlush(client);
+		msg.prepare().writeAndFlush(client);
 	}
 
-	public void sendToClient(Client client, Packet packet)
+	public void sendToClient(Client client, Message msg)
 	{
-		packet.writeAndFlush(client);
+		msg.prepare().writeAndFlush(client);
 	}
 
-	public void sendToAllClients(Packet packet)
+	public void sendToAllClients(Message msg)
 	{
 		for (UUID uuid : server.getClients().keySet())
 		{
-			packet.writeAndFlush(server.getClients().get(uuid));
+			msg.prepare().writeAndFlush(server.getClients().get(uuid));
 		}
 	}
 }

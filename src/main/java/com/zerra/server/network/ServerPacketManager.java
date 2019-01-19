@@ -5,11 +5,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.zerra.common.network.Opcodes;
 import com.zerra.common.network.PacketSender;
+import com.zerra.common.network.msg.MessageBadRequest;
+import com.zerra.common.network.msg.MessagePing;
 import com.zerra.server.ZerraServer;
 
 import simplenet.Client;
 import simplenet.Server;
-import simplenet.packet.Packet;
 
 public class ServerPacketManager
 {
@@ -47,7 +48,7 @@ public class ServerPacketManager
 						ZerraServer.getInstance().stop();
 					} else
 					{
-						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST).putString("Client attempted to shut down a remote server."));
+						this.sender.sendToClient(client, new MessageBadRequest("Client attempted to shut down a remote server."));
 					}
 				}
 
@@ -60,7 +61,7 @@ public class ServerPacketManager
 				} else if (opcode == Opcodes.CLIENT_PING)
 				{
 					client.readLong(time ->{
-						this.sender.sendToClient(client, Packet.builder().putByte(Opcodes.CLIENT_PING).putLong(time));
+						this.sender.sendToClient(client, new MessagePing(time));
 					});
 				}
 			});

@@ -5,9 +5,9 @@ import java.util.UUID;
 import com.zerra.client.ZerraClient;
 import com.zerra.common.network.Opcodes;
 import com.zerra.common.network.PacketSender;
+import com.zerra.common.network.msg.MessageConnect;
 
 import simplenet.Client;
-import simplenet.packet.Packet;
 
 public class ClientPacketManager
 {
@@ -41,7 +41,7 @@ public class ClientPacketManager
 			ZerraClient.logger().info("Successfully connected to the server!");
 
 			this.uuid = UUID.randomUUID();
-			Packet.builder().putByte(Opcodes.CLIENT_CONNECT).putString(uuid.toString()).writeAndFlush(client);
+			this.sender.sendToServer(new MessageConnect(uuid.toString()));
 		});
 
 		client.readByteAlways(opcode ->

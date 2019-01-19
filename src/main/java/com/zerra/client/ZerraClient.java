@@ -27,15 +27,13 @@ import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
-import com.zerra.common.network.Opcodes;
+import com.zerra.common.network.msg.MessageShutdownInternalServer;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.ZerraServer;
-
-import simplenet.packet.Packet;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -108,7 +106,7 @@ public class ZerraClient extends Zerra {
 			return;
 
 		LOGGER.info("Stopping...");
-		this.client.getPacketSender().sendToServer(Packet.builder().putByte(Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER));
+		this.client.getPacketSender().sendToServer(new MessageShutdownInternalServer());
 		this.running = false;
 	}
 
