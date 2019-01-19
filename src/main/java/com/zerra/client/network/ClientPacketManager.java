@@ -23,9 +23,22 @@ public class ClientPacketManager
 		this.createListeners();
 	}
 
-	public void connect()
+	public void switchToInternalServer()
 	{
+		if (client.getChannel().isOpen())
+		{
+			client.close();
+		}
 		client.connect("localhost", 43594);
+	}
+
+	public void switchToRemoteServer(String address, int port)
+	{
+		if (client.getChannel().isOpen())
+		{
+			client.close();
+		}
+		client.connect(address, port);
 	}
 
 	public void createListeners()

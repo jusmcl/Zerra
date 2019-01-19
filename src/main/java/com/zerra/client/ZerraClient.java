@@ -122,7 +122,7 @@ public class ZerraClient extends Zerra {
 				Thread.sleep(1000);
 				System.out.println("Waiting for server...");
 			}
-			this.client.connect();
+			this.client.switchToInternalServer();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
