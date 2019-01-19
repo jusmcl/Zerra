@@ -16,7 +16,7 @@ import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
-import com.zerra.client.network.ClientPacketManager;
+import com.zerra.client.network.ClientManager;
 import com.zerra.client.presence.Presence;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.I18n;
@@ -72,7 +72,7 @@ public class ZerraClient extends Zerra {
 	
 	private ModManager modManager;
 	
-	private ClientPacketManager client;
+	private ClientManager client;
 
 	public ZerraClient() {
 		instance = this;
@@ -80,7 +80,7 @@ public class ZerraClient extends Zerra {
 
 		this.presence = new Presence();
 
-		this.client = new ClientPacketManager();
+		this.client = new ClientManager();
 		
 		this.start();
 	}
@@ -322,7 +322,7 @@ public class ZerraClient extends Zerra {
         return modManager;
     }
     
-    public ClientPacketManager getPacketManager()
+    public ClientManager getPacketManager()
     {
     	return this.client;
     }

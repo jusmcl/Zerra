@@ -12,7 +12,7 @@ import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
-import com.zerra.server.network.ServerPacketManager;
+import com.zerra.server.network.ServerManager;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -36,7 +36,7 @@ public class ZerraServer extends Zerra {
 		this.isNaturallyRemote = isNaturallyRemote;
 		this.isCurrentlyRemote = false;
 		
-		server = new ServerPacketManager();
+		server = new ServerManager();
 		
 		this.start();
 	}

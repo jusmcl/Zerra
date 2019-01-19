@@ -9,7 +9,7 @@ import com.zerra.ClientLaunch;
 import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
-import com.zerra.server.network.ServerPacketManager;
+import com.zerra.server.network.ServerManager;
 
 public class Zerra implements Runnable
 {
@@ -26,7 +26,7 @@ public class Zerra implements Runnable
 
 	protected EventHandler eventHandler;
 
-	protected ServerPacketManager server;
+	protected ServerManager server;
 	
 	public void run()
 	{
