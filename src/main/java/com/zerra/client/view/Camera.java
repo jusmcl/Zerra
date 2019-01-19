@@ -13,7 +13,6 @@ import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
 import com.zerra.common.network.msg.MessagePing;
-import com.zerra.common.state.MenuState;
 import com.zerra.common.state.StateManager;
 import com.zerra.common.state.WorldState;
 import com.zerra.common.world.World;
@@ -115,10 +114,13 @@ public class Camera implements ICamera {
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
 			{
-				if (StateManager.getActiveState() instanceof WorldState)
+				System.out.println("creating world state...");
+				if (StateManager.getActiveState() == null)
 				{
-					System.out.println("Switching to menu state...");
-					StateManager.setActiveState(new MenuState());
+					StateManager.setActiveState(new WorldState());
+				} else if (StateManager.getActiveState() instanceof WorldState)
+				{
+					StateManager.setActiveState(null);
 				}
 			}
 
@@ -132,7 +134,7 @@ public class Camera implements ICamera {
 				}
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
 				{
-					ZerraClient.getInstance().getPacketManager().getPacketSender().sendToServer(new MessagePing());
+					ZerraClient.getInstance().getClientManager().getPacketSender().sendToServer(new MessagePing());
 				}
 			}
 			
