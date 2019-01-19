@@ -45,7 +45,7 @@ public class ClientPacketManager
 	{
 		client.onConnect(() ->
 		{
-			System.out.println(client + " has connected to the server!");
+			ZerraClient.logger().info("Successfully connected to the server!");
 
 			this.uuid = UUID.randomUUID();
 			Packet.builder().putByte(0).putString(uuid.toString()).writeAndFlush(client);

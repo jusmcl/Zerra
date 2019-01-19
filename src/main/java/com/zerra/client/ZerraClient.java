@@ -120,7 +120,7 @@ public class ZerraClient extends Zerra {
 			while(!ZerraServer.getInstance().isReady())
 			{
 				Thread.sleep(1000);
-				System.out.println("Waiting for server...");
+				ZerraClient.logger().info("Waiting for server...");
 			}
 			this.client.switchToInternalServer();
 		} catch (Throwable t) {

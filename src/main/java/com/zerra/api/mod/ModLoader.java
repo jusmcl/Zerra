@@ -12,11 +12,13 @@ public class ModLoader
 {
 	private ModManager modManager;
 
-	public ModLoader(ModManager modManager) {
+	public ModLoader(ModManager modManager)
+	{
 		this.modManager = modManager;
 	}
 
-	public void loadMods(String directory) {
+	public void loadMods(String directory)
+	{
 		ZerraClient.logger().info("Started loading mods...");
 
 		long snapshot = System.currentTimeMillis();
@@ -33,7 +35,6 @@ public class ModLoader
 
 				if (mod != null)
 				{
-					System.out.println(mod.getModInfo().getDomain());
 					modManager.loadedMods.put(mod.getModInfo().getDomain(), mod);
 				}
 			}

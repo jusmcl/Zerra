@@ -26,7 +26,7 @@ public class ServerPacketManager
 
 		server.onConnect(client ->
 		{
-			System.out.println(client + " has connected!");
+			ZerraServer.logger().info(client + " has connected!");
 
 			client.readByteAlways(opcode ->
 			{
