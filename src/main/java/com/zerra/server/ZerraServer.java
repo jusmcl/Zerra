@@ -9,7 +9,6 @@ import com.zerra.client.util.Timer;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.state.StateManager;
-import com.zerra.common.state.WorldState;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerManager;
@@ -64,6 +63,7 @@ public class ZerraServer extends Zerra {
 		LOGGER.info("Stopping...");
 		this.running = false;
 		this.world.stop();
+		this.server.close();
 	}
 
 	// TODO improve loop
@@ -119,9 +119,6 @@ public class ZerraServer extends Zerra {
 			}
 		}
 		this.eventHandler = new EventHandler();
-		
-		//TODO: Eventually set the first state of the game to the game loading state.
-		StateManager.setActiveState(new WorldState());
 	}
 
 	public static ZerraServer getInstance()
@@ -152,5 +149,10 @@ public class ZerraServer extends Zerra {
 	public void setCurrentlyRemote(boolean isCurrentlyRemote)
 	{
 		this.isCurrentlyRemote = isCurrentlyRemote;
+	}
+	
+	public ServerManager getServerManager()
+	{
+		return this.server;
 	}
 }
