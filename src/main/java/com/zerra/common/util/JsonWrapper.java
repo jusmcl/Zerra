@@ -184,6 +184,14 @@ public class JsonWrapper
 		this.write();
 	}
 
+	public void addLong(String element, long value)
+	{
+		if (isReadOnly || !this.getJson().has(element))
+			return;
+		mainJson.addProperty(element, this.getLong(element) + value);
+		this.write();
+	}
+
 	public void addFloat(String element, float value)
 	{
 		if (isReadOnly || !this.getJson().has(element))
@@ -321,6 +329,11 @@ public class JsonWrapper
 	public int getInt(String element)
 	{
 		return this.mainJson.get(element).getAsInt();
+	}
+
+	public long getLong(String element)
+	{
+		return this.mainJson.get(element).getAsLong();
 	}
 
 	public double getDouble(String element)
