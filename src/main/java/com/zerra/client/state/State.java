@@ -1,4 +1,4 @@
-package com.zerra.common.state;
+package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
 import com.zerra.common.Zerra;
