@@ -6,7 +6,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
-import com.zerra.client.Zerra;
+import com.zerra.client.ZerraClient;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -29,11 +29,11 @@ public class Listeners {
 		@Override
 		public void invoke(long window, int key, int scancode, int action, int mods) {
 			if (action == GLFW.GLFW_PRESS) {
-				Zerra.getInstance().onKeyPressed(key);
+				ZerraClient.getInstance().onKeyPressed(key);
 			}
 
 			if (action == GLFW.GLFW_RELEASE) {
-				Zerra.getInstance().onKeyReleased(key);
+				ZerraClient.getInstance().onKeyReleased(key);
 			}
 		}
 	}
@@ -42,11 +42,11 @@ public class Listeners {
 		@Override
 		public void invoke(long window, int button, int action, int mods) {
 			if (action == GLFW.GLFW_PRESS) {
-				Zerra.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), button);
+				ZerraClient.getInstance().onMousePressed(Display.getMouseX(), Display.getMouseY(), button);
 			}
 
 			if (action == GLFW.GLFW_RELEASE) {
-				Zerra.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), button);
+				ZerraClient.getInstance().onMouseReleased(Display.getMouseX(), Display.getMouseY(), button);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class Listeners {
 	private static class ScrollCallback extends GLFWScrollCallback {
 		@Override
 		public void invoke(long window, double xoffset, double yoffset) {
-			Zerra.getInstance().onMouseScrolled(Display.getMouseX(), Display.getMouseY(), yoffset);
+			ZerraClient.getInstance().onMouseScrolled(Display.getMouseX(), Display.getMouseY(), yoffset);
 		}
 	}
 
@@ -63,11 +63,11 @@ public class Listeners {
 		public void invoke(int jid, int event) {
 			Display.joysticksPresent[jid] = (byte) (GLFW.glfwJoystickPresent(jid) ? 1 : 0);
 			if (event == GLFW.GLFW_CONNECTED) {
-				Zerra.getInstance().onJoystickConnected(jid);
-				Zerra.logger().info("Controller " + jid + " was connected");
+				ZerraClient.getInstance().onJoystickConnected(jid);
+				ZerraClient.logger().info("Controller " + jid + " was connected");
 			} else {
-				Zerra.getInstance().onJoystickDisconnected(jid);
-				Zerra.logger().info("Controller " + jid + " was disconnected");
+				ZerraClient.getInstance().onJoystickDisconnected(jid);
+				ZerraClient.logger().info("Controller " + jid + " was disconnected");
 			}
 		}
 	}

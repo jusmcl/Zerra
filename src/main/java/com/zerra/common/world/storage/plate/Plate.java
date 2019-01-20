@@ -1,14 +1,15 @@
 package com.zerra.common.world.storage.plate;
 
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.tile.Tile;
+import java.util.Arrays;
+import java.util.function.Supplier;
+
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tile;
 
 public class Plate {
 	

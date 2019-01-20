@@ -1,4 +1,4 @@
-package com.zerra.common;
+package com.zerra.common.util;
 
 public class CrashCodes {
 

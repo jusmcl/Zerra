@@ -1,9 +1,14 @@
 package com.zerra.api.mod.example;
 
+import javax.annotation.Nonnull;
+
 import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.ModInit;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
+import com.zerra.common.util.UBObjectWrapper;
+import com.zerra.common.world.data.WorldData;
+import com.zerra.common.world.data.WorldDataFactory;
 import com.zerra.common.world.item.Item;
 
 public class ExampleMod implements Mod
@@ -12,8 +17,12 @@ public class ExampleMod implements Mod
 
 	@Override
 	public void init(ModInit modInit) {
+		//Item example
 		Item item = new Item("testItem");
 		modInit.register(item);
+
+		//WorldData example
+		modInit.register(new WorldDataFactory<>("exampleWorldData", ExampleWorldData.class));
 
 		for (int i = 0; i < PROGRESS_MAX; i++) {
 			float progress = ((float) i / (float) PROGRESS_MAX) * 100F;
@@ -37,6 +46,35 @@ public class ExampleMod implements Mod
 				.setModDescription("A simple example mod.")
 				.setWebsiteURL("https://www.example.com")
 				.build();
+	}
+
+	public static class ExampleWorldData extends WorldData {
+		private int number = 1;
+
+		public ExampleWorldData(String registryName) {
+			super(registryName);
+		}
+
+		public void setNumber(int number) {
+			this.number = number;
+		}
+
+		public int getNumber() {
+			return this.number;
+		}
+
+		@Nonnull
+		@Override
+		public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
+			ubo.setInt("number", this.number);
+			return super.writeToUBO(ubo);
+		}
+
+		@Override
+		public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
+			this.number = ubo.getIntSafe("number");
+			super.readFromUBO(ubo);
+		}
 	}
 }
 
