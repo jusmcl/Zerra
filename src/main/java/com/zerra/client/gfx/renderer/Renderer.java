@@ -6,11 +6,8 @@ import com.zerra.client.gfx.model.Model;
 import com.zerra.client.view.Display;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2018 The Zerra Team.</b></em> <br>
  * </br>
- * 
  * Renders standard {@link Model}s based on how they were loaded into memory.
  * 
  * @author Ocelot5836

@@ -4,6 +4,15 @@ import org.joml.Matrix4f;
 
 import com.zerra.ClientLaunch;
 
+/**
+ * 
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * Used for shading in GUI rendering.
+ *
+ * @author Ocelot5836
+ */
+//TODO: Document
 public class GuiShader extends ShaderProgram {
 
 	private int location_projectionMatrix;

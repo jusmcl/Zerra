@@ -2,6 +2,14 @@ package com.zerra.client.gfx.texture;
 
 import org.lwjgl.opengl.GL11;
 
+/**
+ * 
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * A basic texture object.
+ *
+ * @author Ocelot5836
+ */
 public class BasicTexture implements ITexture {
 
 	private int textureId;

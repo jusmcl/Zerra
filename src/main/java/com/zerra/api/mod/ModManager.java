@@ -14,9 +14,12 @@ import com.zerra.client.ZerraClient;
 import com.zerra.common.util.MiscUtils;
 
 /**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
  * The class where mods loaded onto the classpath will be handled and managed.
  *
  * @author Arpaesis
+ * @author Bright_Spark
  */
 public class ModManager {
 
@@ -32,6 +35,9 @@ public class ModManager {
 		this.loader = new ModLoader(this);
 	}
 
+	/**
+	 * Loads mods, processes them one by one, and then cleans up the mod loading threads.
+	 */
 	public void setupMods() {
 		this.loader.loadMods("data/mods/");
 
@@ -46,6 +52,12 @@ public class ModManager {
 		this.pool.shutdown();
 	}
 
+	/**
+	 * Takes a mod and processes it. Processing a mod is consists of giving the mod a load order based on its dependencies (mods should load after dependencies).
+	 * 
+	 * @param domain The domain of the mod.
+	 * @param depth How high the mod should be prioritized. The bigger the number, the larger the priority.
+	 */
 	private void process(String domain, final int depth) {
 		if (depth > this.deepestLevel) {
 			this.deepestLevel = depth;
@@ -61,6 +73,9 @@ public class ModManager {
 		}
 	}
 
+	/**
+	 * Initializes all mods.
+	 */
 	private void initialize() {
 		//Sorts the mods into easy-to-grab layers
 		Map<Integer, Set<Mod>> layers = new HashMap<>();
@@ -93,6 +108,12 @@ public class ModManager {
 		}
 	}
 
+	/**
+	 * Verifies whether or not the domain of a mod exists within the currently loaded mods.
+	 * 
+	 * @param domain The domain to check for.
+	 * @return Whether the domain exists or not.
+	 */
 	public boolean doesDomainExist(String domain) {
 		return this.loadedMods.keySet().contains(domain);
 	}

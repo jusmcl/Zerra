@@ -27,10 +27,9 @@ public class WorldState extends State
 			Thread.sleep(2000);
 		} catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		zerraClient.getClientManager().switchToInternalServer();
+		zerraClient.getConnectionManager().switchToInternalServer();
 	}
 
 	@Override

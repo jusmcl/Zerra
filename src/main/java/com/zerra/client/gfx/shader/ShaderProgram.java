@@ -19,15 +19,14 @@ import com.zerra.client.ZerraClient;
 import com.zerra.client.util.ResourceLocation;
 
 /**
- * <em><b>Copyright (c) 2018 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2018 The Zerra Team.</b></em> <br>
  * </br>
- * 
- * The root for any kind of shader. Handles all of the GL stuff and allows the user to load objects to the shaders from java code.
+ * The root for any kind of shader. Handles all of the GL stuff and allows the
+ * user to load objects to the shaders from java code.
  * 
  * @author Ocelot5836
  */
+//TODO: Document
 public abstract class ShaderProgram {
 
 	private Map<String, String> compileParameters;

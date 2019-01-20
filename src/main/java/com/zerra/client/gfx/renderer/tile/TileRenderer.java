@@ -16,6 +16,13 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * Used for rendering tiles within a plate.
+ *
+ * @author Ocelot5836
+ */
 public class TileRenderer {
 
 	private Matrix4f projectionMatrix;
@@ -32,6 +39,13 @@ public class TileRenderer {
 		this.meshCreator = new TileMeshCreator();
 	}
 
+	/**
+	 * Renders tiles to the world.
+	 * 
+	 * @param camera The camera to view the tiles.
+	 * @param world The world to render the tiles in.
+	 * @param layer The layer ID of the world to render the tiles in.
+	 */
 	public void renderTiles(ICamera camera, World world, int layer) {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);

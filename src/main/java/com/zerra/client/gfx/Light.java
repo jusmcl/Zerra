@@ -3,11 +3,8 @@ package com.zerra.client.gfx;
 import org.joml.Vector3f;
 
 /**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * 
  * A standard point-light that exists in the world.
  * 
  * @author Ocelot5836

@@ -13,6 +13,14 @@ import com.zerra.client.util.Loader;
 import com.zerra.client.util.Maths;
 import com.zerra.client.view.Display;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * The GUI renderer for the game. Used to render GUI onto the screen.
+ *
+ * @author Ocelot5836
+ */
+//TODO: Document this later, because wew lad this is gonna be painful.
 public class GuiRenderer {
 
 	public static final Matrix4f DEFAULT_MATRIX = new Matrix4f().ortho(0, Display.getWidth() / Renderer.SCALE, Display.getHeight() / Renderer.SCALE, 0, 0.3f, 1000.0f);

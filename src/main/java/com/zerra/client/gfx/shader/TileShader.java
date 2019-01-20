@@ -8,6 +8,15 @@ import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.util.Maths;
 import com.zerra.client.view.ICamera;
 
+/**
+ * 
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * Used in shading tiles.
+ *
+ * @author Ocelot5836
+ */
+//TODO: Document
 public class TileShader extends ShaderProgram {
 
 	private int location_projectionMatrix;

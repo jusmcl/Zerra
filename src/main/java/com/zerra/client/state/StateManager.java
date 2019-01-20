@@ -43,7 +43,7 @@ public class StateManager
 		// If we are leaving a world state... clean up the world.
 		if (prevState instanceof WorldState)
 		{
-			ZerraClient.getInstance().getClientManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getClientManager().getUUID().toString()));
+			ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getConnectionManager().getUUID().toString()));
 		} else if (nextState instanceof WorldLoadState)
 		{
 			//Prepare for world...

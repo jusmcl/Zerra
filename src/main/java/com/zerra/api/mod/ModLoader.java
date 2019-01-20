@@ -8,6 +8,13 @@ import com.zerra.common.util.MiscUtils;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * This loads all mods onto the classpath during initialization of the game.
+ * 
+ * @author Arpaesis
+ */
 public class ModLoader
 {
 	private ModManager modManager;
@@ -17,6 +24,11 @@ public class ModLoader
 		this.modManager = modManager;
 	}
 
+	/**
+	 * Loads the mods (jars) from the given directory.
+	 * 
+	 * @param directory The directory to search in.
+	 */
 	public void loadMods(String directory)
 	{
 		ZerraClient.logger().info("Started loading mods...");

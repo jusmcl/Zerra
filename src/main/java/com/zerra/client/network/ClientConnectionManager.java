@@ -9,14 +9,14 @@ import com.zerra.common.network.msg.MessageConnect;
 
 import simplenet.Client;
 
-public class ClientManager
+public class ClientConnectionManager
 {
 
 	private Client client;
 	private PacketSender sender;
 	private UUID uuid;
 
-	public ClientManager()
+	public ClientConnectionManager()
 	{
 		client = new Client();
 		sender = new PacketSender(client);

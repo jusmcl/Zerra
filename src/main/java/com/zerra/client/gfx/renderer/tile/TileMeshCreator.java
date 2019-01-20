@@ -19,6 +19,13 @@ import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * Used for creating tile meshes.
+ *
+ * @author Ocelot5836
+ */
 public class TileMeshCreator {
 
 	private Map<Plate, PlateMeshData> generatedPlates;
@@ -109,7 +116,6 @@ public class TileMeshCreator {
 		}
 	}
 
-	@Nullable
 	public Model getModel(Plate plate) {
 		return !this.ready(plate) ? null : this.platesMesh.get(plate);
 	}
