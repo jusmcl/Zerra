@@ -66,7 +66,10 @@ public class World {
 	public World(String name, long seed)
 	{
 		this(name);
+		
+		//Overrides the previous constructor's stuff.
 		this.random.setSeed(seed);
+		worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
 	}
 
 	public void schedule(Runnable command) {
