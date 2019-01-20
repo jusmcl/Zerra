@@ -62,6 +62,12 @@ public class World {
 
 		this.pool = Executors.newCachedThreadPool();
 	}
+	
+	public World(String name, long seed)
+	{
+		this(name);
+		this.random.setSeed(seed);
+	}
 
 	public void schedule(Runnable command) {
 		this.pool.execute(command);
