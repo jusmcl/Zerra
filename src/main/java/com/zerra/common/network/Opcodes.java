@@ -9,4 +9,6 @@ public class Opcodes
 	public static byte CLIENT_CONNECT = 0;
 	public static byte CLIENT_CHAT_MESSAGE = 1;
 	public static byte CLIENT_PING = 2;
+	public static byte PLATE_DATA = 3;
+	public static byte ENTITY_MOVE = 4;
 }
