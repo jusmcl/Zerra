@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.zerra.common.network.Opcodes;
 import com.zerra.common.network.PacketSender;
-import com.zerra.common.network.msg.MessageBadRequest;
 import com.zerra.common.network.msg.MessagePing;
 import com.zerra.common.network.msg.MessageUnknownRequest;
 import com.zerra.server.ZerraServer;
@@ -30,43 +29,46 @@ public class ServerManager
 
 		server.onConnect(client ->
 		{
-			ZerraServer.logger().info(client + " has connected!");
-
 			client.readByteAlways(opcode ->
 			{
-				if (opcode == Opcodes.CLIENT_SHUTDOWN_INTERNAL_SERVER)
+
+				// When a client closes
+				if (opcode == Opcodes.CLIENT_DISCONNECT)
 				{
+					// Close the client no matter what.
+					client.close();
+
+					client.readString(uuid ->
+					{
+						clients.remove(UUID.fromString(uuid));
+						ZerraServer.logger().info("Player with UUID " + uuid + " has left the game.");
+					});
+
 					// A client shouldn't be able to shut down a remote server.
 					if (!ZerraServer.getInstance().isCurrentlyRemote())
 					{
-						for (UUID uuid : clients.keySet())
-						{
-							clients.get(uuid).close();
-						}
 						this.server.close();
 						ZerraServer.getInstance().stop();
-					} else
-					{
-						this.sender.sendToClient(client, new MessageBadRequest("Client attempted to shut down a remote server."));
 					}
 				}
 
+				// When a client (host or non host) connects to the server.
 				else if (opcode == Opcodes.CLIENT_CONNECT)
 				{
-					client.readString(uuid -> clients.put(UUID.fromString(uuid), client));
+					client.readString(uuid ->
+					{
+						clients.put(UUID.fromString(uuid), client);
+						ZerraServer.logger().info("Player with UUID " + uuid + " has joined the game.");
+					});
+					// For when a non host client leaves the server.
 				} else if (opcode == Opcodes.CLIENT_PING)
 				{
 					client.readLong(time -> this.sender.sendToClient(client, new MessagePing(time)));
-				}else {
+				} else
+				{
 					this.sender.sendToClient(client, new MessageUnknownRequest("The client made an unknown request! This should not happen."));
 				}
 			});
-
-			// Register an optional pre-disconnection listener.
-			client.preDisconnect(() -> ZerraServer.logger().info(client + " is about to disconnect!"));
-
-			// Register an optional post-disconnection listener.
-			client.postDisconnect(() -> ZerraServer.logger().info(client + " has successfully disconnected from the server!"));
 		});
 	}
 

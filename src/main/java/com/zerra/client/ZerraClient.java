@@ -27,7 +27,7 @@ import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
-import com.zerra.common.network.msg.MessageShutdownInternalServer;
+import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
@@ -99,7 +99,8 @@ public class ZerraClient extends Zerra {
 			return;
 
 		LOGGER.info("Stopping...");
-		this.client.getPacketSender().sendToServer(new MessageShutdownInternalServer());
+		//TODO: Only shut down if the server is even alive.
+		this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getClientManager().getUUID().toString()));
 		this.running = false;
 	}
 

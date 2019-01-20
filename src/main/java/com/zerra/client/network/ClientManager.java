@@ -40,6 +40,7 @@ public class ClientManager
 		{
 			ZerraClient.logger().info("Successfully connected to the server!");
 
+			// TODO: Make this not random.
 			this.uuid = UUID.randomUUID();
 			this.sender.sendToServer(new MessageConnect(uuid.toString()));
 		});
@@ -52,15 +53,11 @@ public class ClientManager
 			} else if (opcode == Opcodes.CLIENT_PING)
 			{
 				client.readLong(time -> ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms"));
-			} else if(opcode == Opcodes.ERROR_UNKNOWN_REQUEST)
+			} else if (opcode == Opcodes.ERROR_UNKNOWN_REQUEST)
 			{
 				client.readString(msg -> ZerraClient.logger().warn(msg));
 			}
 		});
-
-		client.preDisconnect(() -> ZerraClient.logger().info(client + " is about to disconnect from the server!"));
-
-		client.postDisconnect(() -> ZerraClient.logger().info(client + " successfully disconnected from the server!"));
 	}
 
 	public void disconnect()
@@ -71,5 +68,10 @@ public class ClientManager
 	public PacketSender getPacketSender()
 	{
 		return this.sender;
+	}
+
+	public UUID getUUID()
+	{
+		return this.uuid;
 	}
 }
