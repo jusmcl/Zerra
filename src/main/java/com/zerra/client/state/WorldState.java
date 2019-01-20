@@ -19,7 +19,7 @@ public class WorldState extends State
 		zerraClient = ZerraClient.getInstance();
 
 		new Thread(new ZerraServer(false), "Server").start();
-
+		//TODO: The server/world is created here (line of code above), however, the client world should also be created along with it.
 		zerraServer = ZerraServer.getInstance();
 
 		try
