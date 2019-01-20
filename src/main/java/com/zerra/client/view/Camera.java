@@ -163,6 +163,7 @@ public class Camera implements ICamera
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition))
 		{
+			//TODO: FIX THIS. The client should never access the server like this. This should be accessing the client's world, not the servers.
 			World world = ZerraServer.getInstance().getWorld();
 			Layer layer = world.getLayer(0);
 			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
