@@ -27,9 +27,7 @@ public class Item implements RegistryNameable
 
     @Override
     public final void setDomain(String domain) {
-        if (!registryName.contains(":")) {
-            registryName = domain + ":" + registryName;
-        }
+		this.registryName = RegistryNameable.injectDomain(this.registryName, domain);
     }
 
     @Override

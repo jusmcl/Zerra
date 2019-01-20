@@ -1,5 +1,16 @@
 package com.zerra.common.world.entity;
 
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.joml.Vector2f;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+
 import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.util.UBObjectWrapper;
@@ -8,12 +19,6 @@ import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.Storable;
 import com.zerra.common.world.storage.plate.WorldLayer;
-import org.joml.*;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.Math;
-import java.util.UUID;
 
 public abstract class Entity implements Storable {
 

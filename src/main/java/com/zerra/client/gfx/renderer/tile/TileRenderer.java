@@ -1,6 +1,11 @@
 package com.zerra.client.gfx.renderer.tile;
 
-import com.zerra.client.Zerra;
+import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
+
+import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.shader.TileShader;
@@ -10,10 +15,6 @@ import com.zerra.client.view.ICamera;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
-import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
 
 public class TileRenderer {
 
@@ -42,7 +43,7 @@ public class TileRenderer {
 				Plate plate = plates[i];
 				if (this.meshCreator.ready(plate)) {
 					Model model = this.meshCreator.getModel(plate);
-					Zerra.getInstance().getTextureManager().bind(Zerra.getInstance().getTextureMap().getLocation());
+					ZerraClient.getInstance().getTextureManager().bind(ZerraClient.getInstance().getTextureMap().getLocation());
 					this.shader.start();
                     this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x() * (Plate.SIZE + 1), plate.getPlatePos().z() * (Plate.SIZE + 1), 0, 0, 1, 1));
 					this.shader.loadViewMatrix(camera);
