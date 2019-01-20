@@ -25,7 +25,7 @@ public class ClientLaunch
 	 */
 	public static void main(String[] args)
 	{
-		ArgsBuilder builder = ArgsBuilder.deserialize(args);
+		ArgsBuilder.deserialize(args);
 		new Thread(new ZerraClient(), "Client").start();
 	}
 }

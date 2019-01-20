@@ -1,16 +1,11 @@
 package com.zerra.client.state;
 
-import com.zerra.client.ZerraClient;
-
 public class WorldLoadState extends State
 {
-
-	private ZerraClient zerra;
 
 	public WorldLoadState()
 	{
 		super("worldload");
-		zerra = ZerraClient.getInstance();
 	}
 
 	@Override

@@ -98,7 +98,7 @@ public class Registry<T extends RegistryNameable>
 		{
 			return false;
 		}
-		Registry r = (Registry) obj;
+		Registry<?> r = (Registry<?>) obj;
 		// noinspection unchecked
 		return type.isAssignableFrom(r.type) || r.type.isAssignableFrom(type);
 	}

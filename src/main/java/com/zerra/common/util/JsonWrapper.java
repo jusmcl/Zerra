@@ -3,7 +3,6 @@ package com.zerra.common.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
@@ -292,22 +291,6 @@ public class JsonWrapper
 		} catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-	}
-
-	@Override
-	protected void finalize() throws Throwable
-	{
-		super.finalize();
-
-		try
-		{
-			if (this.reader.ready())
-				this.reader.close();
-		} catch (IOException e)
-		{
-			// Do nothing. The reader is closed, based on the io exception. There's nothing
-			// more for us to do here.
 		}
 	}
 

@@ -28,7 +28,7 @@ public class EntityFactory<T extends Entity> extends Factory<T>
 	 *        for the given layer ID
 	 * @return This {@link EntityFactory}
 	 */
-	public EntityFactory setLayerPredicate(Predicate<Integer> layerPredicate)
+	public EntityFactory<T> setLayerPredicate(Predicate<Integer> layerPredicate)
 	{
 		this.layerPredicate = layerPredicate;
 		return this;
@@ -54,7 +54,7 @@ public class EntityFactory<T extends Entity> extends Factory<T>
 	 *        for the given tile
 	 * @return This {@link EntityFactory}
 	 */
-	public EntityFactory setTilePredicate(Predicate<Tile> tilePredicate)
+	public EntityFactory<T> setTilePredicate(Predicate<Tile> tilePredicate)
 	{
 		this.tilePredicate = tilePredicate;
 		return this;

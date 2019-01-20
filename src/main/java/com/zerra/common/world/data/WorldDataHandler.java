@@ -32,7 +32,7 @@ public class WorldDataHandler
 	 */
 	public static Map<String, WorldData> getDataForWorld()
 	{
-		return getData(factory -> factory instanceof WorldDataFactory && !((WorldDataFactory) factory).isPerLayer());
+		return getData(factory -> factory instanceof WorldDataFactory && !((WorldDataFactory<?>) factory).isPerLayer());
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class WorldDataHandler
 	 */
 	public static Map<String, WorldData> getDataForLayer(int layer)
 	{
-		return getData(factory -> factory instanceof WorldDataFactory && ((WorldDataFactory) factory).isPerLayer() && ((WorldDataFactory) factory).isForLayer(layer));
+		return getData(factory -> factory instanceof WorldDataFactory && ((WorldDataFactory<?>) factory).isPerLayer() && ((WorldDataFactory<?>) factory).isForLayer(layer));
 	}
 }

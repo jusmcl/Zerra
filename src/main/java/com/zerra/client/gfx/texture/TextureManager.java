@@ -12,7 +12,6 @@ import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
 
 /**
- * 
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
  * Used in managing textures.

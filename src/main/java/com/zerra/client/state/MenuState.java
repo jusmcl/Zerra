@@ -5,12 +5,9 @@ import com.zerra.client.ZerraClient;
 public class MenuState extends State
 {
 
-	private ZerraClient zerra;
-
 	public MenuState()
 	{
 		super("menu");
-		zerra = ZerraClient.getInstance();
 	}
 
 	@Override

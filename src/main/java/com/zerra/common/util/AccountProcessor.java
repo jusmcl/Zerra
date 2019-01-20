@@ -2,11 +2,11 @@ package com.zerra.common.util;
 
 public class AccountProcessor
 {
-	private String id;
+	private String sessionTicket;
 
-	public AccountProcessor(String id)
+	public AccountProcessor(String sessionTicket)
 	{
-		this.id = id;
+		this.sessionTicket = sessionTicket;
 	}
 
 	/**
@@ -15,5 +15,10 @@ public class AccountProcessor
 	public void process()
 	{
 		// TODO: Hook this up with Tebreca's website.
+	}
+
+	public String getSessionTicket()
+	{
+		return sessionTicket;
 	}
 }

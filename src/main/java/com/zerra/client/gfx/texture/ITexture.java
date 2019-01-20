@@ -1,7 +1,6 @@
 package com.zerra.client.gfx.texture;
 
 /**
- * 
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
  * A basic interface for textures.

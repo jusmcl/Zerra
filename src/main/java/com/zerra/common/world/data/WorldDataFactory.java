@@ -27,7 +27,7 @@ public class WorldDataFactory<T extends WorldData> extends Factory<T>
 	 *
 	 * @return This {@link WorldDataFactory}
 	 */
-	public WorldDataFactory setIsPerLayer()
+	public WorldDataFactory<T> setIsPerLayer()
 	{
 		perLayer = true;
 		return this;
@@ -53,7 +53,7 @@ public class WorldDataFactory<T extends WorldData> extends Factory<T>
 	 *        created for the given layer ID
 	 * @return This {@link WorldDataFactory}
 	 */
-	public WorldDataFactory setLayerPredicate(Predicate<Integer> layerPredicate)
+	public WorldDataFactory<T> setLayerPredicate(Predicate<Integer> layerPredicate)
 	{
 		this.layerPredicate = layerPredicate;
 		return this;

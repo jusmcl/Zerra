@@ -109,7 +109,7 @@ public class Registries
 	 */
 	public static Object getNewInstanceFromFactory(String registryName)
 	{
-		Factory factory = getRegisteredObject(registryName, Factory.class);
+		Factory<?> factory = getRegisteredObject(registryName, Factory.class);
 		if (factory != null)
 		{
 			return factory.getNewInstance();
