@@ -1,6 +1,6 @@
 package com.zerra.common.event;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 
 public class Event {
 
@@ -8,7 +8,7 @@ public class Event {
 	private boolean cancelled;
 
 	public void call() {
-		ZerraClient.getInstance().getEventHandler().callEvent(this);
+		Zerra.getInstance().getEventHandler().callEvent(this);
 	}
 
 	public void consume() {

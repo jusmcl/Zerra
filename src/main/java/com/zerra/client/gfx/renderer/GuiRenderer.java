@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.shader.GuiShader;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
@@ -33,7 +33,7 @@ public class GuiRenderer {
 	}
 
 	public void renderTextureQuad(float x, float y, float width, float height, TextureMapSprite sprite) {
-		ZerraClient.getInstance().getTextureManager().bind(ZerraClient.getInstance().getTextureMap().getLocation());
+		Zerra.getInstance().getTextureManager().bind(Zerra.getInstance().getTextureMap().getLocation());
 		this.renderTextureQuad(x, y, width, height, 0, 0, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
 	}
 

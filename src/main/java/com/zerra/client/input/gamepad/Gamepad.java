@@ -3,9 +3,11 @@ package com.zerra.client.input.gamepad;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 
 public class Gamepad {
 
@@ -45,9 +47,9 @@ public class Gamepad {
 				this.buttons[i] = buttons.get(i);
 				if (this.previousButtons[i] != this.buttons[i]) {
 					if (this.isButtonPressed(i)) {
-						ZerraClient.getInstance().onJoystickButtonPressed(this.jid, i);
+						Zerra.getInstance().onJoystickButtonPressed(this.jid, i);
 					} else {
-						ZerraClient.getInstance().onJoystickButtonReleased(this.jid, i);
+						Zerra.getInstance().onJoystickButtonReleased(this.jid, i);
 					}
 				}
 			}
@@ -70,6 +72,7 @@ public class Gamepad {
 		return (button >= 0 && button < this.buttons.length ? this.buttons[button] : 0) == 1;
 	}
 
+	@Nullable
 	public Joystick getJoystick(int joystick) {
 		if (!this.isJoystickPresent(joystick))
 			return null;

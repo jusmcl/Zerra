@@ -1,8 +1,7 @@
 package com.zerra.common.world.tile;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.zerra.common.registry.RegistryNameable;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class TileType implements RegistryNameable {
 
@@ -48,7 +47,9 @@ public class TileType implements RegistryNameable {
 
     @Override
     public void setDomain(String domain) {
-		this.registryName = RegistryNameable.injectDomain(this.registryName, domain);
+        if (!registryName.contains(":")) {
+            registryName = domain + ":" + registryName;
+        }
     }
 
     @Override

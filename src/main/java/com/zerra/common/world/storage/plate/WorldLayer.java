@@ -1,23 +1,15 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
-
 import com.zerra.common.world.World;
-import com.zerra.common.world.data.WorldData;
-import com.zerra.common.world.data.WorldDataHandler;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class WorldLayer implements Layer {
 
@@ -26,7 +18,6 @@ public class WorldLayer implements Layer {
     private Map<Vector3ic, Plate> loadedPlates;
     private List<Vector3ic> loadingPlates;
 	private Set<Entity> loadedEntities;
-	private Map<String, WorldData> worldData;
 
 	public WorldLayer(World world, int layer) {
 		this.world = world;
@@ -34,11 +25,6 @@ public class WorldLayer implements Layer {
         this.loadedPlates = new ConcurrentHashMap<Vector3ic, Plate>();
         this.loadingPlates = new ArrayList<Vector3ic>();
         this.loadedEntities = new HashSet<Entity>();
-
-		//Create and load WorldData for layer
-		this.worldData = WorldDataHandler.getDataForLayer(layer);
-		Map<String, WorldData> data = this.world.getStorageManager().readWorldDataSafe(layer);
-		this.worldData.putAll(data);
     }
 
     @Override
@@ -124,10 +110,5 @@ public class WorldLayer implements Layer {
 	@Override
     public boolean isPlateLoaded(Vector3ic pos) {
 		return this.loadedPlates.containsKey(pos);
-	}
-
-	@Override
-	public WorldData getWorldData(String registryName) {
-		return worldData.get(registryName);
 	}
 }

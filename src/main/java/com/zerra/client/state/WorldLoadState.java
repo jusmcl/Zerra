@@ -1,16 +1,17 @@
-package com.zerra.common.state;
+package com.zerra.client.state;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 
 public class WorldLoadState extends State
 {
 
-	private ZerraClient zerra;
+	private Zerra zerra;
 
 	public WorldLoadState()
 	{
 		super("worldload");
-		zerra = ZerraClient.getInstance();
+		zerra = Zerra.getInstance();
+		zerra.getPresence().setPresence("Loading World", "512x512", "none");
 	}
 
 	@Override

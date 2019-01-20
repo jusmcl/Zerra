@@ -1,8 +1,8 @@
 package com.zerra.common.world.storage;
 
-import javax.annotation.Nonnull;
-
 import com.zerra.common.util.UBObjectWrapper;
+
+import javax.annotation.Nonnull;
 
 public interface Storable {
 

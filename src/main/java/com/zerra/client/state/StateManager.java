@@ -1,10 +1,7 @@
-package com.zerra.common.state;
+package com.zerra.client.state;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.zerra.client.ZerraClient;
-import com.zerra.common.network.msg.MessageShutdownInternalServer;
 
 public class StateManager
 {
@@ -43,7 +40,7 @@ public class StateManager
 		// If we are leaving a world state... clean up the world.
 		if (prevState instanceof WorldState)
 		{
-			ZerraClient.getInstance().getClientManager().getPacketSender().sendToServer(new MessageShutdownInternalServer());
+			//TODO: Zerra.getInstance().world.stop();
 		} else if (nextState instanceof WorldLoadState)
 		{
 			//Prepare for world...

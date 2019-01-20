@@ -29,7 +29,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 
 @Deprecated
 public class WindowManager {
@@ -59,7 +59,7 @@ public class WindowManager {
 		}
 
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			ZerraClient.getInstance().schedule(genRunnable(window, key, scancode, action, mods));
+			Zerra.getInstance().schedule(genRunnable(window, key, scancode, action, mods));
 		});
 
 		try (MemoryStack stack = MemoryStack.stackPush()) {

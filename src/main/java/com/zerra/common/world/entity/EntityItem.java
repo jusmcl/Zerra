@@ -1,6 +1,6 @@
 package com.zerra.common.world.entity;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.item.ItemGroup;
 import com.zerra.common.world.storage.plate.WorldLayer;
@@ -29,7 +29,7 @@ public class EntityItem extends Entity
 	{
 		super.update();
 		
-		if(this.getTicksExisted() >= (ZerraClient.getInstance().getTicksPerSecond() * 60 * 5))
+		if(this.getTicksExisted() >= (Zerra.getInstance().getTicksPerSecond() * 60 * 5))
 		{
 			this.despawn();
 		}

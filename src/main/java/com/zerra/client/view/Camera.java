@@ -7,18 +7,17 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.ClientLaunch;
-import com.zerra.client.ZerraClient;
+import com.zerra.Launch;
+import com.zerra.client.Zerra;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
-import com.zerra.common.network.msg.MessagePing;
-import com.zerra.common.state.StateManager;
-import com.zerra.common.state.WorldState;
+import com.zerra.client.state.MenuState;
+import com.zerra.client.state.StateManager;
+import com.zerra.client.state.WorldState;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
-import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
@@ -66,7 +65,7 @@ public class Camera implements ICamera {
 		this.lastPosition.set(this.position);
 		this.lastRotation.set(this.rotation);
 
-		InputHandler inputHandler = ZerraClient.getInstance().getInputHandler();
+		InputHandler inputHandler = Zerra.getInstance().getInputHandler();
 		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1)) {
 			Gamepad gamepad = inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
 			Joystick joystick = gamepad.getJoystick(0);
@@ -114,27 +113,20 @@ public class Camera implements ICamera {
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
 			{
-				System.out.println("creating world state...");
-				if (StateManager.getActiveState() == null)
+				if (StateManager.getActiveState() instanceof WorldState)
 				{
-					StateManager.setActiveState(new WorldState());
-				} else if (StateManager.getActiveState() instanceof WorldState)
-				{
-					StateManager.setActiveState(null);
+					System.out.println("Switching to menu state...");
+					StateManager.setActiveState(new MenuState());
 				}
 			}
-
+			
 			// Useful keys to adjust the movement speed of the camera when not locked to the player.
-			if(ClientLaunch.IS_DEVELOPMENT_BUILD) {
+			if(Launch.IS_DEVELOPMENT_BUILD) {
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL)) {
 					this.speedAdjust += (this.speedAdjust < 10) ? 0.07f : 0.0f;
 				}
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_MINUS)) {
 					this.speedAdjust -= (this.speedAdjust > -0.75f) ? 0.07f : 0.0f;
-				}
-				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
-				{
-					ZerraClient.getInstance().getClientManager().getPacketSender().sendToServer(new MessagePing());
 				}
 			}
 			
@@ -142,22 +134,18 @@ public class Camera implements ICamera {
 
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition)) {
-			World world = ZerraServer.getInstance().getWorld();
+			World world = Zerra.getInstance().getWorld();
 			Layer layer = world.getLayer(0);
 			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
-			for (int x = 0; x < 3; x++)
-			{
-				for (int z = 0; z < 3; z++)
-				{
+			for (int x = 0; x < 3; x++) {
+				for (int z = 0; z < 3; z++) {
 					Vector3i newPos = this.platePosition.add(x - 1, 0, z - 1, new Vector3i());
 					layer.loadPlate(newPos);
 					loadedPositions.add(newPos);
 				}
 			}
-			for (Plate plate : layer.getLoadedPlates())
-			{
-				if (!loadedPositions.contains(plate.getPlatePos()))
-				{
+			for(Plate plate : layer.getLoadedPlates()) {
+				if(!loadedPositions.contains(plate.getPlatePos())) {
 					layer.unloadPlate(plate.getPlatePos());
 				}
 			}
@@ -166,11 +154,11 @@ public class Camera implements ICamera {
 
 	@Override
 	public Vector3f getPosition() {
-		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.y + (this.position.y - this.lastPosition.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.z + (this.position.z - this.lastPosition.z) * ZerraClient.getInstance().getRenderPartialTicks());
+		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * Zerra.getInstance().getRenderPartialTicks(), this.lastPosition.y + (this.position.y - this.lastPosition.y) * Zerra.getInstance().getRenderPartialTicks(), this.lastPosition.z + (this.position.z - this.lastPosition.z) * Zerra.getInstance().getRenderPartialTicks());
 	}
 
 	@Override
 	public Vector3f getRotation() {
-		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * ZerraClient.getInstance().getRenderPartialTicks());
+		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * Zerra.getInstance().getRenderPartialTicks(), this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * Zerra.getInstance().getRenderPartialTicks(), this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * Zerra.getInstance().getRenderPartialTicks());
 	}
 }

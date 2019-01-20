@@ -1,14 +1,15 @@
 package com.zerra;
 
-import com.zerra.client.ZerraClient;
-import com.zerra.common.util.ArgsBuilder;
+import com.zerra.client.Zerra;
+import com.zerra.common.ArgsBuilder;
+import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
  * The main starting point for the game.
  */
-public class ClientLaunch
+public class Launch
 {
 
 	public static final String NAME = "Zerra";
@@ -18,7 +19,14 @@ public class ClientLaunch
 
 	public static void main(String[] args)
 	{
+
 		ArgsBuilder builder = ArgsBuilder.deserialize(args);
-		new Thread(new ZerraClient(), "Client").start();
+		if (builder.isServer())
+		{
+			new Thread(new ZerraServer(), "server").start();
+		} else
+		{
+			new Thread(new Zerra(), "main").start();
+		}
 	}
 }

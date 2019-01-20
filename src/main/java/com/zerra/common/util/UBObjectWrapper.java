@@ -1,11 +1,11 @@
 package com.zerra.common.util;
 
-import java.util.UUID;
-
 import com.devsmart.ubjson.UBArray;
 import com.devsmart.ubjson.UBObject;
 import com.devsmart.ubjson.UBValue;
 import com.devsmart.ubjson.UBValueFactory;
+
+import java.util.UUID;
 
 /**
  * Wraps the {@link UBObject} to provide simpler methods mostly for getting and setting

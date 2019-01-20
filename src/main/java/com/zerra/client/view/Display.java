@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
@@ -107,7 +107,7 @@ public class Display {
 		for (int jid = 0; jid < Display.joysticksPresent.length; jid++) {
 			Display.joysticksPresent[jid] = (byte) (GLFW.glfwJoystickPresent(GLFW.GLFW_JOYSTICK_1 + jid) ? 1 : 0);
 			if (Display.joysticksPresent[jid] == 1) {
-				ZerraClient.logger().info("Controller " + jid + " was connected");
+				Zerra.logger().info("Controller " + jid + " was connected");
 			}
 		}
 

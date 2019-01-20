@@ -15,7 +15,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import com.zerra.client.ZerraClient;
+import com.zerra.client.Zerra;
 import com.zerra.client.util.ResourceLocation;
 
 /**
@@ -123,7 +123,7 @@ public abstract class ShaderProgram {
 	protected int getUniformLocation(String uniformName) {
 		int location = GL20.glGetUniformLocation(programID, uniformName);
 		if (location < 0) {
-			ZerraClient.logger().warn("Could not find uniform \'" + uniformName + "\' in shader \'" + this.getClass().getName() + "\'");
+			Zerra.logger().warn("Could not find uniform \'" + uniformName + "\' in shader \'" + this.getClass().getName() + "\'");
 		}
 		return GL20.glGetUniformLocation(programID, uniformName);
 	}
@@ -225,8 +225,8 @@ public abstract class ShaderProgram {
 			}
 			reader.close();
 		} catch (Exception e) {
-			ZerraClient.logger().fatal("Could not load shader " + location, e);
-			ZerraClient.getInstance().stop();
+			Zerra.logger().fatal("Could not load shader " + location, e);
+			Zerra.getInstance().stop();
 		}
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
@@ -235,7 +235,7 @@ public abstract class ShaderProgram {
 			System.out.println();
 			System.err.println("Could not compile \'" + this.getClass().getSimpleName() + "\' " + location + " shader!");
 			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
-			ZerraClient.getInstance().stop();
+			Zerra.getInstance().stop();
 		}
 		return shaderID;
 	}
