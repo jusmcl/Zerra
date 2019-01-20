@@ -7,6 +7,7 @@ import com.zerra.common.network.Opcodes;
 import com.zerra.common.network.PacketSender;
 import com.zerra.common.network.msg.MessageBadRequest;
 import com.zerra.common.network.msg.MessagePing;
+import com.zerra.common.network.msg.MessageUnknownRequest;
 import com.zerra.server.ZerraServer;
 
 import simplenet.Client;
@@ -56,6 +57,8 @@ public class ServerManager
 				} else if (opcode == Opcodes.CLIENT_PING)
 				{
 					client.readLong(time -> this.sender.sendToClient(client, new MessagePing(time)));
+				}else {
+					this.sender.sendToClient(client, new MessageUnknownRequest("The client made an unknown request! This should not happen."));
 				}
 			});
 

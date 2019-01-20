@@ -52,6 +52,9 @@ public class ClientManager
 			} else if (opcode == Opcodes.CLIENT_PING)
 			{
 				client.readLong(time -> ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms"));
+			} else if(opcode == Opcodes.ERROR_UNKNOWN_REQUEST)
+			{
+				client.readString(msg -> ZerraClient.logger().warn(msg));
 			}
 		});
 
