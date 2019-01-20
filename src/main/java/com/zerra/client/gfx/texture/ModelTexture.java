@@ -2,6 +2,13 @@ package com.zerra.client.gfx.texture;
 
 import com.zerra.client.util.ResourceLocation;
 
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * A texture as a model object.
+ *
+ * @author Ocelot5836
+ */
 public class ModelTexture
 {
 
