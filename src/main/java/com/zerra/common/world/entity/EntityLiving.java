@@ -9,8 +9,9 @@ public class EntityLiving extends Entity
 {
 	private SharedLivingAttributes attributes;
 
-    public EntityLiving(WorldLayer worldLayer) {
-        super(worldLayer);
+	public EntityLiving(WorldLayer worldLayer)
+	{
+		super(worldLayer);
 
 		this.attributes = new SharedLivingAttributes();
 	}

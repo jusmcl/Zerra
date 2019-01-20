@@ -9,17 +9,17 @@ public class MessagePing implements Message
 {
 
 	private long snapshot;
-	
+
 	public MessagePing()
 	{
 		this.snapshot = System.currentTimeMillis();
 	}
-	
+
 	public MessagePing(long time)
 	{
 		this.snapshot = time;
 	}
-	
+
 	@Override
 	public Packet prepare()
 	{

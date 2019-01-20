@@ -41,7 +41,8 @@ import com.zerra.common.world.tile.Tiles;
  * @author Tebreca
  * @author Arpaesis
  */
-public class ZerraClient extends Zerra {
+public class ZerraClient extends Zerra
+{
 
 	private static final Logger LOGGER = LogManager.getLogger(ClientLaunch.NAME);
 
@@ -49,7 +50,7 @@ public class ZerraClient extends Zerra {
 
 	private ExecutorService pool;
 	private boolean running;
-	
+
 	private int loadingProgress;
 	private int loadingSteps;
 
@@ -61,19 +62,20 @@ public class ZerraClient extends Zerra {
 	protected Camera camera;
 	protected InputHandler inputHandler;
 	protected Fbo fbo;
-	
+
 	private EventHandler eventHandler;
-	
+
 	private ModManager modManager;
-	
+
 	private ClientConnectionManager client;
 
-	public ZerraClient() {
+	public ZerraClient()
+	{
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
 
 		this.client = new ClientConnectionManager();
-		
+
 		this.start();
 	}
 
@@ -81,7 +83,8 @@ public class ZerraClient extends Zerra {
 	 * Sets the game's running status to true.
 	 */
 	@Override
-	public synchronized void start() {
+	public synchronized void start()
+	{
 		if (this.running)
 			return;
 
@@ -93,41 +96,50 @@ public class ZerraClient extends Zerra {
 	 * Shuts down the internal server and stops the game loop.
 	 */
 	@Override
-	public synchronized void stop() {
+	public synchronized void stop()
+	{
 		if (!this.running)
 			return;
 
 		LOGGER.info("Stopping...");
-		//TODO: Only attempt a disconnect if the server is even alive to begin with.
+		// TODO: Only attempt a disconnect if the server is even alive to begin with.
 		this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID().toString()));
 		this.running = false;
 	}
 
 	// TODO improve loop
 	@Override
-	public void run() {
-		try {
+	public void run()
+	{
+		try
+		{
 			this.init();
-		} catch (Throwable t) {
+		} catch (Throwable t)
+		{
 			t.printStackTrace();
 		}
 
-		while (true) {
-			try {
-				
-				while (this.running) {
+		while (true)
+		{
+			try
+			{
+
+				while (this.running)
+				{
 					checkRequestedExit();
 
 					this.timer.updateTimer();
 
-					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
+					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
+					{
 						update();
 					}
-					
+
 					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 					this.render(this.timer.renderPartialTicks);
 				}
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 				this.stop();
 			}
@@ -148,7 +160,7 @@ public class ZerraClient extends Zerra {
 			StateManager.getActiveState().render();
 		}
 	}
-	
+
 	/**
 	 * Updates controls and the client world.
 	 */
@@ -159,22 +171,25 @@ public class ZerraClient extends Zerra {
 	}
 
 	/**
-	 * Initializes the game, including setting up the display, renderers, and input handlers.
+	 * Initializes the game, including setting up the display, renderers, and input
+	 * handlers.
 	 */
 	@Override
-	protected void init() {
+	protected void init()
+	{
 		Display.createDisplay(ClientLaunch.NAME + " v" + ClientLaunch.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-		//TODO:
-		//StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
-		//completeLoadingStep();
+		// TODO:
+		// StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
+		// completeLoadingStep();
 		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.timer = new Timer(20);
 		this.textureManager = new TextureManager();
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
 		Tile[] tiles = Tiles.getTiles();
-		for (Tile tile : tiles) {
+		for (Tile tile : tiles)
+		{
 			this.textureMap.register(tile.getTexture());
 		}
 		this.textureMap.stitch();
@@ -183,21 +198,23 @@ public class ZerraClient extends Zerra {
 		this.camera = new Camera();
 		this.inputHandler = new InputHandler();
 		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
-		
+
 		modManager = new ModManager();
 		modManager.setupMods();
 	}
-	
-	private void completeLoadingStep() {
+
+	private void completeLoadingStep()
+	{
 		this.loadingProgress++;
 		StateManager.getActiveState().update();
 		StateManager.getActiveState().render();
 	}
-	
+
 	/**
 	 * Checks whether or not a request to close the display has been made.
 	 */
-	private void checkRequestedExit() {
+	private void checkRequestedExit()
+	{
 		if (!Display.isCloseRequested())
 			Display.update();
 		else
@@ -209,7 +226,8 @@ public class ZerraClient extends Zerra {
 	 * 
 	 * @param runnable - The task to schedule.
 	 */
-	public void schedule(Runnable runnable) {
+	public void schedule(Runnable runnable)
+	{
 		Validate.notNull(runnable);
 		this.pool.execute(runnable);
 	}
@@ -219,7 +237,8 @@ public class ZerraClient extends Zerra {
 	 * 
 	 * @param keyCode - The key code given by the key pressed.
 	 */
-	public void onKeyPressed(int keyCode) {
+	public void onKeyPressed(int keyCode)
+	{
 		this.inputHandler.setKeyPressed(keyCode, true);
 	}
 
@@ -228,29 +247,36 @@ public class ZerraClient extends Zerra {
 	 * 
 	 * @param keyCode - The key code given by the key released.
 	 */
-	public void onKeyReleased(int keyCode) {
+	public void onKeyReleased(int keyCode)
+	{
 		this.inputHandler.setKeyPressed(keyCode, false);
 	}
 
 	/**
 	 * Fires when a mouse button is pressed.
 	 * 
-	 * @param mouseX - The x position of the mouse on screen when a mouse button is pressed.
-	 * @param mouseY - The y position of the mouse on screen when a mouse button is pressed.
+	 * @param mouseX - The x position of the mouse on screen when a mouse button is
+	 *        pressed.
+	 * @param mouseY - The y position of the mouse on screen when a mouse button is
+	 *        pressed.
 	 * @param mouseButton - The mouse button pressed, given as an int.
 	 */
-	public void onMousePressed(double mouseX, double mouseY, int mouseButton) {
+	public void onMousePressed(double mouseX, double mouseY, int mouseButton)
+	{
 		this.inputHandler.setMouseButtonPressed(mouseButton, true);
 	}
 
 	/**
 	 * Fires when a mouse button is released.
 	 * 
-	 * @param mouseX - The x position of the mouse on screen when a mouse button is released.
-	 * @param mouseY - The y position of the mouse on screen when a mouse button is released.
+	 * @param mouseX - The x position of the mouse on screen when a mouse button is
+	 *        released.
+	 * @param mouseY - The y position of the mouse on screen when a mouse button is
+	 *        released.
 	 * @param mouseButton - The mouse button released, given as an int.
 	 */
-	public void onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+	public void onMouseReleased(double mouseX, double mouseY, int mouseButton)
+	{
 		this.inputHandler.setMouseButtonPressed(mouseButton, false);
 	}
 
@@ -261,7 +287,8 @@ public class ZerraClient extends Zerra {
 	 * @param mouseY - The y position of the mouse as it scrolls.
 	 * @param yoffset - How much the mouse scrolled.
 	 */
-	public void onMouseScrolled(double mouseX, double mouseY, double yoffset) {
+	public void onMouseScrolled(double mouseX, double mouseY, double yoffset)
+	{
 	}
 
 	/**
@@ -270,7 +297,8 @@ public class ZerraClient extends Zerra {
 	 * @param jid - The id of the joystick.
 	 * @param button - The button pressed given as an int.
 	 */
-	public void onJoystickButtonPressed(int jid, int button) {
+	public void onJoystickButtonPressed(int jid, int button)
+	{
 	}
 
 	/**
@@ -279,7 +307,8 @@ public class ZerraClient extends Zerra {
 	 * @param jid - The id of the joystick.
 	 * @param button - The button released given as an int.
 	 */
-	public void onJoystickButtonReleased(int jid, int button) {
+	public void onJoystickButtonReleased(int jid, int button)
+	{
 	}
 
 	/**
@@ -287,7 +316,8 @@ public class ZerraClient extends Zerra {
 	 * 
 	 * @param jid - The id of the joystick.
 	 */
-	public void onJoystickConnected(int jid) {
+	public void onJoystickConnected(int jid)
+	{
 		this.inputHandler.onGamepadConnected(jid);
 	}
 
@@ -296,14 +326,16 @@ public class ZerraClient extends Zerra {
 	 * 
 	 * @param jid - The id of the joystick.
 	 */
-	public void onJoystickDisconnected(int jid) {
+	public void onJoystickDisconnected(int jid)
+	{
 		this.inputHandler.onGamepadDisconnected(jid);
 	}
 
 	/**
 	 * Cleans up the resources when the game closes.
 	 */
-	public void cleanupResources() {
+	public void cleanupResources()
+	{
 		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
@@ -312,70 +344,79 @@ public class ZerraClient extends Zerra {
 		instance = null;
 		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime) + " seconds");
 	}
-	
+
 	/**
 	 * @return The loading progress of the game.
 	 */
-	public float getLoadingPercentage() {
+	public float getLoadingPercentage()
+	{
 		return loadingSteps / loadingProgress;
 	}
 
 	/**
 	 * @return The render partial ticks of the game's rendering cycle.
 	 */
-	public float getRenderPartialTicks() {
+	public float getRenderPartialTicks()
+	{
 		return timer.renderPartialTicks;
 	}
 
 	/**
 	 * @return The texture manager for the game.
 	 */
-	public TextureManager getTextureManager() {
+	public TextureManager getTextureManager()
+	{
 		return textureManager;
 	}
 
 	/**
 	 * @return The texture map the game uses.
 	 */
-	public TextureMap getTextureMap() {
+	public TextureMap getTextureMap()
+	{
 		return textureMap;
 	}
 
 	/**
 	 * @return The input handler for the client.
 	 */
-	public InputHandler getInputHandler() {
+	public InputHandler getInputHandler()
+	{
 		return inputHandler;
 	}
-	
+
 	/**
 	 * @return The event handler for the client.
 	 */
-	public EventHandler getEventHandler() {
+	public EventHandler getEventHandler()
+	{
 		return eventHandler;
 	}
 
 	/**
 	 * @return The logger for the client.
 	 */
-	public static Logger logger() {
+	public static Logger logger()
+	{
 		return LOGGER;
 	}
 
 	/**
 	 * @return The client instance.
 	 */
-	public static ZerraClient getInstance() {
+	public static ZerraClient getInstance()
+	{
 		return instance;
 	}
-	
+
 	/**
 	 * @return Whether the game is running or not.
 	 */
-	public boolean isRunning() {
+	public boolean isRunning()
+	{
 		return running;
 	}
-	
+
 	/**
 	 * @return The number of ticks there are in a second for the game.
 	 */
@@ -383,11 +424,11 @@ public class ZerraClient extends Zerra {
 	{
 		return timer.getTicksPerSecond();
 	}
-	
+
 	/**
 	 * @return The camera for the client.
 	 */
-	public Camera getCamera() 
+	public Camera getCamera()
 	{
 		return camera;
 	}
@@ -395,37 +436,40 @@ public class ZerraClient extends Zerra {
 	/**
 	 * @return The FBO for the client.
 	 */
-	public Fbo getFbo() 
+	public Fbo getFbo()
 	{
 		return fbo;
 	}
-	
+
 	/**
 	 * @return The GUI renderer for the client.
 	 */
-	public GuiRenderer getGuiRenderer() {
+	public GuiRenderer getGuiRenderer()
+	{
 		return guiRenderer;
 	}
 
 	/**
 	 * @return The tile renderer for the client.
 	 */
-	public TileRenderer getTileRenderer() {
+	public TileRenderer getTileRenderer()
+	{
 		return tileRenderer;
 	}
 
 	/**
 	 * @return The mod manager for the client.
 	 */
-    public ModManager getModManager() {
-        return modManager;
-    }
-    
-    /**
-     * @return The connection manager for the client.
-     */
-    public ClientConnectionManager getConnectionManager()
-    {
-    	return this.client;
-    }
+	public ModManager getModManager()
+	{
+		return modManager;
+	}
+
+	/**
+	 * @return The connection manager for the client.
+	 */
+	public ClientConnectionManager getConnectionManager()
+	{
+		return this.client;
+	}
 }

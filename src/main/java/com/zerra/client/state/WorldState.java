@@ -19,9 +19,9 @@ public class WorldState extends State
 		zerraClient = ZerraClient.getInstance();
 
 		new Thread(new ZerraServer(false), "Server").start();
-		
+
 		zerraServer = ZerraServer.getInstance();
-		
+
 		try
 		{
 			Thread.sleep(2000);
@@ -35,7 +35,7 @@ public class WorldState extends State
 	@Override
 	public void update()
 	{
-		
+
 	}
 
 	@Override
@@ -43,7 +43,8 @@ public class WorldState extends State
 	{
 		zerraClient.getFbo().bindFrameBuffer();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		//TODO: This null check shouldn't be necessary. Both the server and client should be ready to go before even considering rendering.
+		// TODO: This null check shouldn't be necessary. Both the server and client
+		// should be ready to go before even considering rendering.
 		if (zerraServer != null && zerraServer.isReady())
 		{
 			zerraClient.getTileRenderer().renderTiles(zerraClient.getCamera(), zerraServer.getWorld(), 0);

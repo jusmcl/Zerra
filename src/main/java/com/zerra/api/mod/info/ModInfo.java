@@ -15,7 +15,8 @@ public interface ModInfo
 {
 
 	/**
-	 * A logger provided automatically for mods to use, customized to use their domain name.
+	 * A logger provided automatically for mods to use, customized to use their
+	 * domain name.
 	 * 
 	 * @return The logger for the mod.
 	 */
@@ -40,7 +41,8 @@ public interface ModInfo
 	String getModVersion();
 
 	/**
-	 * @return The game's version. This is used to determine whether or not the mod is suitable for the running Zerra game.
+	 * @return The game's version. This is used to determine whether or not the mod
+	 *         is suitable for the running Zerra game.
 	 */
 	String getZerraVersion();
 
@@ -50,7 +52,8 @@ public interface ModInfo
 	String[] getAuthors();
 
 	/**
-	 * @return The dependencies the mod uses, if any at all. Should be specified as domains.
+	 * @return The dependencies the mod uses, if any at all. Should be specified as
+	 *         domains.
 	 */
 	String[] getDependencies();
 

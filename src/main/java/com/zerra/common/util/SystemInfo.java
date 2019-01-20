@@ -7,29 +7,37 @@ import javax.management.AttributeList;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-public class SystemInfo {
-	
-	public static long getMaxMemory() {
+public class SystemInfo
+{
+
+	public static long getMaxMemory()
+	{
 		return Runtime.getRuntime().maxMemory();
 	}
 
-	public static long getUsedMemory() {
+	public static long getUsedMemory()
+	{
 		return getMaxMemory() - getFreeMemory();
 	}
 
-	public static long getTotalMemory() {
+	public static long getTotalMemory()
+	{
 		return Runtime.getRuntime().totalMemory();
 	}
 
-	public static long getFreeMemory() {
+	public static long getFreeMemory()
+	{
 		return Runtime.getRuntime().freeMemory();
 	}
 
-	public static double getProcessCpuLoad() {
-		try {
+	public static double getProcessCpuLoad()
+	{
+		try
+		{
 			MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 			ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
-			AttributeList list = mbs.getAttributes(name, new String[] { "ProcessCpuLoad" });
+			AttributeList list = mbs.getAttributes(name, new String[]
+			{ "ProcessCpuLoad" });
 
 			if (list.isEmpty())
 				return Double.NaN;
@@ -43,7 +51,8 @@ public class SystemInfo {
 			// returns a percentage value with 1 decimal point precision
 			return ((int) (value * 1000) / 10.0);
 
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 			return 0D;
 		}

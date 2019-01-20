@@ -12,8 +12,9 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 {
 	private Entity attackTarget;
 
-    public EntityHostile(WorldLayer worldLayer) {
-        super(worldLayer);
+	public EntityHostile(WorldLayer worldLayer)
+	{
+		super(worldLayer);
 	}
 
 	@Override
@@ -30,22 +31,27 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 
 	@Nonnull
 	@Override
-	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo) {
+	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo)
+	{
 		ubo.setUUID("attackTarget", attackTarget.getUuid());
 		return super.writeToUBO(ubo);
 	}
 
-    @Override
-	public void readFromUBO(@Nonnull UBObjectWrapper ubo) {
-        super.readFromUBO(ubo);
-        UUID targetUuid = ubo.getUUID("attackTarget");
-        if (targetUuid == null) {
-            attackTarget = null;
-        } else {
-            Layer layer = getLayer();
-            if (layer != null) {
-                attackTarget = layer.getEntityByUUID(targetUuid);
-            }
-        }
-    }
+	@Override
+	public void readFromUBO(@Nonnull UBObjectWrapper ubo)
+	{
+		super.readFromUBO(ubo);
+		UUID targetUuid = ubo.getUUID("attackTarget");
+		if (targetUuid == null)
+		{
+			attackTarget = null;
+		} else
+		{
+			Layer layer = getLayer();
+			if (layer != null)
+			{
+				attackTarget = layer.getEntityByUUID(targetUuid);
+			}
+		}
+	}
 }

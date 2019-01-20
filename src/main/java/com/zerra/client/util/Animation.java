@@ -3,16 +3,14 @@ package com.zerra.client.util;
 import javax.annotation.Nullable;
 
 /**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * 
  * Allows for basic tile animation. Returns ids based on order and speed.
  * 
  * @author Ocelot5836
  */
-public class Animation<T> {
+public class Animation<T>
+{
 
 	private T[] frames;
 	private int currentFrame;
@@ -22,7 +20,8 @@ public class Animation<T> {
 
 	private int numTimesPlayed;
 
-	public Animation() {
+	public Animation()
+	{
 		this.frames = null;
 		this.currentFrame = 0;
 		this.delay = -1;
@@ -32,16 +31,19 @@ public class Animation<T> {
 	/**
 	 * Updates the animation.
 	 */
-	public void update() {
+	public void update()
+	{
 		if (delay < 0)
 			return;
 
 		long elapsed = (System.nanoTime() - startTime) / 1000000;
-		if (elapsed > delay) {
+		if (elapsed > delay)
+		{
 			currentFrame++;
 			startTime = System.nanoTime();
 		}
-		if (currentFrame >= frames.length) {
+		if (currentFrame >= frames.length)
+		{
 			currentFrame = 0;
 			numTimesPlayed++;
 		}
@@ -50,7 +52,8 @@ public class Animation<T> {
 	/**
 	 * Restarts the animation.
 	 */
-	public void restart() {
+	public void restart()
+	{
 		this.currentFrame = 0;
 		this.startTime = System.nanoTime();
 		this.numTimesPlayed = 0;
@@ -59,14 +62,16 @@ public class Animation<T> {
 	/**
 	 * @return The current frame
 	 */
-	public int getFrame() {
+	public int getFrame()
+	{
 		return currentFrame;
 	}
 
 	/**
 	 * @return The current sprite to be displayed
 	 */
-	public T getObject() throws ArrayIndexOutOfBoundsException {
+	public T getObject() throws ArrayIndexOutOfBoundsException
+	{
 		return frames[currentFrame];
 	}
 
@@ -74,31 +79,34 @@ public class Animation<T> {
 	 * @return The frames
 	 */
 	@Nullable
-	public T[] getFrames() {
+	public T[] getFrames()
+	{
 		return frames;
 	}
 
 	/**
 	 * @return How many times this animation has played
 	 */
-	public int getNumTimesPlayed() {
+	public int getNumTimesPlayed()
+	{
 		return numTimesPlayed;
 	}
 
 	/**
 	 * @return If this animation has played once
 	 */
-	public boolean hasPlayedOnce() {
+	public boolean hasPlayedOnce()
+	{
 		return numTimesPlayed > 0;
 	}
 
 	/**
 	 * Sets the frames in the animation.
 	 * 
-	 * @param frames
-	 *            The frames in the animation
+	 * @param frames The frames in the animation
 	 */
-	public void setFrames(@SuppressWarnings("unchecked") T... frames) {
+	public void setFrames(@SuppressWarnings("unchecked") T... frames)
+	{
 		this.frames = frames;
 		this.restart();
 	}
@@ -106,20 +114,20 @@ public class Animation<T> {
 	/**
 	 * Sets the animation switch delay.
 	 * 
-	 * @param delay
-	 *            The new delay of the animation
+	 * @param delay The new delay of the animation
 	 */
-	public void setDelay(long delay) {
+	public void setDelay(long delay)
+	{
 		this.delay = delay;
 	}
 
 	/**
 	 * Sets the currently selected frame.
 	 * 
-	 * @param currentFrame
-	 *            The new selected frame
+	 * @param currentFrame The new selected frame
 	 */
-	public void setFrame(int currentFrame) {
+	public void setFrame(int currentFrame)
+	{
 		this.currentFrame = currentFrame;
 	}
 }

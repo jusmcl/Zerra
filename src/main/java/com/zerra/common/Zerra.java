@@ -27,7 +27,7 @@ public class Zerra implements Runnable
 	protected EventHandler eventHandler;
 
 	protected ServerManager server;
-	
+
 	public void run()
 	{
 	}

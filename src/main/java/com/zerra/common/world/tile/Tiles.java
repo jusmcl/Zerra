@@ -6,7 +6,8 @@ import com.google.common.collect.Maps;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.tile.impl.TileGround;
 
-public class Tiles {
+public class Tiles
+{
 
 	private static final Map<ResourceLocation, Tile> TILES = Maps.<ResourceLocation, Tile>newHashMap();
 
@@ -15,14 +16,16 @@ public class Tiles {
 	public static final Tile SAND = new TileGround(ZerraTileTypes.SAND, 0xf9d699, new ResourceLocation("textures/sand.png"), "sand");
 	public static final Tile COBBLESTONE = new TileGround(ZerraTileTypes.STONE, 0x9a8a71, new ResourceLocation("textures/cobblestone.png"), "cobblestone");
 
-	public static void registerTiles() {
+	public static void registerTiles()
+	{
 		register(STONE);
 		register(GRASS);
 		register(SAND);
 		register(COBBLESTONE);
 	}
 
-	private static void register(Tile tile) {
+	private static void register(Tile tile)
+	{
 		if (tile == null || tile.getRegistryID() == null)
 			throw new RuntimeException("Tile \'" + (tile == null ? tile : tile.getClass().getName()) + "\' was either null or had no registry name!");
 		if (TILES.containsKey(tile.getRegistryID()))
@@ -30,11 +33,13 @@ public class Tiles {
 		TILES.put(tile.getRegistryID(), tile);
 	}
 
-	public static Tile[] getTiles() {
+	public static Tile[] getTiles()
+	{
 		return TILES.values().toArray(new Tile[0]);
 	}
 
-	public static Tile byId(ResourceLocation id) {
+	public static Tile byId(ResourceLocation id)
+	{
 		return TILES.getOrDefault(id, Tile.NONE);
 	}
 }

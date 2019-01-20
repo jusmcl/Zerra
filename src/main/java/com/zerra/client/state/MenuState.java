@@ -12,7 +12,7 @@ public class MenuState extends State
 		super("menu");
 		zerra = ZerraClient.getInstance();
 	}
-	
+
 	@Override
 	public void update()
 	{

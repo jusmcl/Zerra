@@ -1,30 +1,40 @@
 package com.zerra.client.util;
 
-public class Timer {
+public class Timer
+{
 
-	/** How many full ticks have turned over since the last call to updateTimer(), capped at 10. */
+	/**
+	 * How many full ticks have turned over since the last call to updateTimer(),
+	 * capped at 10.
+	 */
 	public int elapsedTicks;
-	/** How much time has elapsed since the last tick, in ticks, for use by display rendering routines (range: 0.0 - 1.0). */
+	/**
+	 * How much time has elapsed since the last tick, in ticks, for use by display
+	 * rendering routines (range: 0.0 - 1.0).
+	 */
 	public float renderPartialTicks;
-	/** How much time has elapsed since the last tick, in ticks (range: 0.0 - 1.0). */
+	/**
+	 * How much time has elapsed since the last tick, in ticks (range: 0.0 - 1.0).
+	 */
 	public float elapsedPartialTicks;
 
 	private long lastSyncSysClock;
 	private float tickLength;
-	
+
 	private float tps;
 
 	/**
-	 * @param tps
-	 *            The amount of times the timer will update per update
+	 * @param tps The amount of times the timer will update per update
 	 */
-	public Timer(float tps) {
+	public Timer(float tps)
+	{
 		this.tps = tps;
 		this.tickLength = 1000.0f / tps;
 		this.lastSyncSysClock = System.currentTimeMillis();
 	}
 
-	public void updateTimer() {
+	public void updateTimer()
+	{
 		long i = System.currentTimeMillis();
 		this.elapsedPartialTicks = (float) ((i - this.lastSyncSysClock) / this.tickLength);
 		this.lastSyncSysClock = i;
@@ -32,11 +42,12 @@ public class Timer {
 		this.elapsedTicks = (int) this.renderPartialTicks;
 		this.renderPartialTicks -= this.elapsedTicks;
 	}
-	
-	public float getTickLength() {
+
+	public float getTickLength()
+	{
 		return tickLength;
 	}
-	
+
 	public float getTicksPerSecond()
 	{
 		return this.tps;

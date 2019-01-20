@@ -14,16 +14,16 @@ import javax.imageio.ImageIO;
 import com.zerra.client.ZerraClient;
 
 /**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * 
- * This class can load images and text easily instead of having to do it manually. It also saves images that are loaded that can be easily accessed by.
+ * This class can load images and text easily instead of having to do it
+ * manually. It also saves images that are loaded that can be easily accessed
+ * by.
  * 
  * @author Ocelot5836
  */
-public class LoadingUtils {
+public class LoadingUtils
+{
 
 	/** The list of images loaded into memory. */
 	private static final Map<String, BufferedImage> LOADED_IMAGES = new HashMap<String, BufferedImage>();
@@ -36,43 +36,49 @@ public class LoadingUtils {
 	public static final BufferedImage EMPTY_IMAGE32 = createMissingImage(32, 32);
 	/** The default empty image that is 64x64 */
 	public static final BufferedImage EMPTY_IMAGE64 = createMissingImage(64, 64);
-	/** The image that is used in the place of an image if an image can not be found */
+	/**
+	 * The image that is used in the place of an image if an image can not be found
+	 */
 	public static BufferedImage defaultEmptyImage = createMissingImage(256, 256);
 
 	/**
 	 * Loads text into an array from the resources.
 	 * 
-	 * @param path
-	 *            The path to the file
+	 * @param path The path to the file
 	 * @return The text from the file in the form as an array
 	 */
-	public static String[] loadTextToArray(String path) {
+	public static String[] loadTextToArray(String path)
+	{
 		return loadTextToArray(Class.class.getResourceAsStream(path));
 	}
 
 	/**
 	 * Loads text into an array from the resources.
 	 * 
-	 * @param input
-	 *            The path to the file
+	 * @param input The path to the file
 	 * @return The text from the file in the form as an array
 	 */
-	public static String[] loadTextToArray(InputStream input) {
+	public static String[] loadTextToArray(InputStream input)
+	{
 		ArrayList<String> lines = new ArrayList<String>();
 		String[] result = new String[0];
-		try {
+		try
+		{
 			Scanner scanner = new Scanner(input);
 
-			while (scanner.hasNextLine()) {
+			while (scanner.hasNextLine())
+			{
 				lines.add(scanner.nextLine());
 			}
 			scanner.close();
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			ZerraClient.logger().warn("Error loading text to array!", e);
 		}
 		result = new String[lines.size()];
 
-		for (int i = 0; i < lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++)
+		{
 			result[i] = lines.get(i);
 		}
 
@@ -82,14 +88,16 @@ public class LoadingUtils {
 	/**
 	 * Loads text from a website.
 	 * 
-	 * @param path
-	 *            The path to the file
+	 * @param path The path to the file
 	 * @return The text from the file in the form as an array
 	 */
-	public static String[] loadTextToArrayFromURL(String pageURL) {
-		try {
+	public static String[] loadTextToArrayFromURL(String pageURL)
+	{
+		try
+		{
 			return loadTextToArrayFromURL(new URL(pageURL));
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException e)
+		{
 			e.printStackTrace();
 		}
 		return new String[0];
@@ -98,27 +106,31 @@ public class LoadingUtils {
 	/**
 	 * Loads text from a website.
 	 * 
-	 * @param path
-	 *            The path to the file
+	 * @param path The path to the file
 	 * @return The text from the file in the form as an array
 	 */
-	public static String[] loadTextToArrayFromURL(URL pageURL) {
+	public static String[] loadTextToArrayFromURL(URL pageURL)
+	{
 		ArrayList<String> lines = new ArrayList<String>();
 		String[] result = new String[0];
-		try {
+		try
+		{
 			Scanner scanner = new Scanner(pageURL.openStream());
 
-			while (scanner.hasNext()) {
+			while (scanner.hasNext())
+			{
 				lines.add(scanner.nextLine());
 			}
 			scanner.close();
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			ZerraClient.logger().warn(String.format("Error loading text to array from %s!", pageURL));
 			e.printStackTrace();
 		}
 		result = new String[lines.size()];
 
-		for (int i = 0; i < lines.size(); i++) {
+		for (int i = 0; i < lines.size(); i++)
+		{
 			result[i] = lines.get(i);
 		}
 
@@ -126,35 +138,37 @@ public class LoadingUtils {
 	}
 
 	/**
-	 * Loads an image into memory if it is not already loaded. This method can be called by itself to add an image to memory or receive the image directly.
+	 * Loads an image into memory if it is not already loaded. This method can be
+	 * called by itself to add an image to memory or receive the image directly.
 	 * 
-	 * @param name
-	 *            The name of the image to save into memory
-	 * @param path
-	 *            The path to the file
+	 * @param name The name of the image to save into memory
+	 * @param path The path to the file
 	 * @return The image returned by {@link ImageIO}
 	 */
-	public static BufferedImage loadImage(String name, String path) {
+	public static BufferedImage loadImage(String name, String path)
+	{
 		return loadImage(name, Class.class.getResourceAsStream(path));
 	}
 
 	/**
-	 * Loads an image into memory if it is not already loaded. This method can be called by itself to add an image to memory or receive the image directly.
+	 * Loads an image into memory if it is not already loaded. This method can be
+	 * called by itself to add an image to memory or receive the image directly.
 	 * 
-	 * @param name
-	 *            The name of the image to save into memory
-	 * @param input
-	 *            The path to the file
+	 * @param name The name of the image to save into memory
+	 * @param input The path to the file
 	 * @return The image returned by {@link ImageIO}
 	 */
-	public static BufferedImage loadImage(String name, InputStream input) {
+	public static BufferedImage loadImage(String name, InputStream input)
+	{
 		BufferedImage image = null;
 		if (isImageLoaded(name))
 			return LOADED_IMAGES.get(name);
 
-		try {
+		try
+		{
 			image = ImageIO.read(input);
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			ZerraClient.logger().warn(String.format("Missing image: %s", name));
 			image = defaultEmptyImage;
 		}
@@ -166,11 +180,11 @@ public class LoadingUtils {
 	/**
 	 * Gets the image specified from memory.
 	 * 
-	 * @param name
-	 *            The image to search for
+	 * @param name The image to search for
 	 * @return The image found in memory
 	 */
-	public static BufferedImage getImage(String name) {
+	public static BufferedImage getImage(String name)
+	{
 		if (isImageLoaded(name))
 			return LOADED_IMAGES.get(name);
 		ZerraClient.logger().fatal(String.format("You cannot get an image that has not been loaded! The identifier of the image was %s", name));
@@ -178,25 +192,28 @@ public class LoadingUtils {
 	}
 
 	/**
-	 * This creates an image in case an image isn't present. The image is a purple and black checker board pattern.
+	 * This creates an image in case an image isn't present. The image is a purple
+	 * and black checker board pattern.
 	 * 
-	 * @param width
-	 *            The width of the missing image
-	 * @param height
-	 *            The height of the missing image
-	 * 
+	 * @param width The width of the missing image
+	 * @param height The height of the missing image
 	 * @return The image created
 	 */
-	public static BufferedImage createMissingImage(int width, int height) {
+	public static BufferedImage createMissingImage(int width, int height)
+	{
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		if (isImageLoaded("missing" + width + "x" + height))
 			return LOADED_IMAGES.get("missing" + width + "x" + height);
 
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if ((x < width / 2 && y < height / 2) || (x >= width / 2 && y >= height / 2)) {
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				if ((x < width / 2 && y < height / 2) || (x >= width / 2 && y >= height / 2))
+				{
 					image.setRGB(x, y, 0);
-				} else {
+				} else
+				{
 					image.setRGB(x, y, 0xff00ff);
 				}
 			}
@@ -208,18 +225,19 @@ public class LoadingUtils {
 	/**
 	 * Searches {@link #LOADED_IMAGES} for the image specified.
 	 * 
-	 * @param key
-	 *            The key to look for the image
+	 * @param key The key to look for the image
 	 * @return Whether or not the image was loaded
 	 */
-	public static boolean isImageLoaded(String key) {
+	public static boolean isImageLoaded(String key)
+	{
 		return LOADED_IMAGES.containsKey(key);
 	}
 
 	/**
 	 * @return All the loaded images inside of a new map
 	 */
-	public static Map<String, BufferedImage> getLoadedImages() {
+	public static Map<String, BufferedImage> getLoadedImages()
+	{
 		return new HashMap<String, BufferedImage>(LOADED_IMAGES);
 	}
 }

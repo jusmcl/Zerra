@@ -10,21 +10,24 @@ import com.zerra.common.registry.RegistryNameable;
  * 
  * @author Bright_Spark
  */
-public class ModInit {
+public class ModInit
+{
 
-    private final String domain;
+	private final String domain;
 
-    public ModInit(String domain) {
-        this.domain = domain;
-    }
+	public ModInit(String domain)
+	{
+		this.domain = domain;
+	}
 
-    /**
-     * Allows the registration of any object, so long as it has a valid registry.
-     * 
-     * @param object The object to register.
-     */
-    public <T extends RegistryNameable> void register(T object) {
-        object.setDomain(domain);
-        Registries.register(object);
-    }
+	/**
+	 * Allows the registration of any object, so long as it has a valid registry.
+	 * 
+	 * @param object The object to register.
+	 */
+	public <T extends RegistryNameable> void register(T object)
+	{
+		object.setDomain(domain);
+		Registries.register(object);
+	}
 }

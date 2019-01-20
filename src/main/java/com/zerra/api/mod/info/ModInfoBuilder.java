@@ -164,7 +164,8 @@ public class ModInfoBuilder
 	}
 
 	/**
-	 * @param dependencies The dependencies the mod relies on. Dependencies should be specified as a domain.
+	 * @param dependencies The dependencies the mod relies on. Dependencies should
+	 *        be specified as a domain.
 	 * @return A ModInfoBuilder with the set dependencies.
 	 */
 	public ModInfoBuilder setDependencies(String... dependencies)

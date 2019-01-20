@@ -11,7 +11,8 @@ import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
 
-public class TextureManager {
+public class TextureManager
+{
 
 	public static final ResourceLocation MISSING_TEXTURE_LOCATION = new ResourceLocation("missingno");
 
@@ -19,7 +20,8 @@ public class TextureManager {
 	private ResourceLocation boundTextureLocation;
 	private Map<ResourceLocation, ITexture> textures;
 
-	public TextureManager() {
+	public TextureManager()
+	{
 		textures = new HashMap<ResourceLocation, ITexture>();
 		this.loadTexture(MISSING_TEXTURE_LOCATION, Loader.loadTexture(LoadingUtils.createMissingImage(256, 256)));
 		boundTextureLocation = MISSING_TEXTURE_LOCATION;
@@ -28,26 +30,25 @@ public class TextureManager {
 	/**
 	 * Loads a texture up from a resource location.
 	 * 
-	 * @param location
-	 *            The location to load the texture from.
-	 * 
-	 * @param texture
-	 *            The texture to load.
+	 * @param location The location to load the texture from.
+	 * @param texture The texture to load.
 	 */
-	public void loadTexture(ResourceLocation location, ITexture texture) {
+	public void loadTexture(ResourceLocation location, ITexture texture)
+	{
 		textures.put(location, texture);
 	}
 
 	/**
 	 * Binds a texture to a resource location.
 	 * 
-	 * @param location
-	 *            The resource location to bind the texture to.
+	 * @param location The resource location to bind the texture to.
 	 */
-	public void bind(ResourceLocation location) {
+	public void bind(ResourceLocation location)
+	{
 		if (location == null)
 			return;
-		if (textures.get(location) == null || (textures.get(location).getId() == -1)) {
+		if (textures.get(location) == null || (textures.get(location).getId() == -1))
+		{
 			textures.put(location, Loader.loadTexture(location));
 		}
 		this.boundTextureLocation = location;
@@ -57,10 +58,13 @@ public class TextureManager {
 	/**
 	 * Deletes all textures that have been cached and uploaded into memory.
 	 */
-	public void dispose() {
-		for (ResourceLocation location : this.textures.keySet()) {
+	public void dispose()
+	{
+		for (ResourceLocation location : this.textures.keySet())
+		{
 			ITexture texture = this.textures.get(location);
-			if (texture != null) {
+			if (texture != null)
+			{
 				texture.delete();
 			}
 		}
@@ -69,12 +73,11 @@ public class TextureManager {
 	/**
 	 * Gets a texture from a resource location.
 	 * 
-	 * @param location
-	 *            The resource location to get the texture from.
-	 * 
+	 * @param location The resource location to get the texture from.
 	 * @return The texture retrieved from the resource location.
 	 */
-	public ITexture getTexture(ResourceLocation location) {
+	public ITexture getTexture(ResourceLocation location)
+	{
 		if (location == null)
 			location = MISSING_TEXTURE_LOCATION;
 		bind(location);
@@ -84,7 +87,8 @@ public class TextureManager {
 	/**
 	 * @return The currently bound texture location
 	 */
-	public ResourceLocation getBoundTextureLocation() {
+	public ResourceLocation getBoundTextureLocation()
+	{
 		return boundTextureLocation;
 	}
 }

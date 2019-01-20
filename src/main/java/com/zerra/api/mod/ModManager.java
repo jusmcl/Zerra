@@ -21,7 +21,8 @@ import com.zerra.common.util.MiscUtils;
  * @author Arpaesis
  * @author Bright_Spark
  */
-public class ModManager {
+public class ModManager
+{
 
 	public Map<String, Mod> loadedMods = new HashMap<>();
 	public Map<String, Integer> modGroupOrder = new HashMap<>();
@@ -31,17 +32,21 @@ public class ModManager {
 
 	private ExecutorService pool;
 
-	public ModManager() {
+	public ModManager()
+	{
 		this.loader = new ModLoader(this);
 	}
 
 	/**
-	 * Loads mods, processes them one by one, and then cleans up the mod loading threads.
+	 * Loads mods, processes them one by one, and then cleans up the mod loading
+	 * threads.
 	 */
-	public void setupMods() {
+	public void setupMods()
+	{
 		this.loader.loadMods("data/mods/");
 
-		for (String modDomain : this.loadedMods.keySet()) {
+		for (String modDomain : this.loadedMods.keySet())
+		{
 			this.process(modDomain, 0);
 		}
 
@@ -53,21 +58,27 @@ public class ModManager {
 	}
 
 	/**
-	 * Takes a mod and processes it. Processing a mod is consists of giving the mod a load order based on its dependencies (mods should load after dependencies).
+	 * Takes a mod and processes it. Processing a mod is consists of giving the mod
+	 * a load order based on its dependencies (mods should load after dependencies).
 	 * 
 	 * @param domain The domain of the mod.
-	 * @param depth How high the mod should be prioritized. The bigger the number, the larger the priority.
+	 * @param depth How high the mod should be prioritized. The bigger the number,
+	 *        the larger the priority.
 	 */
-	private void process(String domain, final int depth) {
-		if (depth > this.deepestLevel) {
+	private void process(String domain, final int depth)
+	{
+		if (depth > this.deepestLevel)
+		{
 			this.deepestLevel = depth;
 		}
 
 		this.modGroupOrder.compute(domain, (d, layer) -> layer == null ? depth : Math.max(layer, depth));
 
 		String[] dependencies = this.loadedMods.get(domain).getModInfo().getDependencies();
-		if (dependencies != null) {
-			for (int i = 0; i < dependencies.length; i++) {
+		if (dependencies != null)
+		{
+			for (int i = 0; i < dependencies.length; i++)
+			{
 				this.process(dependencies[i], depth + 1);
 			}
 		}
@@ -76,32 +87,40 @@ public class ModManager {
 	/**
 	 * Initializes all mods.
 	 */
-	private void initialize() {
-		//Sorts the mods into easy-to-grab layers
+	private void initialize()
+	{
+		// Sorts the mods into easy-to-grab layers
 		Map<Integer, Set<Mod>> layers = new HashMap<>();
-		for (Map.Entry<String, Integer> modEntry : modGroupOrder.entrySet()) {
+		for (Map.Entry<String, Integer> modEntry : modGroupOrder.entrySet())
+		{
 			int layer = modEntry.getValue();
 			Set<Mod> mods = layers.getOrDefault(layer, new HashSet<>());
 			mods.add(loadedMods.get(modEntry.getKey()));
 			layers.put(layer, mods);
 		}
 
-		for (int currentLevel = this.deepestLevel; currentLevel >= 0; currentLevel--) {
+		for (int currentLevel = this.deepestLevel; currentLevel >= 0; currentLevel--)
+		{
 			Set<Mod> mods = layers.get(currentLevel);
 			int size = mods.size();
 			ZerraClient.logger().info("Loading {} mods on level {}...", size, currentLevel);
 
-			if (size == 1) {
+			if (size == 1)
+			{
 				Mod mod = Iterables.getOnlyElement(mods);
 				mod.init(new ModInit(mod.getModInfo().getDomain()));
-			} else {
-				try {
-					this.pool.invokeAll(mods.stream().map(mod -> (Callable<Void>) () -> {
+			} else
+			{
+				try
+				{
+					this.pool.invokeAll(mods.stream().map(mod -> (Callable<Void>) () ->
+					{
 						String d = mod.getModInfo().getDomain();
 						mod.init(new ModInit(d));
 						return null;
 					}).collect(Collectors.toSet()));
-				} catch (InterruptedException e) {
+				} catch (InterruptedException e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -109,12 +128,14 @@ public class ModManager {
 	}
 
 	/**
-	 * Verifies whether or not the domain of a mod exists within the currently loaded mods.
+	 * Verifies whether or not the domain of a mod exists within the currently
+	 * loaded mods.
 	 * 
 	 * @param domain The domain to check for.
 	 * @return Whether the domain exists or not.
 	 */
-	public boolean doesDomainExist(String domain) {
+	public boolean doesDomainExist(String domain)
+	{
 		return this.loadedMods.keySet().contains(domain);
 	}
 }

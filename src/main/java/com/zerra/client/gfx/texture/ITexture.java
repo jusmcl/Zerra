@@ -1,6 +1,7 @@
 package com.zerra.client.gfx.texture;
 
-public interface ITexture {
+public interface ITexture
+{
 
 	/**
 	 * Deletes this texture from memory.

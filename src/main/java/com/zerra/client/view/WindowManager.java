@@ -32,20 +32,24 @@ import org.lwjgl.system.MemoryUtil;
 import com.zerra.client.ZerraClient;
 
 @Deprecated
-public class WindowManager {
+public class WindowManager
+{
 
 	private static long window;
 	private static GLFWErrorCallback errorCallback;
 
-	public static long getWindow() {
+	public static long getWindow()
+	{
 		return window;
 	}
 
-	public static void init() {
+	public static void init()
+	{
 		errorCallback = GLFWErrorCallback.createPrint(System.err);
 		errorCallback.set();
 
-		if (!glfwInit()) {
+		if (!glfwInit())
+		{
 			throw new IllegalStateException("Failed to initialize GLFW");
 		}
 
@@ -54,15 +58,18 @@ public class WindowManager {
 
 		window = glfwCreateWindow(800, 600, "Zerra", MemoryUtil.NULL, MemoryUtil.NULL);
 
-		if (window == MemoryUtil.NULL) {
+		if (window == MemoryUtil.NULL)
+		{
 			throw new IllegalStateException("Failed to create window!");
 		}
 
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+		glfwSetKeyCallback(window, (window, key, scancode, action, mods) ->
+		{
 			ZerraClient.getInstance().schedule(genRunnable(window, key, scancode, action, mods));
 		});
 
-		try (MemoryStack stack = MemoryStack.stackPush()) {
+		try (MemoryStack stack = MemoryStack.stackPush())
+		{
 			IntBuffer pWidth = stack.mallocInt(1); // int*
 			IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -79,18 +86,23 @@ public class WindowManager {
 		glfwShowWindow(window);
 	}
 
-	private static Runnable genRunnable(long window, int key, int scancode, int action, int mods) {
-		if (action == GLFW_RELEASE) {
-			switch (key) {
+	private static Runnable genRunnable(long window, int key, int scancode, int action, int mods)
+	{
+		if (action == GLFW_RELEASE)
+		{
+			switch (key)
+			{
 			case GLFW_KEY_ESCAPE:
 				return () -> glfwSetWindowShouldClose(window, true);
 			}
 		}
-		return () -> {
+		return () ->
+		{
 		};
 	}
 
-	public static void exit() {
+	public static void exit()
+	{
 		errorCallback.close();
 		glfwFreeCallbacks(window);
 		glfwDestroyWindow(window);

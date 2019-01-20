@@ -25,7 +25,8 @@ import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.storage.IOManager;
 
-public class TextureMap implements ITexture {
+public class TextureMap implements ITexture
+{
 
 	private ResourceLocation location;
 	private int textureId;
@@ -34,7 +35,8 @@ public class TextureMap implements ITexture {
 	private List<ResourceLocation> spriteLocations;
 	private Map<ResourceLocation, TextureMapSprite> sprites;
 
-	public TextureMap(ResourceLocation location, TextureManager textureManager) {
+	public TextureMap(ResourceLocation location, TextureManager textureManager)
+	{
 		this.location = location;
 		this.textureId = GL11.glGenTextures();
 		this.width = 128;
@@ -45,14 +47,17 @@ public class TextureMap implements ITexture {
 	}
 
 	@Override
-	public void delete() {
-		if (this.textureId != -1) {
+	public void delete()
+	{
+		if (this.textureId != -1)
+		{
 			GL11.glDeleteTextures(this.textureId);
 			this.textureId = -1;
 		}
 	}
 
-	public void stitch() {
+	public void stitch()
+	{
 		int startingSize = 128;
 		Map<Vector2i, List<BufferedImage>> imageBatch = new HashMap<Vector2i, List<BufferedImage>>();
 		Map<BufferedImage, ResourceLocation> foundImages = new HashMap<BufferedImage, ResourceLocation>();
@@ -63,8 +68,10 @@ public class TextureMap implements ITexture {
 
 		long startTime = System.currentTimeMillis();
 		ZerraClient.logger().info("Stitching " + (this.spriteLocations.size() + 1) + " sprite(s) into atlas \'" + this.location.toString() + "\'");
-		for (ResourceLocation location : this.spriteLocations) {
-			try {
+		for (ResourceLocation location : this.spriteLocations)
+		{
+			try
+			{
 				BufferedImage image = ImageIO.read(location.getInputStream());
 				this.addImage(image, imageBatch);
 				foundImages.put(image, location);
@@ -72,12 +79,14 @@ public class TextureMap implements ITexture {
 					startingSize = image.getWidth();
 				if (image.getHeight() > startingSize)
 					startingSize = image.getHeight();
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				ZerraClient.logger().warn("Could not find atlas sprite at \'" + location + "\'. Skipping!");
 			}
 		}
 
-		List<Vector2i> orderedSizes = imageBatch.keySet().stream().sorted((o1, o2) -> {
+		List<Vector2i> orderedSizes = imageBatch.keySet().stream().sorted((o1, o2) ->
+		{
 			return o2.x * o2.y - o1.x * o1.y;
 		}).collect(Collectors.toList());
 
@@ -93,25 +102,34 @@ public class TextureMap implements ITexture {
 		BufferedImage atlas = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = atlas.createGraphics();
 
-		try {
-			for (Vector2i size : orderedSizes) {
+		try
+		{
+			for (Vector2i size : orderedSizes)
+			{
 				List<BufferedImage> images = imageBatch.get(size);
-				if (images != null) {
-					for (BufferedImage image : images) {
-						if (xPointer + image.getWidth() > currentWidth) {
+				if (images != null)
+				{
+					for (BufferedImage image : images)
+					{
+						if (xPointer + image.getWidth() > currentWidth)
+						{
 							yPointer = yStart;
 							xPointer = xStart;
 							currentY = yStart;
 							yStart = 0;
-						} else {
-							if (yStart == 0 || image.getHeight() < yStart) {
+						} else
+						{
+							if (yStart == 0 || image.getHeight() < yStart)
+							{
 								yStart = currentY + image.getHeight();
 							}
-							if (previousSize.y > image.getHeight()) {
+							if (previousSize.y > image.getHeight())
+							{
 								xStart = xPointer;
 							}
 						}
-						if (yPointer + image.getHeight() > currentHeight) {
+						if (yPointer + image.getHeight() > currentHeight)
+						{
 							xStart = (int) Math.pow(2, startingExponent + 1);
 							xPointer = xStart;
 							yPointer = 0;
@@ -121,8 +139,10 @@ public class TextureMap implements ITexture {
 							currentWidth = (int) Math.pow(2, startingExponent + 1);
 							currentHeight = (int) Math.pow(2, startingExponent + 1);
 							BufferedImage newImage = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
-							for (int y = 0; y < atlas.getHeight(); y++) {
-								for (int x = 0; x < atlas.getWidth(); x++) {
+							for (int y = 0; y < atlas.getHeight(); y++)
+							{
+								for (int x = 0; x < atlas.getWidth(); x++)
+								{
 									newImage.setRGB(x, y, atlas.getRGB(x, y));
 								}
 							}
@@ -138,7 +158,8 @@ public class TextureMap implements ITexture {
 					}
 				}
 			}
-		} catch (Throwable t) {
+		} catch (Throwable t)
+		{
 			ZerraClient.logger().fatal("Could not create texture atlas \'" + this.location + "\'!", t);
 			ZerraClient.getInstance().stop();
 			return;
@@ -147,7 +168,8 @@ public class TextureMap implements ITexture {
 
 		this.width = atlas.getWidth();
 		this.height = atlas.getHeight();
-		for (ResourceLocation location : this.sprites.keySet()) {
+		for (ResourceLocation location : this.sprites.keySet())
+		{
 			this.sprites.get(location).setAtlasSize(this.width, this.height);
 		}
 
@@ -159,49 +181,59 @@ public class TextureMap implements ITexture {
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, this.width, this.height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, Loader.loadToByteBuffer(atlas));
 
 		ZerraClient.logger().info("Created " + atlas.getWidth() + "x" + atlas.getHeight() + " atlas in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
-		try {
+		try
+		{
 			File file = new File(IOManager.getInstanceDirectory(), "debug/atlas/" + this.location.getDomain() + "-" + this.location.getLocation() + ".png");
 			FileUtils.touch(file);
 			ImageIO.write(atlas, "PNG", new FileOutputStream(file));
-		} catch (Exception e) {
+		} catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 	}
 
-	private void addImage(BufferedImage image, Map<Vector2i, List<BufferedImage>> imageBatch) {
+	private void addImage(BufferedImage image, Map<Vector2i, List<BufferedImage>> imageBatch)
+	{
 		Vector2i size = new Vector2i(image.getWidth(), image.getHeight());
 		List<BufferedImage> list = imageBatch.get(size);
-		if (list == null) {
+		if (list == null)
+		{
 			list = new ArrayList<BufferedImage>();
 			imageBatch.put(size, list);
 		}
 		list.add(image);
 	}
 
-	public void register(ResourceLocation location) {
+	public void register(ResourceLocation location)
+	{
 		this.spriteLocations.add(location);
 	}
 
-	public TextureMapSprite getSprite(ResourceLocation location) {
+	public TextureMapSprite getSprite(ResourceLocation location)
+	{
 		return this.sprites.getOrDefault(location, this.sprites.get(TextureManager.MISSING_TEXTURE_LOCATION));
 	}
 
-	public ResourceLocation getLocation() {
+	public ResourceLocation getLocation()
+	{
 		return location;
 	}
 
 	@Override
-	public int getId() {
+	public int getId()
+	{
 		return textureId;
 	}
 
 	@Override
-	public int getWidth() {
+	public int getWidth()
+	{
 		return width;
 	}
 
 	@Override
-	public int getHeight() {
+	public int getHeight()
+	{
 		return height;
 	}
 }

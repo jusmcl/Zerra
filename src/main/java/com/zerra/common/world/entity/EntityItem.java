@@ -23,13 +23,13 @@ public class EntityItem extends Entity
 	{
 		return group;
 	}
-	
+
 	@Override
 	public void update()
 	{
 		super.update();
-		
-		if(this.getTicksExisted() >= (ZerraClient.getInstance().getTicksPerSecond() * 60 * 5))
+
+		if (this.getTicksExisted() >= (ZerraClient.getInstance().getTicksPerSecond() * 60 * 5))
 		{
 			this.despawn();
 		}

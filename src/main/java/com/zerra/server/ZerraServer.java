@@ -14,29 +14,28 @@ import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerManager;
 
 /**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
- * 
- * <br>
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * 
  * The server for the game.
  * 
  * @author Arpaesis
  */
-public class ZerraServer extends Zerra {
+public class ZerraServer extends Zerra
+{
 
 	private boolean isNaturallyRemote;
 	private boolean isCurrentlyRemote;
-	
-	public ZerraServer(boolean isNaturallyRemote) {
+
+	public ZerraServer(boolean isNaturallyRemote)
+	{
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
-		
+
 		this.isNaturallyRemote = isNaturallyRemote;
 		this.isCurrentlyRemote = false;
-		
+
 		server = new ServerManager();
-		
+
 		this.start();
 	}
 
@@ -44,7 +43,8 @@ public class ZerraServer extends Zerra {
 	 * Sets the game's running status to true.
 	 */
 	@Override
-	public synchronized void start() {
+	public synchronized void start()
+	{
 		if (this.running)
 			return;
 
@@ -56,7 +56,8 @@ public class ZerraServer extends Zerra {
 	 * Sets the game's running status to false.
 	 */
 	@Override
-	public synchronized void stop() {
+	public synchronized void stop()
+	{
 		if (!this.running)
 			return;
 
@@ -68,53 +69,64 @@ public class ZerraServer extends Zerra {
 
 	// TODO improve loop
 	@Override
-	public void run() {
-		try {
+	public void run()
+	{
+		try
+		{
 			this.init();
 			this.serverReady = true;
 			this.server.bindInternally();
-			
-		} catch (Throwable t) {
+
+		} catch (Throwable t)
+		{
 			t.printStackTrace();
 		}
 
-		while (true) {
-			try {
-				while (this.running) {
+		while (true)
+		{
+			try
+			{
+				while (this.running)
+				{
 
 					this.timer.updateTimer();
 
-					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i) {
+					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
+					{
 						update();
 					}
 				}
-			} catch (Exception e) {
+			} catch (Exception e)
+			{
 				e.printStackTrace();
 				this.stop();
 			}
-			
+
 			break;
 		}
 	}
 
 	private void update()
 	{
-		if(StateManager.getActiveState() != null)
+		if (StateManager.getActiveState() != null)
 		{
 			StateManager.getActiveState().update();
 		}
 	}
 
 	@Override
-	protected void init() {
-		
+	protected void init()
+	{
+
 		this.timer = new Timer(20);
-		
+
 		this.world = new World("world");
 		World world = ZerraServer.getInstance().getWorld();
 		Layer layer = world.getLayer(0);
-		for (int x = 0; x < 3; x++) {
-			for (int z = 0; z < 3; z++) {
+		for (int x = 0; x < 3; x++)
+		{
+			for (int z = 0; z < 3; z++)
+			{
 				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
 			}
 		}
@@ -126,11 +138,12 @@ public class ZerraServer extends Zerra {
 		return (ZerraServer) instance;
 	}
 
-	public void schedule(Runnable runnable) {
+	public void schedule(Runnable runnable)
+	{
 		Validate.notNull(runnable);
 		this.pool.execute(runnable);
 	}
-	
+
 	public boolean isReady()
 	{
 		return this.serverReady;
@@ -150,7 +163,7 @@ public class ZerraServer extends Zerra {
 	{
 		this.isCurrentlyRemote = isCurrentlyRemote;
 	}
-	
+
 	public ServerManager getServerManager()
 	{
 		return this.server;

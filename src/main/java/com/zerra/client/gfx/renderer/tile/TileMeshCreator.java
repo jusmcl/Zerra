@@ -26,41 +26,47 @@ import com.zerra.common.world.tile.Tile;
  *
  * @author Ocelot5836
  */
-public class TileMeshCreator {
+public class TileMeshCreator
+{
 
 	private Map<Plate, PlateMeshData> generatedPlates;
 	private Map<Plate, Model> platesMesh;
 	private List<Plate> requestedPlates;
-	
+
 	private Map<Tile, ResourceLocation> textureCache;
 	private PlateMeshData meshCache;
-	
+
 	private Map<Plate, PlateMeshData> map;
 
-	public TileMeshCreator() {
+	public TileMeshCreator()
+	{
 		this.generatedPlates = new ConcurrentHashMap<Plate, PlateMeshData>();
 		this.platesMesh = new ConcurrentHashMap<Plate, Model>();
 		this.requestedPlates = new ArrayList<Plate>();
-		
+
 		this.textureCache = new HashMap<Tile, ResourceLocation>();
 		meshCache = new PlateMeshData(null, null);
-		
+
 		map = new ConcurrentHashMap<Plate, PlateMeshData>(this.generatedPlates);
 	}
 
 	// TODO use indices where possible perhaps
-	private void generatePlateMesh(Plate plate, int index) {
+	private void generatePlateMesh(Plate plate, int index)
+	{
 		int size = Plate.SIZE + 1;
 		float[] vertices = new float[size * size * 12];
 		float[] textureCoords = new float[size * size * 12];
 
 		long lastTime = System.currentTimeMillis();
 		int vertexPointer = 0;
-		for (int x = 0; x < size; x++) {
-			for (int z = 0; z < size; z++) {
+		for (int x = 0; x < size; x++)
+		{
+			for (int z = 0; z < size; z++)
+			{
 				Vector2i pos = new Vector2i(x, z);
 				Tile tile = plate.getTileAt(pos);
-				if (!textureCache.containsKey(tile)) {
+				if (!textureCache.containsKey(tile))
+				{
 					textureCache.put(tile, tile.getTexture());
 				}
 				TextureMapSprite sprite = ZerraClient.getInstance().getTextureMap().getSprite(textureCache.get(tile));
@@ -95,19 +101,23 @@ public class TileMeshCreator {
 
 		meshCache.setPositions(vertices);
 		meshCache.setTextureCoords(textureCoords);
-		
+
 		this.generatedPlates.put(plate, meshCache);
-		
+
 		textureCache.clear();
 	}
 
-	public void prepare() {
-		if (this.generatedPlates.size() > 0) {
+	public void prepare()
+	{
+		if (this.generatedPlates.size() > 0)
+		{
 			map.clear();
 			map.putAll(this.generatedPlates);
-			for (Plate plate : map.keySet()) {
+			for (Plate plate : map.keySet())
+			{
 				PlateMeshData data = map.get(plate);
-				if (plate.isLoaded()) {
+				if (plate.isLoaded())
+				{
 					this.platesMesh.put(plate, Loader.loadToVAO(data.getPositions(), data.getTextureCoords(), 2));
 				}
 				this.requestedPlates.remove(plate);
@@ -116,23 +126,31 @@ public class TileMeshCreator {
 		}
 	}
 
-	public Model getModel(Plate plate) {
+	public Model getModel(Plate plate)
+	{
 		return !this.ready(plate) ? null : this.platesMesh.get(plate);
 	}
 
-	public boolean ready(Plate plate) {
-		if (!plate.isLoaded()) {
-			if (this.platesMesh.containsKey(plate)) {
+	public boolean ready(Plate plate)
+	{
+		if (!plate.isLoaded())
+		{
+			if (this.platesMesh.containsKey(plate))
+			{
 				GL30.glDeleteVertexArrays(this.platesMesh.remove(plate).getVaoID());
 			}
-		} else {
-			if (this.platesMesh.containsKey(plate)) {
-				if (plate.requiresRenderUpdate() && !this.requestedPlates.contains(plate)) {
+		} else
+		{
+			if (this.platesMesh.containsKey(plate))
+			{
+				if (plate.requiresRenderUpdate() && !this.requestedPlates.contains(plate))
+				{
 					this.requestedPlates.add(plate);
 				}
 				return true;
 			}
-			if (!this.requestedPlates.contains(plate)) {
+			if (!this.requestedPlates.contains(plate))
+			{
 				this.requestedPlates.add(plate);
 				ZerraClient.getInstance().schedule(() -> this.generatePlateMesh(plate, this.requestedPlates.size() - 1));
 			}
@@ -140,29 +158,35 @@ public class TileMeshCreator {
 		return false;
 	}
 
-	private static class PlateMeshData {
+	private static class PlateMeshData
+	{
 
 		private float[] positions;
 		private float[] textureCoords;
 
-		public PlateMeshData(float[] positions, float[] textureCoords) {
+		public PlateMeshData(float[] positions, float[] textureCoords)
+		{
 			this.positions = positions;
 			this.textureCoords = textureCoords;
 		}
 
-		public float[] getPositions() {
+		public float[] getPositions()
+		{
 			return positions;
 		}
 
-		public float[] getTextureCoords() {
+		public float[] getTextureCoords()
+		{
 			return textureCoords;
 		}
-		
-		public void setPositions(float[] positions) {
+
+		public void setPositions(float[] positions)
+		{
 			this.positions = positions;
 		}
 
-		public void setTextureCoords(float[] textureCoords) {
+		public void setTextureCoords(float[] textureCoords)
+		{
 			this.textureCoords = textureCoords;
 		}
 	}

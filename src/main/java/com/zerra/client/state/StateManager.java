@@ -46,7 +46,7 @@ public class StateManager
 			ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getConnectionManager().getUUID().toString()));
 		} else if (nextState instanceof WorldLoadState)
 		{
-			//Prepare for world...
+			// Prepare for world...
 		}
 	}
 }

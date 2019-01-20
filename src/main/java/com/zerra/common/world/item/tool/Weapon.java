@@ -13,6 +13,6 @@ public interface Weapon extends Tool
 	 *         damage of the user.
 	 */
 	public float getDamage();
-	
+
 	public Weapon setDamage(float damage);
 }

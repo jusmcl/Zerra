@@ -8,9 +8,9 @@ public enum Attribute
 	PHYS_ARMOR(-100, 0, 90),
 	SPELL_ARMOR(-100, 0, 90);
 
-	private int	value;
-	private int	minValue;
-	private int	maxValue;
+	private int value;
+	private int minValue;
+	private int maxValue;
 
 	Attribute(int value)
 	{

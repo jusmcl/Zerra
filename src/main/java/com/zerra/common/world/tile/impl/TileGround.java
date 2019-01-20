@@ -5,13 +5,15 @@ import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.TileType;
 
-public class TileGround extends Tile {
+public class TileGround extends Tile
+{
 
 	private ResourceLocation name;
 	private int color;
 	private ResourceLocation texture;
 
-	public TileGround(TileType type, int color, ResourceLocation texture, String name) {
+	public TileGround(TileType type, int color, ResourceLocation texture, String name)
+	{
 		super(type);
 		this.color = color;
 		this.texture = texture;
@@ -19,22 +21,26 @@ public class TileGround extends Tile {
 	}
 
 	@Override
-	public ResourceLocation getRegistryID() {
+	public ResourceLocation getRegistryID()
+	{
 		return name;
 	}
 
 	@Override
-	public int getColor() {
+	public int getColor()
+	{
 		return color;
 	}
 
 	@Override
-	public void spawnDropsInLayer(Layer layer) {
+	public void spawnDropsInLayer(Layer layer)
+	{
 
 	}
 
 	@Override
-	public ResourceLocation getTexture() {
+	public ResourceLocation getTexture()
+	{
 		return texture;
 	}
 }

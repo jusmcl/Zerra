@@ -10,7 +10,7 @@ public class Item implements RegistryNameable
 	private String registryName;
 
 	private final ItemRarity RARITY;
-	
+
 	private boolean canBeGrouped = true;
 
 	public Item(String registryName)
@@ -25,13 +25,15 @@ public class Item implements RegistryNameable
 		this.setCanBeGrouped(true);
 	}
 
-    @Override
-    public final void setDomain(String domain) {
+	@Override
+	public final void setDomain(String domain)
+	{
 		this.registryName = RegistryNameable.injectDomain(this.registryName, domain);
-    }
+	}
 
-    @Override
-    public String getRegistryName() {
+	@Override
+	public String getRegistryName()
+	{
 		return registryName;
 	}
 

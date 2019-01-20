@@ -23,13 +23,15 @@ import com.zerra.common.world.storage.plate.Plate;
  *
  * @author Ocelot5836
  */
-public class TileRenderer {
+public class TileRenderer
+{
 
 	private Matrix4f projectionMatrix;
 	private TileShader shader;
 	private TileMeshCreator meshCreator;
 
-	public TileRenderer() {
+	public TileRenderer()
+	{
 		this.projectionMatrix = new Matrix4f().ortho(0, Display.getWidth() / (Renderer.SCALE * 16), Display.getHeight() / (Renderer.SCALE * 16), 0, 0.3f, 1000.0f);
 		this.shader = new TileShader();
 		this.shader.start();
@@ -46,20 +48,24 @@ public class TileRenderer {
 	 * @param world The world to render the tiles in.
 	 * @param layer The layer ID of the world to render the tiles in.
 	 */
-	public void renderTiles(ICamera camera, World world, int layer) {
+	public void renderTiles(ICamera camera, World world, int layer)
+	{
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 		this.meshCreator.prepare();
 		Layer worldLayer = world.getLayer(layer);
-		if (worldLayer != null) {
+		if (worldLayer != null)
+		{
 			Plate[] plates = worldLayer.getLoadedPlates();
-			for (int i = 0; i < plates.length; i++) {
+			for (int i = 0; i < plates.length; i++)
+			{
 				Plate plate = plates[i];
-				if (this.meshCreator.ready(plate)) {
+				if (this.meshCreator.ready(plate))
+				{
 					Model model = this.meshCreator.getModel(plate);
 					ZerraClient.getInstance().getTextureManager().bind(ZerraClient.getInstance().getTextureMap().getLocation());
 					this.shader.start();
-                    this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x() * (Plate.SIZE + 1), plate.getPlatePos().z() * (Plate.SIZE + 1), 0, 0, 1, 1));
+					this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x() * (Plate.SIZE + 1), plate.getPlatePos().z() * (Plate.SIZE + 1), 0, 0, 1, 1));
 					this.shader.loadViewMatrix(camera);
 					GL30.glBindVertexArray(model.getVaoID());
 					GL20.glEnableVertexAttribArray(0);

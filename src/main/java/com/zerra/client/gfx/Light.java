@@ -9,13 +9,15 @@ import org.joml.Vector3f;
  * 
  * @author Ocelot5836
  */
-public class Light {
+public class Light
+{
 
 	private Vector3f position;
 	private Vector3f color;
 	private float brightness;
 
-	public Light(Vector3f position, float red, float green, float blue, float brightness) {
+	public Light(Vector3f position, float red, float green, float blue, float brightness)
+	{
 		this.position = new Vector3f(position);
 		this.color = new Vector3f(red, green, blue);
 		this.brightness = brightness;
@@ -24,21 +26,24 @@ public class Light {
 	/**
 	 * @return The position of the light
 	 */
-	public Vector3f getPosition() {
+	public Vector3f getPosition()
+	{
 		return position;
 	}
 
 	/**
 	 * @return The color of the light
 	 */
-	public Vector3f getColor() {
+	public Vector3f getColor()
+	{
 		return color;
 	}
 
 	/**
 	 * @return The brightness of the light
 	 */
-	public float getBrightness() {
+	public float getBrightness()
+	{
 		return brightness;
 	}
 }
