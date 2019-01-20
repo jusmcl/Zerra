@@ -437,5 +437,15 @@ public class IOManager {
 		public World getWorld() {
 			return world;
 		}
+		
+		public List<Pair<Integer, ResourceLocation>> getTileIndexes()
+		{
+			return this.tileIndexes;
+		}
+		
+		public  Map<ResourceLocation, Integer> getTileMapper()
+		{
+			return this.tileMapper;
+		}
 	}
 }

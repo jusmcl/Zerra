@@ -1,15 +1,26 @@
 package com.zerra.common.world.storage.plate;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
 public class Plate {
 	
@@ -107,5 +118,65 @@ public class Plate {
 			return this.platePos.equals(((Plate) obj).platePos);
 		}
 		return super.equals(obj);
+	}
+	
+	public byte[] toBytes()
+	{
+
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+		List<Pair<Integer, ResourceLocation>> indexes = layer.getWorld().getStorageManager().getTileIndexes();
+		Map<ResourceLocation, Integer> mapper = layer.getWorld().getStorageManager().getTileMapper();
+
+		ObjectOutput out = null;
+		try
+		{
+			out = new ObjectOutputStream(bos);
+		} catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		for (int x = 0; x < Plate.SIZE; x++)
+		{
+			for (int z = 0; z < Plate.SIZE; z++)
+			{
+				Vector2i position = new Vector2i(x, z);
+				try
+				{
+					out.writeShort(indexes.get(mapper.get(this.getTileAt(position).getRegistryID())).getLeft());
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+
+			}
+		}
+		return bos.toByteArray();
+	}
+	
+	public Plate fromBytes(byte[] bytes)
+	{
+		List<Pair<Integer, ResourceLocation>> indexes = layer.getWorld().getStorageManager().getTileIndexes();
+
+		DataInputStream is = new DataInputStream(new ByteArrayInputStream(bytes));
+
+		Plate plate = new Plate(this.layer);
+		for (int x = 0; x < Plate.SIZE; x++)
+		{
+			for (int z = 0; z < Plate.SIZE; z++)
+			{
+				Vector2i tilePos = new Vector2i(x, z);
+				try
+				{
+					plate.setTileAt(tilePos, Tiles.byId(indexes.get(is.readShort()).getRight()));
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		plate.setPlatePos(platePos);
+
+		return plate;
 	}
 }

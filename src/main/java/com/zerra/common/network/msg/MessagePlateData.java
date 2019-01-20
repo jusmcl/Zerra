@@ -19,8 +19,7 @@ public class MessagePlateData implements Message
 	@Override
 	public Packet prepare()
 	{
-		//TODO:
-		return Packet.builder().putByte(Opcodes.PLATE_DATA);
+		return Packet.builder().putByte(Opcodes.PLATE_DATA).putBytes(plate.toBytes());
 	}
 
 }

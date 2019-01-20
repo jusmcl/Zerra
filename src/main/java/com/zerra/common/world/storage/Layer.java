@@ -63,7 +63,6 @@ public interface Layer {
      * @param uuid Unique ID
      * @return Entity with the UUID
      */
-    @Nullable
     Entity getEntityByUUID(UUID uuid);
 
 	/**
@@ -73,7 +72,6 @@ public interface Layer {
 	 *            The pos to check
 	 * @return The plate found or null if it is loading
 	 */
-    @Nullable
     Plate getPlate(Vector3ic pos);
 
 	/**
