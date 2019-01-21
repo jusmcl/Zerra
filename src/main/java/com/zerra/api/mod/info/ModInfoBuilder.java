@@ -1,6 +1,7 @@
 package com.zerra.api.mod.info;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.annotation.Nullable;
 
@@ -56,8 +57,16 @@ public class ModInfoBuilder
 	 * @return A new ModInfo object.
 	 */
 	@Nullable
-	public static ModInfo fromJSONFile(FileInputStream fileInputStream)
+	public static ModInfo fromJSONFile(String path)
 	{
+		FileInputStream fileInputStream = null;
+		try
+		{
+			fileInputStream = new FileInputStream(path);
+		} catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
 		JsonWrapper jsonWrapper = new JsonWrapper(fileInputStream);
 		JsonObject object = jsonWrapper.getJson();
 		boolean flag = true;
