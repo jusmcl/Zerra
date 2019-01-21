@@ -11,8 +11,12 @@ import com.zerra.ClientLaunch;
 import com.zerra.common.world.storage.IOManager;
 
 /**
- * @author Tebreca Class that takes the String[] given as arg and deserializes
- *         it into an object holding the launch args vice versa
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
+ * </br>
+ * Class that takes the String[] given as arguments and deserializes them into
+ * an object that holds the launch arguments.
+ * 
+ * @author Tebreca
  */
 public class ArgsBuilder
 {
@@ -21,20 +25,18 @@ public class ArgsBuilder
 
 	public static final Logger LAUNCH = LogManager.getLogger("Launch");
 
-	private final boolean isServer;
-	private final boolean isClient;
 	private final String id;
 	private final String workingDir;
 
-	public ArgsBuilder(boolean isServer, String id, String workingDir)
+	public ArgsBuilder(String id, String workingDir)
 	{
-		this.isServer = isServer;
-		this.isClient = !isServer;
 		this.id = id;
 		this.workingDir = workingDir;
 	}
 
 	/**
+	 * Deserializes arguments given at launch into data to work with.
+	 * 
 	 * @param args the args given by the runtime environment
 	 * @return an new instance of the {@link ArgsBuilder} which contains the values
 	 *         of the parsed args
@@ -54,7 +56,7 @@ public class ArgsBuilder
 			if (ClientLaunch.IS_DEVELOPMENT_BUILD)
 			{
 				IOManager.init(new File("data"));
-				return new ArgsBuilder(false, "player", "null");
+				return new ArgsBuilder("player", "null");
 			} else
 			{
 				LAUNCH.fatal("Missing required parameters");
@@ -62,26 +64,20 @@ public class ArgsBuilder
 			}
 		}
 		// default assignments
-		boolean isServer = false;
 		String id = null, workingDir = null;
 		Iterator<String> iterator = Arrays.asList(args).iterator();
 
-		// iterating trough strings as args; to add args: just add another case
-		// statement to the switch.
-		// then, when you need the next string, check if the iterator has a next arg,
-		// and that it doesn't start
-		// with "--" for an example look at the case for loginKey, username and dir
+		/*
+		 * iterating trough strings as args; to add args: just add another case
+		 * statement to the switch. then, when you need the next string, check if the
+		 * iterator has a next arg, and that it doesn't start with "--" for an example
+		 * look at the case for loginKey, username and dir
+		 */
 		while (iterator.hasNext())
 		{
 			String value = iterator.next();
 			switch (value)
 			{
-			case "--server":
-				isServer = true;
-				break;
-			case "--client":
-				isServer = false;
-				break;
 			case "--id":
 				if (!iterator.hasNext())
 				{
@@ -119,17 +115,7 @@ public class ArgsBuilder
 
 		// test if all args are set, if not, assigning the data but only if
 		// IS_DEVELOPMENT_BUILD is true
-		return new ArgsBuilder(isServer, id, workingDir);
-	}
-
-	public boolean isClient()
-	{
-		return isClient;
-	}
-
-	public boolean isServer()
-	{
-		return isServer;
+		return new ArgsBuilder(id, workingDir);
 	}
 
 	public String getId()
