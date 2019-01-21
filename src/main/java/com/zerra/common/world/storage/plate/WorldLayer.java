@@ -1,23 +1,17 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
-
 import com.zerra.common.world.World;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.data.WorldDataHandler;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class WorldLayer implements Layer
 {
@@ -145,7 +139,12 @@ public class WorldLayer implements Layer
 		return this.loadedPlates.containsKey(pos);
 	}
 
-	@Override
+    @Override
+    public Map<String, WorldData> getAllWorldData() {
+        return this.worldData;
+    }
+
+    @Override
 	public WorldData getWorldData(String registryName)
 	{
 		return worldData.get(registryName);

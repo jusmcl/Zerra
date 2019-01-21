@@ -1,14 +1,14 @@
 package com.zerra.common.world.storage;
 
-import java.util.Set;
-import java.util.UUID;
-
-import org.joml.Vector3ic;
-
 import com.zerra.common.world.World;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
+import org.joml.Vector3ic;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public interface Layer
 {
@@ -80,6 +80,11 @@ public interface Layer
 	 * @return Whether or not the plate is loaded at the pos
 	 */
 	boolean isPlateLoaded(Vector3ic pos);
+
+    /**
+     * Gets all {@link WorldData} in this layer
+     */
+    Map<String, WorldData> getAllWorldData();
 
 	/**
 	 * Gets {@link WorldData} by registry name in this layer

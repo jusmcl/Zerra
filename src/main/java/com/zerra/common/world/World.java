@@ -1,21 +1,5 @@
 package com.zerra.common.world;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.joml.Vector2i;
-import org.joml.Vector3ic;
-
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.data.WorldDataHandler;
@@ -24,6 +8,16 @@ import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.storage.plate.WorldLayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.joml.Vector2i;
+import org.joml.Vector3ic;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class World
 {
@@ -103,7 +97,7 @@ public class World
 		Layer layer = this.getLayer(layerId);
 		if (layer != null)
 		{
-			this.storageManager.writeWorldDataSafe(layerId, this.worldData);
+			this.storageManager.writeWorldDataSafe(layerId, layer.getAllWorldData());
 			for (Plate plate : layer.getLoadedPlates())
 			{
 				if (plate != null)

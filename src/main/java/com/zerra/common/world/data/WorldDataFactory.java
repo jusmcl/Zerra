@@ -1,9 +1,9 @@
 package com.zerra.common.world.data;
 
-import java.util.function.Predicate;
-
 import com.zerra.common.util.Factory;
 import com.zerra.common.world.World;
+
+import java.util.function.Predicate;
 
 /**
  * A factory class used to create new {@link WorldData} instances and some
@@ -67,8 +67,7 @@ public class WorldDataFactory<T extends WorldData> extends Factory<T>
 	 * @param layer Layer ID
 	 * @return True if should be created for the layer
 	 */
-	public boolean isForLayer(int layer)
-	{
-		return layerPredicate == null || layerPredicate.test(layer);
+	public boolean isForLayer(int layer) {
+		return layerPredicate != null && layerPredicate.test(layer);
 	}
 }
