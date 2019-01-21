@@ -2,7 +2,6 @@ package com.zerra.client.state;
 
 import org.lwjgl.opengl.GL11;
 
-import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.view.Display;
 import com.zerra.server.ZerraServer;
@@ -10,18 +9,15 @@ import com.zerra.server.ZerraServer;
 public class WorldState extends State
 {
 
-	private ZerraServer zerraServer;
-	private ZerraClient zerraClient;
 
 	public WorldState()
 	{
 		super("world");
-		zerraClient = ZerraClient.getInstance();
 
 		new Thread(new ZerraServer(false), "Server").start();
 		// TODO: The server/world is created here (line of code above), however, the
 		// client world should also be created along with it.
-		zerraServer = ZerraServer.getInstance();
+		reloadServerInstance();
 
 		try
 		{

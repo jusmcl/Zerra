@@ -1,32 +1,32 @@
 package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
-import com.zerra.common.Zerra;
+import com.zerra.server.ZerraServer;
 
-public class State
+public abstract class State
 {
 
 	private String name;
 
-	protected Zerra zerra;
+	protected ZerraClient zerraClient;
+	protected ZerraServer zerraServer;
 
 	public State(String name)
 	{
 		this.name = name;
-		// TODO: Make sure this should use ZerraClient, and not ZerraServer.
-		this.zerra = ZerraClient.getInstance();
+		this.zerraClient = ZerraClient.getInstance();
+		reloadServerInstance();
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
+	}
+	
+	public void reloadServerInstance() {
+		this.zerraServer = ZerraServer.getInstance();
 	}
 
 	// No rendering can ever be done in this method
-	public void update()
-	{
+	public abstract void update();
 
-	}
-
-	public void render()
-	{
-	}
+	public abstract void render();
 
 	public String getName()
 	{
