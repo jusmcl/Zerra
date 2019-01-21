@@ -4,7 +4,7 @@ public class GameLoadState extends State
 {
 
 
-	public GameLoadState(int windowWidth, int windowHeight, int loadingBarWidth, int loadingBarHeight, int frameWidth)
+	public GameLoadState()
 	{
 		super("gameload");
 

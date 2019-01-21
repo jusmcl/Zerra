@@ -5,6 +5,8 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.Validate;
 import org.joml.Vector3i;
 
+import com.zerra.client.state.LoadingManager;
+import com.zerra.client.state.LoadingManager.LoadingState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.util.Timer;
 import com.zerra.common.Zerra;
@@ -117,7 +119,7 @@ public class ZerraServer extends Zerra
 	@Override
 	protected void init()
 	{
-
+		LoadingManager.setState(LoadingState.WorldPlates);
 		this.timer = new Timer(20);
 
 		this.world = new World("world");
@@ -130,6 +132,7 @@ public class ZerraServer extends Zerra
 				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
 			}
 		}
+		LoadingManager.setState(LoadingState.JoinServer);
 		this.eventHandler = new EventHandler();
 	}
 
