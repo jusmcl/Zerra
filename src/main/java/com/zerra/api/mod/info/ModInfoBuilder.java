@@ -51,7 +51,7 @@ public class ModInfoBuilder
 	}
 
 	/**
-	 * Fetches a modinfo instance from a JSON file.
+	 * Creates a modinfo instance from a JSON file.
 	 * 
 	 * @param fileInputStream The stream for the file.
 	 * @return A new ModInfo object.
