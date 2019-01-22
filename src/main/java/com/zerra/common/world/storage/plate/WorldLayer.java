@@ -145,12 +145,13 @@ public class WorldLayer implements Layer
 		return this.loadedPlates.containsKey(pos);
 	}
 
-    @Override
-    public Map<String, WorldData> getAllWorldData() {
-        return this.worldData;
-    }
+	@Override
+	public Map<String, WorldData> getAllWorldData()
+	{
+		return this.worldData;
+	}
 
-    @Override
+	@Override
 	public WorldData getWorldData(String registryName)
 	{
 		return worldData.get(registryName);

@@ -12,7 +12,7 @@ import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
-import com.zerra.server.network.ServerManager;
+import com.zerra.server.network.ServerConnectionManager;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -27,15 +27,25 @@ public class ZerraServer extends Zerra
 	private boolean isNaturallyRemote;
 	private boolean isCurrentlyRemote;
 
+	private String address;
+
 	public ZerraServer(boolean isNaturallyRemote)
 	{
+		this(isNaturallyRemote, "localhost");
+	}
+
+	public ZerraServer(boolean isNaturallyRemote, String address)
+	{
+		super();
 		instance = this;
 		this.pool = Executors.newCachedThreadPool();
+
+		this.address = address;
 
 		this.isNaturallyRemote = isNaturallyRemote;
 		this.isCurrentlyRemote = false;
 
-		server = new ServerManager();
+		serverManager = new ServerConnectionManager();
 
 		this.start();
 	}
@@ -65,7 +75,7 @@ public class ZerraServer extends Zerra
 		LOGGER.info("Stopping...");
 		this.running = false;
 		this.world.stop();
-		this.server.close();
+		this.serverManager.close();
 	}
 
 	// TODO improve loop
@@ -75,8 +85,14 @@ public class ZerraServer extends Zerra
 		try
 		{
 			this.init();
-			this.serverReady = true;
-			this.server.bindInternally();
+
+			if (!this.isNaturallyRemote)
+			{
+				this.serverManager.bindInternally();
+			} else
+			{
+				this.serverManager.bindRemotely(address, 43594);
+			}
 
 		} catch (Throwable t)
 		{
@@ -140,11 +156,6 @@ public class ZerraServer extends Zerra
 		return (ZerraServer) instance;
 	}
 
-	public boolean isReady()
-	{
-		return this.serverReady;
-	}
-
 	public boolean isNaturallyRemote()
 	{
 		return isNaturallyRemote;
@@ -160,8 +171,8 @@ public class ZerraServer extends Zerra
 		this.isCurrentlyRemote = isCurrentlyRemote;
 	}
 
-	public ServerManager getServerManager()
+	public ServerConnectionManager getServerManager()
 	{
-		return this.server;
+		return this.serverManager;
 	}
 }

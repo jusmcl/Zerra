@@ -2,7 +2,7 @@ package com.zerra.common.network;
 
 import java.util.UUID;
 
-import com.zerra.server.network.ServerManager;
+import com.zerra.server.network.ServerConnectionManager;
 
 import simplenet.Client;
 
@@ -10,14 +10,14 @@ public class PacketSender
 {
 
 	Client client;
-	ServerManager server;
+	ServerConnectionManager server;
 
 	public PacketSender(Client client)
 	{
 		this.client = client;
 	}
 
-	public PacketSender(ServerManager server)
+	public PacketSender(ServerConnectionManager server)
 	{
 		this.server = server;
 	}

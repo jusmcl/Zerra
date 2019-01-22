@@ -3,7 +3,6 @@ package com.zerra.client.state;
 public class GameLoadState extends State
 {
 
-
 	public GameLoadState()
 	{
 		super("gameload");
@@ -19,7 +18,7 @@ public class GameLoadState extends State
 	@Override
 	public void render()
 	{
-		
+
 		// TODO: redo draw loading bar
 
 	}

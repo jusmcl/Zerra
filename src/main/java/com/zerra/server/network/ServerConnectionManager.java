@@ -12,14 +12,14 @@ import com.zerra.server.ZerraServer;
 import simplenet.Client;
 import simplenet.Server;
 
-public class ServerManager
+public class ServerConnectionManager
 {
 
 	private Server server;
 	private PacketSender sender;
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 
-	public ServerManager()
+	public ServerConnectionManager()
 	{
 		sender = new PacketSender(this);
 	}

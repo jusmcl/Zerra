@@ -67,7 +67,8 @@ public class WorldDataFactory<T extends WorldData> extends Factory<T>
 	 * @param layer Layer ID
 	 * @return True if should be created for the layer
 	 */
-	public boolean isForLayer(int layer) {
+	public boolean isForLayer(int layer)
+	{
 		return layerPredicate != null && layerPredicate.test(layer);
 	}
 }

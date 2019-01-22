@@ -1,6 +1,7 @@
 package com.zerra.common;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +11,7 @@ import com.zerra.ClientLaunch;
 import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.world.World;
-import com.zerra.server.network.ServerManager;
+import com.zerra.server.network.ServerConnectionManager;
 
 public class Zerra implements Runnable
 {
@@ -20,14 +21,19 @@ public class Zerra implements Runnable
 
 	protected ExecutorService pool;
 	protected boolean running;
-	protected boolean serverReady = false;
 
 	protected Timer timer;
 	protected World world;
 
 	protected EventHandler eventHandler;
 
-	protected ServerManager server;
+	protected ServerConnectionManager serverManager;
+
+	public Zerra()
+	{
+		this.pool = Executors.newCachedThreadPool();
+
+	}
 
 	public void run()
 	{

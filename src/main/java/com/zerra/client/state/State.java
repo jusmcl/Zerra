@@ -18,8 +18,9 @@ public abstract class State
 		reloadServerInstance();
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
 	}
-	
-	public void reloadServerInstance() {
+
+	public void reloadServerInstance()
+	{
 		this.zerraServer = ZerraServer.getInstance();
 	}
 

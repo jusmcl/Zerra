@@ -24,8 +24,7 @@ public class ExampleMod implements Mod
 
 		// WorldData example
 		modInit.register(new WorldDataFactory<>("exampleWorldData", ExampleWorldData.class));
-		modInit.register(new WorldDataFactory<>("perLayerExampleWorldData", ExampleWorldData.class)
-				.setIsPerLayer().setLayerPredicate(layer -> layer == 1));
+		modInit.register(new WorldDataFactory<>("perLayerExampleWorldData", ExampleWorldData.class).setIsPerLayer().setLayerPredicate(layer -> layer == 1));
 
 		for (int i = 0; i < PROGRESS_MAX; i++)
 		{

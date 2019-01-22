@@ -1,8 +1,5 @@
 package com.zerra.client;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -38,7 +35,6 @@ public class ZerraClient extends Zerra
 
 	private static ZerraClient instance;
 
-	private ExecutorService pool;
 	private boolean running;
 
 	private Timer timer;
@@ -54,8 +50,8 @@ public class ZerraClient extends Zerra
 
 	public ZerraClient()
 	{
+		super();
 		instance = this;
-		this.pool = Executors.newCachedThreadPool();
 
 		this.client = new ClientConnectionManager();
 
