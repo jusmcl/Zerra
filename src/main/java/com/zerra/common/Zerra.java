@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.zerra.ClientLaunch;
-import com.zerra.client.util.Timer;
 import com.zerra.common.event.EventHandler;
+import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
 import com.zerra.server.network.ServerConnectionManager;
 
