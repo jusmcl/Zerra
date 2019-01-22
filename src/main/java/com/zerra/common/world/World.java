@@ -39,14 +39,13 @@ public class World
 	private WorldStorageManager storageManager;
 	private ExecutorService pool;
 
-	public World(String name)
+	public World(String name, Long seed)
 	{
 		this.logger = LogManager.getLogger("World-" + name);
 		this.name = name;
 		this.random = new Random();
 
-		// TODO: Make this also accept user-inputed seeds.
-		this.random.setSeed(random.nextLong());
+		this.random.setSeed(seed == null ? random.nextLong() : seed);
 
 		this.storageManager = new WorldStorageManager(this);
 
@@ -66,13 +65,9 @@ public class World
 		this.pool = Executors.newCachedThreadPool();
 	}
 
-	public World(String name, long seed)
+	public World(String name)
 	{
-		this(name);
-
-		// Overrides the previous constructor's stuff.
-		this.random.setSeed(seed);
-		worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
+		this(name, null);
 	}
 
 	public void schedule(Runnable command)
