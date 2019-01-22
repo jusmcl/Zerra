@@ -82,44 +82,25 @@ public class ZerraServer extends Zerra
 	@Override
 	public void run()
 	{
-		try
-		{
-			this.init();
+		this.init();
 
-			if (!this.isNaturallyRemote)
-			{
-				this.serverManager.bindInternally();
-			} else
-			{
-				this.serverManager.bindRemotely(address, 43594);
-			}
-
-		} catch (Throwable t)
+		if (!this.isNaturallyRemote)
 		{
-			t.printStackTrace();
+			this.serverManager.bindInternally();
+		} else
+		{
+			this.serverManager.bindRemotely(address, 43594);
 		}
 
-		while (true)
+		while (this.running)
 		{
-			try
-			{
-				while (this.running)
-				{
 
-					this.timer.updateTimer();
+			this.timer.updateTimer();
 
-					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
-					{
-						update();
-					}
-				}
-			} catch (Exception e)
+			for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
 			{
-				e.printStackTrace();
-				this.stop();
+				update();
 			}
-
-			break;
 		}
 	}
 
