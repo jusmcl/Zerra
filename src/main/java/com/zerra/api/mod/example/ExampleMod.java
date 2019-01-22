@@ -1,5 +1,7 @@
 package com.zerra.api.mod.example;
 
+import javax.annotation.Nonnull;
+
 import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.ModInit;
 import com.zerra.api.mod.info.ModInfo;
@@ -8,8 +10,6 @@ import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.data.WorldDataFactory;
 import com.zerra.common.world.item.Item;
-
-import javax.annotation.Nonnull;
 
 public class ExampleMod implements Mod
 {

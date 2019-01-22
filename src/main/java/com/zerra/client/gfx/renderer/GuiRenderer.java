@@ -45,7 +45,7 @@ public class GuiRenderer
 
 	public void renderTextureQuad(float x, float y, float width, float height, TextureMapSprite sprite)
 	{
-		ZerraClient.getInstance().getTextureManager().bind(ZerraClient.getInstance().getTextureMap().getLocation());
+		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(ZerraClient.getInstance().getRenderingManager().getTextureMap().getLocation());
 		this.renderTextureQuad(x, y, width, height, 0, 0, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
 	}
 

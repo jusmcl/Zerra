@@ -1,6 +1,5 @@
 package com.zerra.client;
 
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -11,25 +10,17 @@ import org.lwjgl.opengl.GL11;
 
 import com.zerra.ClientLaunch;
 import com.zerra.api.mod.ModManager;
-import com.zerra.client.gfx.renderer.GuiRenderer;
-import com.zerra.client.gfx.renderer.tile.TileRenderer;
-import com.zerra.client.gfx.texture.TextureManager;
-import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.StateManager;
-import com.zerra.client.util.Fbo;
-import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
-import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.util.Timer;
-import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.util.MiscUtils;
-import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tiles;
 
 /**
@@ -51,21 +42,14 @@ public class ZerraClient extends Zerra
 	private ExecutorService pool;
 	private boolean running;
 
-	private int loadingProgress;
-	private int loadingSteps;
-
 	private Timer timer;
-	private TextureManager textureManager;
-	private TextureMap textureMap;
-	protected TileRenderer tileRenderer;
-	protected GuiRenderer guiRenderer;
-	protected Camera camera;
 	protected InputHandler inputHandler;
-	protected Fbo fbo;
 
 	private EventHandler eventHandler;
 
 	private ModManager modManager;
+
+	private RenderingManager renderingManager;
 
 	private ClientConnectionManager client;
 
@@ -75,6 +59,8 @@ public class ZerraClient extends Zerra
 		this.pool = Executors.newCachedThreadPool();
 
 		this.client = new ClientConnectionManager();
+
+		this.renderingManager = new RenderingManager();
 
 		this.start();
 	}
@@ -166,7 +152,7 @@ public class ZerraClient extends Zerra
 	 */
 	private void update()
 	{
-		this.camera.update();
+		this.renderingManager.getCamera().update();
 		this.inputHandler.updateGamepad();
 	}
 
@@ -177,37 +163,13 @@ public class ZerraClient extends Zerra
 	@Override
 	protected void init()
 	{
-		Display.createDisplay(ClientLaunch.NAME + " v" + ClientLaunch.VERSION, 1280, 720);
-		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
-		// TODO:
-		// StateManager.setActiveState(new GameLoadState(1280, 720, 500, 20, 2));
-		// completeLoadingStep();
-		I18n.setLanguage(new Locale("en", "us"));
 		Tiles.registerTiles();
 		this.timer = new Timer(20);
-		this.textureManager = new TextureManager();
-		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this.textureManager);
-		Tile[] tiles = Tiles.getTiles();
-		for (Tile tile : tiles)
-		{
-			this.textureMap.register(tile.getTexture());
-		}
-		this.textureMap.stitch();
-		this.tileRenderer = new TileRenderer();
-		this.guiRenderer = new GuiRenderer();
-		this.camera = new Camera();
+		this.renderingManager.init();
 		this.inputHandler = new InputHandler();
-		this.fbo = new Fbo(Display.getWidth(), Display.getHeight(), Fbo.DEPTH_RENDER_BUFFER, 2);
 
 		modManager = new ModManager();
 		modManager.setupMods();
-	}
-
-	private void completeLoadingStep()
-	{
-		this.loadingProgress++;
-		StateManager.getActiveState().update();
-		StateManager.getActiveState().render();
 	}
 
 	/**
@@ -339,18 +301,10 @@ public class ZerraClient extends Zerra
 		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
-		this.textureManager.dispose();
+		this.renderingManager.getTextureManager().dispose();
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime) + " seconds");
-	}
-
-	/**
-	 * @return The loading progress of the game.
-	 */
-	public float getLoadingPercentage()
-	{
-		return loadingSteps / loadingProgress;
 	}
 
 	/**
@@ -359,22 +313,6 @@ public class ZerraClient extends Zerra
 	public float getRenderPartialTicks()
 	{
 		return timer.renderPartialTicks;
-	}
-
-	/**
-	 * @return The texture manager for the game.
-	 */
-	public TextureManager getTextureManager()
-	{
-		return textureManager;
-	}
-
-	/**
-	 * @return The texture map the game uses.
-	 */
-	public TextureMap getTextureMap()
-	{
-		return textureMap;
 	}
 
 	/**
@@ -426,35 +364,11 @@ public class ZerraClient extends Zerra
 	}
 
 	/**
-	 * @return The camera for the client.
+	 * @return The rendering manager for the client.
 	 */
-	public Camera getCamera()
+	public RenderingManager getRenderingManager()
 	{
-		return camera;
-	}
-
-	/**
-	 * @return The FBO for the client.
-	 */
-	public Fbo getFbo()
-	{
-		return fbo;
-	}
-
-	/**
-	 * @return The GUI renderer for the client.
-	 */
-	public GuiRenderer getGuiRenderer()
-	{
-		return guiRenderer;
-	}
-
-	/**
-	 * @return The tile renderer for the client.
-	 */
-	public TileRenderer getTileRenderer()
-	{
-		return tileRenderer;
+		return renderingManager;
 	}
 
 	/**
@@ -471,5 +385,10 @@ public class ZerraClient extends Zerra
 	public ClientConnectionManager getConnectionManager()
 	{
 		return this.client;
+	}
+
+	public World createWorld(String name, long seed)
+	{
+		return this.world = new World(name, seed);
 	}
 }

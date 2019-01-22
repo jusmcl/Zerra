@@ -13,7 +13,7 @@ public class MenuState extends State
 	@Override
 	public void update()
 	{
-		ZerraClient.getInstance().getCamera().update();
+		ZerraClient.getInstance().getRenderingManager().getCamera().update();
 		ZerraClient.getInstance().getInputHandler().updateGamepad();
 	}
 

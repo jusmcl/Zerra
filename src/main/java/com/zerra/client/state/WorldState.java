@@ -9,7 +9,6 @@ import com.zerra.server.ZerraServer;
 public class WorldState extends State
 {
 
-
 	public WorldState()
 	{
 		super("world");
@@ -38,19 +37,19 @@ public class WorldState extends State
 	@Override
 	public void render()
 	{
-		zerraClient.getFbo().bindFrameBuffer();
+		zerraClient.getRenderingManager().getFbo().bindFrameBuffer();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		// TODO: This null check shouldn't be necessary. Both the server and client
 		// should be ready to go before even considering rendering.
 		if (zerraServer != null && zerraServer.isReady())
 		{
-			zerraClient.getTileRenderer().renderTiles(zerraClient.getCamera(), zerraServer.getWorld(), 0);
+			zerraClient.getRenderingManager().getTileRenderer().renderTiles(zerraClient.getRenderingManager().getCamera(), zerraServer.getWorld(), 0);
 		}
-		zerraClient.getFbo().unbindFrameBuffer();
+		zerraClient.getRenderingManager().getFbo().unbindFrameBuffer();
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, zerraClient.getFbo().getColorTexture(0));
-		zerraClient.getGuiRenderer().setProjectionMatrix(GuiRenderer.FBO_MATRIX);
-		zerraClient.getGuiRenderer().renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
-		zerraClient.getGuiRenderer().restoreProjectionMatrix();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, zerraClient.getRenderingManager().getFbo().getColorTexture(0));
+		zerraClient.getRenderingManager().getGuiRenderer().setProjectionMatrix(GuiRenderer.FBO_MATRIX);
+		zerraClient.getRenderingManager().getGuiRenderer().renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
+		zerraClient.getRenderingManager().getGuiRenderer().restoreProjectionMatrix();
 	}
 }
