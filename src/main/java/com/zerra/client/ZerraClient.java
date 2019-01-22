@@ -97,41 +97,24 @@ public class ZerraClient extends Zerra
 	@Override
 	public void run()
 	{
-		try
-		{
-			this.init();
-		} catch (Throwable t)
-		{
-			t.printStackTrace();
-		}
 
-		while (true)
+		this.init();
+
+		while (this.running)
 		{
-			try
+			checkRequestedExit();
+
+			this.timer.updateTimer();
+
+			for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
 			{
-
-				while (this.running)
-				{
-					checkRequestedExit();
-
-					this.timer.updateTimer();
-
-					for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
-					{
-						update();
-					}
-
-					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-					this.render(this.timer.renderPartialTicks);
-				}
-			} catch (Exception e)
-			{
-				e.printStackTrace();
-				this.stop();
+				update();
 			}
-			this.cleanupResources();
-			break;
+
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+			this.render(this.timer.renderPartialTicks);
 		}
+		this.cleanupResources();
 	}
 
 	/**
