@@ -2,6 +2,7 @@ package com.zerra.common;
 
 import java.util.concurrent.ExecutorService;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,5 +58,16 @@ public class Zerra implements Runnable
 	public static Logger logger()
 	{
 		return LOGGER;
+	}
+
+	/**
+	 * Schedules a new task.
+	 * 
+	 * @param runnable - The task to schedule.
+	 */
+	public void schedule(Runnable runnable)
+	{
+		Validate.notNull(runnable);
+		this.pool.execute(runnable);
 	}
 }

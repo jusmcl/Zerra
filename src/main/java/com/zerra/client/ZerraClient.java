@@ -3,7 +3,6 @@ package com.zerra.client;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -164,17 +163,6 @@ public class ZerraClient extends Zerra
 			Display.update();
 		else
 			this.stop();
-	}
-
-	/**
-	 * Schedules a new task.
-	 * 
-	 * @param runnable - The task to schedule.
-	 */
-	public void schedule(Runnable runnable)
-	{
-		Validate.notNull(runnable);
-		this.pool.execute(runnable);
 	}
 
 	/**

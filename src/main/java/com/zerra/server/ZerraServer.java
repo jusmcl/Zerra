@@ -2,7 +2,6 @@ package com.zerra.server;
 
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.Validate;
 import org.joml.Vector3i;
 
 import com.zerra.client.state.LoadingManager;
@@ -139,12 +138,6 @@ public class ZerraServer extends Zerra
 	public static ZerraServer getInstance()
 	{
 		return (ZerraServer) instance;
-	}
-
-	public void schedule(Runnable runnable)
-	{
-		Validate.notNull(runnable);
-		this.pool.execute(runnable);
 	}
 
 	public boolean isReady()
