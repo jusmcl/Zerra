@@ -10,6 +10,7 @@ import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerConnectionManager;
+import com.zerra.server.world.ServerWorld;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -111,7 +112,7 @@ public class ZerraServer extends Zerra
 	{
 		this.timer = new Timer(20);
 
-		this.world = new World("world");
+		this.world = new ServerWorld("world");
 		World world = ZerraServer.getInstance().getWorld();
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++)
