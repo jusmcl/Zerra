@@ -53,6 +53,9 @@ public class ModLoader
 					if(!DOMAIN_PATTERN.matcher(domain).matches())
 					{
 						throw new RuntimeException(String.format("The domain name '%s' is invalid for the pattern '%s'", domain, DOMAIN_PATTERN.pattern()));
+					}else if(modManager.loadedMods.containsKey(domain))
+					{
+						throw new RuntimeException(String.format("The domain name '%s' was already loaded during this session", domain));
 					}
 
 					modManager.loadedMods.put(domain, mod);
