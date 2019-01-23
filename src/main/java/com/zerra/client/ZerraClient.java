@@ -271,7 +271,7 @@ public class ZerraClient extends Zerra
 		this.renderingManager.getTextureManager().dispose();
 		this.pool.shutdown();
 		instance = null;
-		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime) + " seconds");
+		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime));
 	}
 
 	/**
