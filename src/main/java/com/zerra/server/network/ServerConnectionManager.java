@@ -47,7 +47,6 @@ public class ServerConnectionManager
 					// A client shouldn't be able to shut down a remote server.
 					if (!ZerraServer.getInstance().isCurrentlyRemote())
 					{
-						this.server.close();
 						ZerraServer.getInstance().stop();
 					}
 				}
