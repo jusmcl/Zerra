@@ -25,7 +25,7 @@ public class WorldState extends State
 		{
 			e.printStackTrace();
 		}
-		zerraClient.getConnectionManager().switchToInternalServer();
+		zerraClient.getConnectionManager().connect();
 	}
 
 	@Override

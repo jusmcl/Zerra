@@ -1,35 +1,49 @@
 package com.zerra.common.network.msg;
 
-import org.joml.Vector3fc;
-
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
+import com.zerra.common.network.MessageHandler;
+import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
-
+import org.joml.Vector3fc;
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageEntityMove implements Message
-{
+import java.util.UUID;
 
+public class MessageEntityMove extends Message
+{
+	private UUID entityUuid;
 	private Vector3fc entityPos;
 	private Vector3fc entityVel;
 
 	public MessageEntityMove(Entity entity)
 	{
-		this(entity.getActualPosition(), entity.getVelocity());
-	}
-
-	public MessageEntityMove(Vector3fc entityPos, Vector3fc entityVel)
-	{
-		this.entityPos = entityPos;
-		this.entityVel = entityVel;
+		this.entityUuid = entity.getUuid();
+		this.entityPos = entity.getActualPosition();
+		this.entityVel = entity.getVelocity();
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.ENTITY_MOVE).putFloat(entityPos.x()).putFloat(entityPos.y()).putFloat(entityPos.z()).putFloat(entityVel.x()).putFloat(entityVel.y())
-				.putFloat(entityVel.z());
+		putUuid(packet, this.entityUuid)
+			.putFloat(entityPos.x()).putFloat(entityPos.y()).putFloat(entityPos.z())
+			.putFloat(entityVel.x()).putFloat(entityVel.y()).putFloat(entityVel.z());
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		this.entityUuid = readUuid(client);
+		//TODO: Finish
+	}
+
+	public static class Handler implements MessageHandler<MessageEntityMove>
+	{
+		@Override
+		public void handleMessage(MessageEntityMove message, World world)
+		{
+			//TODO
+		}
+	}
 }

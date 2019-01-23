@@ -1,23 +1,40 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
-
+import com.zerra.common.network.MessageHandler;
+import com.zerra.common.world.World;
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageDisconnect implements Message
-{
-	String uuid;
+import java.util.UUID;
 
-	public MessageDisconnect(String uuid)
+public class MessageDisconnect extends Message
+{
+	private UUID uuid;
+
+	public MessageDisconnect(UUID uuid)
 	{
 		this.uuid = uuid;
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.CLIENT_DISCONNECT).putString(uuid);
+		putUuid(packet, this.uuid);
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		this.uuid = readUuid(client);
+	}
+
+	public static class Handler implements MessageHandler<MessageDisconnect>
+	{
+		@Override
+		public void handleMessage(MessageDisconnect message, World world)
+		{
+			//TODO
+		}
+	}
 }

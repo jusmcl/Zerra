@@ -1,124 +1,81 @@
 package com.zerra.server.network;
 
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.zerra.common.network.Opcodes;
-import com.zerra.common.network.PacketSender;
-import com.zerra.common.network.msg.MessagePing;
-import com.zerra.common.network.msg.MessageUnknownRequest;
+import com.zerra.common.network.ConnectionManager;
+import com.zerra.common.network.Message;
 import com.zerra.server.ZerraServer;
-
 import simplenet.Client;
 import simplenet.Server;
 
-public class ServerConnectionManager
-{
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
-	private Server server;
-	private PacketSender sender;
+public class ServerConnectionManager extends ConnectionManager<Server>
+{
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 
 	public ServerConnectionManager()
 	{
-		sender = new PacketSender(this);
+		this(LOCALHOST);
 	}
 
-	public void createListeners()
+	public ServerConnectionManager(String address)
 	{
-
-		server.onConnect(client ->
-		{
-			client.readByteAlways(opcode ->
-			{
-
-				// When a client closes
-				if (opcode == Opcodes.CLIENT_DISCONNECT)
-				{
-					// Close the client no matter what.
-					client.close();
-
-					client.readString(uuid ->
-					{
-						clients.remove(UUID.fromString(uuid));
-						ZerraServer.logger().info("Player with UUID " + uuid + " has left the game.");
-					});
-
-					// A client shouldn't be able to shut down a remote server.
-					if (!ZerraServer.getInstance().isCurrentlyRemote())
-					{
-						this.server.close();
-						ZerraServer.getInstance().stop();
-					}
-				}
-
-				// When a client (host or non host) connects to the server.
-				else if (opcode == Opcodes.CLIENT_CONNECT)
-				{
-					client.readString(uuid ->
-					{
-						clients.put(UUID.fromString(uuid), client);
-						ZerraServer.logger().info("Player with UUID " + uuid + " has joined the game.");
-					});
-					// For when a non host client leaves the server.
-				} else if (opcode == Opcodes.CLIENT_PING)
-				{
-					client.readLong(time -> this.sender.sendToClient(client, new MessagePing(time)));
-				} else
-				{
-					this.sender.sendToClient(client, new MessageUnknownRequest("The client made an unknown request! This should not happen."));
-				}
-			});
-		});
+		this(address == null ? LOCALHOST : address, PORT);
 	}
 
-	public void bindInternally()
+	public ServerConnectionManager(String address, int port)
 	{
-		server = new Server();
-		this.createListeners();
-		server.bind("localhost", 43594);
-		ZerraServer.getInstance().setCurrentlyRemote(false);
-	}
+		super(new Server());
 
-	/**
-	 * Try to bind to an address + port. If the server is by default remote (meaning
-	 * it's a standalone server), do not fall back to an internal server. If the
-	 * server is by default not remote (internal), it is a client + server combo and
-	 * should fall back to an internal if this fails.
-	 */
-	public void bindRemotely(String address, int port)
-	{
+		boolean isLocalHost = LOCALHOST.equals(address);
 
-		if (ZerraServer.getInstance().isNaturallyRemote())
+		try
 		{
-			server.bind(address, port);
-		} else
+			receiver.bind(address, port);
+		}
+		catch(RuntimeException e)
 		{
-			try
+			if (isLocalHost)
 			{
-				server.bind(address, port);
-				ZerraServer.getInstance().setCurrentlyRemote(true);
-			} catch (Exception e)
+				LOGGER.error(String.format("Unable to bind to %s:%s!", address, port), e);
+			}
+			else
 			{
-				e.printStackTrace();
-				ZerraServer.getInstance().setCurrentlyRemote(false);
+				LOGGER.warn("Unable to bind to {}:{}, falling back to localhost", address, port);
+				receiver.bind(LOCALHOST, PORT);
+				isLocalHost = true;
 			}
 		}
+
+		ZerraServer.getInstance().setCurrentlyRemote(isLocalHost);
 	}
 
-	public void close()
+	@Override
+	public void createListeners()
 	{
-		this.server.close();
-		this.server = null;
+		receiver.onConnect(client -> client.readIntAlways(id -> handleMessage(client, id)));
 	}
 
-	public ConcurrentHashMap<UUID, Client> getClients()
+	@Override
+	public void sendToServer(Message message)
+	{
+		LOGGER.warn("Can't send to server from the server!");
+	}
+
+	@Override
+	public void sendToClient(Message message, Client client)
+	{
+		message.prepare().writeAndFlush(client);
+	}
+
+	@Override
+	public void sendToAllClients(Message message)
+	{
+		getClients().values().forEach(client -> message.prepare().writeAndFlush(client));
+	}
+
+	private ConcurrentHashMap<UUID, Client> getClients()
 	{
 		return this.clients;
-	}
-
-	public PacketSender getSender()
-	{
-		return this.sender;
 	}
 }

@@ -1,16 +1,15 @@
 package com.zerra.common;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
+import com.zerra.common.event.EventHandler;
+import com.zerra.common.util.Timer;
+import com.zerra.common.world.World;
+import com.zerra.common.world.tile.Tiles;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.zerra.common.event.EventHandler;
-import com.zerra.common.util.Timer;
-import com.zerra.common.world.World;
-import com.zerra.server.network.ServerConnectionManager;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Zerra implements Runnable
 {
@@ -25,8 +24,6 @@ public class Zerra implements Runnable
 	protected World world;
 
 	protected EventHandler eventHandler;
-
-	protected ServerConnectionManager serverManager;
 
 	public Zerra()
 	{
@@ -46,8 +43,12 @@ public class Zerra implements Runnable
 	{
 	}
 
-	protected void init() throws Throwable
+	protected void init()
 	{
+		this.start();
+
+		ZerraContentInit.init();
+		Tiles.registerTiles();
 	}
 
 	public World getWorld()

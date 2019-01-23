@@ -1,15 +1,15 @@
 package com.zerra.server;
 
-import java.util.concurrent.Executors;
-
-import org.joml.Vector3i;
-
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
+import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
+import org.joml.Vector3i;
+
+import java.util.concurrent.Executors;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -26,9 +26,11 @@ public class ZerraServer extends Zerra
 
 	private String address;
 
+	private ServerConnectionManager serverManager;
+
 	public ZerraServer(boolean isNaturallyRemote)
 	{
-		this(isNaturallyRemote, "localhost");
+		this(isNaturallyRemote, ConnectionManager.LOCALHOST);
 	}
 
 	public ZerraServer(boolean isNaturallyRemote, String address)
@@ -43,8 +45,6 @@ public class ZerraServer extends Zerra
 		this.isCurrentlyRemote = false;
 
 		serverManager = new ServerConnectionManager();
-
-		this.start();
 	}
 
 	/**
@@ -81,17 +81,8 @@ public class ZerraServer extends Zerra
 	{
 		this.init();
 
-		if (!this.isNaturallyRemote)
-		{
-			this.serverManager.bindInternally();
-		} else
-		{
-			this.serverManager.bindRemotely(address, 43594);
-		}
-
 		while (this.running)
 		{
-
 			this.timer.updateTimer();
 
 			for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
@@ -109,9 +100,14 @@ public class ZerraServer extends Zerra
 	@Override
 	protected void init()
 	{
+		super.init();
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
+
+		this.serverManager = this.isNaturallyRemote ? new ServerConnectionManager(address) : new ServerConnectionManager();
+		this.serverManager.setWorld(this.world);
+
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++)
 		{

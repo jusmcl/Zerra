@@ -1,73 +1,68 @@
 package com.zerra.client.network;
 
-import java.util.UUID;
-
-import com.zerra.client.ZerraClient;
-import com.zerra.common.network.Opcodes;
-import com.zerra.common.network.PacketSender;
+import com.zerra.common.network.ConnectionManager;
+import com.zerra.common.network.Message;
 import com.zerra.common.network.msg.MessageConnect;
-
+import com.zerra.common.world.World;
 import simplenet.Client;
 
-public class ClientConnectionManager
-{
+import java.util.UUID;
 
-	private Client client;
-	private PacketSender sender;
+public class ClientConnectionManager extends ConnectionManager<Client>
+{
 	private UUID uuid;
 
 	public ClientConnectionManager()
 	{
-		client = new Client();
-		sender = new PacketSender(client);
-
-		this.createListeners();
+		super(new Client());
 	}
 
-	public void switchToInternalServer()
+	public void setWorld(World world)
 	{
-		client.connect("localhost", 43594);
+		this.world = world;
 	}
 
-	public void switchToRemoteServer(String address, int port)
+	public void connect()
 	{
-		client.connect(address, port);
+		connect(LOCALHOST, PORT);
 	}
 
+	public void connect(String address, int port)
+	{
+		receiver.connect(address, port);
+	}
+
+	@Override
 	public void createListeners()
 	{
-		client.onConnect(() ->
+		receiver.onConnect(() ->
 		{
-			ZerraClient.logger().info("Successfully connected to the server!");
+			LOGGER.info("Successfully connected to the server!");
 
 			// TODO: Make this not random.
 			this.uuid = UUID.randomUUID();
-			this.sender.sendToServer(new MessageConnect(uuid.toString()));
+			this.sendToServer(new MessageConnect(uuid));
 		});
 
-		client.readByteAlways(opcode ->
-		{
-			if (opcode == Opcodes.ERROR_BAD_REQUEST)
-			{
-				client.readString(msg -> ZerraClient.logger().warn("The client made a bad request: " + msg));
-			} else if (opcode == Opcodes.CLIENT_PING)
-			{
-				client.readLong(time -> ZerraClient.logger().info("Ping: " + (System.currentTimeMillis() - time) + "ms"));
-			} else if (opcode == Opcodes.ERROR_UNKNOWN_REQUEST)
-			{
-				client.readString(msg -> ZerraClient.logger().warn(msg));
-			}
-		});
+		receiver.readIntAlways(id -> handleMessage(receiver, id));
 	}
 
-	public void disconnect()
+	@Override
+	public void sendToServer(Message message)
 	{
-		this.client.close();
+		message.prepare().writeAndFlush(receiver);
 	}
 
-	public PacketSender getPacketSender()
+	@Override
+	public void sendToClient(Message message, Client client)
 	{
-		return this.sender;
+		LOGGER.warn("Can't send to client from the client!");
+	}
+
+	@Override
+	public void sendToAllClients(Message message)
+	{
+		LOGGER.warn("Can't send to clients from the client!");
 	}
 
 	public UUID getUUID()

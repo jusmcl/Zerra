@@ -1,14 +1,14 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
+import com.zerra.common.network.MessageHandler;
+import com.zerra.common.world.World;
 import com.zerra.common.world.storage.plate.Plate;
-
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessagePlateData implements Message
+public class MessagePlateData extends Message
 {
-
 	private Plate plate;
 
 	public MessagePlateData(Plate plate)
@@ -17,9 +17,27 @@ public class MessagePlateData implements Message
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.PLATE_DATA).putBytes(plate.toBytes());
+		byte[] bytes = plate.toBytes();
+		packet.putInt(bytes.length).putBytes(bytes);
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		final int[] num = new int[1];
+		client.readInt(value -> num[0] = value);
+		//TODO: Fix this... Plate#fromBytes is messed up
+		//client.readBytes(num[0], bytes -> this.plate = Plate.);
+	}
+
+	public static class Handler implements MessageHandler<MessagePlateData>
+	{
+		@Override
+		public void handleMessage(MessagePlateData message, World world)
+		{
+			//TODO
+		}
+	}
 }
