@@ -7,7 +7,6 @@ import org.joml.Vector3i;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.Timer;
-import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
@@ -113,7 +112,6 @@ public class ZerraServer extends Zerra
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
-		World world = ZerraServer.getInstance().getWorld();
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++)
 		{
