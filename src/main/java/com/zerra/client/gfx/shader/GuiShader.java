@@ -1,8 +1,7 @@
 package com.zerra.client.gfx.shader;
 
+import com.zerra.common.Reference;
 import org.joml.Matrix4f;
-
-import com.zerra.ClientLaunch;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -23,7 +22,7 @@ public class GuiShader extends ShaderProgram
 
 	public GuiShader()
 	{
-		super(ClientLaunch.DOMAIN, "gui");
+		super(Reference.DOMAIN, "gui");
 	}
 
 	@Override

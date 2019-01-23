@@ -2,7 +2,7 @@ package com.zerra.client.util;
 
 import java.io.InputStream;
 
-import com.zerra.ClientLaunch;
+import com.zerra.common.Reference;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -27,7 +27,7 @@ public class ResourceLocation
 			this.location = resourceLocationRaw[1];
 		} else
 		{
-			this.domain = ClientLaunch.DOMAIN;
+			this.domain = Reference.DOMAIN;
 			this.location = location;
 		}
 	}

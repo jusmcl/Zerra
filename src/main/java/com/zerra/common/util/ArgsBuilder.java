@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.zerra.common.Reference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.zerra.ClientLaunch;
 import com.zerra.common.world.storage.IOManager;
 
 /**
@@ -44,7 +44,7 @@ public class ArgsBuilder
 	public static ArgsBuilder deserialize(String[] args)
 	{
 		// check if zerra is in a development environment
-		if (ClientLaunch.IS_DEVELOPMENT_BUILD)
+		if (Reference.IS_DEVELOPMENT_BUILD)
 		{
 			LAUNCH.info("Launching from development environment");
 		}
@@ -53,7 +53,7 @@ public class ArgsBuilder
 		// a negative exit code
 		if (args.length == 0)
 		{
-			if (ClientLaunch.IS_DEVELOPMENT_BUILD)
+			if (Reference.IS_DEVELOPMENT_BUILD)
 			{
 				IOManager.init(new File("data"));
 				return new ArgsBuilder("player", "null");

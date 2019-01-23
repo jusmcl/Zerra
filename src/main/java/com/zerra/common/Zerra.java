@@ -7,7 +7,6 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.zerra.ClientLaunch;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
@@ -15,7 +14,7 @@ import com.zerra.server.network.ServerConnectionManager;
 
 public class Zerra implements Runnable
 {
-	protected static final Logger LOGGER = LogManager.getLogger(ClientLaunch.NAME);
+	protected static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
 
 	protected static Zerra instance;
 

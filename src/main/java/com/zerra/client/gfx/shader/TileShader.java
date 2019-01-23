@@ -1,8 +1,8 @@
 package com.zerra.client.gfx.shader;
 
+import com.zerra.common.Reference;
 import org.joml.Matrix4f;
 
-import com.zerra.ClientLaunch;
 import com.zerra.client.gfx.Light;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.util.Maths;
@@ -25,7 +25,7 @@ public class TileShader extends ShaderProgram
 
 	public TileShader()
 	{
-		super(ClientLaunch.DOMAIN, "tile");
+		super(Reference.DOMAIN, "tile");
 	}
 
 	@Override

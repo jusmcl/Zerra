@@ -1,10 +1,10 @@
 package com.zerra.client;
 
+import com.zerra.common.Reference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
-import com.zerra.ClientLaunch;
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
@@ -31,7 +31,7 @@ import com.zerra.common.world.tile.Tiles;
 public class ZerraClient extends Zerra
 {
 
-	private static final Logger LOGGER = LogManager.getLogger(ClientLaunch.NAME);
+	private static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
 
 	private static ZerraClient instance;
 

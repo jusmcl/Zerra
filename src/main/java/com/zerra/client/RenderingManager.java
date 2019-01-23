@@ -2,7 +2,6 @@ package com.zerra.client;
 
 import java.util.Locale;
 
-import com.zerra.ClientLaunch;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
@@ -12,6 +11,7 @@ import com.zerra.client.util.I18n;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Camera;
 import com.zerra.client.view.Display;
+import com.zerra.common.Reference;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 
@@ -27,7 +27,7 @@ public class RenderingManager
 
 	public void init()
 	{
-		Display.createDisplay(ClientLaunch.NAME + " v" + ClientLaunch.VERSION, 1280, 720);
+		Display.createDisplay(Reference.NAME + " v" + Reference.VERSION, 1280, 720);
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 		I18n.setLanguage(new Locale("en", "us"));
 

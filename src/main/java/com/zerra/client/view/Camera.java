@@ -3,11 +3,11 @@ package com.zerra.client.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zerra.common.Reference;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
 
-import com.zerra.ClientLaunch;
 import com.zerra.client.ZerraClient;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
@@ -142,7 +142,7 @@ public class Camera implements ICamera
 
 			// Useful keys to adjust the movement speed of the camera when not locked to the
 			// player.
-			if (ClientLaunch.IS_DEVELOPMENT_BUILD)
+			if (Reference.IS_DEVELOPMENT_BUILD)
 			{
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL))
 				{
