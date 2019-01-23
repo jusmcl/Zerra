@@ -1,6 +1,5 @@
 package com.zerra.client;
 
-import com.zerra.common.Reference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -9,8 +8,10 @@ import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.StateManager;
+import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
+import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.msg.MessageDisconnect;
@@ -83,8 +84,10 @@ public class ZerraClient extends Zerra
 			return;
 
 		LOGGER.info("Stopping...");
-		// TODO: Only attempt a disconnect if the server is even alive to begin with.
-		this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID().toString()));
+		if (StateManager.getActiveState() instanceof WorldState)
+		{
+			this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID().toString()));
+		}
 		this.running = false;
 	}
 
