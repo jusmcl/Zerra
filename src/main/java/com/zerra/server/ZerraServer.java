@@ -1,15 +1,12 @@
 package com.zerra.server;
 
-import java.util.concurrent.Executors;
-
-import org.joml.Vector3i;
-
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.Timer;
-import com.zerra.common.world.storage.Layer;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
+
+import java.util.concurrent.Executors;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -112,14 +109,7 @@ public class ZerraServer extends Zerra
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
-		Layer layer = world.getLayer(0);
-		for (int x = 0; x < 3; x++)
-		{
-			for (int z = 0; z < 3; z++)
-			{
-				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
-			}
-		}
+
 		this.eventHandler = new EventHandler();
 	}
 
