@@ -11,6 +11,7 @@ import com.zerra.client.ZerraClient;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
+import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.common.Reference;
@@ -132,7 +133,7 @@ public class Camera implements ICamera
 				System.out.println("creating world state...");
 				if (StateManager.getActiveState() == null)
 				{
-					StateManager.setActiveState(new WorldState());
+					StateManager.setActiveState(new GameLoadState());
 				} else if (StateManager.getActiveState() instanceof WorldState)
 				{
 					StateManager.setActiveState(null);

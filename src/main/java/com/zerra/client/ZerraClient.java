@@ -135,6 +135,10 @@ public class ZerraClient extends Zerra
 	{
 		this.renderingManager.getCamera().update();
 		this.inputHandler.updateGamepad();
+		if(StateManager.getActiveState() != null) 
+		{
+			StateManager.getActiveState().update();
+		}
 	}
 
 	/**
