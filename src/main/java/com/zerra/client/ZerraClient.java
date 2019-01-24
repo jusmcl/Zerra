@@ -11,6 +11,7 @@ import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
+import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
@@ -48,6 +49,8 @@ public class ZerraClient extends Zerra
 	private RenderingManager renderingManager;
 
 	private ClientConnectionManager client;
+
+	private ClientWorld world;
 
 	public ZerraClient()
 	{
@@ -371,6 +374,11 @@ public class ZerraClient extends Zerra
 
 	public World createWorld(String name, long seed)
 	{
-		return this.world = new World(name, seed);
+		return this.world = new ClientWorld(name, seed);
+	}
+
+	public ClientWorld getWorld()
+	{
+		return this.world;
 	}
 }

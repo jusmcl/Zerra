@@ -44,6 +44,7 @@ public class StateManager
 		if (prevState instanceof WorldState)
 		{
 			ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getConnectionManager().getUUID().toString()));
+			ZerraClient.getInstance().getWorld().stop();
 		} else if (nextState instanceof WorldLoadState)
 		{
 			// Prepare for world...
