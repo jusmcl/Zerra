@@ -23,6 +23,8 @@ public class ZerraServer extends Zerra
 
 	private String address;
 
+	private ServerWorld world;
+
 	public ZerraServer(boolean isNaturallyRemote)
 	{
 		this(isNaturallyRemote, "localhost");
@@ -100,7 +102,7 @@ public class ZerraServer extends Zerra
 
 	private void update()
 	{
-		this.getWorld().update();
+		this.world.update();
 	}
 
 	@Override
@@ -136,5 +138,10 @@ public class ZerraServer extends Zerra
 	public ServerConnectionManager getServerManager()
 	{
 		return this.serverManager;
+	}
+
+	public ServerWorld getWorld()
+	{
+		return this.world;
 	}
 }

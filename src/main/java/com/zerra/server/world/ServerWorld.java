@@ -15,4 +15,15 @@ public class ServerWorld extends World
 		// TODO: Update server world here.
 	}
 
+	@Override
+	public void stop()
+	{
+		this.storageManager.writeWorldDataSafe(null, this.worldData);
+		for (int i = 0; i < this.layers.length; i++)
+		{
+			int layerId = i;
+			this.pool.execute(() -> this.save(layerId));
+		}
+		super.stop();
+	}
 }

@@ -34,11 +34,11 @@ public class World
 	private Random random;
 	private Vector2i worldSpawnPoint;
 
-	private Layer[] layers;
-	private Map<String, WorldData> worldData;
+	protected Layer[] layers;
+	protected Map<String, WorldData> worldData;
 
-	private WorldStorageManager storageManager;
-	private ExecutorService pool;
+	protected WorldStorageManager storageManager;
+	protected ExecutorService pool;
 
 	public World(String name, Long seed)
 	{
@@ -95,12 +95,6 @@ public class World
 	 */
 	public void stop()
 	{
-		this.storageManager.writeWorldDataSafe(null, this.worldData);
-		for (int i = 0; i < this.layers.length; i++)
-		{
-			int layerId = i;
-			this.pool.execute(() -> this.save(layerId));
-		}
 		this.pool.shutdown();
 	}
 

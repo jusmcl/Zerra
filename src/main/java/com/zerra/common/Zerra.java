@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.Timer;
-import com.zerra.common.world.World;
 import com.zerra.server.network.ServerConnectionManager;
 
 public class Zerra implements Runnable
@@ -22,7 +21,6 @@ public class Zerra implements Runnable
 	protected boolean running;
 
 	protected Timer timer;
-	protected World world;
 
 	protected EventHandler eventHandler;
 
@@ -48,11 +46,6 @@ public class Zerra implements Runnable
 
 	protected void init() throws Throwable
 	{
-	}
-
-	public World getWorld()
-	{
-		return world;
 	}
 
 	public EventHandler getEventHandler()
