@@ -1,7 +1,6 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.MessageHandler;
 import com.zerra.common.world.World;
 import simplenet.Client;
 import simplenet.packet.Packet;
@@ -27,12 +26,9 @@ public class MessageUnknownRequest extends Message
 		client.readString(s -> this.error = s);
 	}
 
-	public static class Handler implements MessageHandler<MessageUnknownRequest>
+	@Override
+	public void handle(World world)
 	{
-		@Override
-		public void handleMessage(MessageUnknownRequest message, World world)
-		{
-			//TODO
-		}
+		//TODO
 	}
 }

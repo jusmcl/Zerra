@@ -47,7 +47,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 			}
 		}
 
-		ZerraServer.getInstance().setCurrentlyRemote(isLocalHost);
+		ZerraServer.getInstance().setCurrentlyRemote(!isLocalHost);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.MessageHandler;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import org.joml.Vector3fc;
@@ -38,12 +37,9 @@ public class MessageEntityMove extends Message
 		//TODO: Finish
 	}
 
-	public static class Handler implements MessageHandler<MessageEntityMove>
+	@Override
+	public void handle(World world)
 	{
-		@Override
-		public void handleMessage(MessageEntityMove message, World world)
-		{
-			//TODO
-		}
+		//TODO
 	}
 }

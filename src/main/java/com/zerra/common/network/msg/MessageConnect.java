@@ -1,7 +1,6 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.MessageHandler;
 import com.zerra.common.world.World;
 import simplenet.Client;
 import simplenet.packet.Packet;
@@ -29,12 +28,9 @@ public class MessageConnect extends Message
 		this.uuid = readUuid(client);
 	}
 
-	public static class Handler implements MessageHandler<MessageConnect>
+	@Override
+	public void handle(World world)
 	{
-		@Override
-		public void handleMessage(MessageConnect message, World world)
-		{
-			//TODO
-		}
+		//TODO
 	}
 }

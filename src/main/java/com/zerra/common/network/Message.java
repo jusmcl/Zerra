@@ -1,7 +1,6 @@
 package com.zerra.common.network;
 
-import com.zerra.common.util.MiscUtils;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import com.zerra.common.world.World;
 import simplenet.Client;
 import simplenet.packet.Packet;
 
@@ -9,13 +8,9 @@ import java.util.UUID;
 
 public abstract class Message
 {
-	private String domain = null;
 	private Integer id = null;
 
-	public static <T extends Message> T create(Class<T> messageClass)
-	{
-		return MiscUtils.createNewInstance(messageClass);
-	}
+	public Message() {}
 
 	public final Packet prepare()
 	{
@@ -24,18 +19,13 @@ public abstract class Message
 		return packet;
 	}
 
-	public final void setIdAndDomain(int id, String domain)
+	public final Message setId(Integer id)
 	{
 		this.id = id;
-		this.domain = domain;
+		return this;
 	}
 
-	public String getDomain()
-	{
-		return domain;
-	}
-
-	public Integer getId()
+	public final Integer getId()
 	{
 		return id;
 	}
@@ -54,11 +44,12 @@ public abstract class Message
 	 */
 	public abstract void readFromClient(Client client);
 
-	@Override
-	public int hashCode()
-	{
-		return new HashCodeBuilder().append(this.domain).append(this.id).toHashCode();
-	}
+	/**
+	 * Implement this and handle this message on the receiving end
+	 *
+	 * @param world The {@link World} instance
+	 */
+	public abstract void handle(World world);
 
 	/*
 		Helper methods

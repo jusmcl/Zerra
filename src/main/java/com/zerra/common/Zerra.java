@@ -15,8 +15,6 @@ public class Zerra implements Runnable
 {
 	protected static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
 
-	protected static Zerra instance;
-
 	protected ExecutorService pool;
 	protected boolean running;
 
@@ -28,7 +26,6 @@ public class Zerra implements Runnable
 	public Zerra()
 	{
 		this.pool = Executors.newCachedThreadPool();
-
 	}
 
 	public void run()
@@ -46,9 +43,6 @@ public class Zerra implements Runnable
 	protected void init()
 	{
 		this.start();
-
-		ZerraContentInit.init();
-		Tiles.registerTiles();
 	}
 
 	public World getWorld()

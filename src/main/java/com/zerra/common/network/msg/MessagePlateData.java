@@ -1,7 +1,6 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.network.Message;
-import com.zerra.common.network.MessageHandler;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.plate.Plate;
 import simplenet.Client;
@@ -32,12 +31,9 @@ public class MessagePlateData extends Message
 		//client.readBytes(num[0], bytes -> this.plate = Plate.);
 	}
 
-	public static class Handler implements MessageHandler<MessagePlateData>
+	@Override
+	public void handle(World world)
 	{
-		@Override
-		public void handleMessage(MessagePlateData message, World world)
-		{
-			//TODO
-		}
+		//TODO
 	}
 }

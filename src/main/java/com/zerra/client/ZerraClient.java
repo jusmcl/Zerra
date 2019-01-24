@@ -8,11 +8,13 @@ import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
 import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
+import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
+import com.zerra.common.world.tile.Tiles;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
@@ -28,9 +30,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class ZerraClient extends Zerra
 {
-
-	private static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
-
 	private static ZerraClient instance;
 
 	private boolean running;
@@ -138,6 +137,11 @@ public class ZerraClient extends Zerra
 	protected void init()
 	{
 		super.init();
+
+		ZerraContentInit.init();
+		//TODO: Move tiles registration into ZerraContentInit
+		Tiles.registerTiles();
+
 		this.timer = new Timer(20);
 		this.renderingManager.init();
 		this.inputHandler = new InputHandler();
@@ -293,14 +297,6 @@ public class ZerraClient extends Zerra
 	public EventHandler getEventHandler()
 	{
 		return eventHandler;
-	}
-
-	/**
-	 * @return The logger for the client.
-	 */
-	public static Logger logger()
-	{
-		return LOGGER;
 	}
 
 	/**

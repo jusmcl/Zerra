@@ -1,28 +1,27 @@
 package com.zerra.common.registry;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
-import com.zerra.common.network.MessageHandler;
 import com.zerra.common.util.Factory;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.tile.TileType;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Registries
 {
-
 	private static final Set<Registry<? extends RegistryNameable>> REGISTRIES = new HashSet<>();
-	private static final Map<Integer, Pair<Class<? extends Message>, MessageHandler<? extends Message>>> MESSAGES = new HashMap<>();
+
+	private static final Map<Integer, Class<? extends Message>> MESSAGES = new HashMap<>();
+	private static final Map<String, Integer> NUM_MESSAGES_BY_DOMAIN = new HashMap<>();
 
 	static
 	{
@@ -149,32 +148,49 @@ public class Registries
 	}
 
 	/**
-	 * Registers a {@link Message} class with its {@link MessageHandler} class
+	 * Registers a {@link Message} class
 	 *
 	 * @param domain Mod domain name
-	 * @param messageClass Message class
-	 * @param handlerClass MessageHandler class
+	 * @param message Message instance
 	 */
-	public static <T extends Message> void registerMessage(String domain, Class<T> messageClass, Class<? extends MessageHandler<T>> handlerClass)
+	public static <T extends Message> void registerMessage(String domain, Class<T> message)
 	{
 		if (StringUtils.isEmpty(domain))
 		{
 			throw new RuntimeException("Can't register Message with null or empty domain!");
 		}
-		MessageHandler<T> handler = MiscUtils.createNewInstance(handlerClass);
-		if (handler != null)
+		if (MESSAGES.containsValue(message))
 		{
-			MESSAGES.put(messageClass.hashCode(), new ImmutablePair<>(messageClass, handler));
+			throw new RuntimeException(String.format("The message class %s has already been registered!", message.getName()));
 		}
+		//Get the next message ID for this domain
+		int nextId = NUM_MESSAGES_BY_DOMAIN.getOrDefault(domain, -1) + 1;
+		//Create hash for message
+		int hash = new HashCodeBuilder().append(domain).append(nextId).toHashCode();
+		if (MESSAGES.containsKey(hash))
+		{
+			throw new RuntimeException(String.format("The hash %s generated for the message class %s already exists!", hash, message.getName()));
+		}
+		//Add the new message
+		MESSAGES.put(hash, message);
+		NUM_MESSAGES_BY_DOMAIN.put(domain, nextId);
 	}
 
 	/**
-	 * Gets the {@link Message} class and {@link MessageHandler} instance for the given ID
+	 * Gets a new {@link Message} instance for the given ID
+	 * Returns null if no message registered for the ID
 	 *
 	 * @param id Message registry ID
 	 */
-	public static Pair<Class<? extends Message>, MessageHandler<? extends Message>> getMessage(int id)
+	@Nullable
+	public static Message getMessage(int id)
 	{
-		return MESSAGES.get(id);
+		Class<? extends Message> messageClass = MESSAGES.get(id);
+		if (messageClass == null)
+		{
+			Zerra.logger().warn("No message for id: " + id);
+			return null;
+		}
+		return MiscUtils.createNewInstance(messageClass).setId(id);
 	}
 }

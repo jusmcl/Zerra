@@ -5,6 +5,7 @@ import com.zerra.common.Zerra;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 public class MiscUtils
 {
@@ -23,12 +24,12 @@ public class MiscUtils
 		Constructor<T> constructor = null;
 		try
 		{
-			constructor = clazz.getConstructor(parameterTypes);
+			constructor = clazz.getDeclaredConstructor(parameterTypes);
 			return constructor.newInstance(arguments);
 		}
 		catch(NoSuchMethodException e)
 		{
-			Zerra.logger().error(String.format("The class %s does not have a constructor with the parameter types: %s!", clazz.getName(), parameterTypes), e);
+			Zerra.logger().error(String.format("The class %s does not have a constructor with the parameter types: %s!", clazz.getName(), Arrays.toString(parameterTypes)), e);
 		}
 		catch(IllegalAccessException e)
 		{

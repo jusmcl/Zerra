@@ -1,10 +1,12 @@
 package com.zerra.server;
 
 import com.zerra.common.Zerra;
+import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
 import org.joml.Vector3i;
@@ -20,6 +22,7 @@ import java.util.concurrent.Executors;
  */
 public class ZerraServer extends Zerra
 {
+	private static ZerraServer instance;
 
 	private boolean isNaturallyRemote;
 	private boolean isCurrentlyRemote;
@@ -37,7 +40,6 @@ public class ZerraServer extends Zerra
 	{
 		super();
 		instance = this;
-		this.pool = Executors.newCachedThreadPool();
 
 		this.address = address;
 
@@ -101,6 +103,15 @@ public class ZerraServer extends Zerra
 	protected void init()
 	{
 		super.init();
+
+		//Check if this is remote, as we don't want to register everything twice if running integrated
+		if (this.isCurrentlyRemote)
+		{
+			ZerraContentInit.init();
+			//TODO: Move tiles registration into ZerraContentInit
+			Tiles.registerTiles();
+		}
+
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
@@ -121,7 +132,7 @@ public class ZerraServer extends Zerra
 
 	public static ZerraServer getInstance()
 	{
-		return (ZerraServer) instance;
+		return instance;
 	}
 
 	public boolean isNaturallyRemote()

@@ -2,7 +2,6 @@ package com.zerra.common.network;
 
 import com.zerra.common.registry.Registries;
 import com.zerra.common.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import simplenet.Client;
@@ -30,18 +29,16 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 
 	protected void handleMessage(Client client, int messageId)
 	{
-		Pair<Class<? extends Message>, MessageHandler<? extends Message>> pair = Registries.getMessage(messageId);
-		if (pair == null)
+		Message message = Registries.getMessage(messageId);
+		if (message == null)
 		{
 			LOGGER.error("Unknown message: " + messageId);
 		}
 		else
 		{
-			//Create the Message instance and read the data from the client
-			Message message = Message.create(pair.getLeft());
+			//Read the data from the client and handle the message
 			message.readFromClient(client);
-			//Get the MessageHandler and handle the Message
-			pair.getRight().handleMessage(message, world);
+			message.handle(world);
 		}
 	}
 
