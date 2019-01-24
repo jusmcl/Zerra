@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.view.Display;
+import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.server.ZerraServer;
 
 public class WorldState extends State
@@ -52,5 +53,15 @@ public class WorldState extends State
 		zerraClient.getRenderingManager().getGuiRenderer().setProjectionMatrix(GuiRenderer.FBO_MATRIX);
 		zerraClient.getRenderingManager().getGuiRenderer().renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
 		zerraClient.getRenderingManager().getGuiRenderer().restoreProjectionMatrix();
+	}
+
+	public static void cleanupWorldState()
+	{
+		ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getConnectionManager().getUUID().toString()));
+
+		if (ZerraClient.getInstance().getWorld() != null)
+		{
+			ZerraClient.getInstance().getWorld().stop();
+		}
 	}
 }

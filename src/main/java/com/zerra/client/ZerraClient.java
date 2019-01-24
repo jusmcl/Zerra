@@ -15,7 +15,6 @@ import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
-import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
@@ -91,14 +90,9 @@ public class ZerraClient extends Zerra
 		// Alert the server that we are disconnecting from it.
 		if (StateManager.getActiveState() instanceof WorldState)
 		{
-			this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID().toString()));
+			WorldState.cleanupWorldState();
 		}
 
-		// Close the client world if it is still active.
-		if (this.world != null)
-		{
-			this.world.stop();
-		}
 		this.running = false;
 	}
 
