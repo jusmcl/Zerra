@@ -1,13 +1,14 @@
 package com.zerra.api.mod;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.zerra.client.ZerraClient;
 import com.zerra.common.Zerra;
 import com.zerra.common.util.MiscUtils;
+
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
-
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -47,20 +48,19 @@ public class ModLoader
 			{
 				try
 				{
-					//TODO: Use MiscUtils.createInstance once the messages branch is merged
+					// TODO: Use MiscUtils.createInstance once the messages branch is merged
 					Mod mod = (Mod) modClass.getConstructor().newInstance();
 					String domain = mod.getModInfo().getDomain();
-					if(!DOMAIN_PATTERN.matcher(domain).matches())
+					if (!DOMAIN_PATTERN.matcher(domain).matches())
 					{
 						throw new RuntimeException(String.format("The domain name '%s' is invalid for the pattern '%s'", domain, DOMAIN_PATTERN.pattern()));
-					}else if(modManager.loadedMods.containsKey(domain))
+					} else if (modManager.loadedMods.containsKey(domain))
 					{
 						throw new RuntimeException(String.format("The domain name '%s' was already loaded during this session", domain));
 					}
 
 					modManager.loadedMods.put(domain, mod);
-				}
-				catch(Exception e)
+				} catch (Exception e)
 				{
 					Zerra.logger().error("Failed to load mod " + modClass.getName(), e);
 				}

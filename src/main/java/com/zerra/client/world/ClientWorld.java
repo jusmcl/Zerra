@@ -10,4 +10,9 @@ public class ClientWorld extends World
 		super(name, seed);
 	}
 
+	@Override
+	public void update()
+	{
+		// TODO: Update client world here.
+	}
 }

@@ -1,6 +1,5 @@
 package com.zerra.client.state;
 
-import com.zerra.client.ZerraClient;
 import com.zerra.client.state.TexturePreloader.LoadingState;
 
 public class GameLoadState extends State
@@ -15,7 +14,7 @@ public class GameLoadState extends State
 	@Override
 	public void update()
 	{
-		if(TexturePreloader.getState() == LoadingState.Done) 
+		if (TexturePreloader.getState() == LoadingState.Done)
 		{
 			StateManager.setActiveState(new WorldState());
 			TexturePreloader.setState(LoadingState.None);
@@ -25,7 +24,6 @@ public class GameLoadState extends State
 	@Override
 	public void render()
 	{
-		
 
 	}
 }

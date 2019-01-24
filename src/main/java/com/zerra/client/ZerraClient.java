@@ -84,9 +84,17 @@ public class ZerraClient extends Zerra
 			return;
 
 		LOGGER.info("Stopping...");
+
+		// Alert the server that we are disconnecting from it.
 		if (StateManager.getActiveState() instanceof WorldState)
 		{
 			this.client.getPacketSender().sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID().toString()));
+		}
+
+		// Close the client world if it is still active.
+		if (this.world != null)
+		{
+			this.world.stop();
 		}
 		this.running = false;
 	}
@@ -135,7 +143,7 @@ public class ZerraClient extends Zerra
 	{
 		this.renderingManager.getCamera().update();
 		this.inputHandler.updateGamepad();
-		if(StateManager.getActiveState() != null) 
+		if (StateManager.getActiveState() != null)
 		{
 			StateManager.getActiveState().update();
 		}

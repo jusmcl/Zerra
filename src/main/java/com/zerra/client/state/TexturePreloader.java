@@ -23,8 +23,6 @@ public class TexturePreloader implements Runnable
 			currentLoadingState = state;
 		}
 	}
-	
-	
 
 	public static LoadingState getState()
 	{
@@ -33,11 +31,11 @@ public class TexturePreloader implements Runnable
 			return currentLoadingState;
 		}
 	}
-	
+
 	private static final Logger LOGGER = LogManager.getLogger("Texture Loader");
 
 	@Override
-	public void run() 
+	public void run()
 	{
 		setState(LoadingState.Loading);
 		// TODO: Use log4j logger without errors
@@ -46,7 +44,5 @@ public class TexturePreloader implements Runnable
 		System.out.println("Done loading textures");
 		setState(LoadingState.Done);
 	}
-	
-	
 
 }

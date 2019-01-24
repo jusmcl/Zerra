@@ -65,7 +65,7 @@ public class World
 			this.layers[i] = new WorldLayer(this, i);
 		}
 
-		//Load 3x3 in the first layer
+		// Load 3x3 in the first layer
 		Layer layer = getLayer(0);
 		for (int x = -1; x <= 1; x++)
 		{
@@ -84,6 +84,10 @@ public class World
 	public void schedule(Runnable command)
 	{
 		this.pool.execute(command);
+	}
+
+	public void update()
+	{
 	}
 
 	/**

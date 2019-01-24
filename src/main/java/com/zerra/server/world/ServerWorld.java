@@ -10,4 +10,9 @@ public class ServerWorld extends World
 		super(name);
 	}
 
+	public void update()
+	{
+		// TODO: Update server world here.
+	}
+
 }

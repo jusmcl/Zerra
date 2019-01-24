@@ -1,12 +1,12 @@
 package com.zerra.server;
 
+import java.util.concurrent.Executors;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.Timer;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
-
-import java.util.concurrent.Executors;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -100,7 +100,7 @@ public class ZerraServer extends Zerra
 
 	private void update()
 	{
-		// Update server world here.
+		this.getWorld().update();
 	}
 
 	@Override
