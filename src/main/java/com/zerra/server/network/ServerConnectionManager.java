@@ -97,6 +97,11 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 		return this.clients;
 	}
 
+	public void addClient(UUID uuid, Client client)
+	{
+		clients.put(uuid, client);
+	}
+
 	public void closeClient(UUID uuid)
 	{
 		Client client = clients.remove(uuid);

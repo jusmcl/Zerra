@@ -2,6 +2,7 @@ package com.zerra.common.network;
 
 import com.zerra.common.Zerra;
 import com.zerra.common.registry.Registries;
+import com.zerra.server.network.ServerConnectionManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import simplenet.Client;
@@ -43,11 +44,13 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		{
 			throw new RuntimeException(String.format("Tried to send a message of type %s which is not registered!", message.getClass().getName()));
 		}
+		message.setId(id);
 		//Attach UUID
 		if (message.includesSender())
 		{
 			message.setSender(getUuid());
 		}
+		LOGGER.debug("Preparing message {}", message.getClass().getName());
 		return message.prepare();
 	}
 
@@ -61,6 +64,11 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		else
 		{
 			//Read the data from the client and handle the message
+			if (message.includesSender() && this instanceof ServerConnectionManager)
+			{
+				message.setSender(message.readUuid(client));
+			}
+			LOGGER.debug("Handling message type {} from sender {}", message.getClass().getName(), message.getSender());
 			message.readFromClient(client);
 			zerra.handleMessage(message);
 		}
