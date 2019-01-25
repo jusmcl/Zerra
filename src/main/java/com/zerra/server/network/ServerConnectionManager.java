@@ -1,16 +1,18 @@
 package com.zerra.server.network;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nullable;
+
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.server.ZerraServer;
+
 import simplenet.Client;
 import simplenet.Server;
 import simplenet.packet.Packet;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
@@ -30,14 +32,12 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 		try
 		{
 			receiver.bind(address, port);
-		}
-		catch(RuntimeException e)
+		} catch (RuntimeException e)
 		{
 			if (isLocalHost)
 			{
 				LOGGER.error(String.format("Unable to bind to %s:%s!", address, port), e);
-			}
-			else
+			} else
 			{
 				LOGGER.warn("Unable to bind to {}:{}, falling back to localhost", address, port);
 				receiver.bind(LOCALHOST, PORT);
@@ -51,7 +51,8 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	@Override
 	public void createListeners()
 	{
-		//TODO: We need a way of adding to the clients map when we get a MessageConnect!
+		// TODO: We need a way of adding to the clients map when we get a
+		// MessageConnect!
 		receiver.onConnect(client -> client.readIntAlways(id -> handleMessage(client, id)));
 	}
 
@@ -81,7 +82,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	}
 
 	@Override
-	protected UUID getUuid()
+	protected UUID getUUID()
 	{
 		return null;
 	}

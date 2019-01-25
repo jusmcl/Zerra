@@ -36,6 +36,7 @@ public class Factory<T> implements RegistryNameable
 	 */
 	public T getNewInstance()
 	{
-		return MiscUtils.createNewInstance(this.type, new Class[]{String.class}, registryName);
+		return MiscUtils.createNewInstance(this.type, new Class[]
+		{ String.class }, registryName);
 	}
 }

@@ -1,16 +1,18 @@
 package com.zerra.common.network;
 
+import java.util.UUID;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.registry.Registries;
 import com.zerra.server.network.ServerConnectionManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import simplenet.Client;
 import simplenet.channel.Channeled;
 import simplenet.packet.Packet;
 import simplenet.receiver.Receiver;
-
-import java.util.UUID;
 
 public abstract class ConnectionManager<T extends Receiver & Channeled>
 {
@@ -28,27 +30,27 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 	}
 
 	/**
-	 * Sets the message ID and client UUID as sender and returns the result of {@link Message#prepare()}
+	 * Sets the message ID and client UUID as sender and returns the result of
+	 * {@link Message#prepare()}
 	 */
 	protected Packet prepareMessage(Message message)
 	{
-		//Validate side message is meant for
+		// Validate side message is meant for
 		if (!isMessageSideValid(message.getReceivingSide()))
 		{
-			LOGGER.warn("Message {} was attempted to be sent even though the message is for {}!",
-				message.getClass().getName(), message.getReceivingSide());
+			LOGGER.warn("Message {} was attempted to be sent even though the message is for {}!", message.getClass().getName(), message.getReceivingSide());
 		}
-		//Get message ID from registry
+		// Get message ID from registry
 		Integer id = Registries.getMessageId(message.getClass());
 		if (id == null)
 		{
 			throw new RuntimeException(String.format("Tried to send a message of type %s which is not registered!", message.getClass().getName()));
 		}
 		message.setId(id);
-		//Attach UUID
+		// Attach UUID
 		if (message.includesSender())
 		{
-			message.setSender(getUuid());
+			message.setSender(getUUID());
 		}
 		LOGGER.debug("Preparing message {}", message.getClass().getName());
 		return message.prepare();
@@ -60,13 +62,12 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		if (message == null)
 		{
 			LOGGER.error("Unknown message: " + messageId);
-		}
-		else
+		} else
 		{
-			//Read the data from the client and handle the message
+			// Read the data from the client and handle the message
 			if (message.includesSender() && this instanceof ServerConnectionManager)
 			{
-				message.setSender(message.readUuid(client));
+				message.setSender(message.readUUID(client));
 			}
 			LOGGER.debug("Handling message type {} from sender {}", message.getClass().getName(), message.getSender());
 			message.readFromClient(client);
@@ -89,7 +90,7 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		receiver.close();
 	}
 
-	protected abstract UUID getUuid();
+	protected abstract UUID getUUID();
 
 	protected abstract boolean isMessageSideValid(MessageSide side);
 }

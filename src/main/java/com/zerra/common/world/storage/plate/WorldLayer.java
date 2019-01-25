@@ -122,7 +122,7 @@ public class WorldLayer implements Layer
 	@Override
 	public Entity getEntityByUUID(UUID uuid)
 	{
-		return loadedEntities.stream().filter(entity -> entity.getUuid().equals(uuid)).findFirst().orElse(null);
+		return loadedEntities.stream().filter(entity -> entity.getUUID().equals(uuid)).findFirst().orElse(null);
 	}
 
 	@Override

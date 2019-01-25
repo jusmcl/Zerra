@@ -1,41 +1,46 @@
 package com.zerra.common.network;
 
-import com.zerra.common.Zerra;
-import com.zerra.common.world.World;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
+
+import com.zerra.common.Zerra;
+import com.zerra.common.world.World;
+
 import simplenet.Client;
 import simplenet.packet.Packet;
-
-import javax.annotation.Nonnull;
-import java.util.UUID;
 
 public abstract class Message
 {
 	private Integer id = null;
-	protected UUID senderUuid = null;
+	protected UUID senderUUID = null;
 
-	public Message() {}
+	public Message()
+	{
+	}
 
 	/**
-	 * Prepares this message to be send by writing the data into a new {@link Packet} and returning it
+	 * Prepares this message to be send by writing the data into a new
+	 * {@link Packet} and returning it
 	 */
 	public final Packet prepare()
 	{
 		Packet packet = Packet.builder().putInt(this.id);
-		if (this.includesSender() && this.senderUuid != null)
+		if (this.includesSender() && this.senderUUID != null)
 		{
-			putUuid(packet, this.senderUuid);
+			putUUID(packet, this.senderUUID);
 		}
 		writeToPacket(packet);
 		return packet;
 	}
 
 	/**
-	 * Sets the unique ID for this message type
-	 * This is called and set automatically
+	 * Sets the unique ID for this message type This is called and set automatically
 	 */
 	public final Message setId(Integer id)
 	{
@@ -54,9 +59,9 @@ public abstract class Message
 	/**
 	 * Sets the sender UUID to the message
 	 */
-	public final Message setSender(UUID senderUuid)
+	public final Message setSender(UUID senderUUID)
 	{
-		this.senderUuid = senderUuid;
+		this.senderUUID = senderUUID;
 		return this;
 	}
 
@@ -65,11 +70,12 @@ public abstract class Message
 	 */
 	public final UUID getSender()
 	{
-		return senderUuid;
+		return senderUUID;
 	}
 
 	/**
-	 * Returns if this message should have a UUID attached from the client who sent it
+	 * Returns if this message should have a UUID attached from the client who sent
+	 * it
 	 */
 	public boolean includesSender()
 	{
@@ -109,15 +115,15 @@ public abstract class Message
 	public abstract Message handle(Zerra zerra, World world);
 
 	/*
-		Helper methods
+	 * Helper methods
 	 */
 
-	protected final Packet putUuid(Packet packet, UUID uuid)
+	protected final Packet putUUID(Packet packet, UUID uuid)
 	{
 		return packet.putLong(uuid.getMostSignificantBits()).putLong(uuid.getLeastSignificantBits());
 	}
 
-	protected final UUID readUuid(Client client)
+	protected final UUID readUUID(Client client)
 	{
 		final long[] uuidParts = new long[2];
 		client.readLong(value -> uuidParts[0] = value);

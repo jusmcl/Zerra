@@ -38,11 +38,12 @@ public class TextureManager
 		boundTextureLocation = MISSING_TEXTURE_LOCATION;
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this);
 	}
-	
+
 	/**
 	 * Registers all tiles into the texture map
 	 */
-	public void registerTiles() {
+	public void registerTiles()
+	{
 		Tile[] tiles = Tiles.getTiles();
 		for (Tile tile : tiles)
 		{
@@ -60,7 +61,7 @@ public class TextureManager
 	{
 		textures.put(location, texture);
 	}
-	
+
 	/**
 	 * @return The texture map the game uses.
 	 */

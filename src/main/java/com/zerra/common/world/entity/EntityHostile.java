@@ -33,7 +33,7 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 	@Override
 	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo)
 	{
-		ubo.setUUID("attackTarget", attackTarget.getUuid());
+		ubo.setUUID("attackTarget", attackTarget.getUUID());
 		return super.writeToUBO(ubo);
 	}
 
@@ -41,8 +41,8 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 	public void readFromUBO(@Nonnull UBObjectWrapper ubo)
 	{
 		super.readFromUBO(ubo);
-		UUID targetUuid = ubo.getUUID("attackTarget");
-		if (targetUuid == null)
+		UUID targetUUID = ubo.getUUID("attackTarget");
+		if (targetUUID == null)
 		{
 			attackTarget = null;
 		} else
@@ -50,7 +50,7 @@ public abstract class EntityHostile extends EntityLiving implements HostileEntit
 			Layer layer = getLayer();
 			if (layer != null)
 			{
-				attackTarget = layer.getEntityByUUID(targetUuid);
+				attackTarget = layer.getEntityByUUID(targetUUID);
 			}
 		}
 	}

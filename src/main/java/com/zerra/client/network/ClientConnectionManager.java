@@ -1,13 +1,14 @@
 package com.zerra.client.network;
 
+import java.util.UUID;
+
 import com.zerra.client.ZerraClient;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.network.msg.MessageConnect;
-import simplenet.Client;
 
-import java.util.UUID;
+import simplenet.Client;
 
 public class ClientConnectionManager extends ConnectionManager<Client>
 {
@@ -68,7 +69,7 @@ public class ClientConnectionManager extends ConnectionManager<Client>
 	}
 
 	@Override
-	public UUID getUuid()
+	public UUID getUUID()
 	{
 		return this.uuid;
 	}

@@ -1,5 +1,7 @@
 package com.zerra.client;
 
+import org.lwjgl.opengl.GL11;
+
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
@@ -15,7 +17,6 @@ import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tiles;
-import org.lwjgl.opengl.GL11;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -82,7 +83,7 @@ public class ZerraClient extends Zerra
 		{
 			WorldState.cleanupWorldState();
 		}
-    
+
 		this.running = false;
 	}
 
@@ -146,13 +147,14 @@ public class ZerraClient extends Zerra
 		super.init();
 
 		ZerraContentInit.init();
-		//TODO: Move tiles registration into ZerraContentInit
+		// TODO: Move tiles registration into ZerraContentInit
 		Tiles.registerTiles();
 
 		this.timer = new Timer(20);
 		this.renderingManager.init();
 		this.inputHandler = new InputHandler();
-		//TODO: Create the world and set the world in the ClientConnectionManager instance
+		// TODO: Create the world and set the world in the ClientConnectionManager
+		// instance
 
 		modManager = new ModManager();
 		modManager.setupMods();

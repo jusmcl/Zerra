@@ -4,6 +4,7 @@ import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.World;
+
 import simplenet.Client;
 import simplenet.packet.Packet;
 
@@ -39,10 +40,9 @@ public class MessagePing extends Message
 		if (zerra.isClient())
 		{
 			Zerra.logger().info("Ping: " + MiscUtils.millisSinceTime(this.snapshot));
-		}
-		else
+		} else
 		{
-			//Send the time snapshot back to the client
+			// Send the time snapshot back to the client
 			return new MessagePing(this.snapshot);
 		}
 		return null;

@@ -1,5 +1,16 @@
 package com.zerra.common.registry;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.zerra.common.Zerra;
@@ -8,15 +19,6 @@ import com.zerra.common.util.Factory;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.item.Item;
 import com.zerra.common.world.tile.TileType;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class Registries
 {
@@ -165,22 +167,22 @@ public class Registries
 		{
 			throw new RuntimeException(String.format("The message class %s has already been registered!", message.getName()));
 		}
-		//Get the next message ID for this domain
+		// Get the next message ID for this domain
 		int nextId = NUM_MESSAGES_BY_DOMAIN.getOrDefault(domain, -1) + 1;
-		//Create hash for message
+		// Create hash for message
 		int hash = new HashCodeBuilder().append(domain).append(nextId).toHashCode();
 		if (MESSAGES.containsKey(hash))
 		{
 			throw new RuntimeException(String.format("The hash %s generated for the message class %s already exists!", hash, message.getName()));
 		}
-		//Add the new message
+		// Add the new message
 		MESSAGES.put(hash, message);
 		NUM_MESSAGES_BY_DOMAIN.put(domain, nextId);
 	}
 
 	/**
-	 * Gets a new {@link Message} instance for the given ID
-	 * Returns null if no message registered for the ID
+	 * Gets a new {@link Message} instance for the given ID Returns null if no
+	 * message registered for the ID
 	 *
 	 * @param id Message registry ID
 	 */
@@ -197,8 +199,8 @@ public class Registries
 	}
 
 	/**
-	 * Gets the ID for the given {@link Message} class
-	 * Returns null if message was not registered
+	 * Gets the ID for the given {@link Message} class Returns null if message was
+	 * not registered
 	 *
 	 * @param messageClass Message class
 	 */

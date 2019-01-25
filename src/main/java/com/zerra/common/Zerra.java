@@ -1,20 +1,17 @@
 package com.zerra.common;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
-import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import com.zerra.common.event.EventHandler;
-import com.zerra.common.util.Timer;
-import com.zerra.server.network.ServerConnectionManager;
 
 public abstract class Zerra implements Runnable
 {
@@ -85,29 +82,26 @@ public abstract class Zerra implements Runnable
 	{
 		single.execute(() ->
 		{
-			//Validate side message is meant for
+			// Validate side message is meant for
 			if (!message.getReceivingSide().isValidForSide(this.isClient()))
 			{
-				logger().warn("Message {} was sent to {} even though its receiving side is {}!",
-					message.getClass().getName(), this.isClient() ? "client" : "server", message.getReceivingSide());
+				logger().warn("Message {} was sent to {} even though its receiving side is {}!", message.getClass().getName(), this.isClient() ? "client" : "server", message.getReceivingSide());
 				return;
 			}
 			Message m = message.handle(this, getWorld());
-			//If returned a new message, send it back to the sender
+			// If returned a new message, send it back to the sender
 			if (m != null)
 			{
 				if (!message.includesSender() && !this.isClient())
 				{
 					logger().warn("Message of type {} sent from client wants to reply from server, but no sender UUID was included!", message.getClass().getName());
-				}
-				else
+				} else
 				{
 					if (message.getSender() == null)
 					{
-						//Server doesn't have a sender UUID
+						// Server doesn't have a sender UUID
 						getConnectionManager().sendToServer(m);
-					}
-					else
+					} else
 					{
 						getConnectionManager().sendToClient(m, message.getSender());
 					}

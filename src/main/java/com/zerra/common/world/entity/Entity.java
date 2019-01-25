@@ -113,7 +113,7 @@ public abstract class Entity implements Storable
 	 *
 	 * @return Unique ID
 	 */
-	public UUID getUuid()
+	public UUID getUUID()
 	{
 		return uuid;
 	}

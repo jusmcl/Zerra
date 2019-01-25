@@ -1,5 +1,7 @@
 package com.zerra.server;
 
+import org.joml.Vector3i;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
@@ -9,7 +11,6 @@ import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
-import org.joml.Vector3i;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -28,7 +29,7 @@ public class ZerraServer extends Zerra
 	private String address;
 
 	private ServerConnectionManager serverManager;
-  
+
 	private ServerWorld world;
 
 	public ZerraServer(boolean isNaturallyRemote)
@@ -102,11 +103,12 @@ public class ZerraServer extends Zerra
 	{
 		super.init();
 
-		//Check if this is remote, as we don't want to register everything twice if running integrated
+		// Check if this is remote, as we don't want to register everything twice if
+		// running integrated
 		if (this.isCurrentlyRemote)
 		{
 			ZerraContentInit.init();
-			//TODO: Move tiles registration into ZerraContentInit
+			// TODO: Move tiles registration into ZerraContentInit
 			Tiles.registerTiles();
 		}
 
@@ -124,7 +126,7 @@ public class ZerraServer extends Zerra
 				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
 			}
 		}
-    
+
 		this.eventHandler = new EventHandler();
 	}
 

@@ -1,11 +1,12 @@
 package com.zerra.common.util;
 
-import com.zerra.common.Zerra;
-
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+
+import javax.annotation.Nullable;
+
+import com.zerra.common.Zerra;
 
 public class MiscUtils
 {
@@ -31,20 +32,16 @@ public class MiscUtils
 		{
 			constructor = clazz.getDeclaredConstructor(parameterTypes);
 			return constructor.newInstance(arguments);
-		}
-		catch(NoSuchMethodException e)
+		} catch (NoSuchMethodException e)
 		{
 			Zerra.logger().error(String.format("The class %s does not have a constructor with the parameter types: %s!", clazz.getName(), Arrays.toString(parameterTypes)), e);
-		}
-		catch(IllegalAccessException e)
+		} catch (IllegalAccessException e)
 		{
 			Zerra.logger().error(String.format("Cannot access the constructor %s!", constructor), e);
-		}
-		catch(InstantiationException e)
+		} catch (InstantiationException e)
 		{
 			Zerra.logger().error(String.format("Cannot instantiate the class %s because it is abstract!", clazz.getName()), e);
-		}
-		catch(InvocationTargetException e)
+		} catch (InvocationTargetException e)
 		{
 			Zerra.logger().error(String.format("The constructor %s threw an exception!", constructor), e);
 		}

@@ -24,6 +24,6 @@ public class GameLoadState extends State
 	@Override
 	public void render()
 	{
-		
+
 	}
 }
