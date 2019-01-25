@@ -1,13 +1,13 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
-
+import com.zerra.common.world.World;
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageUnknownRequest implements Message
+public class MessageUnknownRequest extends Message
 {
-
 	private String error;
 
 	public MessageUnknownRequest(String error)
@@ -16,9 +16,21 @@ public class MessageUnknownRequest implements Message
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST).putString(error);
+		packet.putString(error);
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		client.readString(s -> this.error = s);
+	}
+
+	@Override
+	public Message handle(Zerra zerra, World world)
+	{
+		Zerra.logger().warn("Unknown request: " + this.error);
+		return null;
+	}
 }

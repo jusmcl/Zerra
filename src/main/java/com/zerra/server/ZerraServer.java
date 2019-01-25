@@ -1,12 +1,15 @@
 package com.zerra.server;
 
-import java.util.concurrent.Executors;
-
 import com.zerra.common.Zerra;
+import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
+import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.util.Timer;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
+import org.joml.Vector3i;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -17,33 +20,31 @@ import com.zerra.server.world.ServerWorld;
  */
 public class ZerraServer extends Zerra
 {
+	private static ZerraServer instance;
 
 	private boolean isNaturallyRemote;
 	private boolean isCurrentlyRemote;
 
 	private String address;
 
+	private ServerConnectionManager serverManager;
+  
 	private ServerWorld world;
 
 	public ZerraServer(boolean isNaturallyRemote)
 	{
-		this(isNaturallyRemote, "localhost");
+		this(isNaturallyRemote, ConnectionManager.LOCALHOST);
 	}
 
 	public ZerraServer(boolean isNaturallyRemote, String address)
 	{
 		super();
 		instance = this;
-		this.pool = Executors.newCachedThreadPool();
 
 		this.address = address;
 
 		this.isNaturallyRemote = isNaturallyRemote;
 		this.isCurrentlyRemote = false;
-
-		serverManager = new ServerConnectionManager();
-
-		this.start();
 	}
 
 	/**
@@ -80,17 +81,8 @@ public class ZerraServer extends Zerra
 	{
 		this.init();
 
-		if (!this.isNaturallyRemote)
-		{
-			this.serverManager.bindInternally();
-		} else
-		{
-			this.serverManager.bindRemotely(address, 43594);
-		}
-
 		while (this.running)
 		{
-
 			this.timer.updateTimer();
 
 			for (int i = 0; i < Math.min(10, this.timer.elapsedTicks); ++i)
@@ -108,16 +100,43 @@ public class ZerraServer extends Zerra
 	@Override
 	protected void init()
 	{
+		super.init();
+
+		//Check if this is remote, as we don't want to register everything twice if running integrated
+		if (this.isCurrentlyRemote)
+		{
+			ZerraContentInit.init();
+			//TODO: Move tiles registration into ZerraContentInit
+			Tiles.registerTiles();
+		}
+
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
 
+		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? address : null);
+
+		Layer layer = world.getLayer(0);
+		for (int x = 0; x < 3; x++)
+		{
+			for (int z = 0; z < 3; z++)
+			{
+				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
+			}
+		}
+    
 		this.eventHandler = new EventHandler();
+	}
+
+	@Override
+	public boolean isClient()
+	{
+		return false;
 	}
 
 	public static ZerraServer getInstance()
 	{
-		return (ZerraServer) instance;
+		return instance;
 	}
 
 	public boolean isNaturallyRemote()
@@ -135,11 +154,13 @@ public class ZerraServer extends Zerra
 		this.isCurrentlyRemote = isCurrentlyRemote;
 	}
 
-	public ServerConnectionManager getServerManager()
+	@Override
+	public ServerConnectionManager getConnectionManager()
 	{
-		return this.serverManager;
+		return serverManager;
 	}
 
+	@Override
 	public ServerWorld getWorld()
 	{
 		return this.world;

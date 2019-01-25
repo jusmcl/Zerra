@@ -1,9 +1,5 @@
 package com.zerra.client;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.opengl.GL11;
-
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
@@ -12,13 +8,14 @@ import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
-import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
+import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tiles;
+import org.lwjgl.opengl.GL11;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -31,9 +28,6 @@ import com.zerra.common.world.tile.Tiles;
  */
 public class ZerraClient extends Zerra
 {
-
-	private static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
-
 	private static ZerraClient instance;
 
 	private boolean running;
@@ -47,7 +41,7 @@ public class ZerraClient extends Zerra
 
 	private RenderingManager renderingManager;
 
-	private ClientConnectionManager client;
+	private ClientConnectionManager clientConnection;
 
 	private ClientWorld world;
 
@@ -56,11 +50,7 @@ public class ZerraClient extends Zerra
 		super();
 		instance = this;
 
-		this.client = new ClientConnectionManager();
-
 		this.renderingManager = new RenderingManager();
-
-		this.start();
 	}
 
 	/**
@@ -92,7 +82,7 @@ public class ZerraClient extends Zerra
 		{
 			WorldState.cleanupWorldState();
 		}
-
+    
 		this.running = false;
 	}
 
@@ -153,13 +143,27 @@ public class ZerraClient extends Zerra
 	@Override
 	protected void init()
 	{
+		super.init();
+
+		ZerraContentInit.init();
+		//TODO: Move tiles registration into ZerraContentInit
 		Tiles.registerTiles();
+
 		this.timer = new Timer(20);
 		this.renderingManager.init();
 		this.inputHandler = new InputHandler();
+		//TODO: Create the world and set the world in the ClientConnectionManager instance
 
 		modManager = new ModManager();
 		modManager.setupMods();
+
+		this.clientConnection = new ClientConnectionManager(this);
+	}
+
+	@Override
+	public boolean isClient()
+	{
+		return true;
 	}
 
 	/**
@@ -311,14 +315,6 @@ public class ZerraClient extends Zerra
 	}
 
 	/**
-	 * @return The logger for the client.
-	 */
-	public static Logger logger()
-	{
-		return LOGGER;
-	}
-
-	/**
 	 * @return The client instance.
 	 */
 	public static ZerraClient getInstance()
@@ -361,9 +357,10 @@ public class ZerraClient extends Zerra
 	/**
 	 * @return The connection manager for the client.
 	 */
+	@Override
 	public ClientConnectionManager getConnectionManager()
 	{
-		return this.client;
+		return this.clientConnection;
 	}
 
 	public World createWorld(String name, long seed)
@@ -371,6 +368,7 @@ public class ZerraClient extends Zerra
 		return this.world = new ClientWorld(name, seed);
 	}
 
+	@Override
 	public ClientWorld getWorld()
 	{
 		return this.world;

@@ -1,13 +1,13 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
-
+import com.zerra.common.world.World;
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageBadRequest implements Message
+public class MessageBadRequest extends Message
 {
-
 	private String error;
 
 	public MessageBadRequest(String error)
@@ -16,9 +16,21 @@ public class MessageBadRequest implements Message
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.ERROR_BAD_REQUEST).putString(error);
+		packet.putString(this.error);
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		client.readString(s -> this.error = s);
+	}
+
+	@Override
+	public Message handle(Zerra zerra, World world)
+	{
+		Zerra.logger().warn("Bad request: " + this.error);
+		return null;
+	}
 }

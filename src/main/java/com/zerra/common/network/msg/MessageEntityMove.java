@@ -1,35 +1,62 @@
 package com.zerra.common.network.msg;
 
-import org.joml.Vector3fc;
-
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
-import com.zerra.common.network.Opcodes;
+import com.zerra.common.network.MessageSide;
+import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
-
+import org.joml.Vector3fc;
+import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageEntityMove implements Message
-{
+import javax.annotation.Nonnull;
+import java.util.UUID;
 
+public class MessageEntityMove extends Message
+{
+	private UUID entityUuid;
 	private Vector3fc entityPos;
 	private Vector3fc entityVel;
 
 	public MessageEntityMove(Entity entity)
 	{
-		this(entity.getActualPosition(), entity.getVelocity());
+		this.entityUuid = entity.getUuid();
+		this.entityPos = entity.getActualPosition();
+		this.entityVel = entity.getVelocity();
 	}
 
-	public MessageEntityMove(Vector3fc entityPos, Vector3fc entityVel)
+	@Nonnull
+	@Override
+	public MessageSide getReceivingSide()
 	{
-		this.entityPos = entityPos;
-		this.entityVel = entityVel;
+		return MessageSide.CLIENT;
 	}
 
 	@Override
-	public Packet prepare()
+	protected void writeToPacket(Packet packet)
 	{
-		return Packet.builder().putByte(Opcodes.ENTITY_MOVE).putFloat(entityPos.x()).putFloat(entityPos.y()).putFloat(entityPos.z()).putFloat(entityVel.x()).putFloat(entityVel.y())
-				.putFloat(entityVel.z());
+		putUuid(packet, this.entityUuid);
+		putVector3f(packet, this.entityPos);
+		putVector3f(packet, this.entityVel);
 	}
 
+	@Override
+	public void readFromClient(Client client)
+	{
+		this.entityUuid = readUuid(client);
+		this.entityPos = readVector3f(client);
+		this.entityVel = readVector3f(client);
+	}
+
+	@Override
+	public Message handle(Zerra zerra, World world)
+	{
+		Entity entity = world.getEntityByUUID(this.entityUuid);
+		if (entity != null)
+		{
+			entity.setPosition(this.entityPos);
+			entity.setVelocity(this.entityVel);
+		}
+		return null;
+	}
 }

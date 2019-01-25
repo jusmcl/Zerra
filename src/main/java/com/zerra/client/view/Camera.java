@@ -154,7 +154,7 @@ public class Camera implements ICamera
 				}
 				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
 				{
-					ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessagePing());
+					ZerraClient.getInstance().getConnectionManager().sendToServer(new MessagePing());
 				}
 			}
 
