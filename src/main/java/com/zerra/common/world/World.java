@@ -40,13 +40,23 @@ public class World
 	protected WorldStorageManager storageManager;
 	protected ExecutorService pool;
 
+	private long seed;
+
 	public World(String name, Long seed)
 	{
 		this.logger = LogManager.getLogger("World-" + name);
 		this.name = name;
 		this.random = new Random();
 
-		this.random.setSeed(seed == null ? random.nextLong() : seed);
+		if (seed == null)
+		{
+			this.seed = random.nextLong();
+			this.random.setSeed(this.seed);
+		} else
+		{
+			this.random.setSeed(seed);
+			this.seed = seed;
+		}
 
 		this.storageManager = new WorldStorageManager(this);
 
@@ -238,5 +248,10 @@ public class World
 	{
 		Layer layer = getLayer(layerId);
 		return layer == null ? null : layer.getWorldData(registryName);
+	}
+
+	public long getSeed()
+	{
+		return this.seed;
 	}
 }
