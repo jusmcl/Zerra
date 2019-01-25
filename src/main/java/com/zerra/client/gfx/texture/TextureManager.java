@@ -7,9 +7,12 @@ import javax.annotation.Nonnull;
 
 import org.lwjgl.opengl.GL11;
 
+import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -26,12 +29,25 @@ public class TextureManager
 	@Nonnull
 	private ResourceLocation boundTextureLocation;
 	private Map<ResourceLocation, ITexture> textures;
+	private TextureMap textureMap;
 
 	public TextureManager()
 	{
 		textures = new HashMap<ResourceLocation, ITexture>();
 		this.loadTexture(MISSING_TEXTURE_LOCATION, Loader.loadTexture(LoadingUtils.createMissingImage(256, 256)));
 		boundTextureLocation = MISSING_TEXTURE_LOCATION;
+		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this);
+	}
+	
+	/**
+	 * Registers all tiles into the texture map
+	 */
+	public void registerTiles() {
+		Tile[] tiles = Tiles.getTiles();
+		for (Tile tile : tiles)
+		{
+			this.textureMap.register(tile.getTexture());
+		}
 	}
 
 	/**
@@ -43,6 +59,14 @@ public class TextureManager
 	public void loadTexture(ResourceLocation location, ITexture texture)
 	{
 		textures.put(location, texture);
+	}
+	
+	/**
+	 * @return The texture map the game uses.
+	 */
+	public TextureMap getTextureMap()
+	{
+		return textureMap;
 	}
 
 	/**

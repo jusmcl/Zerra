@@ -1,16 +1,21 @@
 package com.zerra.client;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
+
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.StateManager;
+import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
+import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
-import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
@@ -45,6 +50,8 @@ public class ZerraClient extends Zerra
 
 	private ClientConnectionManager clientConnection;
 
+	private ClientWorld world;
+
 	public ZerraClient()
 	{
 		super();
@@ -76,8 +83,13 @@ public class ZerraClient extends Zerra
 			return;
 
 		LOGGER.info("Stopping...");
-		// TODO: Only attempt a disconnect if the server is even alive to begin with.
-		this.clientConnection.sendToServer(new MessageDisconnect());
+
+		// Alert the server that we are disconnecting from it.
+		if (StateManager.getActiveState() instanceof WorldState)
+		{
+			WorldState.cleanupWorldState();
+		}
+    
 		this.running = false;
 	}
 
@@ -125,6 +137,10 @@ public class ZerraClient extends Zerra
 	{
 		this.renderingManager.getCamera().update();
 		this.inputHandler.updateGamepad();
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().update();
+		}
 	}
 
 	/**
@@ -278,7 +294,7 @@ public class ZerraClient extends Zerra
 		this.renderingManager.getTextureManager().dispose();
 		this.pool.shutdown();
 		instance = null;
-		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime) + " seconds");
+		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime));
 	}
 
 	/**
@@ -355,6 +371,11 @@ public class ZerraClient extends Zerra
 
 	public World createWorld(String name, long seed)
 	{
-		return this.world = new World(name, seed);
+		return this.world = new ClientWorld(name, seed);
+	}
+
+	public ClientWorld getWorld()
+	{
+		return this.world;
 	}
 }

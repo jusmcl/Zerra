@@ -3,7 +3,6 @@ package com.zerra.client.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zerra.common.Reference;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFW;
@@ -12,13 +11,14 @@ import com.zerra.client.ZerraClient;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.input.gamepad.Gamepad;
 import com.zerra.client.input.gamepad.Joystick;
+import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
+import com.zerra.common.Reference;
 import com.zerra.common.network.msg.MessagePing;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
-import com.zerra.server.ZerraServer;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -133,7 +133,7 @@ public class Camera implements ICamera
 				System.out.println("creating world state...");
 				if (StateManager.getActiveState() == null)
 				{
-					StateManager.setActiveState(new WorldState());
+					StateManager.setActiveState(new GameLoadState());
 				} else if (StateManager.getActiveState() instanceof WorldState)
 				{
 					StateManager.setActiveState(null);
@@ -163,9 +163,9 @@ public class Camera implements ICamera
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
 		if (!this.platePosition.equals(this.lastPlatePosition))
 		{
-			// TODO: FIX THIS. The client should never access the server like this. This
-			// should be accessing the client's world, not the servers.
-			World world = ZerraServer.getInstance().getWorld();
+			World world = ZerraClient.getInstance().getWorld();
+			// TODO: Causes a NPE, but that's fine, because it's a good reminder to setup
+			// the client world anyways.
 			Layer layer = world.getLayer(0);
 			List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
 			for (int x = 0; x < 3; x++)

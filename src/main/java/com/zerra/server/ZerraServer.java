@@ -1,5 +1,7 @@
 package com.zerra.server;
 
+import java.util.concurrent.Executors;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
@@ -28,6 +30,8 @@ public class ZerraServer extends Zerra
 	private String address;
 
 	private ServerConnectionManager serverManager;
+  
+	private ServerWorld world;
 
 	public ZerraServer(boolean isNaturallyRemote)
 	{
@@ -92,7 +96,7 @@ public class ZerraServer extends Zerra
 
 	private void update()
 	{
-		// Update server world here.
+		this.world.update();
 	}
 
 	@Override
@@ -122,6 +126,7 @@ public class ZerraServer extends Zerra
 				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
 			}
 		}
+    
 		this.eventHandler = new EventHandler();
 	}
 
@@ -155,5 +160,10 @@ public class ZerraServer extends Zerra
 	public ServerConnectionManager getConnectionManager()
 	{
 		return serverManager;
+	}
+
+	public ServerWorld getWorld()
+	{
+		return this.world;
 	}
 }

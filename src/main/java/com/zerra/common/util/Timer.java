@@ -7,7 +7,7 @@ public class Timer
 	 * How many full ticks have turned over since the last call to updateTimer(),
 	 * capped at 10.
 	 */
-	public int elapsedTicks;
+	public volatile int elapsedTicks;
 	/**
 	 * How much time has elapsed since the last tick, in ticks, for use by display
 	 * rendering routines (range: 0.0 - 1.0).

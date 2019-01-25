@@ -1,12 +1,12 @@
 package com.zerra.client.gfx.shader;
 
-import com.zerra.common.Reference;
 import org.joml.Matrix4f;
 
 import com.zerra.client.gfx.Light;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.util.Maths;
 import com.zerra.client.view.ICamera;
+import com.zerra.common.Reference;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>

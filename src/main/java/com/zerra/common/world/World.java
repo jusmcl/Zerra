@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Vector2i;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import com.zerra.common.util.MiscUtils;
@@ -33,11 +34,11 @@ public class World
 	private Random random;
 	private Vector2i worldSpawnPoint;
 
-	private Layer[] layers;
-	private Map<String, WorldData> worldData;
+	protected Layer[] layers;
+	protected Map<String, WorldData> worldData;
 
-	private WorldStorageManager storageManager;
-	private ExecutorService pool;
+	protected WorldStorageManager storageManager;
+	protected ExecutorService pool;
 
 	public World(String name, Long seed)
 	{
@@ -51,18 +52,28 @@ public class World
 
 		worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
 
+		this.pool = Executors.newCachedThreadPool();
+
 		// Create and load WorldData for world
 		this.worldData = WorldDataHandler.getDataForWorld();
 		Map<String, WorldData> data = this.storageManager.readWorldDataSafe(null);
 		this.worldData.putAll(data);
 
 		this.layers = new Layer[6];
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < this.layers.length; i++)
 		{
 			this.layers[i] = new WorldLayer(this, i);
 		}
 
-		this.pool = Executors.newCachedThreadPool();
+		// Load 3x3 in the first layer
+		Layer layer = getLayer(0);
+		for (int x = -1; x <= 1; x++)
+		{
+			for (int z = -1; z <= 1; z++)
+			{
+				layer.loadPlate(new Vector3i(x, 0, z));
+			}
+		}
 	}
 
 	public World(String name)
@@ -75,17 +86,15 @@ public class World
 		this.pool.execute(command);
 	}
 
+	public void update()
+	{
+	}
+
 	/**
 	 * Shuts down the thread pool and saves all data
 	 */
 	public void stop()
 	{
-		this.storageManager.writeWorldDataSafe(null, this.worldData);
-		for (int i = 0; i < this.layers.length; i++)
-		{
-			int layerId = i;
-			this.pool.execute(() -> this.save(layerId));
-		}
 		this.pool.shutdown();
 	}
 

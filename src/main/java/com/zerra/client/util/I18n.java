@@ -107,8 +107,8 @@ public class I18n
 			bundle = ResourceBundle.getBundle("assets/" + Reference.DOMAIN + "/lang/" + (locale.getLanguage() + "_" + locale.getCountry()).toLowerCase(), locale);
 		} catch (Exception e)
 		{
-			ZerraClient.logger().warn(
-					"Could not locate language file for \'" + Reference.DOMAIN + "\' locale \'" + locale.getLanguage() + "_" + locale.getCountry() + "\'. Defaulting to english language file.");
+			ZerraClient.logger()
+					.warn("Could not locate language file for \'" + Reference.DOMAIN + "\' locale \'" + locale.getLanguage() + "_" + locale.getCountry() + "\'. Defaulting to english language file.");
 			try
 			{
 				bundle = ResourceBundle.getBundle("assets/" + Reference.DOMAIN + "/lang/" + (english.getLanguage() + "_" + english.getCountry()).toLowerCase(), english);

@@ -3,9 +3,6 @@ package com.zerra.client.state;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zerra.client.ZerraClient;
-import com.zerra.common.network.msg.MessageDisconnect;
-
 public class StateManager
 {
 
@@ -43,7 +40,7 @@ public class StateManager
 		// If we are leaving a world state... clean up the world.
 		if (prevState instanceof WorldState)
 		{
-			ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
+			WorldState.cleanupWorldState();
 		} else if (nextState instanceof WorldLoadState)
 		{
 			// Prepare for world...

@@ -12,6 +12,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.zerra.common.event.EventHandler;
+import com.zerra.common.util.Timer;
+import com.zerra.server.network.ServerConnectionManager;
+
 public abstract class Zerra implements Runnable
 {
 	protected static final Logger LOGGER = LogManager.getLogger(Reference.NAME);
@@ -21,7 +25,6 @@ public abstract class Zerra implements Runnable
 	protected boolean running;
 
 	protected Timer timer;
-	protected World world;
 
 	protected EventHandler eventHandler;
 
