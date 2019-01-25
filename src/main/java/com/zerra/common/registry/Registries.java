@@ -1,5 +1,7 @@
 package com.zerra.common.registry;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.Factory;
@@ -20,7 +22,7 @@ public class Registries
 {
 	private static final Set<Registry<? extends RegistryNameable>> REGISTRIES = new HashSet<>();
 
-	private static final Map<Integer, Class<? extends Message>> MESSAGES = new HashMap<>();
+	private static final BiMap<Integer, Class<? extends Message>> MESSAGES = HashBiMap.create();
 	private static final Map<String, Integer> NUM_MESSAGES_BY_DOMAIN = new HashMap<>();
 
 	static
@@ -192,5 +194,16 @@ public class Registries
 			return null;
 		}
 		return MiscUtils.createNewInstance(messageClass).setId(id);
+	}
+
+	/**
+	 * Gets the ID for the given {@link Message} class
+	 * Returns null if message was not registered
+	 *
+	 * @param messageClass Message class
+	 */
+	public static Integer getMessageId(Class<? extends Message> messageClass)
+	{
+		return MESSAGES.inverse().get(messageClass);
 	}
 }

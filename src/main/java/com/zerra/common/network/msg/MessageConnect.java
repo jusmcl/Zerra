@@ -1,36 +1,43 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import simplenet.Client;
 import simplenet.packet.Packet;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class MessageConnect extends Message
 {
-	private UUID uuid;
+	public MessageConnect() {}
 
-	public MessageConnect(UUID uuid)
+	@Override
+	public boolean includesSender()
 	{
-		this.uuid = uuid;
+		return true;
+	}
+
+	@Nonnull
+	@Override
+	public MessageSide getReceivingSide()
+	{
+		return MessageSide.SERVER;
 	}
 
 	@Override
-	protected void writeToPacket(Packet packet)
-	{
-		putUuid(packet, this.uuid);
-	}
+	protected void writeToPacket(Packet packet) {}
 
 	@Override
-	public void readFromClient(Client client)
-	{
-		this.uuid = readUuid(client);
-	}
+	public void readFromClient(Client client) {}
 
 	@Override
-	public void handle(World world)
+	public Message handle(Zerra zerra, World world)
 	{
-		//TODO
+		//TODO: Player connection logic? e.g. spawn player and notify clients
+		Zerra.logger().info("Player with UUID {} has joined the server", this.senderUuid);
+		return null;
 	}
 }

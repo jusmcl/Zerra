@@ -1,10 +1,14 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.common.world.storage.plate.Plate;
 import simplenet.Client;
 import simplenet.packet.Packet;
+
+import javax.annotation.Nonnull;
 
 public class MessagePlateData extends Message
 {
@@ -13,6 +17,13 @@ public class MessagePlateData extends Message
 	public MessagePlateData(Plate plate)
 	{
 		this.plate = plate;
+	}
+
+	@Nonnull
+	@Override
+	public MessageSide getReceivingSide()
+	{
+		return MessageSide.CLIENT;
 	}
 
 	@Override
@@ -32,8 +43,9 @@ public class MessagePlateData extends Message
 	}
 
 	@Override
-	public void handle(World world)
+	public Message handle(Zerra zerra, World world)
 	{
-		//TODO
+		//TODO: handle message
+		return null;
 	}
 }

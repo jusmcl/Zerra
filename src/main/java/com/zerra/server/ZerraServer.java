@@ -11,8 +11,6 @@ import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
 import org.joml.Vector3i;
 
-import java.util.concurrent.Executors;
-
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
@@ -45,8 +43,6 @@ public class ZerraServer extends Zerra
 
 		this.isNaturallyRemote = isNaturallyRemote;
 		this.isCurrentlyRemote = false;
-
-		serverManager = new ServerConnectionManager();
 	}
 
 	/**
@@ -116,8 +112,7 @@ public class ZerraServer extends Zerra
 
 		this.world = new ServerWorld("world");
 
-		this.serverManager = this.isNaturallyRemote ? new ServerConnectionManager(address) : new ServerConnectionManager();
-		this.serverManager.setWorld(this.world);
+		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? address : null);
 
 		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++)
@@ -128,6 +123,12 @@ public class ZerraServer extends Zerra
 			}
 		}
 		this.eventHandler = new EventHandler();
+	}
+
+	@Override
+	public boolean isClient()
+	{
+		return false;
 	}
 
 	public static ZerraServer getInstance()
@@ -150,8 +151,9 @@ public class ZerraServer extends Zerra
 		this.isCurrentlyRemote = isCurrentlyRemote;
 	}
 
-	public ServerConnectionManager getServerManager()
+	@Override
+	public ServerConnectionManager getConnectionManager()
 	{
-		return this.serverManager;
+		return serverManager;
 	}
 }

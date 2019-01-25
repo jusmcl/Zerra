@@ -1,9 +1,10 @@
 package com.zerra.client.network;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.network.msg.MessageConnect;
-import com.zerra.common.world.World;
 import simplenet.Client;
 
 import java.util.UUID;
@@ -12,14 +13,9 @@ public class ClientConnectionManager extends ConnectionManager<Client>
 {
 	private UUID uuid;
 
-	public ClientConnectionManager()
+	public ClientConnectionManager(ZerraClient zerra)
 	{
-		super(new Client());
-	}
-
-	public void setWorld(World world)
-	{
-		this.world = world;
+		super(zerra, new Client());
 	}
 
 	public void connect()
@@ -41,7 +37,7 @@ public class ClientConnectionManager extends ConnectionManager<Client>
 
 			// TODO: Make this not random.
 			this.uuid = UUID.randomUUID();
-			this.sendToServer(new MessageConnect(uuid));
+			this.sendToServer(new MessageConnect());
 		});
 
 		receiver.readIntAlways(id -> handleMessage(receiver, id));
@@ -50,7 +46,13 @@ public class ClientConnectionManager extends ConnectionManager<Client>
 	@Override
 	public void sendToServer(Message message)
 	{
-		message.prepare().writeAndFlush(receiver);
+		prepareMessage(message).writeAndFlush(receiver);
+	}
+
+	@Override
+	public void sendToClient(Message message, UUID uuid)
+	{
+		LOGGER.warn("Can't send to client from the client!");
 	}
 
 	@Override
@@ -65,8 +67,15 @@ public class ClientConnectionManager extends ConnectionManager<Client>
 		LOGGER.warn("Can't send to clients from the client!");
 	}
 
-	public UUID getUUID()
+	@Override
+	public UUID getUuid()
 	{
 		return this.uuid;
+	}
+
+	@Override
+	protected boolean isMessageSideValid(MessageSide side)
+	{
+		return side.isForServer();
 	}
 }

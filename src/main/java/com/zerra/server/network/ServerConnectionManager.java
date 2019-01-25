@@ -2,10 +2,13 @@ package com.zerra.server.network;
 
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.server.ZerraServer;
 import simplenet.Client;
 import simplenet.Server;
+import simplenet.packet.Packet;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,19 +16,14 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 {
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 
-	public ServerConnectionManager()
+	public ServerConnectionManager(ZerraServer zerra, @Nullable String address)
 	{
-		this(LOCALHOST);
+		this(zerra, address == null ? LOCALHOST : address, PORT);
 	}
 
-	public ServerConnectionManager(String address)
+	public ServerConnectionManager(ZerraServer zerra, String address, int port)
 	{
-		this(address == null ? LOCALHOST : address, PORT);
-	}
-
-	public ServerConnectionManager(String address, int port)
-	{
-		super(new Server());
+		super(zerra, new Server());
 
 		boolean isLocalHost = LOCALHOST.equals(address);
 
@@ -47,12 +45,13 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 			}
 		}
 
-		ZerraServer.getInstance().setCurrentlyRemote(!isLocalHost);
+		zerra.setCurrentlyRemote(!isLocalHost);
 	}
 
 	@Override
 	public void createListeners()
 	{
+		//TODO: We need a way of adding to the clients map when we get a MessageConnect!
 		receiver.onConnect(client -> client.readIntAlways(id -> handleMessage(client, id)));
 	}
 
@@ -63,19 +62,47 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	}
 
 	@Override
+	public void sendToClient(Message message, UUID uuid)
+	{
+		sendToClient(message, clients.get(uuid));
+	}
+
+	@Override
 	public void sendToClient(Message message, Client client)
 	{
-		message.prepare().writeAndFlush(client);
+		prepareMessage(message).writeAndFlush(client);
 	}
 
 	@Override
 	public void sendToAllClients(Message message)
 	{
-		getClients().values().forEach(client -> message.prepare().writeAndFlush(client));
+		Packet packet = prepareMessage(message);
+		getClients().values().forEach(packet::writeAndFlush);
+	}
+
+	@Override
+	protected UUID getUuid()
+	{
+		return null;
+	}
+
+	@Override
+	protected boolean isMessageSideValid(MessageSide side)
+	{
+		return side.isForClient();
 	}
 
 	private ConcurrentHashMap<UUID, Client> getClients()
 	{
 		return this.clients;
+	}
+
+	public void closeClient(UUID uuid)
+	{
+		Client client = clients.remove(uuid);
+		if (client != null)
+		{
+			client.close();
+		}
 	}
 }

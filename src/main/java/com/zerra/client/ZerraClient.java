@@ -50,8 +50,6 @@ public class ZerraClient extends Zerra
 		super();
 		instance = this;
 
-		this.clientConnection = new ClientConnectionManager();
-
 		this.renderingManager = new RenderingManager();
 	}
 
@@ -79,7 +77,7 @@ public class ZerraClient extends Zerra
 
 		LOGGER.info("Stopping...");
 		// TODO: Only attempt a disconnect if the server is even alive to begin with.
-		this.clientConnection.sendToServer(new MessageDisconnect(this.getConnectionManager().getUUID()));
+		this.clientConnection.sendToServer(new MessageDisconnect());
 		this.running = false;
 	}
 
@@ -149,6 +147,14 @@ public class ZerraClient extends Zerra
 
 		modManager = new ModManager();
 		modManager.setupMods();
+
+		this.clientConnection = new ClientConnectionManager(this);
+	}
+
+	@Override
+	public boolean isClient()
+	{
+		return true;
 	}
 
 	/**

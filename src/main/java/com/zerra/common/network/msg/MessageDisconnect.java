@@ -1,36 +1,51 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
+import com.zerra.server.ZerraServer;
 import simplenet.Client;
 import simplenet.packet.Packet;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class MessageDisconnect extends Message
 {
-	private UUID uuid;
+	public MessageDisconnect() {}
 
-	public MessageDisconnect(UUID uuid)
+	@Override
+	public boolean includesSender()
 	{
-		this.uuid = uuid;
+		return true;
+	}
+
+	@Nonnull
+	@Override
+	public MessageSide getReceivingSide()
+	{
+		return MessageSide.SERVER;
 	}
 
 	@Override
-	protected void writeToPacket(Packet packet)
-	{
-		putUuid(packet, this.uuid);
-	}
+	protected void writeToPacket(Packet packet) {}
 
 	@Override
-	public void readFromClient(Client client)
-	{
-		this.uuid = readUuid(client);
-	}
+	public void readFromClient(Client client) {}
 
 	@Override
-	public void handle(World world)
+	public Message handle(Zerra zerra, World world)
 	{
-		//TODO
+		//TODO: Player disconnection logic? e.g. remove player and notify clients
+		((ZerraServer) zerra).getConnectionManager().closeClient(this.senderUuid);
+		Zerra.logger().info("Player with UUID {} has left the server", this.senderUuid);
+
+		//If an integrated server, then shut down the server
+		if (!((ZerraServer) zerra).isCurrentlyRemote())
+		{
+			zerra.stop();
+		}
+		return null;
 	}
 }

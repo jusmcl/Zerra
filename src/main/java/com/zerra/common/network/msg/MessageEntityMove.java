@@ -1,12 +1,15 @@
 package com.zerra.common.network.msg;
 
+import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
 import org.joml.Vector3fc;
 import simplenet.Client;
 import simplenet.packet.Packet;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class MessageEntityMove extends Message
@@ -22,24 +25,38 @@ public class MessageEntityMove extends Message
 		this.entityVel = entity.getVelocity();
 	}
 
+	@Nonnull
+	@Override
+	public MessageSide getReceivingSide()
+	{
+		return MessageSide.CLIENT;
+	}
+
 	@Override
 	protected void writeToPacket(Packet packet)
 	{
-		putUuid(packet, this.entityUuid)
-			.putFloat(entityPos.x()).putFloat(entityPos.y()).putFloat(entityPos.z())
-			.putFloat(entityVel.x()).putFloat(entityVel.y()).putFloat(entityVel.z());
+		putUuid(packet, this.entityUuid);
+		putVector3f(packet, this.entityPos);
+		putVector3f(packet, this.entityVel);
 	}
 
 	@Override
 	public void readFromClient(Client client)
 	{
 		this.entityUuid = readUuid(client);
-		//TODO: Finish
+		this.entityPos = readVector3f(client);
+		this.entityVel = readVector3f(client);
 	}
 
 	@Override
-	public void handle(World world)
+	public Message handle(Zerra zerra, World world)
 	{
-		//TODO
+		Entity entity = world.getEntityByUUID(this.entityUuid);
+		if (entity != null)
+		{
+			entity.setPosition(this.entityPos);
+			entity.setVelocity(this.entityVel);
+		}
+		return null;
 	}
 }
