@@ -57,7 +57,7 @@ public class WorldState extends State
 
 	public static void cleanupWorldState()
 	{
-		ZerraClient.getInstance().getConnectionManager().getPacketSender().sendToServer(new MessageDisconnect(ZerraClient.getInstance().getConnectionManager().getUUID().toString()));
+		ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
 
 		if (ZerraClient.getInstance().getWorld() != null)
 		{

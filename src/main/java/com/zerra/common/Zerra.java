@@ -53,10 +53,7 @@ public abstract class Zerra implements Runnable
 
 	public abstract boolean isClient();
 
-	public World getWorld()
-	{
-		return world;
-	}
+	public abstract World getWorld();
 
 	public EventHandler getEventHandler()
 	{

@@ -1,9 +1,5 @@
 package com.zerra.client;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.opengl.GL11;
-
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
@@ -12,7 +8,6 @@ import com.zerra.client.state.WorldState;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
-import com.zerra.common.Reference;
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
@@ -20,8 +15,6 @@ import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tiles;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -364,6 +357,7 @@ public class ZerraClient extends Zerra
 	/**
 	 * @return The connection manager for the client.
 	 */
+	@Override
 	public ClientConnectionManager getConnectionManager()
 	{
 		return this.clientConnection;
@@ -374,6 +368,7 @@ public class ZerraClient extends Zerra
 		return this.world = new ClientWorld(name, seed);
 	}
 
+	@Override
 	public ClientWorld getWorld()
 	{
 		return this.world;
