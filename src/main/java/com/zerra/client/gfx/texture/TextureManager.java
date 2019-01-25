@@ -37,13 +37,17 @@ public class TextureManager
 		this.loadTexture(MISSING_TEXTURE_LOCATION, Loader.loadTexture(LoadingUtils.createMissingImage(256, 256)));
 		boundTextureLocation = MISSING_TEXTURE_LOCATION;
 		this.textureMap = new TextureMap(new ResourceLocation("atlas"), this);
-
+	}
+	
+	/**
+	 * Registers all tiles into the texture map
+	 */
+	public void registerTiles() {
 		Tile[] tiles = Tiles.getTiles();
 		for (Tile tile : tiles)
 		{
 			this.textureMap.register(tile.getTexture());
 		}
-		this.textureMap.stitch();
 	}
 
 	/**
