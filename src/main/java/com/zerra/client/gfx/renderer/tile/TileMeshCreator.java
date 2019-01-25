@@ -67,7 +67,7 @@ public class TileMeshCreator
 				{
 					textureCache.put(tile, tile.getTexture());
 				}
-				TextureMapSprite sprite = ZerraClient.getInstance().getRenderingManager().getTextureMap().getSprite(textureCache.get(tile));
+				TextureMapSprite sprite = ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap().getSprite(textureCache.get(tile));
 				vertices[vertexPointer * 12] = x;
 				vertices[vertexPointer * 12 + 1] = z;
 				vertices[vertexPointer * 12 + 2] = x;

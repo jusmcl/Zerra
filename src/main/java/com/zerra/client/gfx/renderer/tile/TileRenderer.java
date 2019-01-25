@@ -63,7 +63,7 @@ public class TileRenderer
 				if (this.meshCreator.ready(plate))
 				{
 					Model model = this.meshCreator.getModel(plate);
-					ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(ZerraClient.getInstance().getRenderingManager().getTextureMap().getLocation());
+					ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap().getLocation());
 					this.shader.start();
 					this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(plate.getPlatePos().x() * (Plate.SIZE + 1), plate.getPlatePos().z() * (Plate.SIZE + 1), 0, 0, 1, 1));
 					this.shader.loadViewMatrix(camera);
