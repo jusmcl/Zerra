@@ -59,6 +59,11 @@ public class ModLoader
 						throw new RuntimeException(String.format("The domain name '%s' was already loaded during this session", domain));
 					}
 
+					if (domain.equalsIgnoreCase("zerra"))
+					{
+						throw new RuntimeException(String.format("Mod class %s uses an invalid domain 'zerra' and will not be loaded!", mod.getClass().getName()));
+					}
+
 					modManager.loadedMods.put(domain, mod);
 				} catch (Exception e)
 				{
