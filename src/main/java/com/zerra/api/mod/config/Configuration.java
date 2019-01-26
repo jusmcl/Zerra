@@ -20,7 +20,6 @@ public class Configuration
 	{
 		new File(configDir).mkdirs();
 
-		System.out.println(configDir);
 		this.configFile = new File(configDir, name + ".json");
 
 		try

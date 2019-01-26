@@ -33,7 +33,9 @@ public class ExampleMod implements Mod
 			this.getLogger().info("MOD 1 PROGRESS: " + progress + "%");
 		}
 
-		new ExampleConfiguration("example_config");
+		Configuration config = new ExampleConfiguration("example_config");
+		
+		System.out.println(config.getConfig().getBoolean("entitiesEnabled"));
 
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
