@@ -85,6 +85,8 @@ public class ZerraClient extends Zerra
 		}
 
 		this.running = false;
+
+		super.stop();
 	}
 
 	// TODO improve loop

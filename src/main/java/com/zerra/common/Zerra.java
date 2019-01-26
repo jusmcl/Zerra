@@ -41,6 +41,7 @@ public abstract class Zerra implements Runnable
 
 	public synchronized void stop()
 	{
+		single.shutdown();
 	}
 
 	protected void init()

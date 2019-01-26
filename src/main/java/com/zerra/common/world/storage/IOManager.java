@@ -46,7 +46,7 @@ public class IOManager
 {
 
 	protected static File saves;
-	protected static File instanceDir;
+	public static File instanceDir;
 
 	public static File getSavesDirectory()
 	{

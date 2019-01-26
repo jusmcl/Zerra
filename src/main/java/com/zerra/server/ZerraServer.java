@@ -74,6 +74,8 @@ public class ZerraServer extends Zerra
 		this.running = false;
 		this.world.stop();
 		this.serverManager.close();
+
+		super.stop();
 	}
 
 	// TODO improve loop
