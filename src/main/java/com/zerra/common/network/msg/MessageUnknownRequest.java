@@ -1,10 +1,9 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.Zerra;
+import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.world.World;
-
-import simplenet.Client;
 import simplenet.packet.Packet;
 
 public class MessageUnknownRequest extends Message
@@ -23,9 +22,9 @@ public class MessageUnknownRequest extends Message
 	}
 
 	@Override
-	public void readFromClient(Client client)
+	public void readFromClient(ClientWrapper client)
 	{
-		client.readString(s -> this.error = s);
+		this.error = client.readString();
 	}
 
 	@Override

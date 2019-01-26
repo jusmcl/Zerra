@@ -1,11 +1,10 @@
 package com.zerra.common.network.msg;
 
 import com.zerra.common.Zerra;
+import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.World;
-
-import simplenet.Client;
 import simplenet.packet.Packet;
 
 public class MessagePing extends Message
@@ -23,15 +22,21 @@ public class MessagePing extends Message
 	}
 
 	@Override
+	public boolean includesSender()
+	{
+		return true;
+	}
+
+	@Override
 	protected void writeToPacket(Packet packet)
 	{
 		packet.putLong(this.snapshot);
 	}
 
 	@Override
-	public void readFromClient(Client client)
+	public void readFromClient(ClientWrapper client)
 	{
-		client.readLong(value -> this.snapshot = value);
+		this.snapshot = client.readLong();
 	}
 
 	@Override

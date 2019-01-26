@@ -1,19 +1,16 @@
 package com.zerra.common.network.msg;
 
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
-import org.joml.Vector3fc;
-
 import com.zerra.common.Zerra;
+import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
-
-import simplenet.Client;
+import org.joml.Vector3fc;
 import simplenet.packet.Packet;
+
+import javax.annotation.Nonnull;
+import java.util.UUID;
 
 public class MessageEntityMove extends Message
 {
@@ -44,7 +41,7 @@ public class MessageEntityMove extends Message
 	}
 
 	@Override
-	public void readFromClient(Client client)
+	public void readFromClient(ClientWrapper client)
 	{
 		this.entityUUID = readUUID(client);
 		this.entityPos = readVector3f(client);

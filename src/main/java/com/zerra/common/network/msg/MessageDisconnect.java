@@ -1,15 +1,14 @@
 package com.zerra.common.network.msg;
 
-import javax.annotation.Nonnull;
-
 import com.zerra.common.Zerra;
+import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.server.ZerraServer;
-
-import simplenet.Client;
 import simplenet.packet.Packet;
+
+import javax.annotation.Nonnull;
 
 public class MessageDisconnect extends Message
 {
@@ -36,7 +35,7 @@ public class MessageDisconnect extends Message
 	}
 
 	@Override
-	public void readFromClient(Client client)
+	public void readFromClient(ClientWrapper client)
 	{
 	}
 
