@@ -142,12 +142,12 @@ public class JsonWrapper
 	/**
 	 * A method that automatically determines what data type to add.
 	 *
-	 * @param element
-	 * @param obj
+	 * @param element The name of the element.
+	 * @param obj The object to put for the given name.
 	 */
 	public void put(String element, Object obj)
 	{
-		if (isReadOnly || !this.getJson().has(element))
+		if (isReadOnly)
 			return;
 
 		if (obj instanceof Boolean)
@@ -167,9 +167,22 @@ public class JsonWrapper
 		this.write();
 	}
 
+	/**
+	 * Puts a value into the JSON, but only if it doesn't exist.
+	 * 
+	 * @param element The name of the element.
+	 * @param obj The object to put for the given name.
+	 */
+	public void putSafe(String element, Object obj)
+	{
+		if (this.getJson().has(element))
+			return;
+		this.put(element, obj);
+	}
+
 	public void addString(String element, String value)
 	{
-		if (isReadOnly | !this.getJson().has(element))
+		if (isReadOnly || !this.getJson().has(element))
 			return;
 		mainJson.addProperty(element, this.getString(element) + value);
 		this.write();

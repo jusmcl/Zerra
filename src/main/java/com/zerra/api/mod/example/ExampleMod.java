@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.ModInit;
+import com.zerra.api.mod.config.Configuration;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 import com.zerra.common.util.UBObjectWrapper;
@@ -31,6 +32,10 @@ public class ExampleMod implements Mod
 			float progress = ((float) i / (float) PROGRESS_MAX) * 100F;
 			this.getLogger().info("MOD 1 PROGRESS: " + progress + "%");
 		}
+
+		Configuration config = new ExampleConfiguration("example_config");
+		
+		System.out.println(config.getConfig().getBoolean("entitiesEnabled"));
 
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
@@ -80,5 +85,24 @@ public class ExampleMod implements Mod
 			this.number = ubo.getIntSafe("number");
 			super.readFromUBO(ubo);
 		}
+	}
+
+	public static class ExampleConfiguration extends Configuration
+	{
+
+		public ExampleConfiguration(String name)
+		{
+			super(name);
+		}
+
+		@Override
+		public void populateConfig()
+		{
+			this.getConfig().putSafe("entitiesEnabled", true);
+			this.getConfig().putSafe("maxEntityCount", 200);
+			this.getConfig().putSafe("entityTicksPerSecond", 20.0F);
+			this.getConfig().putSafe("entityMoveSpeed", 20.0D);
+		}
+
 	}
 }
