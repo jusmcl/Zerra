@@ -15,50 +15,6 @@ public interface ModInfo
 {
 
 	/**
-	 * Empty instance, used by {@link ModInfoBuilder} when an exception is thrown, so it doesn't have to return null
-	 */
-    ModInfo EMPTY = new ModInfo() {
-		@Override
-		public String getDomain() {
-			return "";
-		}
-		@Override
-		public String getModName() {
-			return "";
-		}
-
-		@Override
-		public String getModVersion() {
-			return "";
-		}
-
-		@Override
-		public String getZerraVersion() {
-			return "";
-		}
-		@Override
-		public String[] getAuthors() {
-			return new String[0];
-		}
-		@Override
-		public String[] getDependencies() {
-			return new String[0];
-		}
-		@Override
-		public String getModDescription() {
-			return "";
-		}
-		@Override
-		public String getWebsiteURL() {
-			return "";
-		}
-		@Override
-		public String getCredits() {
-			return "";
-		}
-	};
-
-    /**
 	 * A logger provided automatically for mods to use, customized to use their
 	 * domain name.
 	 * 

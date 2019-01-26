@@ -2,15 +2,11 @@ package com.zerra.api.mod.info;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import javax.annotation.Nullable;
 
 import com.google.gson.JsonObject;
 import com.zerra.common.util.JsonWrapper;
-import com.zerra.common.util.StreamUtil;
-import org.apache.log4j.Logger;
-import sun.rmi.runtime.Log;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -21,8 +17,6 @@ import sun.rmi.runtime.Log;
  */
 public class ModInfoBuilder
 {
-
-    public static Logger LOGGER = Logger.getLogger("ModInfo");
 
 	public static String[] optionalJsonKeys =
 	{ "modDescription", "websiteURL", "credits", "authors", "dependencies" };
@@ -59,9 +53,10 @@ public class ModInfoBuilder
 	/**
 	 * Creates a modinfo instance from a JSON file.
 	 * 
-	 * @param path The path to the file.
+	 * @param fileInputStream The stream for the file.
 	 * @return A new ModInfo object.
 	 */
+	@Nullable
 	public static ModInfo fromJSONFile(String path)
 	{
 		FileInputStream fileInputStream = null;
@@ -70,49 +65,38 @@ public class ModInfoBuilder
 			fileInputStream = new FileInputStream(path);
 		} catch (FileNotFoundException e)
 		{
-			ModInfoBuilder.LOGGER.error("Exception trying to build modinfo!!", e);
-		    return ModInfo.EMPTY;
+			e.printStackTrace();
 		}
-		return fromJSONFile(fileInputStream);
+		JsonWrapper jsonWrapper = new JsonWrapper(fileInputStream);
+		JsonObject object = jsonWrapper.getJson();
+		boolean flag = true;
+		for (String key : requiredJsonKeys)
+		{
+			flag &= object.has(key);
+		}
+		if (!flag)
+		{
+			jsonWrapper.close();
+			return null;
+		}
+
+		String domain = jsonWrapper.getString("domain");
+		String modName = jsonWrapper.getString("modName");
+		String modVersion = jsonWrapper.getString("modVersion");
+		String zerraVersion = jsonWrapper.getString("zerraVersion");
+
+		ModInfoBuilder builder = new ModInfoBuilder(domain, modName, modVersion, zerraVersion);
+
+		for (String key : optionalJsonKeys)
+		{
+			if (object.has(key))
+			{
+				builder.set(key, (String[]) jsonWrapper.get(key));
+			}
+		}
+		jsonWrapper.close();
+		return builder.build();
 	}
-
-	public static ModInfo fromJSONFile(InputStream stream){
-	    FileInputStream fileInputStream;
-	    if(stream instanceof FileInputStream){
-	        fileInputStream = (FileInputStream) stream;
-        } else {
-	        fileInputStream = StreamUtil.convert(stream);
-        }
-        JsonWrapper jsonWrapper = new JsonWrapper(fileInputStream);
-        JsonObject object = jsonWrapper.getJson();
-        boolean flag = true;
-        for (String key : requiredJsonKeys)
-        {
-            flag &= object.has(key);
-        }
-        if (!flag)
-        {
-            jsonWrapper.close();
-            return null;
-        }
-
-        String domain = jsonWrapper.getString("domain");
-        String modName = jsonWrapper.getString("modName");
-        String modVersion = jsonWrapper.getString("modVersion");
-        String zerraVersion = jsonWrapper.getString("zerraVersion");
-
-        ModInfoBuilder builder = new ModInfoBuilder(domain, modName, modVersion, zerraVersion);
-
-        for (String key : optionalJsonKeys)
-        {
-            if (object.has(key))
-            {
-                builder.set(key, (String[]) jsonWrapper.get(key));
-            }
-        }
-        jsonWrapper.close();
-        return builder.build();
-    }
 
 	/**
 	 * A generic setter for any of the optional mod properties.
