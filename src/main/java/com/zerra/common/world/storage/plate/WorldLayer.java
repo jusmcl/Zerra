@@ -63,7 +63,6 @@ public class WorldLayer implements Layer
 		Vector3i platePos = new Vector3i(pos);
 		if (!this.loadingPlates.contains(platePos) && !this.isPlateLoaded(platePos))
 		{
-			this.world.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
 			this.loadingPlates.add(platePos);
 			if (this.world.getStorageManager().isPlateGenerated(this.layer, platePos))
 			{
@@ -72,6 +71,7 @@ public class WorldLayer implements Layer
 					this.loadedEntities.addAll(this.world.getStorageManager().readEntitiesSafe(this.layer, platePos));
 					this.loadedPlates.put(platePos, this.world.getStorageManager().readPlateSafe(this.layer, platePos));
 					this.loadingPlates.remove(platePos);
+					this.world.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
 				});
 			} else
 			{
@@ -79,6 +79,7 @@ public class WorldLayer implements Layer
 				{
 					this.loadedPlates.put(platePos, this.generate(platePos));
 					this.loadingPlates.remove(platePos);
+					this.world.logger().info("Generated plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
 				});
 			}
 		}
