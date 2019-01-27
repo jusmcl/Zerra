@@ -80,15 +80,13 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 						this.sendToClient(new MessageReady(), queuedClient);
 						this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), queuedClient);
 
-						// for (int x = 0; x < 3; x++)
-						// {
-						// for (int z = 0; z < 3; z++)
-						// {
-						// this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i(x - 1, 0, z - 1)), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
-						// }
-						// }
-						
-						this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+						for (int x = 0; x < 3; x++)
+						{
+							for (int z = 0; z < 3; z++)
+							{
+								this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i(x - 1, 0, z - 1)), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+							}
+						}
 					});
 					this.queuedClients.clear();
 					handleMessage(client, id);
