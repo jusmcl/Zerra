@@ -21,6 +21,8 @@ import simplenet.packet.Packet;
 
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
+	public static final int MAX_BYTES = 10240;
+	
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 	private Deque<Client> queuedClients = new ConcurrentLinkedDeque<>();
 	private boolean doneLoading;
@@ -32,7 +34,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 
 	public ServerConnectionManager(ZerraServer zerra, String address, int port)
 	{
-		super(zerra, new Server());
+		super(zerra, new Server(MAX_BYTES));
 
 		boolean isLocalHost = LOCALHOST.equals(address);
 
