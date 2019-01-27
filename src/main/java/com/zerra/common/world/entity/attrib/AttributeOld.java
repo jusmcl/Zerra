@@ -1,13 +1,10 @@
 package com.zerra.common.world.entity.attrib;
 
+//TODO move these into some entity class
 @Deprecated
 public enum AttributeOld
 {
-	HEALTH(0, 50, 50),
-	STAMINA(10),
-	MANA(0, 50, 50),
-	PHYS_ARMOR(-100, 0, 90),
-	SPELL_ARMOR(-100, 0, 90);
+	HEALTH(0, 50, 50), STAMINA(10), MANA(0, 50, 50), PHYS_ARMOR(-100, 0, 90), SPELL_ARMOR(-100, 0, 90);
 
 	private int value;
 	private int minValue;

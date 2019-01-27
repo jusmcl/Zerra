@@ -1,5 +1,7 @@
 package com.zerra.common.world.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -15,6 +17,7 @@ import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
+import com.zerra.common.world.entity.attrib.Attribute;
 import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.Storable;
@@ -22,8 +25,9 @@ import com.zerra.common.world.storage.plate.WorldLayer;
 
 public abstract class Entity implements Storable
 {
+	private Map<String, Attribute<?>> attributes;
 
-	protected World world;
+	private World world;
 	private String registryName;
 	private UUID uuid;
 
@@ -37,8 +41,6 @@ public abstract class Entity implements Storable
 	private Vector2f entitySize = new Vector2f();
 
 	private boolean isInvisible;
-	private boolean isInWater;
-	private boolean isOnFire;
 
 	// Used in determining starting point of collision box sizing.
 	private float anchorPoint = 0f;
@@ -47,6 +49,8 @@ public abstract class Entity implements Storable
 
 	public Entity(WorldLayer worldLayer)
 	{
+		this.attributes = new HashMap<String, Attribute<?>>();
+
 		// Set world.
 		this.world = worldLayer.getWorld();
 
@@ -90,7 +94,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the registry name for this entity
 	 *
-	 * @param name The registry name
+	 * @param name
+	 *            The registry name
 	 */
 	public void setRegistryName(String name)
 	{
@@ -108,8 +113,7 @@ public abstract class Entity implements Storable
 	}
 
 	/**
-	 * Gets the unique ID for this entity Will be null if the entity has not been
-	 * spawned yet
+	 * Gets the unique ID for this entity Will be null if the entity has not been spawned yet
 	 *
 	 * @return Unique ID
 	 */
@@ -131,11 +135,20 @@ public abstract class Entity implements Storable
 	}
 
 	/**
+	 * Called during entity construction to add entity attributes to the map.
+	 * 
+	 * @param attributes
+	 *            The attributes map
+	 */
+	protected void setEntityAttributes(Map<String, Attribute<?>> attributes)
+	{
+	}
+
+	/**
 	 * Called during entity construction.
 	 */
-	public void init()
+	protected void init()
 	{
-
 	}
 
 	/**
@@ -151,7 +164,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the facing of this entity
 	 *
-	 * @param direction Entity facing
+	 * @param direction
+	 *            Entity facing
 	 */
 	public void setFacingDirection(Direction direction)
 	{
@@ -247,9 +261,12 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the size of the entity.
 	 *
-	 * @param width Entity width
-	 * @param height Entity height
-	 * @param anchorPoint Entity collision box start point offset
+	 * @param width
+	 *            Entity width
+	 * @param height
+	 *            Entity height
+	 * @param anchorPoint
+	 *            Entity collision box start point offset
 	 */
 	public void setSize(float width, float height, float anchorPoint)
 	{
@@ -281,7 +298,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the velocity of this entity
 	 *
-	 * @param velocity Velocity
+	 * @param velocity
+	 *            Velocity
 	 */
 	public void setVelocity(Vector3fc velocity)
 	{
@@ -291,7 +309,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Adds to the velocity of this entity
 	 *
-	 * @param velocity Velocity to add
+	 * @param velocity
+	 *            Velocity to add
 	 */
 	public void addVelocity(Vector3fc velocity)
 	{
@@ -311,7 +330,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Calculates the distance of this entity to another entity
 	 *
-	 * @param entity Other entity
+	 * @param entity
+	 *            Other entity
 	 * @return Distance to the other entity
 	 */
 	public float getDistanceTo(Entity entity)
@@ -320,10 +340,10 @@ public abstract class Entity implements Storable
 	}
 
 	/**
-	 * Calculates the distance of this entity to a position in the current world
-	 * layer
+	 * Calculates the distance of this entity to a position in the current world layer
 	 *
-	 * @param pos Position in the world layer
+	 * @param pos
+	 *            Position in the world layer
 	 * @return Distance to the position
 	 */
 	public float getDistanceTo(Vector3fc pos)
@@ -354,51 +374,12 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets if this entity should be invisible
 	 *
-	 * @param invisible Whether this entity should be invisible
+	 * @param invisible
+	 *            Whether this entity should be invisible
 	 */
 	public void setInvisible(boolean invisible)
 	{
 		isInvisible = invisible;
-	}
-
-	/**
-	 * Gets if this entity is in water
-	 *
-	 * @return If this entity is in water
-	 */
-	public boolean isInWater()
-	{
-		return this.isInWater;
-	}
-
-	/**
-	 * Sets if this entity is in water
-	 *
-	 * @param isInWater Whether this entity is in water
-	 */
-	public void setInWater(boolean isInWater)
-	{
-		this.isInWater = isInWater;
-	}
-
-	/**
-	 * Gest if this entity is on fire
-	 *
-	 * @return If this entity is on fire
-	 */
-	public boolean isOnFire()
-	{
-		return this.isOnFire;
-	}
-
-	/**
-	 * Sets if this entity should be on fire
-	 *
-	 * @param isOnFire Whether this entity should be on fire
-	 */
-	public void setOnFire(boolean isOnFire)
-	{
-		this.isOnFire = isOnFire;
 	}
 
 	/**
@@ -456,8 +437,6 @@ public abstract class Entity implements Storable
 
 		// Misc
 		ubo.setBoolean("invisible", this.isInvisible);
-		ubo.setBoolean("inWater", this.isInWater);
-		ubo.setBoolean("onFire", this.isOnFire);
 
 		return ubo;
 	}
@@ -479,7 +458,8 @@ public abstract class Entity implements Storable
 		if (uboPos == null)
 		{
 			setPosition(new Vector3f(0F, 0F, 0F));
-		} else
+		}
+		else
 		{
 			setPosition(new Vector3f(uboPos.getFloatSafe("x"), uboPos.getFloatSafe("y"), uboPos.getFloatSafe("z")));
 		}
@@ -492,7 +472,5 @@ public abstract class Entity implements Storable
 
 		// Misc
 		this.isInvisible = ubo.getBooleanSafe("invisible");
-		this.isInWater = ubo.getBooleanSafe("inWater");
-		this.isOnFire = ubo.getBooleanSafe("onFire");
 	}
 }
