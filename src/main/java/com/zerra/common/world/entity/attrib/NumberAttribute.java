@@ -1,30 +1,30 @@
 package com.zerra.common.world.entity.attrib;
 
-public class NumberAttribute implements Attribute<Number>
+public class NumberAttribute<T extends Number> implements Attribute<T>
 {
-	private Number defaultValue;
-	private Number value;
+	private T defaultValue;
+	private T value;
 
-	protected NumberAttribute(Number defaultValue)
+	protected NumberAttribute(T defaultValue)
 	{
 		this.defaultValue = defaultValue;
 		this.value = defaultValue;
 	}
 
 	@Override
-	public Number getDefaultValue()
+	public T getDefaultValue()
 	{
 		return defaultValue;
 	}
 
 	@Override
-	public Number getValue()
+	public T getValue()
 	{
 		return value;
 	}
 
 	@Override
-	public void setValue(Number value)
+	public void setValue(T value)
 	{
 		this.value = value;
 	}

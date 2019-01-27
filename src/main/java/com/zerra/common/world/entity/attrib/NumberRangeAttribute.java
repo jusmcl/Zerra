@@ -1,11 +1,11 @@
 package com.zerra.common.world.entity.attrib;
 
-public class NumberRangeAttribute extends NumberAttribute implements RangeAttribute<Number>
+public class NumberRangeAttribute<T extends Number> extends NumberAttribute<T> implements RangeAttribute<T>
 {
-	private Number minimumValue;
-	private Number maximumValue;
+	private T minimumValue;
+	private T maximumValue;
 
-	protected NumberRangeAttribute(Number defaultValue, Number minimumValue, Number maximumValue)
+	protected NumberRangeAttribute(T defaultValue, T minimumValue, T maximumValue)
 	{
 		super(defaultValue);
 		this.minimumValue = minimumValue;
@@ -13,7 +13,7 @@ public class NumberRangeAttribute extends NumberAttribute implements RangeAttrib
 	}
 	
 	@Override
-	public void setValue(Number value)
+	public void setValue(T value)
 	{
 		if(value.doubleValue() < this.minimumValue.doubleValue())
 			value = this.minimumValue;
@@ -23,25 +23,25 @@ public class NumberRangeAttribute extends NumberAttribute implements RangeAttrib
 	}
 
 	@Override
-	public Number getMinimumValue()
+	public T getMinimumValue()
 	{
 		return minimumValue;
 	}
 
 	@Override
-	public Number getMaximumValue()
+	public T getMaximumValue()
 	{
 		return maximumValue;
 	}
 
 	@Override
-	public void setMinimumValue(Number minimumValue)
+	public void setMinimumValue(T minimumValue)
 	{
 		this.minimumValue = minimumValue;
 	}
 
 	@Override
-	public void setMaximumValue(Number maximumValue)
+	public void setMaximumValue(T maximumValue)
 	{
 		this.maximumValue = maximumValue;
 	}

@@ -24,9 +24,9 @@ public class AttributeFactory
 	 * @return The attribute created for type {@link Number}
 	 * @see Attribute
 	 */
-	public static Attribute<Number> createNumberAttribute(Number defaultValue, Number value)
+	public static <T extends Number> Attribute<T> createNumberAttribute(T defaultValue, T value)
 	{
-		Attribute<Number> attribute = new NumberAttribute(defaultValue);
+		Attribute<T> attribute = new NumberAttribute<T>(defaultValue);
 		attribute.setValue(value);
 		return attribute;
 	}
@@ -39,9 +39,9 @@ public class AttributeFactory
 	 * @return The attribute created for type {@link Number}
 	 * @see Attribute
 	 */
-	public static Attribute<Number> createNumberAttribute(Number defaultValue)
+	public static <T extends Number> Attribute<T> createNumberAttribute(T defaultValue)
 	{
-		return new NumberAttribute(defaultValue);
+		return new NumberAttribute<T>(defaultValue);
 	}
 
 	/**
@@ -58,9 +58,9 @@ public class AttributeFactory
 	 * @return The attribute created for type {@link Number}
 	 * @see RangeAttribute
 	 */
-	public static RangeAttribute<Number> createNumberRangeAttribute(Number defaultValue, Number value, Number minimumValue, Number maximumValue)
+	public static <T extends Number> RangeAttribute<T> createNumberRangeAttribute(T defaultValue, T value, T minimumValue, T maximumValue)
 	{
-		RangeAttribute<Number> attribute = new NumberRangeAttribute(defaultValue, minimumValue, maximumValue);
+		RangeAttribute<T> attribute = new NumberRangeAttribute<T>(defaultValue, minimumValue, maximumValue);
 		attribute.setValue(value);
 		return attribute;
 	}
@@ -77,9 +77,9 @@ public class AttributeFactory
 	 * @return The attribute created for type {@link Number}
 	 * @see RangeAttribute
 	 */
-	public static RangeAttribute<Number> createNumberRangeAttribute(Number defaultValue, Number minimumValue, Number maximumValue)
+	public static <T extends Number> RangeAttribute<T> createNumberRangeAttribute(T defaultValue, T minimumValue, T maximumValue)
 	{
-		return new NumberRangeAttribute(defaultValue, minimumValue, maximumValue);
+		return new NumberRangeAttribute<T>(defaultValue, minimumValue, maximumValue);
 	}
 
 	/**
