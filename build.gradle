@@ -83,7 +83,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'com.zerra.Launch'
+		attributes 'Main-Class': 'com.zerra.ClientLaunch', 'Multi-Release': 'true'
 	}
 	from {
 		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
