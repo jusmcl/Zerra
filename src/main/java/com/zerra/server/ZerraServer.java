@@ -120,12 +120,11 @@ public class ZerraServer extends Zerra
 
 		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? address : null);
 
-		Layer layer = world.getLayer(0);
 		for (int x = 0; x < 3; x++)
 		{
 			for (int z = 0; z < 3; z++)
 			{
-				layer.loadPlate(new Vector3i(x - 1, 0, z - 1));
+				this.world.loadPlate(0, new Vector3i(x - 1, 0, z - 1));
 			}
 		}
 

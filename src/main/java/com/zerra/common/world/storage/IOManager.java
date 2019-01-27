@@ -41,6 +41,7 @@ import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
+import com.zerra.server.world.ServerWorld;
 
 public class IOManager
 {
@@ -74,13 +75,13 @@ public class IOManager
 
 		private static final int VERSION = 2;
 
-		private final World world;
+		private final ServerWorld world;
 		private final File worldDir;
 
 		private List<Pair<Integer, ResourceLocation>> tileIndexes;
 		private Map<ResourceLocation, Integer> tileMapper;
 
-		public WorldStorageManager(World world)
+		public WorldStorageManager(ServerWorld world)
 		{
 			this.world = world;
 			this.worldDir = new File(IOManager.saves, world.getName());
@@ -238,10 +239,8 @@ public class IOManager
 				List<Pair<Integer, ResourceLocation>> pairs = new ArrayList<Pair<Integer, ResourceLocation>>();
 				try (DataInputStream is = new DataInputStream(new FileInputStream(tiles)))
 				{
-					while (is.available() > 0)
-					{
-						pairs.add(new ImmutablePair<Integer, ResourceLocation>((int) is.readShort(), new ResourceLocation(is.readUTF())));
-					}
+					pairs.addAll(readTileIndexes(is));
+					is.close();
 				}
 				catch (Exception e)
 				{
@@ -271,12 +270,8 @@ public class IOManager
 
 			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(tileLookupFile)))
 			{
-				// Write all tiles to the lookup file
-				for (Pair<Integer, ResourceLocation> pair : this.tileIndexes)
-				{
-					os.writeShort(pair.getLeft());
-					os.writeUTF(pair.getRight().toString());
-				}
+				writeTileIndexes(os, this.tileIndexes);
+				os.close();
 			}
 		}
 
@@ -291,7 +286,6 @@ public class IOManager
 					if (tileIndex.getRight().equals(tile.getRegistryID()))
 					{
 						id = tileIndex.getLeft();
-						this.tileMapper.put(tile.getRegistryID(), id);
 						break;
 					}
 				}
@@ -299,9 +293,9 @@ public class IOManager
 				if (id == -1)
 				{
 					this.tileIndexes.add(new ImmutablePair<Integer, ResourceLocation>(this.tileIndexes.size(), tile.getRegistryID()));
-					this.tileMapper.put(tile.getRegistryID(), this.tileIndexes.size() - 1);
 				}
 			}
+			this.tileMapper.putAll(createTileMapper(this.tileIndexes));
 
 			try
 			{
@@ -321,15 +315,8 @@ public class IOManager
 
 			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(plateFile)))
 			{
-				// Write plate tiles
-				for (int x = 0; x < Plate.SIZE; x++)
-				{
-					for (int z = 0; z < Plate.SIZE; z++)
-					{
-						Vector2i position = new Vector2i(x, z);
-						os.writeShort(this.tileIndexes.get(this.tileMapper.get(plate.getTileAt(position).getRegistryID())).getLeft());
-					}
-				}
+				writePlate(os, plate, this.tileIndexes, this.tileMapper);
+				os.close();
 			}
 		}
 
@@ -343,37 +330,12 @@ public class IOManager
 				return null;
 			}
 
-			DataInputStream is = new DataInputStream(new FileInputStream(plateFile));
-			try
+			try (DataInputStream is = new DataInputStream(new FileInputStream(plateFile)))
 			{
-				// Read plate tiles
-				Plate plate = new Plate(this.world.getLayer(layer));
-				for (int x = 0; x < Plate.SIZE; x++)
-				{
-					for (int z = 0; z < Plate.SIZE; z++)
-					{
-						Vector2i tilePos = new Vector2i(x, z);
-						try
-						{
-							plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readShort()).getRight()));
-						}
-						catch (Exception e)
-						{
-							this.world.logger().warn("Error loading tile in plate \'" + layer + ":" + platePos.x() + "," + platePos.y() + "," + platePos.z() + "\' at position \'" + x + "," + z + "\'", e);
-							plate.setTileAt(tilePos, Tile.NONE);
-						}
-					}
-				}
+				Plate plate = readPlate(is, this.world.getLayer(layer), platePos, this.tileIndexes);
 				is.close();
-				plate.setPlatePos(platePos);
 				return plate;
 			}
-			catch (Exception e)
-			{
-				is.close();
-				e.printStackTrace();
-			}
-			return null;
 		}
 
 		public void writeEntities(int layer, Vector3ic platePos, Set<Entity> entities) throws IOException
@@ -575,6 +537,72 @@ public class IOManager
 		public Map<ResourceLocation, Integer> getTileMapper()
 		{
 			return this.tileMapper;
+		}
+
+		public static void writeTileIndexes(DataOutputStream os, List<Pair<Integer, ResourceLocation>> tileIndexes) throws IOException
+		{
+			// Write all tiles to the lookup file
+			for (Pair<Integer, ResourceLocation> pair : tileIndexes)
+			{
+				os.writeShort(pair.getLeft());
+				os.writeUTF(pair.getRight().toString());
+			}
+		}
+
+		public static List<Pair<Integer, ResourceLocation>> readTileIndexes(DataInputStream is) throws IOException
+		{
+			List<Pair<Integer, ResourceLocation>> pairs = new ArrayList<Pair<Integer, ResourceLocation>>();
+			while (is.available() > 0)
+			{
+				pairs.add(new ImmutablePair<Integer, ResourceLocation>((int) is.readShort(), new ResourceLocation(is.readUTF())));
+			}
+			return pairs;
+		}
+
+		public static void writePlate(DataOutputStream os, Plate plate, List<Pair<Integer, ResourceLocation>> tileIndexes, Map<ResourceLocation, Integer> tileMapper) throws IOException
+		{
+			// Write plate tiles
+			for (int x = 0; x < Plate.SIZE; x++)
+			{
+				for (int z = 0; z < Plate.SIZE; z++)
+				{
+					Vector2i position = new Vector2i(x, z);
+					os.writeShort(tileIndexes.get(tileMapper.get(plate.getTileAt(position).getRegistryID())).getLeft());
+				}
+			}
+		}
+
+		public static Plate readPlate(DataInputStream is, Layer layer, Vector3ic platePos, List<Pair<Integer, ResourceLocation>> tileIndexes)
+		{
+			// Read plate tiles
+			Plate plate = new Plate(layer);
+			for (int x = 0; x < Plate.SIZE; x++)
+			{
+				for (int z = 0; z < Plate.SIZE; z++)
+				{
+					Vector2i tilePos = new Vector2i(x, z);
+					try
+					{
+						plate.setTileAt(tilePos, Tiles.byId(tileIndexes.get(is.readShort()).getRight()));
+					}
+					catch (Exception e)
+					{
+						plate.setTileAt(tilePos, Tile.NONE);
+					}
+				}
+			}
+			plate.setPlatePos(platePos);
+			return plate;
+		}
+
+		public static Map<ResourceLocation, Integer> createTileMapper(List<Pair<Integer, ResourceLocation>> tileIndexes)
+		{
+			Map<ResourceLocation, Integer> tileMapper = new HashMap<ResourceLocation, Integer>();
+			for (Pair<Integer, ResourceLocation> tileIndex : tileIndexes)
+			{
+				tileMapper.put(tileIndex.getRight(), tileIndex.getLeft());
+			}
+			return tileMapper;
 		}
 	}
 }

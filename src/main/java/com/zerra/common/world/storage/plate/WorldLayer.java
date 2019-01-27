@@ -1,8 +1,6 @@
 package com.zerra.common.world.storage.plate;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -13,8 +11,6 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import com.zerra.common.world.World;
-import com.zerra.common.world.data.WorldData;
-import com.zerra.common.world.data.WorldDataHandler;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
@@ -25,31 +21,30 @@ public class WorldLayer implements Layer
 	private World world;
 	private int layer;
 	private Map<Vector3ic, Plate> loadedPlates;
-	private List<Vector3ic> loadingPlates;
 	private Set<Entity> loadedEntities;
-	private Map<String, WorldData> worldData;
 
 	public WorldLayer(World world, int layer)
 	{
 		this.world = world;
 		this.layer = layer;
 		this.loadedPlates = new ConcurrentHashMap<Vector3ic, Plate>();
-		this.loadingPlates = new ArrayList<Vector3ic>();
 		this.loadedEntities = new HashSet<Entity>();
-
-		// Create and load WorldData for layer
-		this.worldData = WorldDataHandler.getDataForLayer(layer);
-		Map<String, WorldData> data = this.world.getStorageManager().readWorldDataSafe(layer);
-		this.worldData.putAll(data);
+	}
+	
+	@Override
+	public void addPlate(Vector3ic pos, Plate plate)
+	{
+		this.loadedPlates.put(pos, plate);
+	}
+	
+	@Override
+	public void removePlate(Vector3ic pos)
+	{
+		this.loadedPlates.remove(pos);
 	}
 
 	@Override
-	public World getWorld()
-	{
-		return this.world;
-	}
-
-	private Plate generate(Vector3i pos)
+	public Plate generate(Vector3ic pos)
 	{
 		Plate plate = new Plate(this);
 		plate.setPlatePos(new Vector3i(pos));
@@ -58,48 +53,9 @@ public class WorldLayer implements Layer
 	}
 
 	@Override
-	public void loadPlate(Vector3ic pos)
+	public World getWorld()
 	{
-		Vector3i platePos = new Vector3i(pos);
-		if (!this.loadingPlates.contains(platePos) && !this.isPlateLoaded(platePos))
-		{
-			this.loadingPlates.add(platePos);
-			if (this.world.getStorageManager().isPlateGenerated(this.layer, platePos))
-			{
-				this.world.schedule(() ->
-				{
-					this.loadedEntities.addAll(this.world.getStorageManager().readEntitiesSafe(this.layer, platePos));
-					this.loadedPlates.put(platePos, this.world.getStorageManager().readPlateSafe(this.layer, platePos));
-					this.loadingPlates.remove(platePos);
-					this.world.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
-				});
-			} else
-			{
-				this.world.schedule(() ->
-				{
-					this.loadedPlates.put(platePos, this.generate(platePos));
-					this.loadingPlates.remove(platePos);
-					this.world.logger().info("Generated plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
-				});
-			}
-		}
-	}
-
-	@Override
-	public void unloadPlate(Vector3ic pos)
-	{
-		this.world.logger().info("Unloaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + this.layer);
-		Plate plate = this.getPlate(pos);
-		if (plate != null)
-		{
-			plate.unload();
-			this.world.schedule(() ->
-			{
-				this.world.save(this.layer, plate.getPlatePos());
-				this.loadedEntities.removeIf(entity -> plate.isInsidePlate(entity.getTilePosition(), entity.getLayerId()));
-				this.loadedPlates.remove(pos);
-			});
-		}
+		return this.world;
 	}
 
 	@Override
@@ -135,8 +91,6 @@ public class WorldLayer implements Layer
 	@Override
 	public Plate getPlate(Vector3ic pos)
 	{
-		if (!this.isPlateLoaded(pos))
-			this.loadPlate(pos);
 		return this.loadedPlates.get(pos);
 	}
 
@@ -144,17 +98,5 @@ public class WorldLayer implements Layer
 	public boolean isPlateLoaded(Vector3ic pos)
 	{
 		return this.loadedPlates.containsKey(pos);
-	}
-
-	@Override
-	public Map<String, WorldData> getAllWorldData()
-	{
-		return this.worldData;
-	}
-
-	@Override
-	public WorldData getWorldData(String registryName)
-	{
-		return worldData.get(registryName);
 	}
 }
