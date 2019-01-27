@@ -155,30 +155,6 @@ public class Camera implements ICamera
 		}
 
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
-		// if (!this.platePosition.equals(this.lastPlatePosition))
-		// {
-		// World world = ZerraClient.getInstance().getWorld();
-		// // TODO: Causes a NPE, but that's fine, because it's a good reminder to setup
-		// // the client world anyways.
-		// Layer layer = world.getLayer(0);
-		// List<Vector3i> loadedPositions = new ArrayList<Vector3i>();
-		// for (int x = 0; x < 3; x++)
-		// {
-		// for (int z = 0; z < 3; z++)
-		// {
-		// Vector3i newPos = this.platePosition.add(x - 1, 0, z - 1, new Vector3i());
-		// layer.loadPlate(newPos);
-		// loadedPositions.add(newPos);
-		// }
-		// }
-		// for (Plate plate : layer.getLoadedPlates())
-		// {
-		// if (!loadedPositions.contains(plate.getPlatePos()))
-		// {
-		// layer.unloadPlate(plate.getPlatePos());
-		// }
-		// }
-		// }
 	}
 
 	@Override

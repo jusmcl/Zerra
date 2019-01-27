@@ -1,6 +1,8 @@
 package com.zerra.client.input;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
@@ -12,22 +14,20 @@ import com.zerra.client.view.Display;
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
- * Handles all input passed in from the {@link Display}'s handlers into
- * {@link ZerraClient}.
+ * Handles all input passed in from the {@link Display}'s handlers into {@link ZerraClient}.
  * 
  * @author Ocelot5836
  */
 public class InputHandler
 {
-
-	private byte[] keys;
-	private byte[] mouseButtons;
+	private List<Integer> activeKeys;
+	private List<Integer> activeMouseButtons;
 	private Map<Integer, Gamepad> gamepads;
 
 	public InputHandler()
 	{
-		this.keys = new byte[GLFW.GLFW_KEY_LAST];
-		this.mouseButtons = new byte[GLFW.GLFW_MOUSE_BUTTON_LAST];
+		this.activeKeys = new ArrayList<Integer>();
+		this.activeMouseButtons = new ArrayList<Integer>();
 		this.gamepads = new HashMap<Integer, Gamepad>();
 		for (int jid = 0; jid < Display.getAllPresentJoysticks().length; jid++)
 		{
@@ -39,55 +39,91 @@ public class InputHandler
 	}
 
 	/**
+	 * @return The number of keys pressed on the keyboard
+	 */
+	public int getNumberOfKeysPressed()
+	{
+		return this.activeKeys.size();
+	}
+
+	/**
+	 * @return The number of buttons pressed on the mouse
+	 */
+	public int getNumberOfMouseButtonsPressed()
+	{
+		return this.activeMouseButtons.size();
+	}
+
+	/**
+	 * @return Whether or not ANY mouse button is pressed
+	 */
+	public boolean isReceivingMouseInput()
+	{
+		return this.activeMouseButtons.size() > 0;
+	}
+
+	/**
 	 * Checks to see if the key code supplied has been pressed.
 	 * 
-	 * @param keyCode The code of the key
+	 * @param keyCode
+	 *            The code of the key
 	 * @return Whether or not that key was pressed
 	 */
 	public boolean isKeyPressed(int keyCode)
 	{
-		if (keyCode < 0 || keyCode >= this.keys.length)
-			return false;
-		return this.keys[keyCode] == 1;
+		return this.activeKeys.contains(keyCode);
 	}
 
 	/**
 	 * Checks to see if the mouse button supplied is pressed.
 	 * 
-	 * @param mouseButton The button to check
+	 * @param mouseButton
+	 *            The button to check
 	 * @return Whether or not that button is pressed
 	 */
 	public boolean isMouseButtonPressed(int mouseButton)
 	{
-		if (mouseButton < 0 || mouseButton >= this.mouseButtons.length)
-			return false;
-		return this.mouseButtons[mouseButton] == 1;
+		return this.activeMouseButtons.contains(mouseButton);
 	}
 
 	/**
 	 * Sets the key with the supplied key code to be pressed or not.
 	 * 
-	 * @param keyCode The key code to set pressed
-	 * @param pressed Whether or not the key should be pressed
+	 * @param keyCode
+	 *            The key code to set pressed
+	 * @param pressed
+	 *            Whether or not the key should be pressed
 	 */
 	public void setKeyPressed(int keyCode, boolean pressed)
 	{
-		if (keyCode < 0 || keyCode >= this.keys.length)
-			return;
-		this.keys[keyCode] = (byte) (pressed ? 1 : 0);
+		if (pressed)
+		{
+			this.activeKeys.add(keyCode);
+		}
+		else
+		{
+			this.activeKeys.remove(keyCode);
+		}
 	}
 
 	/**
 	 * Sets the supplied mouse button to be pressed or not.
 	 * 
-	 * @param mouseButton The button to set to be pressed
-	 * @param pressed Whether or not the button should be pressed
+	 * @param mouseButton
+	 *            The button to set to be pressed
+	 * @param pressed
+	 *            Whether or not the button should be pressed
 	 */
 	public void setMouseButtonPressed(int mouseButton, boolean pressed)
 	{
-		if (mouseButton < 0 || mouseButton >= this.mouseButtons.length)
-			return;
-		this.mouseButtons[mouseButton] = (byte) (pressed ? 1 : 0);
+		if (pressed)
+		{
+			this.activeMouseButtons.add(mouseButton);
+		}
+		else
+		{
+			this.activeMouseButtons.remove(mouseButton);
+		}
 	}
 
 	/**
@@ -101,7 +137,8 @@ public class InputHandler
 			if (GLFW.glfwJoystickPresent(jid))
 			{
 				gamepad.update();
-			} else
+			}
+			else
 			{
 				this.onGamepadDisconnected(jid);
 			}
@@ -111,7 +148,8 @@ public class InputHandler
 	/**
 	 * Registers a gamepad as being connected.
 	 * 
-	 * @param jid The id of the joystick
+	 * @param jid
+	 *            The id of the joystick
 	 */
 	public void onGamepadConnected(int jid)
 	{
@@ -126,7 +164,8 @@ public class InputHandler
 	/**
 	 * Registers a joystick as being disconnected.
 	 * 
-	 * @param jid The id of the joystick
+	 * @param jid
+	 *            The id of the joystick
 	 */
 	public void onGamepadDisconnected(int jid)
 	{
@@ -136,7 +175,8 @@ public class InputHandler
 	/**
 	 * Checks to see if a gamepad is connected.
 	 * 
-	 * @param jid The id of the joystick
+	 * @param jid
+	 *            The id of the joystick
 	 * @return Whether or not the gamepad is connected
 	 */
 	public boolean isGamepadConnected(int jid)
@@ -147,7 +187,8 @@ public class InputHandler
 	/**
 	 * Checks to see if a gamepad is connected to the device.
 	 * 
-	 * @param jid The id of the joystick
+	 * @param jid
+	 *            The id of the joystick
 	 * @return The gamepad or null if it is not connected
 	 */
 	public Gamepad getGamepad(int jid)
