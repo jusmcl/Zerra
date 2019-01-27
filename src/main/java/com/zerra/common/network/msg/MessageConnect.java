@@ -7,6 +7,7 @@ import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.server.ZerraServer;
+import com.zerra.server.world.ServerWorld;
 
 import simplenet.Client;
 import simplenet.packet.Packet;
@@ -47,7 +48,12 @@ public class MessageConnect extends Message
 	public Message handle(Zerra zerra, World world)
 	{
 		// TODO: Player connection logic? e.g. spawn player and notify clients
-		((ZerraServer) zerra).getConnectionManager().addClient(this.senderUUID, this.client);
+		
+		ZerraServer server = ((ZerraServer) zerra);
+		ServerWorld serverWorld = ((ServerWorld) world);
+		server.getConnectionManager().addClient(this.senderUUID, this.client);
+		System.out.println("Server tile indexes: " + serverWorld.getStorageManager().getTileIndexes());
+		server.getConnectionManager().sendToClient(new MessageTileData(serverWorld.getStorageManager().getTileIndexes()), this.client);
 		Zerra.logger().info("Player with UUID {} has joined the server", this.senderUUID);
 		return null;
 	}

@@ -7,6 +7,7 @@ import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.common.network.msg.MessageEntityMove;
 import com.zerra.common.network.msg.MessagePing;
 import com.zerra.common.network.msg.MessagePlateData;
+import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.common.network.msg.MessageUnknownRequest;
 import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.RegistryNameable;
@@ -37,6 +38,7 @@ public class ZerraContentInit
 		regMessage(MessageDisconnect.class);
 		regMessage(MessageEntityMove.class);
 		regMessage(MessagePing.class);
+		regMessage(MessageTileData.class);
 		regMessage(MessagePlateData.class);
 		regMessage(MessageUnknownRequest.class);
 	}

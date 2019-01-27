@@ -5,12 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
 
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.world.ClientWorld;
@@ -18,29 +17,22 @@ import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
-import com.zerra.common.world.storage.IOManager.WorldStorageManager;
-import com.zerra.common.world.storage.plate.Plate;
 
 import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessagePlateData extends Message
+public class MessageTileData extends Message
 {
-	private Plate plate;
 	private List<Pair<Integer, ResourceLocation>> tileIndexes;
-	private Map<ResourceLocation, Integer> tileMapper;
 
-	private byte[] bytes;
-	
-	public MessagePlateData()
+	public MessageTileData()
 	{
+		this(new ArrayList<Pair<Integer, ResourceLocation>>());
 	}
 
-	public MessagePlateData(Plate plate, List<Pair<Integer, ResourceLocation>> tileIndexes, Map<ResourceLocation, Integer> tileMapper)
+	public MessageTileData(List<Pair<Integer, ResourceLocation>> tileIndexes)
 	{
-		this.plate = plate;
 		this.tileIndexes = tileIndexes;
-		this.tileMapper = tileMapper;
 	}
 
 	@Override
@@ -55,11 +47,12 @@ public class MessagePlateData extends Message
 		ByteArrayOutputStream byteOs = new ByteArrayOutputStream();
 		try (DataOutputStream os = new DataOutputStream(byteOs))
 		{
-			os.writeInt(this.plate.getLayer().getLayerId());
-			os.writeInt(this.plate.getPlatePos().x());
-			os.writeInt(this.plate.getPlatePos().y());
-			os.writeInt(this.plate.getPlatePos().z());
-			WorldStorageManager.writePlate(os, this.plate, this.tileIndexes, this.tileMapper);
+			os.writeInt(this.tileIndexes.size());
+			for (Pair<Integer, ResourceLocation> pair : this.tileIndexes)
+			{
+				os.writeInt(pair.getLeft());
+				os.writeUTF(pair.getRight().toString());
+			}
 			os.close();
 		}
 		catch (IOException e)
@@ -76,24 +69,25 @@ public class MessagePlateData extends Message
 	{
 		client.readInt(value -> client.readBytes(value, (bytes) ->
 		{
-			this.bytes = bytes;
+			try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(bytes)))
+			{
+				int size = is.readInt();
+				for (int i = 0; i < size; i++)
+				{
+					this.tileIndexes.add(new ImmutablePair<Integer, ResourceLocation>(is.readInt(), new ResourceLocation(is.readUTF())));
+				}
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}));
 	}
 
 	@Override
 	public Message handle(Zerra zerra, World world)
 	{
-		List<Pair<Integer, ResourceLocation>> tileIndexes = ((ClientWorld) world).getTileIndexes();
-		try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(this.bytes)))
-		{
-			int layer = is.readInt();
-			Vector3ic platePos = new Vector3i(is.readInt(), is.readInt(), is.readInt());
-			WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		((ClientWorld) world).setTileIndexes(this.tileIndexes);
 		return null;
 	}
 }
