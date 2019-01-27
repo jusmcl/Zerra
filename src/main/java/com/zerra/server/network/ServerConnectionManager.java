@@ -7,9 +7,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.annotation.Nullable;
 
+import org.joml.Vector3i;
+
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
+import com.zerra.common.network.msg.MessagePlateData;
 import com.zerra.common.network.msg.MessageReady;
 import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.server.ZerraServer;
@@ -22,7 +25,7 @@ import simplenet.packet.Packet;
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
 	public static final int MAX_BYTES = 10240;
-	
+
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
 	private Deque<Client> queuedClients = new ConcurrentLinkedDeque<>();
 	private boolean doneLoading;
@@ -73,8 +76,19 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 				{
 					this.queuedClients.forEach(queuedClient ->
 					{
+						ServerWorld world = ((ServerWorld) this.zerra.getWorld());
 						this.sendToClient(new MessageReady(), queuedClient);
-						this.sendToClient(new MessageTileData(((ServerWorld) this.zerra.getWorld()).getStorageManager().getTileIndexes()), queuedClient);
+						this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), queuedClient);
+
+						// for (int x = 0; x < 3; x++)
+						// {
+						// for (int z = 0; z < 3; z++)
+						// {
+						// this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i(x - 1, 0, z - 1)), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+						// }
+						// }
+						
+						this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
 					});
 					this.queuedClients.clear();
 					handleMessage(client, id);

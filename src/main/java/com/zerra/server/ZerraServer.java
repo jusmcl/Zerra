@@ -116,7 +116,7 @@ public class ZerraServer extends Zerra
 
 		this.world = new ServerWorld("world");
 
-		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? address : null);
+		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? this.address : null);
 
 		for (int x = 0; x < 3; x++)
 		{

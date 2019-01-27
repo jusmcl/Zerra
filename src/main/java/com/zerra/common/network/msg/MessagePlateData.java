@@ -31,7 +31,7 @@ public class MessagePlateData extends Message
 	private Map<ResourceLocation, Integer> tileMapper;
 
 	private byte[] bytes;
-	
+
 	public MessagePlateData()
 	{
 	}
@@ -74,7 +74,7 @@ public class MessagePlateData extends Message
 	@Override
 	public void readFromClient(Client client)
 	{
-		client.readInt(value -> client.readBytes(value, (bytes) ->
+		client.readInt(value -> client.readBytes(value, bytes ->
 		{
 			this.bytes = bytes;
 		}));
@@ -88,7 +88,7 @@ public class MessagePlateData extends Message
 		{
 			int layer = is.readInt();
 			Vector3ic platePos = new Vector3i(is.readInt(), is.readInt(), is.readInt());
-			WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes);
+			((ClientWorld)world).getLayer(layer).addPlate(platePos, WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes));
 		}
 		catch (IOException e)
 		{

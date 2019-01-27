@@ -51,11 +51,12 @@ public class ServerWorld extends World
 		}
 
 		// Load 3x3 in the first layer
-		for (int x = -1; x <= 1; x++)
+		for (int x = 0; x < 3; x++)
 		{
-			for (int z = -1; z <= 1; z++)
+			for (int z = 0; z < 3; z++)
 			{
-				this.loadPlate(0, new Vector3i(x, 0, z));
+				Vector3i pos = new Vector3i(x - 1, 0, z - 1);
+				this.loadPlate(0, pos);
 			}
 		}
 	}

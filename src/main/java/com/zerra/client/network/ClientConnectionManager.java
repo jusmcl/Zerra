@@ -12,11 +12,13 @@ import simplenet.Client;
 
 public class ClientConnectionManager extends ConnectionManager<Client>
 {
+	public static final int MAX_BYTES = 10240;
+
 	private UUID uuid;
 
 	public ClientConnectionManager(ZerraClient zerra)
 	{
-		super(zerra, new Client());
+		super(zerra, new Client(MAX_BYTES));
 	}
 
 	public void connect()
