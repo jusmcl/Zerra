@@ -42,8 +42,8 @@ public class WorldState extends State
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, zerraClient.getRenderingManager().getFbo().getColorTexture(0));
 		zerraClient.getRenderingManager().getGuiRenderer().setProjectionMatrix(GuiRenderer.FBO_MATRIX);
-		zerraClient.getRenderingManager().getGuiRenderer().renderTextureQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
-		zerraClient.getRenderingManager().getGuiRenderer().restoreProjectionMatrix();
+		zerraClient.getRenderingManager().getGuiRenderer().renderTexturedQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
+		zerraClient.getRenderingManager().getGuiRenderer().restoreDefaultProjectionMatrix();
 	}
 
 	public static void cleanupWorldState()
