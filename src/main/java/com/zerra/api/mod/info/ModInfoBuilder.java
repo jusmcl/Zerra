@@ -201,7 +201,7 @@ public class ModInfoBuilder
 						max = field.getDeclaredAnnotation(Conf.Range.class).max();
 					}
 
-					if (field.getDeclaredAnnotation(Conf.Doc.class) != null)
+					if (field.getDeclaredAnnotation(Conf.Desc.class) != null)
 					{
 
 						String rangeAddon = "";
@@ -209,7 +209,7 @@ public class ModInfoBuilder
 						{
 							rangeAddon = " The minimum value is " + min + " and the maximum value is " + max;
 						}
-						conf.getConfig().putSafe("#doc-" + field.getName(), field.getDeclaredAnnotation(Conf.Doc.class).value() + rangeAddon);
+						conf.getConfig().putSafe("#desc-" + field.getName(), field.getDeclaredAnnotation(Conf.Desc.class).value() + rangeAddon);
 
 						if (field.getType().isAssignableFrom(int.class))
 						{

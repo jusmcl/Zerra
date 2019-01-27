@@ -11,7 +11,7 @@ public @interface Conf
 {
 
 	@Retention(RetentionPolicy.RUNTIME)
-	@interface Doc
+	@interface Desc
 	{
 		String value();
 	}
