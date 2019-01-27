@@ -40,12 +40,7 @@ public class Configuration
 		}
 
 		configWrapper = new JsonWrapper(configFile);
-		this.populateConfig();
 		this.configWrapper.close();
-	}
-
-	public void populateConfig()
-	{
 	}
 
 	public JsonWrapper getConfig()

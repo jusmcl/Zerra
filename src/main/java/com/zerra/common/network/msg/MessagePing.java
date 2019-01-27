@@ -5,6 +5,7 @@ import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.World;
+
 import simplenet.packet.Packet;
 
 public class MessagePing extends Message

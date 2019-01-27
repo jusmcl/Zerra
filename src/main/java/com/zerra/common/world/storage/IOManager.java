@@ -97,8 +97,7 @@ public class IOManager
 				if (contents == null || contents.length <= 0)
 				{
 					writeVersion();
-				}
-				else
+				} else
 				{
 					// TODO: Convert the world to the new version?
 					// But for now we'll ignore until we have converters or another solution in
@@ -110,8 +109,7 @@ public class IOManager
 			try
 			{
 				this.readTileIndexes();
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 				this.tileIndexes.clear();
@@ -126,8 +124,7 @@ public class IOManager
 			{
 				// noinspection ResultOfMethodCallIgnored
 				file.createNewFile();
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				this.world.logger().error("Couldn't create new version file", e);
 				return;
@@ -135,8 +132,7 @@ public class IOManager
 			try (DataOutputStream is = new DataOutputStream(new FileOutputStream(file)))
 			{
 				is.writeInt(VERSION);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				this.world.logger().warn("Error writing to version file!", e);
 			}
@@ -148,8 +144,7 @@ public class IOManager
 			try (DataInputStream is = new DataInputStream(new FileInputStream(file)))
 			{
 				return is.readInt();
-			}
-			catch (IOException ignored)
+			} catch (IOException ignored)
 			{
 			}
 			return -1;
@@ -160,8 +155,7 @@ public class IOManager
 			try
 			{
 				this.writePlate(layer, plate);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -173,8 +167,7 @@ public class IOManager
 			try
 			{
 				return this.readPlate(layer, pos);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 				return null;
@@ -186,8 +179,7 @@ public class IOManager
 			try
 			{
 				this.writeEntities(layer, platePos, entities);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -198,8 +190,7 @@ public class IOManager
 			try
 			{
 				return this.readEntities(layer, platePos);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 				return null;
@@ -211,8 +202,7 @@ public class IOManager
 			try
 			{
 				this.writeWorldData(layer, worldDataMap);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -223,8 +213,7 @@ public class IOManager
 			try
 			{
 				return this.readWorldData(layer);
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 				return null;
@@ -242,14 +231,12 @@ public class IOManager
 					{
 						pairs.add(new ImmutablePair<Integer, ResourceLocation>((int) is.readShort(), new ResourceLocation(is.readUTF())));
 					}
-				}
-				catch (Exception e)
+				} catch (Exception e)
 				{
 					this.world.logger().warn("Could not load tile indexes from {}", tiles.getName());
 				}
 				return pairs;
-			}
-			else
+			} else
 			{
 				return new ArrayList<Pair<Integer, ResourceLocation>>();
 			}
@@ -306,8 +293,7 @@ public class IOManager
 			try
 			{
 				this.writeTileIndexes();
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -356,10 +342,10 @@ public class IOManager
 						try
 						{
 							plate.setTileAt(tilePos, Tiles.byId(this.tileIndexes.get(is.readShort()).getRight()));
-						}
-						catch (Exception e)
+						} catch (Exception e)
 						{
-							this.world.logger().warn("Error loading tile in plate \'" + layer + ":" + platePos.x() + "," + platePos.y() + "," + platePos.z() + "\' at position \'" + x + "," + z + "\'", e);
+							this.world.logger().warn("Error loading tile in plate \'" + layer + ":" + platePos.x() + "," + platePos.y() + "," + platePos.z() + "\' at position \'" + x + "," + z + "\'",
+									e);
 							plate.setTileAt(tilePos, Tile.NONE);
 						}
 					}
@@ -367,8 +353,7 @@ public class IOManager
 				is.close();
 				plate.setPlatePos(platePos);
 				return plate;
-			}
-			catch (Exception e)
+			} catch (Exception e)
 			{
 				is.close();
 				e.printStackTrace();
@@ -403,7 +388,8 @@ public class IOManager
 
 			// Read entities from file
 			/*
-			 * Set<Entity> entities = readStorablesFromFile(file, object -> { //TODO: Deserialise entity data! }); return entities;
+			 * Set<Entity> entities = readStorablesFromFile(file, object -> { //TODO:
+			 * Deserialise entity data! }); return entities;
 			 */
 
 			// TEMP
@@ -460,8 +446,7 @@ public class IOManager
 					FileUtils.touch(backupPlateFile);
 					org.apache.commons.io.IOUtils.copy(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
-			}
-			catch (IOException e)
+			} catch (IOException e)
 			{
 				e.printStackTrace();
 			}
@@ -470,12 +455,9 @@ public class IOManager
 		/**
 		 * Writes objects that implement {@link Storable} to the given file
 		 *
-		 * @param file
-		 *            File to write to
-		 * @param storables
-		 *            Objects to write
-		 * @throws IOException
-		 *             If issues writing to file
+		 * @param file File to write to
+		 * @param storables Objects to write
+		 * @throws IOException If issues writing to file
 		 */
 		private static void writeStorablesToFile(File file, Collection<? extends Storable> storables) throws IOException
 		{
@@ -489,17 +471,14 @@ public class IOManager
 		}
 
 		/**
-		 * Reads objects that implement {@link Storable} from a given file that have been written by writeStorablesToFile
+		 * Reads objects that implement {@link Storable} from a given file that have
+		 * been written by writeStorablesToFile
 		 *
-		 * @param file
-		 *            File the read from
-		 * @param readFunction
-		 *            {@link Function} to read and parse the data
-		 * @param <T>
-		 *            {@link Storable} type
+		 * @param file File the read from
+		 * @param readFunction {@link Function} to read and parse the data
+		 * @param <T> {@link Storable} type
 		 * @return {@link Set} of the collected objects
-		 * @throws IOException
-		 *             If issues reading the file
+		 * @throws IOException If issues reading the file
 		 */
 		private static <T extends Storable> Set<T> readStorablesFromFile(File file, Function<UBObjectWrapper, T> readFunction) throws IOException
 		{

@@ -2,10 +2,13 @@ package com.zerra.api.mod.info;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 
 import javax.annotation.Nullable;
 
 import com.google.gson.JsonObject;
+import com.zerra.api.mod.config.Conf;
+import com.zerra.api.mod.config.Configuration;
 import com.zerra.common.util.JsonWrapper;
 
 /**
@@ -41,6 +44,8 @@ public class ModInfoBuilder
 	private String[] authors;
 
 	private String[] dependencies;
+
+	private Class configClass;
 
 	public ModInfoBuilder(String domain, String modName, String modVersion, String zerraVersion)
 	{
@@ -169,6 +174,69 @@ public class ModInfoBuilder
 	public ModInfoBuilder setAuthors(String... authors)
 	{
 		this.authors = authors;
+		return this;
+	}
+
+	public ModInfoBuilder setConfigClass(Class<?> configClass)
+	{
+		try
+		{
+			if (configClass.isAnnotationPresent(Conf.class))
+			{
+				this.configClass = configClass;
+
+				Configuration conf = new Configuration(this.domain);
+
+				for (Field field : configClass.getFields())
+				{
+					System.out.println("NAME: " + field.getName());
+					System.out.println("TYPE: " + field.getType().getName());
+
+					if (field.getDeclaredAnnotation(Conf.Doc.class) != null)
+					{
+						System.out.println("FOUND ANNOTATION");
+						conf.getConfig().putSafe("#doc-" + field.getName(), field.getDeclaredAnnotation(Conf.Doc.class).value());
+						if (field.getType().isAssignableFrom(int.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getInt(configClass));
+						} else if (field.getType().isAssignableFrom(double.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getDouble(configClass));
+						} else if (field.getType().isAssignableFrom(float.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getFloat(configClass));
+						} else if (field.getType().isAssignableFrom(long.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getLong(configClass));
+						} else if (field.getType().isAssignableFrom(short.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getShort(configClass));
+						} else if (field.getType().isAssignableFrom(byte.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getByte(configClass));
+						} else if (field.getType().isAssignableFrom(char.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getChar(configClass));
+						} else if (field.getType().isAssignableFrom(String.class))
+						{
+							conf.getConfig().putSafe(field.getName(), (String) field.get(configClass));
+						} else if (field.getType().isAssignableFrom(boolean.class))
+						{
+							conf.getConfig().putSafe(field.getName(), field.getBoolean(configClass));
+						} else
+						{
+							// TODO: Maybe handle objects?
+						}
+					}
+				}
+			} else
+			{
+				throw new RuntimeException(String.format("Class with domain %s tried to set a config without the %s annotation!", this.domain, Conf.class.getName()));
+			}
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		return this;
 	}
 

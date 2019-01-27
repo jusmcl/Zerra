@@ -1,15 +1,18 @@
 package com.zerra.common.network;
 
-import com.zerra.common.Zerra;
-import com.zerra.common.world.World;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
-import simplenet.packet.Packet;
 
-import javax.annotation.Nonnull;
-import java.util.UUID;
+import com.zerra.common.Zerra;
+import com.zerra.common.world.World;
+
+import simplenet.packet.Packet;
 
 public abstract class Message
 {

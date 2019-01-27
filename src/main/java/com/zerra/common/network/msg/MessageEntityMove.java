@@ -1,16 +1,19 @@
 package com.zerra.common.network.msg;
 
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
+import org.joml.Vector3fc;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.Entity;
-import org.joml.Vector3fc;
-import simplenet.packet.Packet;
 
-import javax.annotation.Nonnull;
-import java.util.UUID;
+import simplenet.packet.Packet;
 
 public class MessageEntityMove extends Message
 {

@@ -1,16 +1,18 @@
 package com.zerra.server.network;
 
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nullable;
+
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.server.ZerraServer;
+
 import simplenet.Client;
 import simplenet.Server;
 import simplenet.packet.Packet;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
@@ -96,9 +98,9 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 		return this.clients;
 	}
 
-    public boolean addClient(UUID uuid, Client client)
-    {
-        return clients.putIfAbsent(uuid, client) == null;
+	public boolean addClient(UUID uuid, Client client)
+	{
+		return clients.putIfAbsent(uuid, client) == null;
 	}
 
 	public void closeClient(UUID uuid)

@@ -1,17 +1,19 @@
 package com.zerra.common.network;
 
+import java.util.UUID;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.network.msg.MessageConnect;
 import com.zerra.common.registry.Registries;
 import com.zerra.server.network.ServerConnectionManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import simplenet.Client;
 import simplenet.channel.Channeled;
 import simplenet.packet.Packet;
 import simplenet.receiver.Receiver;
-
-import java.util.UUID;
 
 public abstract class ConnectionManager<T extends Receiver & Channeled>
 {
@@ -49,7 +51,7 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		// Attach UUID
 		if (message.includesSender())
 		{
-            LOGGER.debug("Attaching UUID {} to message", getUUID());
+			LOGGER.debug("Attaching UUID {} to message", getUUID());
 			message.setSender(getUUID());
 		}
 		LOGGER.debug("Preparing message {}", message.getClass().getName());
@@ -64,24 +66,24 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 			LOGGER.error("Unknown message: " + messageId);
 		} else
 		{
-            ClientWrapper clientWrapper = new ClientWrapper(client);
+			ClientWrapper clientWrapper = new ClientWrapper(client);
 			// Read the data from the client and handle the message
 			if (message.includesSender() && this instanceof ServerConnectionManager)
 			{
-                message.setSender(message.readUUID(clientWrapper));
+				message.setSender(message.readUUID(clientWrapper));
 			}
 			LOGGER.debug("Handling message type {} from sender {}", message.getClass().getName(), message.getSender());
 
-            //Special handling for a new connection
-            if(message instanceof MessageConnect && this instanceof ServerConnectionManager)
-            {
-                if(((ServerConnectionManager) this).addClient(message.getSender(), client))
-                {
-                    LOGGER.debug("Added new client connection {}", message.getSender());
-                }
-            }
+			// Special handling for a new connection
+			if (message instanceof MessageConnect && this instanceof ServerConnectionManager)
+			{
+				if (((ServerConnectionManager) this).addClient(message.getSender(), client))
+				{
+					LOGGER.debug("Added new client connection {}", message.getSender());
+				}
+			}
 
-            message.readFromClient(clientWrapper);
+			message.readFromClient(clientWrapper);
 			zerra.handleMessage(message);
 		}
 	}

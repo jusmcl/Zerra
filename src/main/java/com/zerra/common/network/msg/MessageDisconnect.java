@@ -1,14 +1,15 @@
 package com.zerra.common.network.msg;
 
+import javax.annotation.Nonnull;
+
 import com.zerra.common.Zerra;
 import com.zerra.common.network.ClientWrapper;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 import com.zerra.server.ZerraServer;
-import simplenet.packet.Packet;
 
-import javax.annotation.Nonnull;
+import simplenet.packet.Packet;
 
 public class MessageDisconnect extends Message
 {

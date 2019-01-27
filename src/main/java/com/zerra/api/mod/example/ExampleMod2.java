@@ -14,12 +14,6 @@ public class ExampleMod2 implements Mod
 		Item item = new Item("testItem");
 		modInit.register(item);
 
-		for (int i = 0; i < ExampleMod.PROGRESS_MAX; i++)
-		{
-			float progress = ((float) i / (float) ExampleMod.PROGRESS_MAX) * 100F;
-			this.getLogger().info("MOD 2 PROGRESS: " + progress + "%");
-		}
-
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 
