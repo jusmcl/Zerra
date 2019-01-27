@@ -173,6 +173,11 @@ public class Display
 	 */
 	public static void setCursor(BufferedImage image, int xhot, int yhot)
 	{
+		if (cursorID != NULL)
+		{
+			GLFW.glfwDestroyCursor(cursorID);
+			cursorID = NULL;
+		}
 		GLFWImage cursorImage = GLFWImage.create();
 		cursorImage.width(image.getWidth());
 		cursorImage.height(image.getHeight());
