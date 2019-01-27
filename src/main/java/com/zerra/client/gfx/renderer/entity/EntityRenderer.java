@@ -14,11 +14,11 @@ public class EntityRenderer
 {
 	private static final Map<Class<? extends Entity>, EntityRender<? extends Entity>> ENTITY_RENDERS = Maps.<Class<? extends Entity>, EntityRender<? extends Entity>>newHashMap();
 
-	private Map<Integer, Map<String, List<Entity>>> renderEntities;
+	private Map<Integer, Map<Class<? extends Entity>, List<Entity>>> renderEntities;
 
 	public EntityRenderer()
 	{
-		this.renderEntities = new HashMap<Integer, Map<String, List<Entity>>>();
+		this.renderEntities = new HashMap<Integer, Map<Class<? extends Entity>, List<Entity>>>();
 	}
 
 	public void add(Collection<Entity> entities)
@@ -41,26 +41,33 @@ public class EntityRenderer
 	{
 		if (!this.renderEntities.containsKey(entity.getLayerId()))
 		{
-			this.renderEntities.put(entity.getLayerId(), new HashMap<String, List<Entity>>());
+			this.renderEntities.put(entity.getLayerId(), new HashMap<Class<? extends Entity>, List<Entity>>());
 		}
-		Map<String, List<Entity>> entityBatch = this.renderEntities.get(entity.getLayerId());
-		if (!entityBatch.containsKey(entity.getRegistryName()))
+		Map<Class<? extends Entity>, List<Entity>> entityBatch = this.renderEntities.get(entity.getLayerId());
+		if (!entityBatch.containsKey(entity.getClass()))
 		{
-			entityBatch.put(entity.getRegistryName(), new ArrayList<Entity>());
+			entityBatch.put(entity.getClass(), new ArrayList<Entity>());
 		}
-		entityBatch.get(entity.getRegistryName()).add(entity);
+		entityBatch.get(entity.getClass()).add(entity);
 	}
 
 	public void renderEntities(int layer, ICamera camera, float partialTicks)
 	{
-		if (!this.renderEntities.isEmpty())
+		Map<Class<? extends Entity>, List<Entity>> layerBatch = this.renderEntities.get(layer);
+		if (layerBatch != null)
 		{
-			System.out.println(this.renderEntities);
+			for (Class<? extends Entity> type : layerBatch.keySet())
+			{
+				List<Entity> entities = layerBatch.get(type);
+				for (Entity entity : entities)
+				{
+				}
+			}
 		}
 		this.renderEntities.clear();
 	}
 
-	public static <T extends Entity> void bindEntityRender(Class<T> entityClass, EntityRender<T> render)
+	public static void bindEntityRender(Class<? extends Entity> entityClass, EntityRender<? extends Entity> render)
 	{
 		ENTITY_RENDERS.put(entityClass, render);
 	}
