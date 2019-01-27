@@ -9,6 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.World;
+import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 
 public class ClientWorld extends World
@@ -21,6 +22,9 @@ public class ClientWorld extends World
 		super(name, seed, false);
 		this.tileIndexes = new ArrayList<Pair<Integer, ResourceLocation>>();
 		this.tileMapper = new HashMap<ResourceLocation, Integer>();
+
+		// TODO remove this temp code and sync with server instead
+		this.addEntity(new EntityPlayer(this));
 	}
 
 	@Override
@@ -29,7 +33,12 @@ public class ClientWorld extends World
 		// TODO: Update client world here.
 	}
 	
-	public void setTileIndexes(List<Pair<Integer, ResourceLocation>> tileIndexes) {
+	public void render(float partialTicks) {
+		
+	}
+
+	public void setTileIndexes(List<Pair<Integer, ResourceLocation>> tileIndexes)
+	{
 		this.tileIndexes.clear();
 		this.tileIndexes.addAll(tileIndexes);
 		this.tileMapper.clear();
