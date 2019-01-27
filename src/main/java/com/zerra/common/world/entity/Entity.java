@@ -50,15 +50,15 @@ public abstract class Entity implements Storable
 
 	private Direction direction;
 
-	public Entity(WorldLayer worldLayer)
+	public Entity(World world)
 	{
 		this.attributes = new HashMap<String, Attribute<?>>();
 
 		// Set world.
-		this.world = worldLayer.getWorld();
+		this.world = world;
 
 		// Set layer
-		this.layer = worldLayer.getLayerId();
+		this.layer = 0;
 
 		// Set to origin.
 		this.entityPosition.set(0f, 0f, 0f);

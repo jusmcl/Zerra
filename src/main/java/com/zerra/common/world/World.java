@@ -88,6 +88,7 @@ public class World
 		Layer worldLayer = this.getLayer(entity.getLayerId());
 		if (worldLayer != null)
 		{
+			entity.spawn();
 			worldLayer.getEntities().add(entity);
 		}
 	}

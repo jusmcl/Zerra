@@ -127,7 +127,7 @@ public class ZerraServer extends Zerra
 		}
 
 		this.eventHandler = new EventHandler();
-		this.serverManager.onFinishLoading();
+		this.schedule(() -> this.serverManager.onFinishLoading());
 	}
 
 	@Override

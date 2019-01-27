@@ -2,14 +2,13 @@ package com.zerra.common.world.entity;
 
 import com.zerra.common.event.entity.EntityDeathEvent;
 import com.zerra.common.event.entity.EntityLivingEvent;
-import com.zerra.common.world.storage.plate.WorldLayer;
+import com.zerra.common.world.World;
 
 public class EntityLiving extends Entity
 {
-
-	public EntityLiving(WorldLayer worldLayer)
+	public EntityLiving(World world)
 	{
-		super(worldLayer);
+		super(world);
 	}
 
 	// TODO move this to the spot where entities are removed

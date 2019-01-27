@@ -1,11 +1,12 @@
 package com.zerra.common.world.entity;
 
-import com.zerra.common.world.storage.plate.WorldLayer;
+import com.zerra.common.world.World;
 
 public class EntityPlayer extends Entity
 {
-	public EntityPlayer(WorldLayer worldLayer)
+	public EntityPlayer(World world)
 	{
-		super(worldLayer);
+		super(world);
+		this.setRegistryName("player");
 	}
 }
