@@ -200,12 +200,9 @@ public class ModInfoBuilder
 						min = field.getDeclaredAnnotation(Conf.Range.class).min();
 						max = field.getDeclaredAnnotation(Conf.Range.class).max();
 					}
-					System.out.println("NAME: " + field.getName());
-					System.out.println("TYPE: " + field.getType().getName());
 
 					if (field.getDeclaredAnnotation(Conf.Doc.class) != null)
 					{
-						System.out.println("FOUND ANNOTATION");
 
 						String rangeAddon = "";
 						if (flag)
