@@ -31,7 +31,7 @@ public class WorldState extends State
 	}
 
 	@Override
-	public void render()
+	public void render(float partialTicks)
 	{
 		zerraClient.getRenderingManager().getFbo().bindFrameBuffer();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

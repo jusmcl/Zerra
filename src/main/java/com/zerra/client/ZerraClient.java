@@ -122,7 +122,7 @@ public class ZerraClient extends Zerra
 	{
 		if (StateManager.getActiveState() != null)
 		{
-			StateManager.getActiveState().render();
+			StateManager.getActiveState().render(this.getRenderPartialTicks());
 		}
 	}
 
