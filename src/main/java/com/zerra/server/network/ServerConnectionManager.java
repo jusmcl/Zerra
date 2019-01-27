@@ -69,27 +69,21 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 		// MessageConnect!
 		this.receiver.onConnect(client ->
 		{
+			ServerWorld world = ((ServerWorld) this.zerra.getWorld());
+			this.sendToClient(new MessageReady(), client);
+			this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), client);
+			this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+
 			this.queuedClients.add(client);
 			client.readIntAlways(id ->
 			{
 				if (this.doneLoading)
 				{
-					this.queuedClients.forEach(queuedClient ->
-					{
-						ServerWorld world = ((ServerWorld) this.zerra.getWorld());
-						this.sendToClient(new MessageReady(), queuedClient);
-						this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), queuedClient);
-
-						for (int x = 0; x < 3; x++)
-						{
-							for (int z = 0; z < 3; z++)
-							{
-								this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i(x - 1, 0, z - 1)), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
-							}
-						}
-					});
-					this.queuedClients.clear();
 					handleMessage(client, id);
+				}
+				else
+				{
+					System.out.println("TEST");
 				}
 			});
 		});
@@ -158,5 +152,13 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	public void onFinishLoading()
 	{
 		this.doneLoading = true;
+		this.queuedClients.forEach(queuedClient ->
+		{
+			ServerWorld world = ((ServerWorld) this.zerra.getWorld());
+			this.sendToClient(new MessageReady(), queuedClient);
+			this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), queuedClient);
+			this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), queuedClient);
+		});
+		this.queuedClients.clear();
 	}
 }
