@@ -102,7 +102,7 @@ public class InputHandler
 		}
 		else
 		{
-			this.activeKeys.remove(keyCode);
+			this.activeKeys.remove((Integer)keyCode);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class InputHandler
 		}
 		else
 		{
-			this.activeMouseButtons.remove(mouseButton);
+			this.activeMouseButtons.remove((Integer)mouseButton);
 		}
 	}
 
