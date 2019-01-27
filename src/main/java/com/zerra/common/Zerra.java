@@ -40,6 +40,7 @@ public abstract class Zerra implements Runnable
 
 	public synchronized void stop()
 	{
+        pool.shutdown();
 		single.shutdown();
 	}
 
