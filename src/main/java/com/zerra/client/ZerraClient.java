@@ -1,5 +1,7 @@
 package com.zerra.client;
 
+import java.util.Locale;
+
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.api.mod.ModManager;
@@ -7,6 +9,7 @@ import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
+import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
@@ -37,13 +40,10 @@ public class ZerraClient extends Zerra
 	protected InputHandler inputHandler;
 
 	private EventHandler eventHandler;
-
 	private ModManager modManager;
-
 	private RenderingManager renderingManager;
 
 	private ClientConnectionManager clientConnection;
-
 	private ClientWorld world;
 
 	public ZerraClient()
@@ -158,8 +158,9 @@ public class ZerraClient extends Zerra
 		// TODO: Create the world and set the world in the ClientConnectionManager
 		// instance
 
-		modManager = new ModManager();
-		modManager.setupMods();
+		this.modManager = new ModManager();
+		this.modManager.setupMods();
+		I18n.setLanguage(new Locale("en", "us"));
 
 		this.clientConnection = new ClientConnectionManager(this);
 	}
