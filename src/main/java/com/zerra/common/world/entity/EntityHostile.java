@@ -5,16 +5,16 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import com.zerra.common.util.UBObjectWrapper;
+import com.zerra.common.world.World;
 import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.plate.WorldLayer;
 
 public abstract class EntityHostile extends EntityLiving implements HostileEntity
 {
 	private Entity attackTarget;
 
-	public EntityHostile(WorldLayer worldLayer)
+	public EntityHostile(World world)
 	{
-		super(worldLayer);
+		super(world);
 	}
 
 	@Override

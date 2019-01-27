@@ -1,5 +1,7 @@
 package com.zerra.common.world.entity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -15,6 +17,10 @@ import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
 import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
+import com.zerra.common.world.entity.attrib.Attribute;
+import com.zerra.common.world.entity.attrib.AttributeFactory;
+import com.zerra.common.world.entity.attrib.AttributeType;
+import com.zerra.common.world.entity.attrib.RangeAttribute;
 import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.Storable;
@@ -22,8 +28,9 @@ import com.zerra.common.world.storage.plate.WorldLayer;
 
 public abstract class Entity implements Storable
 {
+	private Map<String, Attribute<?>> attributes;
 
-	protected World world;
+	private World world;
 	private String registryName;
 	private UUID uuid;
 
@@ -37,21 +44,21 @@ public abstract class Entity implements Storable
 	private Vector2f entitySize = new Vector2f();
 
 	private boolean isInvisible;
-	private boolean isInWater;
-	private boolean isOnFire;
 
 	// Used in determining starting point of collision box sizing.
 	private float anchorPoint = 0f;
 
 	private Direction direction;
 
-	public Entity(WorldLayer worldLayer)
+	public Entity(World world)
 	{
+		this.attributes = new HashMap<String, Attribute<?>>();
+
 		// Set world.
-		this.world = worldLayer.getWorld();
+		this.world = world;
 
 		// Set layer
-		this.layer = worldLayer.getLayerId();
+		this.layer = 0;
 
 		// Set to origin.
 		this.entityPosition.set(0f, 0f, 0f);
@@ -90,7 +97,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the registry name for this entity
 	 *
-	 * @param name The registry name
+	 * @param name
+	 *            The registry name
 	 */
 	public void setRegistryName(String name)
 	{
@@ -108,8 +116,7 @@ public abstract class Entity implements Storable
 	}
 
 	/**
-	 * Gets the unique ID for this entity Will be null if the entity has not been
-	 * spawned yet
+	 * Gets the unique ID for this entity Will be null if the entity has not been spawned yet
 	 *
 	 * @return Unique ID
 	 */
@@ -131,11 +138,20 @@ public abstract class Entity implements Storable
 	}
 
 	/**
+	 * Called during entity construction to add entity attributes to the map. Use {@link AttributeFactory} to create new attributes.
+	 * 
+	 * @param attributes
+	 *            The attributes map
+	 */
+	protected void setEntityAttributes(Map<String, Attribute<?>> attributes)
+	{
+	}
+
+	/**
 	 * Called during entity construction.
 	 */
-	public void init()
+	protected void init()
 	{
-
 	}
 
 	/**
@@ -151,7 +167,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the facing of this entity
 	 *
-	 * @param direction Entity facing
+	 * @param direction
+	 *            Entity facing
 	 */
 	public void setFacingDirection(Direction direction)
 	{
@@ -247,9 +264,12 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the size of the entity.
 	 *
-	 * @param width Entity width
-	 * @param height Entity height
-	 * @param anchorPoint Entity collision box start point offset
+	 * @param width
+	 *            Entity width
+	 * @param height
+	 *            Entity height
+	 * @param anchorPoint
+	 *            Entity collision box start point offset
 	 */
 	public void setSize(float width, float height, float anchorPoint)
 	{
@@ -281,7 +301,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets the velocity of this entity
 	 *
-	 * @param velocity Velocity
+	 * @param velocity
+	 *            Velocity
 	 */
 	public void setVelocity(Vector3fc velocity)
 	{
@@ -291,7 +312,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Adds to the velocity of this entity
 	 *
-	 * @param velocity Velocity to add
+	 * @param velocity
+	 *            Velocity to add
 	 */
 	public void addVelocity(Vector3fc velocity)
 	{
@@ -311,7 +333,8 @@ public abstract class Entity implements Storable
 	/**
 	 * Calculates the distance of this entity to another entity
 	 *
-	 * @param entity Other entity
+	 * @param entity
+	 *            Other entity
 	 * @return Distance to the other entity
 	 */
 	public float getDistanceTo(Entity entity)
@@ -320,10 +343,10 @@ public abstract class Entity implements Storable
 	}
 
 	/**
-	 * Calculates the distance of this entity to a position in the current world
-	 * layer
+	 * Calculates the distance of this entity to a position in the current world layer
 	 *
-	 * @param pos Position in the world layer
+	 * @param pos
+	 *            Position in the world layer
 	 * @return Distance to the position
 	 */
 	public float getDistanceTo(Vector3fc pos)
@@ -354,51 +377,12 @@ public abstract class Entity implements Storable
 	/**
 	 * Sets if this entity should be invisible
 	 *
-	 * @param invisible Whether this entity should be invisible
+	 * @param invisible
+	 *            Whether this entity should be invisible
 	 */
 	public void setInvisible(boolean invisible)
 	{
 		isInvisible = invisible;
-	}
-
-	/**
-	 * Gets if this entity is in water
-	 *
-	 * @return If this entity is in water
-	 */
-	public boolean isInWater()
-	{
-		return this.isInWater;
-	}
-
-	/**
-	 * Sets if this entity is in water
-	 *
-	 * @param isInWater Whether this entity is in water
-	 */
-	public void setInWater(boolean isInWater)
-	{
-		this.isInWater = isInWater;
-	}
-
-	/**
-	 * Gest if this entity is on fire
-	 *
-	 * @return If this entity is on fire
-	 */
-	public boolean isOnFire()
-	{
-		return this.isOnFire;
-	}
-
-	/**
-	 * Sets if this entity should be on fire
-	 *
-	 * @param isOnFire Whether this entity should be on fire
-	 */
-	public void setOnFire(boolean isOnFire)
-	{
-		this.isOnFire = isOnFire;
 	}
 
 	/**
@@ -454,14 +438,101 @@ public abstract class Entity implements Storable
 		// Direction
 		ubo.setByte("direction", (byte) this.direction.ordinal());
 
+		// Attributes
+		UBObjectWrapper attributesUbo = new UBObjectWrapper();
+		for (String attributeName : this.attributes.keySet())
+		{
+			Attribute<?> attribute = this.attributes.get(attributeName);
+			RangeAttribute<?> range = attribute instanceof RangeAttribute<?> ? (RangeAttribute<?>) attribute : null;
+			Object value = attribute.getValue();
+
+			UBObjectWrapper attributeUbo = new UBObjectWrapper();
+			if (value instanceof Byte)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.BYTE_RANGE.getId() : AttributeType.BYTE.getId());
+				attributeUbo.setByte("value", (Byte) value);
+				if (range != null)
+				{
+					attributeUbo.setByte("minValue", (Byte) range.getMinimumValue());
+					attributeUbo.setByte("maxValue", (Byte) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Short)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.SHORT_RANGE.getId() : AttributeType.SHORT.getId());
+				attributeUbo.setShort("value", (Short) value);
+				if (range != null)
+				{
+					attributeUbo.setShort("minValue", (Short) range.getMinimumValue());
+					attributeUbo.setShort("maxValue", (Short) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Integer)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.INTEGER_RANGE.getId() : AttributeType.INTEGER.getId());
+				attributeUbo.setInt("value", (Integer) value);
+				if (range != null)
+				{
+					attributeUbo.setInt("minValue", (Integer) range.getMinimumValue());
+					attributeUbo.setInt("maxValue", (Integer) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Float)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.FLOAT_RANGE.getId() : AttributeType.FLOAT.getId());
+				attributeUbo.setFloat("value", (Float) value);
+				if (range != null)
+				{
+					attributeUbo.setFloat("minValue", (Float) range.getMinimumValue());
+					attributeUbo.setFloat("maxValue", (Float) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Double)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.DOUBLE_RANGE.getId() : AttributeType.DOUBLE.getId());
+				attributeUbo.setDouble("value", (Double) value);
+				if (range != null)
+				{
+					attributeUbo.setDouble("minValue", (Double) range.getMinimumValue());
+					attributeUbo.setDouble("maxValue", (Double) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Long)
+			{
+				attributeUbo.setByte("type", range != null ? AttributeType.LONG_RANGE.getId() : AttributeType.LONG.getId());
+				attributeUbo.setLong("value", (Long) value);
+				if (range != null)
+				{
+					attributeUbo.setLong("minValue", (Long) range.getMinimumValue());
+					attributeUbo.setLong("maxValue", (Long) range.getMaximumValue());
+				}
+			}
+			else if (value instanceof Boolean)
+			{
+				attributeUbo.setByte("type", AttributeType.BOOLEAN.getId());
+				attributeUbo.setBoolean("value", (Boolean) value);
+			}
+			else if (value instanceof String)
+			{
+				attributeUbo.setByte("type", AttributeType.STRING.getId());
+				attributeUbo.setString("value", (String) value);
+			}
+			else
+			{
+				throw new RuntimeException("Invalid attribute type \'" + value.getClass().getName() + "\'");
+			}
+
+			attributesUbo.setUBObject(attributeName, attributeUbo);
+		}
+		ubo.setUBObject("attributes", attributesUbo);
+
 		// Misc
 		ubo.setBoolean("invisible", this.isInvisible);
-		ubo.setBoolean("inWater", this.isInWater);
-		ubo.setBoolean("onFire", this.isOnFire);
 
 		return ubo;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void readFromUBO(@Nonnull UBObjectWrapper ubo)
 	{
@@ -479,7 +550,8 @@ public abstract class Entity implements Storable
 		if (uboPos == null)
 		{
 			setPosition(new Vector3f(0F, 0F, 0F));
-		} else
+		}
+		else
 		{
 			setPosition(new Vector3f(uboPos.getFloatSafe("x"), uboPos.getFloatSafe("y"), uboPos.getFloatSafe("z")));
 		}
@@ -490,9 +562,79 @@ public abstract class Entity implements Storable
 		// Layer
 		this.layer = ubo.getIntSafe("layer");
 
+		// Attributes
+		UBObjectWrapper attributesUbo = ubo.getUBObjectWrapped("attributes");
+		for (String attributeName : attributesUbo.getWrappedUBObject().keySet())
+		{
+			Attribute<?> attribute = this.attributes.get(attributeName);
+			if (attribute == null)
+				throw new RuntimeException("Entity \'" + this.getClass().getName() + "\' has additional attributes in UBO that aren't registered!");
+			UBObjectWrapper attributeUbo = attributesUbo.getUBObjectWrapped(attributeName);
+			AttributeType type = AttributeType.byId(attributeUbo.getByte("type"));
+
+			switch (type)
+			{
+			case BYTE:
+				((Attribute<Byte>) attribute).setValue(attributeUbo.getByteSafe("value"));
+				break;
+			case SHORT:
+				((Attribute<Short>) attribute).setValue(attributeUbo.getShortSafe("value"));
+				break;
+			case INTEGER:
+				((Attribute<Integer>) attribute).setValue(attributeUbo.getIntSafe("value"));
+				break;
+			case FLOAT:
+				((Attribute<Float>) attribute).setValue(attributeUbo.getFloatSafe("value"));
+				break;
+			case DOUBLE:
+				((Attribute<Double>) attribute).setValue(attributeUbo.getDoubleSafe("value"));
+				break;
+			case LONG:
+				((Attribute<Long>) attribute).setValue(attributeUbo.getLongSafe("value"));
+				break;
+			case BYTE_RANGE:
+				((RangeAttribute<Byte>) attribute).setValue(attributeUbo.getByteSafe("value"));
+				((RangeAttribute<Byte>) attribute).setMinimumValue(attributeUbo.getByteSafe("minValue"));
+				((RangeAttribute<Byte>) attribute).setMaximumValue(attributeUbo.getByteSafe("maxValue"));
+				break;
+			case SHORT_RANGE:
+				((RangeAttribute<Short>) attribute).setValue(attributeUbo.getShortSafe("value"));
+				((RangeAttribute<Short>) attribute).setMinimumValue(attributeUbo.getShortSafe("minValue"));
+				((RangeAttribute<Short>) attribute).setMaximumValue(attributeUbo.getShortSafe("maxValue"));
+				break;
+			case INTEGER_RANGE:
+				((RangeAttribute<Integer>) attribute).setValue(attributeUbo.getIntSafe("value"));
+				((RangeAttribute<Integer>) attribute).setMinimumValue(attributeUbo.getIntSafe("minValue"));
+				((RangeAttribute<Integer>) attribute).setMaximumValue(attributeUbo.getIntSafe("maxValue"));
+				break;
+			case FLOAT_RANGE:
+				((RangeAttribute<Float>) attribute).setValue(attributeUbo.getFloatSafe("value"));
+				((RangeAttribute<Float>) attribute).setMinimumValue(attributeUbo.getFloatSafe("minValue"));
+				((RangeAttribute<Float>) attribute).setMaximumValue(attributeUbo.getFloatSafe("maxValue"));
+				break;
+			case DOUBLE_RANGE:
+				((RangeAttribute<Double>) attribute).setValue(attributeUbo.getDoubleSafe("value"));
+				((RangeAttribute<Double>) attribute).setMinimumValue(attributeUbo.getDoubleSafe("minValue"));
+				((RangeAttribute<Double>) attribute).setMaximumValue(attributeUbo.getDoubleSafe("maxValue"));
+				break;
+			case LONG_RANGE:
+				((RangeAttribute<Long>) attribute).setValue(attributeUbo.getLongSafe("value"));
+				((RangeAttribute<Long>) attribute).setMinimumValue(attributeUbo.getLongSafe("minValue"));
+				((RangeAttribute<Long>) attribute).setMaximumValue(attributeUbo.getLongSafe("maxValue"));
+				break;
+			case BOOLEAN:
+				((Attribute<Boolean>) attribute).setValue(attributeUbo.getBooleanSafe("value"));
+				break;
+			case STRING:
+				((Attribute<String>) attribute).setValue(attributeUbo.getStringSafe("value"));
+				break;
+			default:
+				throw new RuntimeException("Invalid attribute type \'" + type.name() + "\'");
+			}
+		}
+		ubo.setUBObject("attributes", attributesUbo);
+
 		// Misc
 		this.isInvisible = ubo.getBooleanSafe("invisible");
-		this.isInWater = ubo.getBooleanSafe("inWater");
-		this.isOnFire = ubo.getBooleanSafe("onFire");
 	}
 }
