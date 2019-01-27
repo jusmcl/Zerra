@@ -12,6 +12,7 @@ import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.common.Reference;
+import com.zerra.common.Zerra;
 import com.zerra.common.network.msg.MessagePing;
 import com.zerra.common.world.storage.plate.Plate;
 
@@ -128,7 +129,7 @@ public class Camera implements ICamera
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
 			{
-				System.out.println("creating world state...");
+				Zerra.logger().info("creating world state...");
 				if (StateManager.getActiveState() == null)
 				{
 					StateManager.setActiveState(new GameLoadState());

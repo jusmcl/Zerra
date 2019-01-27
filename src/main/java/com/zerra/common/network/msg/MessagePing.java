@@ -23,6 +23,12 @@ public class MessagePing extends Message
 	}
 
 	@Override
+	public boolean includesSender()
+	{
+		return true;
+	}
+
+	@Override
 	protected void writeToPacket(Packet packet)
 	{
 		packet.putLong(this.snapshot);
@@ -31,7 +37,7 @@ public class MessagePing extends Message
 	@Override
 	public void readFromClient(Client client)
 	{
-		client.readLong(value -> this.snapshot = value);
+		this.snapshot = client.readLong();
 	}
 
 	@Override
@@ -40,7 +46,8 @@ public class MessagePing extends Message
 		if (zerra.isClient())
 		{
 			Zerra.logger().info("Ping: " + MiscUtils.millisSinceTime(this.snapshot));
-		} else
+		}
+		else
 		{
 			// Send the time snapshot back to the client
 			return new MessagePing(this.snapshot);

@@ -25,8 +25,7 @@ public abstract class Message
 	}
 
 	/**
-	 * Prepares this message to be send by writing the data into a new
-	 * {@link Packet} and returning it
+	 * Prepares this message to be send by writing the data into a new {@link Packet} and returning it
 	 */
 	public final Packet prepare()
 	{
@@ -74,8 +73,7 @@ public abstract class Message
 	}
 
 	/**
-	 * Returns if this message should have a UUID attached from the client who sent
-	 * it
+	 * Returns if this message should have a UUID attached from the client who sent it
 	 */
 	public boolean includesSender()
 	{
@@ -94,22 +92,26 @@ public abstract class Message
 	/**
 	 * Implement this and write any data to the {@link Packet}
 	 *
-	 * @param packet The packet to be sent
+	 * @param packet
+	 *            The packet to be sent
 	 */
 	protected abstract void writeToPacket(Packet packet);
 
 	/**
 	 * Implement this and read all data from the {@link Client}
 	 *
-	 * @param client Client to read data back from
+	 * @param client
+	 *            Client to read data back from
 	 */
 	public abstract void readFromClient(Client client);
 
 	/**
 	 * Implement this and handle this message on the receiving end
 	 *
-	 * @param zerra The {@link Zerra} instance
-	 * @param world The {@link World} instance
+	 * @param zerra
+	 *            The {@link Zerra} instance
+	 * @param world
+	 *            The {@link World} instance
 	 * @return null or a {@link Message} to reply back to the sender
 	 */
 	public abstract Message handle(Zerra zerra, World world);
@@ -125,10 +127,9 @@ public abstract class Message
 
 	protected final UUID readUUID(Client client)
 	{
-		final long[] uuidParts = new long[2];
-		client.readLong(value -> uuidParts[0] = value);
-		client.readLong(value -> uuidParts[1] = value);
-		return new UUID(uuidParts[0], uuidParts[1]);
+		long most = client.readLong();
+		long least = client.readLong();
+		return new UUID(most, least);
 	}
 
 	protected final Packet putVector3i(Packet packet, Vector3ic vector3ic)
@@ -138,11 +139,10 @@ public abstract class Message
 
 	protected final Vector3ic readVector3i(Client client)
 	{
-		final int[] vectorParts = new int[3];
-		client.readInt(value -> vectorParts[0] = value);
-		client.readInt(value -> vectorParts[1] = value);
-		client.readInt(value -> vectorParts[2] = value);
-		return new Vector3i(vectorParts[0], vectorParts[1], vectorParts[2]);
+		int x = client.readInt();
+		int y = client.readInt();
+		int z = client.readInt();
+		return new Vector3i(x, y, z);
 	}
 
 	protected final Packet putVector3f(Packet packet, Vector3fc vector3fc)
@@ -152,10 +152,9 @@ public abstract class Message
 
 	protected final Vector3fc readVector3f(Client client)
 	{
-		final float[] vectorParts = new float[3];
-		client.readFloat(value -> vectorParts[0] = value);
-		client.readFloat(value -> vectorParts[1] = value);
-		client.readFloat(value -> vectorParts[2] = value);
-		return new Vector3f(vectorParts[0], vectorParts[1], vectorParts[2]);
+		float x = client.readFloat();
+		float y = client.readFloat();
+		float z = client.readFloat();
+		return new Vector3f(x, y, z);
 	}
 }

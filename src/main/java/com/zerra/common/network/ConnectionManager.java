@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.zerra.common.Zerra;
+import com.zerra.common.network.msg.MessageConnect;
 import com.zerra.common.registry.Registries;
 import com.zerra.server.network.ServerConnectionManager;
 
@@ -30,8 +31,7 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 	}
 
 	/**
-	 * Sets the message ID and client UUID as sender and returns the result of
-	 * {@link Message#prepare()}
+	 * Sets the message ID and client UUID as sender and returns the result of {@link Message#prepare()}
 	 */
 	protected Packet prepareMessage(Message message)
 	{
@@ -50,6 +50,7 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		// Attach UUID
 		if (message.includesSender())
 		{
+			LOGGER.debug("Attaching UUID {} to message", getUUID());
 			message.setSender(getUUID());
 		}
 		LOGGER.debug("Preparing message {}", message.getClass().getName());
@@ -62,7 +63,8 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 		if (message == null)
 		{
 			LOGGER.error("Unknown message: " + messageId);
-		} else
+		}
+		else
 		{
 			// Read the data from the client and handle the message
 			if (message.includesSender() && this instanceof ServerConnectionManager)
@@ -70,6 +72,16 @@ public abstract class ConnectionManager<T extends Receiver & Channeled>
 				message.setSender(message.readUUID(client));
 			}
 			LOGGER.debug("Handling message type {} from sender {}", message.getClass().getName(), message.getSender());
+
+			// Special handling for a new connection
+			if (message instanceof MessageConnect && this instanceof ServerConnectionManager)
+			{
+				if (((ServerConnectionManager) this).addClient(message.getSender(), client))
+				{
+					LOGGER.debug("Added new client connection {}", message.getSender());
+				}
+			}
+
 			message.readFromClient(client);
 			zerra.handleMessage(message);
 		}

@@ -21,6 +21,10 @@ public class MessageEntityMove extends Message
 	private Vector3fc entityPos;
 	private Vector3fc entityVel;
 
+	public MessageEntityMove()
+	{
+	}
+
 	public MessageEntityMove(Entity entity)
 	{
 		this.entityUUID = entity.getUUID();

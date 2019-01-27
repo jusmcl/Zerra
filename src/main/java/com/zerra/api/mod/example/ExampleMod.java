@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import com.zerra.api.mod.Mod;
 import com.zerra.api.mod.ModInit;
-import com.zerra.api.mod.config.Configuration;
 import com.zerra.api.mod.info.ModInfo;
 import com.zerra.api.mod.info.ModInfoBuilder;
 import com.zerra.common.util.UBObjectWrapper;
@@ -15,6 +14,9 @@ import com.zerra.common.world.item.Item;
 public class ExampleMod implements Mod
 {
 	public static final int PROGRESS_MAX = 100;
+	private ModInfo info = new ModInfoBuilder("examplemod", "Example Mod", "1.0", "0.0.4").setAuthors("Arpaesis").setCredits("Credits to the Zerra development team for making the game!")
+			.setDependencies("exampledependency", "exampledependency2", "anotherexampledependency").setModDescription("A simple example mod.").setWebsiteURL("https://www.example.com")
+			.setConfigClass(ExampleConfiguration.class).build();
 
 	@Override
 	public void init(ModInit modInit)
@@ -27,16 +29,6 @@ public class ExampleMod implements Mod
 		modInit.register(new WorldDataFactory<>("exampleWorldData", ExampleWorldData.class));
 		modInit.register(new WorldDataFactory<>("perLayerExampleWorldData", ExampleWorldData.class).setIsPerLayer().setLayerPredicate(layer -> layer == 1));
 
-		for (int i = 0; i < PROGRESS_MAX; i++)
-		{
-			float progress = ((float) i / (float) PROGRESS_MAX) * 100F;
-			this.getLogger().info("MOD 1 PROGRESS: " + progress + "%");
-		}
-
-		Configuration config = new ExampleConfiguration("example_config");
-		
-		System.out.println(config.getConfig().getBoolean("entitiesEnabled"));
-
 		this.getLogger().info(this.getModInfo().getModName() + " has finished initialization.");
 	}
 
@@ -48,8 +40,7 @@ public class ExampleMod implements Mod
 	@Override
 	public ModInfo getModInfo()
 	{
-		return new ModInfoBuilder("examplemod", "Example Mod", "1.0", "0.0.4").setAuthors("Arpaesis").setCredits("Credits to the Zerra development team for making the game!")
-				.setDependencies("exampledependency", "exampledependency2", "anotherexampledependency").setModDescription("A simple example mod.").setWebsiteURL("https://www.example.com").build();
+		return info;
 	}
 
 	public static class ExampleWorldData extends WorldData
@@ -85,24 +76,5 @@ public class ExampleMod implements Mod
 			this.number = ubo.getIntSafe("number");
 			super.readFromUBO(ubo);
 		}
-	}
-
-	public static class ExampleConfiguration extends Configuration
-	{
-
-		public ExampleConfiguration(String name)
-		{
-			super(name);
-		}
-
-		@Override
-		public void populateConfig()
-		{
-			this.getConfig().putSafe("entitiesEnabled", true);
-			this.getConfig().putSafe("maxEntityCount", 200);
-			this.getConfig().putSafe("entityTicksPerSecond", 20.0F);
-			this.getConfig().putSafe("entityMoveSpeed", 20.0D);
-		}
-
 	}
 }

@@ -13,10 +13,6 @@ import simplenet.packet.Packet;
 
 public class MessageDisconnect extends Message
 {
-	public MessageDisconnect()
-	{
-	}
-
 	@Override
 	public boolean includesSender()
 	{

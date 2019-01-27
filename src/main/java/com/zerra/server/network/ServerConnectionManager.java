@@ -137,9 +137,9 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 		return this.clients;
 	}
 
-	public void addClient(UUID uuid, Client client)
+	public boolean addClient(UUID uuid, Client client)
 	{
-		this.clients.put(uuid, client);
+		return clients.putIfAbsent(uuid, client) == null;
 	}
 
 	public void closeClient(UUID uuid)

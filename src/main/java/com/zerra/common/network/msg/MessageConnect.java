@@ -6,15 +6,12 @@ import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
-import com.zerra.server.ZerraServer;
 
 import simplenet.Client;
 import simplenet.packet.Packet;
 
 public class MessageConnect extends Message
 {
-	private Client client;
-
 	public MessageConnect()
 	{
 	}
@@ -40,16 +37,12 @@ public class MessageConnect extends Message
 	@Override
 	public void readFromClient(Client client)
 	{
-		this.client = client;
 	}
 
 	@Override
 	public Message handle(Zerra zerra, World world)
 	{
 		// TODO: Player connection logic? e.g. spawn player and notify clients
-
-		ZerraServer server = ((ZerraServer) zerra);
-		server.getConnectionManager().addClient(this.senderUUID, this.client);
 		Zerra.logger().info("Player with UUID {} has joined the server", this.senderUUID);
 		return null;
 	}

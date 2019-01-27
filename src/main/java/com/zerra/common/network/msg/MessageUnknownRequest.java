@@ -25,7 +25,7 @@ public class MessageUnknownRequest extends Message
 	@Override
 	public void readFromClient(Client client)
 	{
-		client.readString(s -> this.error = s);
+		this.error = client.readString();
 	}
 
 	@Override
