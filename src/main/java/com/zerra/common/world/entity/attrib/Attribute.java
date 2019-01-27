@@ -1,56 +1,35 @@
 package com.zerra.common.world.entity.attrib;
 
-public enum Attribute
+/**
+ * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
+ * 
+ * <br>
+ * </br>
+ * 
+ * An attribute is a simple way to store a value in an entity easily.
+ * 
+ * @author Ocelot5836
+ *
+ * @param <T>
+ *            The type of value this attribute stores
+ */
+public interface Attribute<T>
 {
-	HEALTH(0, 50, 50),
-	STAMINA(10),
-	MANA(0, 50, 50),
-	PHYS_ARMOR(-100, 0, 90),
-	SPELL_ARMOR(-100, 0, 90);
+	/**
+	 * @return The default value of this attribute
+	 */
+	T getDefaultValue();
 
-	private int value;
-	private int minValue;
-	private int maxValue;
+	/**
+	 * @return The value this attribute is set to
+	 */
+	T getValue();
 
-	Attribute(int value)
-	{
-		this.value = value;
-	}
-
-	Attribute(int minValue, int value, int maxValue)
-	{
-		this.minValue = minValue;
-		this.value = value;
-		this.maxValue = maxValue;
-	}
-
-	public int getMinValue()
-	{
-		return this.minValue;
-	}
-
-	public void setMinValue(int minValue)
-	{
-		this.minValue = minValue;
-	}
-
-	public int getValue()
-	{
-		return this.value;
-	}
-
-	public void setValue(int value)
-	{
-		this.value = value;
-	}
-
-	public int getMaxValue()
-	{
-		return this.maxValue;
-	}
-
-	public void setMaxValue(int maxValue)
-	{
-		this.maxValue = maxValue;
-	}
+	/**
+	 * Sets the value to the value specified.
+	 * 
+	 * @param value
+	 *            The new value
+	 */
+	void setValue(T value);
 }

@@ -18,6 +18,7 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.data.WorldDataHandler;
 import com.zerra.common.world.entity.Entity;
+import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
@@ -59,6 +60,9 @@ public class ServerWorld extends World
 				this.loadPlate(0, pos);
 			}
 		}
+
+		// TODO remove this temp code
+		this.addEntity(new EntityPlayer(this));
 	}
 
 	@Override

@@ -83,16 +83,19 @@ public class MessagePlateData extends Message
 	@Override
 	public Message handle(Zerra zerra, World world)
 	{
-		List<Pair<Integer, ResourceLocation>> tileIndexes = ((ClientWorld) world).getTileIndexes();
-		try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(this.bytes)))
+		if (this.bytes != null)
 		{
-			int layer = is.readInt();
-			Vector3ic platePos = new Vector3i(is.readInt(), is.readInt(), is.readInt());
-			((ClientWorld)world).getLayer(layer).addPlate(platePos, WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+			List<Pair<Integer, ResourceLocation>> tileIndexes = ((ClientWorld) world).getTileIndexes();
+			try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(this.bytes)))
+			{
+				int layer = is.readInt();
+				Vector3ic platePos = new Vector3i(is.readInt(), is.readInt(), is.readInt());
+				((ClientWorld) world).getLayer(layer).addPlate(platePos, WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

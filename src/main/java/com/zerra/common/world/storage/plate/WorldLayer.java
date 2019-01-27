@@ -17,7 +17,6 @@ import com.zerra.common.world.tile.Tiles;
 
 public class WorldLayer implements Layer
 {
-
 	private World world;
 	private int layer;
 	private Map<Vector3ic, Plate> loadedPlates;
