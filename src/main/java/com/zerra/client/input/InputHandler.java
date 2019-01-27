@@ -1,5 +1,6 @@
 package com.zerra.client.input;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +21,13 @@ import com.zerra.client.view.Display;
 public class InputHandler
 {
 	private List<Integer> activeKeys;
-	private byte[] mouseButtons;
+	private List<Integer> activeMouseButtons;
 	private Map<Integer, Gamepad> gamepads;
 
 	public InputHandler()
 	{
-		this.mouseButtons = new byte[GLFW.GLFW_MOUSE_BUTTON_LAST];
+		this.activeKeys = new ArrayList<Integer>();
+		this.activeMouseButtons = new ArrayList<Integer>();
 		this.gamepads = new HashMap<Integer, Gamepad>();
 		for (int jid = 0; jid < Display.getAllPresentJoysticks().length; jid++)
 		{
@@ -45,11 +47,19 @@ public class InputHandler
 	}
 
 	/**
-	 * @return Whether or not ANY key is pressed
+	 * @return The number of buttons pressed on the mouse
 	 */
-	public boolean isReceivingKeyboardInput()
+	public int getNumberOfMouseButtonsPressed()
 	{
-		return this.activeKeys.size() > 0;
+		return this.activeMouseButtons.size();
+	}
+
+	/**
+	 * @return Whether or not ANY mouse button is pressed
+	 */
+	public boolean isReceivingMouseInput()
+	{
+		return this.activeMouseButtons.size() > 0;
 	}
 
 	/**
@@ -73,9 +83,7 @@ public class InputHandler
 	 */
 	public boolean isMouseButtonPressed(int mouseButton)
 	{
-		if (mouseButton < 0 || mouseButton >= this.mouseButtons.length)
-			return false;
-		return this.mouseButtons[mouseButton] == 1;
+		return this.activeMouseButtons.contains(mouseButton);
 	}
 
 	/**
@@ -108,9 +116,14 @@ public class InputHandler
 	 */
 	public void setMouseButtonPressed(int mouseButton, boolean pressed)
 	{
-		if (mouseButton < 0 || mouseButton >= this.mouseButtons.length)
-			return;
-		this.mouseButtons[mouseButton] = (byte) (pressed ? 1 : 0);
+		if (pressed)
+		{
+			this.activeMouseButtons.add(mouseButton);
+		}
+		else
+		{
+			this.activeMouseButtons.remove(mouseButton);
+		}
 	}
 
 	/**
