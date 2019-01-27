@@ -50,14 +50,16 @@ public class ServerWorld extends World
 			this.worldLayerData.add(worldData);
 			this.loadingPlates.put(i, new ArrayList<Vector3ic>());
 		}
-
+	}
+	
+	public void startup() {
 		// Load 3x3 in the first layer
 		for (int x = 0; x < 3; x++)
 		{
 			for (int z = 0; z < 3; z++)
 			{
 				Vector3i pos = new Vector3i(x - 1, 0, z - 1);
-				this.loadPlate(0, pos);
+				this.loadPlateWait(0, pos);
 			}
 		}
 
@@ -81,6 +83,34 @@ public class ServerWorld extends World
 			this.pool.execute(() -> this.save(layerId));
 		}
 		super.stop();
+	}
+
+	private void loadPlateWait(int layer, Vector3ic pos)
+	{
+		Vector3i platePos = new Vector3i(pos);
+		Layer worldLayer = this.getLayer(layer);
+		List<Vector3ic> loadingPlates = this.loadingPlates.get(layer);
+
+		if (worldLayer != null && loadingPlates != null)
+		{
+			if (!loadingPlates.contains(platePos) && !worldLayer.isPlateLoaded(platePos))
+			{
+				loadingPlates.add(platePos);
+				if (this.getStorageManager().isPlateGenerated(layer, platePos))
+				{
+					this.getStorageManager().readEntitiesSafe(layer, platePos).forEach((entity) -> worldLayer.getEntities().add(entity));
+					worldLayer.addPlate(platePos, this.getStorageManager().readPlateSafe(layer, platePos));
+					loadingPlates.remove(platePos);
+					this.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + layer);
+				}
+				else
+				{
+					worldLayer.addPlate(platePos, worldLayer.generate(platePos));
+					loadingPlates.remove(platePos);
+					this.logger().info("Generated plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + layer);
+				}
+			}
+		}
 	}
 
 	public void loadPlate(int layer, Vector3ic pos)

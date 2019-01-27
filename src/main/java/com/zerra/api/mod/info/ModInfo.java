@@ -1,8 +1,5 @@
 package com.zerra.api.mod.info;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
  * </br>
@@ -57,17 +54,6 @@ public interface ModInfo
 			return "";
 		}
 	};
-
-    /**
-	 * A logger provided automatically for mods to use, customized to use their
-	 * domain name.
-	 * 
-	 * @return The logger for the mod.
-	 */
-	default Logger logger()
-	{
-		return LogManager.getLogger(this.getDomain());
-	}
 
 	/**
 	 * @return The domain for the mod.

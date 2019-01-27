@@ -1,16 +1,12 @@
 package com.zerra.common.network.msg;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
 
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.world.ClientWorld;
@@ -74,10 +70,11 @@ public class MessagePlateData extends Message
 	@Override
 	public void readFromClient(Client client)
 	{
-		client.readInt(value -> client.readBytes(value, bytes ->
+		int size = client.readInt();
+		client.readBytes(size, bytes ->
 		{
 			this.bytes = bytes;
-		}));
+		});
 	}
 
 	@Override
@@ -85,17 +82,7 @@ public class MessagePlateData extends Message
 	{
 		if (this.bytes != null)
 		{
-			List<Pair<Integer, ResourceLocation>> tileIndexes = ((ClientWorld) world).getTileIndexes();
-			try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(this.bytes)))
-			{
-				int layer = is.readInt();
-				Vector3ic platePos = new Vector3i(is.readInt(), is.readInt(), is.readInt());
-				((ClientWorld) world).getLayer(layer).addPlate(platePos, WorldStorageManager.readPlate(is, world.getLayer(layer), platePos, tileIndexes));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			((ClientWorld) world).processPlate(this.bytes);
 		}
 		return null;
 	}

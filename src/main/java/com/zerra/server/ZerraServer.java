@@ -1,7 +1,5 @@
 package com.zerra.server;
 
-import org.joml.Vector3i;
-
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
@@ -115,19 +113,11 @@ public class ZerraServer extends Zerra
 		this.timer = new Timer(20);
 
 		this.world = new ServerWorld("world");
-
 		this.serverManager = new ServerConnectionManager(this, this.isNaturallyRemote ? this.address : null);
-
-		for (int x = 0; x < 3; x++)
-		{
-			for (int z = 0; z < 3; z++)
-			{
-				this.world.loadPlate(0, new Vector3i(x - 1, 0, z - 1));
-			}
-		}
-
 		this.eventHandler = new EventHandler();
-		this.schedule(() -> this.serverManager.onFinishLoading());
+		
+		this.world.startup();
+		this.serverManager.onFinishLoading();
 	}
 
 	@Override

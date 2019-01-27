@@ -1,19 +1,17 @@
 package com.zerra.common.world;
 
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.annotation.Nullable;
-
+import com.zerra.common.world.entity.Entity;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.storage.plate.WorldLayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Vector2i;
 
-import com.zerra.common.world.entity.Entity;
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.plate.WorldLayer;
+import javax.annotation.Nullable;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class World
 {
@@ -47,7 +45,7 @@ public class World
 		}
 		this.worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
 
-		this.pool = Executors.newCachedThreadPool();
+		this.pool = Executors.newCachedThreadPool(r -> new Thread(r, getClass().getSimpleName()));
 		this.layers = new Layer[6];
 		for (int i = 0; i < this.layers.length; i++)
 		{

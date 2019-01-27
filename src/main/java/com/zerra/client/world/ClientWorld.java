@@ -61,6 +61,7 @@ public class ClientWorld extends World
 				{
 					e.printStackTrace();
 				}
+				this.awaitingPlates.remove(i);
 				i--;
 			}
 		}
