@@ -365,11 +365,12 @@ public class IOManager
 
 			// Read entities from file
 
-			Set<Entity> entities = readStorablesFromFile(file, wrapper ->
-			{
-				return null;
-			});
-			return entities;
+			// Set<Entity> entities = readStorablesFromFile(file, wrapper ->
+			// {
+			// return null;
+			// });
+			// return entities;
+			return Collections.emptySet();
 		}
 
 		public void writeWorldData(@Nullable Integer layer, Map<String, WorldData> worldDataMap) throws IOException
