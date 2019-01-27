@@ -63,7 +63,7 @@ public class Camera implements ICamera
 		this.lastRotation.set(this.rotation);
 
 		InputHandler inputHandler = ZerraClient.getInstance().getInputHandler();
-		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1))
+		if (inputHandler.isGamepadConnected(GLFW.GLFW_JOYSTICK_1) && !inputHandler.isReceivingMouseInput())
 		{
 			Gamepad gamepad = inputHandler.getGamepad(GLFW.GLFW_JOYSTICK_1);
 			Joystick joystick = gamepad.getJoystick(0);
