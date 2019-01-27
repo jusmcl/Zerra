@@ -27,7 +27,7 @@ public abstract class State
 	// No rendering can ever be done in this method
 	public abstract void update();
 
-	public abstract void render();
+	public abstract void render(float partialTicks);
 
 	public String getName()
 	{

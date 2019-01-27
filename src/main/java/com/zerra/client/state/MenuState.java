@@ -18,7 +18,7 @@ public class MenuState extends State
 	}
 
 	@Override
-	public void render()
+	public void render(float partialTicks)
 	{
 		// TODO: Render a background and buttons here!
 	}
