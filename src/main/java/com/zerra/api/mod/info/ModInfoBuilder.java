@@ -2,10 +2,10 @@ package com.zerra.api.mod.info;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 
-import javax.annotation.Nullable;
+import org.apache.log4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.zerra.api.mod.config.Conf;
@@ -13,8 +13,6 @@ import com.zerra.api.mod.config.Configuration;
 import com.zerra.client.util.Maths;
 import com.zerra.common.util.JsonWrapper;
 import com.zerra.common.util.StreamUtil;
-import org.apache.log4j.Logger;
-import sun.rmi.runtime.Log;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
