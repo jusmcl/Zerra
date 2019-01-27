@@ -1,7 +1,5 @@
 package com.zerra.common.world.entity.attrib;
 
-import com.zerra.common.world.storage.Storable;
-
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em>
  * 
@@ -142,33 +140,33 @@ public class AttributeFactory
 		return new StringAttribute(defaultValue);
 	}
 
-	/**
-	 * Creates a new attribute for a storable object and sets the value.
-	 * 
-	 * @param defaultValue
-	 *            The default value of the attribute
-	 * @param value
-	 *            The new value of the attribute
-	 * @return The attribute created for type {@link Storable}
-	 * @see Attribute
-	 */
-	public static Attribute<Storable> createObjectAttribute(Storable defaultValue, Storable value)
-	{
-		Attribute<Storable> attribute = new ObjectAttribute(defaultValue);
-		attribute.setValue(value);
-		return attribute;
-	}
-
-	/**
-	 * Creates a new attribute for a storable object.
-	 * 
-	 * @param defaultValue
-	 *            The default value of the attribute
-	 * @return The attribute created for type {@link Storable}
-	 * @see Attribute
-	 */
-	public static Attribute<Storable> createObjectAttribute(Storable defaultValue)
-	{
-		return new ObjectAttribute(defaultValue);
-	}
+	// /**
+	// * Creates a new attribute for a storable object and sets the value.
+	// *
+	// * @param defaultValue
+	// * The default value of the attribute
+	// * @param value
+	// * The new value of the attribute
+	// * @return The attribute created for type {@link Storable}
+	// * @see Attribute
+	// */
+	// public static Attribute<Storable> createObjectAttribute(Storable defaultValue, Storable value)
+	// {
+	// Attribute<Storable> attribute = new ObjectAttribute(defaultValue);
+	// attribute.setValue(value);
+	// return attribute;
+	// }
+	//
+	// /**
+	// * Creates a new attribute for a storable object.
+	// *
+	// * @param defaultValue
+	// * The default value of the attribute
+	// * @return The attribute created for type {@link Storable}
+	// * @see Attribute
+	// */
+	// public static Attribute<Storable> createObjectAttribute(Storable defaultValue)
+	// {
+	// return new ObjectAttribute(defaultValue);
+	// }
 }

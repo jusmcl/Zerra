@@ -77,6 +77,21 @@ public class World
 		this.pool.shutdown();
 	}
 
+	/**
+	 * Adds the specified entity to the world.
+	 * 
+	 * @param entity
+	 *            The entity to add
+	 */
+	public void addEntity(Entity entity)
+	{
+		Layer worldLayer = this.getLayer(entity.getLayerId());
+		if (worldLayer != null)
+		{
+			worldLayer.getEntities().add(entity);
+		}
+	}
+
 	@Nullable
 	public Entity getEntityByUUID(UUID uuid)
 	{
@@ -90,7 +105,7 @@ public class World
 		}
 		return null;
 	}
-	
+
 	public boolean isServer()
 	{
 		return server;
