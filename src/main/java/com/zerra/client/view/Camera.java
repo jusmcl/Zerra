@@ -84,8 +84,7 @@ public class Camera implements ICamera
 					{
 						this.position.x += joystick.getX();
 					}
-				}
-				else
+				} else
 				{
 					if (!(joystick.getX() < xOffset + 0.01f))
 					{
@@ -99,8 +98,7 @@ public class Camera implements ICamera
 					{
 						this.position.y += joystick.getY();
 					}
-				}
-				else
+				} else
 				{
 					if (!(joystick.getY() < yOffset + 0.01f))
 					{
@@ -109,55 +107,51 @@ public class Camera implements ICamera
 				}
 			}
 		}
-		else
+
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP))
 		{
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP))
+			this.position.y -= 1 + this.speedAdjust;
+		}
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN))
+		{
+			this.position.y += 1 + this.speedAdjust;
+		}
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT))
+		{
+			this.position.x -= 1 + this.speedAdjust;
+		}
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
+		{
+			this.position.x += 1 + this.speedAdjust;
+		}
+		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
+		{
+			Zerra.logger().info("creating world state...");
+			if (StateManager.getActiveState() == null)
 			{
-				this.position.y -= 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN))
+				StateManager.setActiveState(new GameLoadState());
+			} else if (StateManager.getActiveState() instanceof WorldState)
 			{
-				this.position.y += 1 + this.speedAdjust;
+				StateManager.setActiveState(null);
 			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT))
-			{
-				this.position.x -= 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
-			{
-				this.position.x += 1 + this.speedAdjust;
-			}
-			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
-			{
-				Zerra.logger().info("creating world state...");
-				if (StateManager.getActiveState() == null)
-				{
-					StateManager.setActiveState(new GameLoadState());
-				}
-				else if (StateManager.getActiveState() instanceof WorldState)
-				{
-					StateManager.setActiveState(null);
-				}
-			}
+		}
 
-			// Useful keys to adjust the movement speed of the camera when not locked to the
-			// player.
-			if (Reference.IS_DEVELOPMENT_BUILD)
+		// Useful keys to adjust the movement speed of the camera when not locked to the
+		// player.
+		if (Reference.IS_DEVELOPMENT_BUILD)
+		{
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL))
 			{
-				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_EQUAL))
-				{
-					this.speedAdjust += (this.speedAdjust < 10) ? 0.07f : 0.0f;
-				}
-				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_MINUS))
-				{
-					this.speedAdjust -= (this.speedAdjust > -0.75f) ? 0.07f : 0.0f;
-				}
-				if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
-				{
-					ZerraClient.getInstance().getConnectionManager().sendToServer(new MessagePing());
-				}
+				this.speedAdjust += (this.speedAdjust < 10) ? 0.07f : 0.0f;
 			}
-
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_MINUS))
+			{
+				this.speedAdjust -= (this.speedAdjust > -0.75f) ? 0.07f : 0.0f;
+			}
+			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_2))
+			{
+				ZerraClient.getInstance().getConnectionManager().sendToServer(new MessagePing());
+			}
 		}
 
 		this.platePosition.set((int) (this.position.x / (float) (Plate.SIZE + 1)), (int) this.position.z, (int) (this.position.y / (float) (Plate.SIZE + 1)));
@@ -190,12 +184,16 @@ public class Camera implements ICamera
 	@Override
 	public Vector3f getPosition()
 	{
-		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.y + (this.position.y - this.lastPosition.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.lastPosition.z + (this.position.z - this.lastPosition.z) * ZerraClient.getInstance().getRenderPartialTicks());
+		return this.renderPosition.set(this.lastPosition.x + (this.position.x - this.lastPosition.x) * ZerraClient.getInstance().getRenderPartialTicks(),
+				this.lastPosition.y + (this.position.y - this.lastPosition.y) * ZerraClient.getInstance().getRenderPartialTicks(),
+				this.lastPosition.z + (this.position.z - this.lastPosition.z) * ZerraClient.getInstance().getRenderPartialTicks());
 	}
 
 	@Override
 	public Vector3f getRotation()
 	{
-		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * ZerraClient.getInstance().getRenderPartialTicks(), this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * ZerraClient.getInstance().getRenderPartialTicks());
+		return this.renderRotation.set(this.renderRotation.x + (this.rotation.x - this.renderRotation.x) * ZerraClient.getInstance().getRenderPartialTicks(),
+				this.renderRotation.y + (this.rotation.y - this.renderRotation.y) * ZerraClient.getInstance().getRenderPartialTicks(),
+				this.renderRotation.z + (this.rotation.z - this.renderRotation.z) * ZerraClient.getInstance().getRenderPartialTicks());
 	}
 }
