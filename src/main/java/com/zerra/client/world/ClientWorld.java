@@ -30,7 +30,6 @@ public class ClientWorld extends World
 	}
 	
 	public void setTileIndexes(List<Pair<Integer, ResourceLocation>> tileIndexes) {
-		System.out.println("Got tile indexes! " + tileIndexes);
 		this.tileIndexes.clear();
 		this.tileIndexes.addAll(tileIndexes);
 		this.tileMapper.clear();

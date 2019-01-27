@@ -52,7 +52,6 @@ public class MessageConnect extends Message
 		ZerraServer server = ((ZerraServer) zerra);
 		ServerWorld serverWorld = ((ServerWorld) world);
 		server.getConnectionManager().addClient(this.senderUUID, this.client);
-		System.out.println("Server tile indexes: " + serverWorld.getStorageManager().getTileIndexes());
 		server.getConnectionManager().sendToClient(new MessageTileData(serverWorld.getStorageManager().getTileIndexes()), this.client);
 		Zerra.logger().info("Player with UUID {} has joined the server", this.senderUUID);
 		return null;
