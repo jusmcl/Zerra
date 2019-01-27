@@ -15,4 +15,12 @@ public @interface Conf
 	{
 		String value();
 	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface Range
+	{
+		int min();
+
+		int max();
+	}
 }

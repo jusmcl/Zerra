@@ -132,7 +132,49 @@ public class Maths
 	 * @param max The highest the value should go.
 	 * @return The clamped value.
 	 */
-	public static double clamp(double value, double min, double max)
+	public static int clamp(int value, int min, int max)
+	{
+		if (value < min)
+		{
+			value = min;
+		}
+		if (value > max)
+		{
+			value = max;
+		}
+		return value;
+	}
+	
+	/**
+	 * A method for clamping a variable between two values.
+	 * 
+	 * @param value The value to be clamped.
+	 * @param min The lowest the value should go.
+	 * @param max The highest the value should go.
+	 * @return The clamped value.
+	 */
+	public static double clampD(double value, double min, double max)
+	{
+		if (value < min)
+		{
+			value = min;
+		}
+		if (value > max)
+		{
+			value = max;
+		}
+		return value;
+	}
+	
+	/**
+	 * A method for clamping a variable between two values.
+	 * 
+	 * @param value The value to be clamped.
+	 * @param min The lowest the value should go.
+	 * @param max The highest the value should go.
+	 * @return The clamped value.
+	 */
+	public static float clampF(float value, float min, float max)
 	{
 		if (value < min)
 		{

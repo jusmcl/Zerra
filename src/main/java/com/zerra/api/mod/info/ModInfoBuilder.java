@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.google.gson.JsonObject;
 import com.zerra.api.mod.config.Conf;
 import com.zerra.api.mod.config.Configuration;
+import com.zerra.client.util.Maths;
 import com.zerra.common.util.JsonWrapper;
 
 /**
@@ -189,22 +190,39 @@ public class ModInfoBuilder
 
 				for (Field field : configClass.getFields())
 				{
+
+					boolean flag = field.getDeclaredAnnotation(Conf.Range.class) != null;
+
+					int min = 0;
+					int max = 0;
+					if (flag)
+					{
+						min = field.getDeclaredAnnotation(Conf.Range.class).min();
+						max = field.getDeclaredAnnotation(Conf.Range.class).max();
+					}
 					System.out.println("NAME: " + field.getName());
 					System.out.println("TYPE: " + field.getType().getName());
 
 					if (field.getDeclaredAnnotation(Conf.Doc.class) != null)
 					{
 						System.out.println("FOUND ANNOTATION");
-						conf.getConfig().putSafe("#doc-" + field.getName(), field.getDeclaredAnnotation(Conf.Doc.class).value());
+
+						String rangeAddon = "";
+						if (flag)
+						{
+							rangeAddon = " The minimum value is " + min + " and the maximum value is " + max;
+						}
+						conf.getConfig().putSafe("#doc-" + field.getName(), field.getDeclaredAnnotation(Conf.Doc.class).value() + rangeAddon);
+
 						if (field.getType().isAssignableFrom(int.class))
 						{
-							conf.getConfig().putSafe(field.getName(), field.getInt(configClass));
+							conf.getConfig().putSafe(field.getName(), Maths.clamp(field.getInt(configClass), min, max));
 						} else if (field.getType().isAssignableFrom(double.class))
 						{
-							conf.getConfig().putSafe(field.getName(), field.getDouble(configClass));
+							conf.getConfig().putSafe(field.getName(), flag ? Maths.clampD(field.getDouble(configClass), (double) min, (double) max) : field.getDouble(configClass));
 						} else if (field.getType().isAssignableFrom(float.class))
 						{
-							conf.getConfig().putSafe(field.getName(), field.getFloat(configClass));
+							conf.getConfig().putSafe(field.getName(), flag ? Maths.clampF(field.getFloat(configClass), (float) min, (float) max) : field.getFloat(configClass));
 						} else if (field.getType().isAssignableFrom(long.class))
 						{
 							conf.getConfig().putSafe(field.getName(), field.getLong(configClass));
