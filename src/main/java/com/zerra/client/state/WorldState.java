@@ -21,13 +21,6 @@ public class WorldState extends State
 
 		reloadServerInstance();
 
-		try
-		{
-			Thread.sleep(2000);
-		} catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
 		zerraClient.getConnectionManager().connect();
 	}
 

@@ -7,7 +7,6 @@ import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.util.Timer;
-import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.tile.Tiles;
 import com.zerra.server.network.ServerConnectionManager;
 import com.zerra.server.world.ServerWorld;
@@ -27,7 +26,6 @@ public class ZerraServer extends Zerra
 	private boolean isCurrentlyRemote;
 
 	private String address;
-
 	private ServerConnectionManager serverManager;
 
 	private ServerWorld world;
@@ -129,6 +127,7 @@ public class ZerraServer extends Zerra
 		}
 
 		this.eventHandler = new EventHandler();
+		this.serverManager.onFinishLoading();
 	}
 
 	@Override

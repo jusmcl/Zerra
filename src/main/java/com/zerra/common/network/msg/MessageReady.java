@@ -2,41 +2,34 @@ package com.zerra.common.network.msg;
 
 import com.zerra.common.Zerra;
 import com.zerra.common.network.Message;
+import com.zerra.common.network.MessageSide;
 import com.zerra.common.world.World;
 
 import simplenet.Client;
 import simplenet.packet.Packet;
 
-public class MessageBadRequest extends Message
+public class MessageReady extends Message
 {
-	private String error;
-
-	public MessageBadRequest()
+	@Override
+	public MessageSide getReceivingSide()
 	{
-		this(null);
-	}
-
-	public MessageBadRequest(String error)
-	{
-		this.error = error;
+		return MessageSide.CLIENT;
 	}
 
 	@Override
 	protected void writeToPacket(Packet packet)
 	{
-		packet.putString(this.error);
 	}
 
 	@Override
 	public void readFromClient(Client client)
 	{
-		client.readString(s -> this.error = s);
 	}
 
 	@Override
 	public Message handle(Zerra zerra, World world)
 	{
-		Zerra.logger().warn("Bad request: " + this.error);
+		// TODO do things here like notify the client etc
 		return null;
 	}
 }

@@ -206,6 +206,6 @@ public class Registries
 	 */
 	public static Integer getMessageId(Class<? extends Message> messageClass)
 	{
-		return MESSAGES.inverse().get(messageClass);
+		return MESSAGES.inverse().containsKey(messageClass) ? MESSAGES.inverse().get(messageClass) : -1;
 	}
 }
