@@ -1,25 +1,23 @@
 package com.zerra.common.network;
 
-import java.util.UUID;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.zerra.common.Zerra;
 import com.zerra.common.network.msg.MessageConnect;
 import com.zerra.common.registry.Registries;
 import com.zerra.server.network.ServerConnectionManager;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import simplenet.Client;
 import simplenet.channel.Channeled;
 import simplenet.packet.Packet;
 import simplenet.receiver.Receiver;
 
+import java.util.UUID;
+
 public abstract class ConnectionManager<T extends Receiver & Channeled>
 {
 	public static final String LOCALHOST = "localhost";
 	public static final int PORT = 43594;
-	protected final Logger LOGGER = LogManager.getLogger();
+	protected final Logger LOGGER = LogManager.getLogger(this);
 	protected T receiver;
 	protected Zerra zerra;
 

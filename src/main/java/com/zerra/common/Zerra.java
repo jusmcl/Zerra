@@ -1,17 +1,16 @@
 package com.zerra.common;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.util.Timer;
 import com.zerra.common.world.World;
+import org.apache.commons.lang3.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class Zerra implements Runnable
 {
@@ -27,8 +26,8 @@ public abstract class Zerra implements Runnable
 
 	public Zerra()
 	{
-		this.pool = Executors.newCachedThreadPool();
-		this.single = Executors.newSingleThreadExecutor(r -> new Thread(r, "Message Processing"));
+		this.pool = Executors.newCachedThreadPool(r -> new Thread(r, getClass().getSimpleName()));
+		this.single = Executors.newSingleThreadExecutor(r -> new Thread(r, getClass().getSimpleName() + "_Messages"));
 	}
 
 	public void run()

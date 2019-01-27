@@ -1,5 +1,9 @@
 package com.zerra.api.mod;
 
+import com.google.common.collect.Iterables;
+import com.zerra.client.ZerraClient;
+import com.zerra.common.util.MiscUtils;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -8,10 +12,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.Iterables;
-import com.zerra.client.ZerraClient;
-import com.zerra.common.util.MiscUtils;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -50,7 +50,7 @@ public class ModManager
 			this.process(modDomain, 0);
 		}
 
-		this.pool = Executors.newCachedThreadPool();
+		this.pool = Executors.newCachedThreadPool(r -> new Thread(r, getClass().getSimpleName()));
 		long snapshot = System.currentTimeMillis();
 		this.initialize();
 		ZerraClient.logger().info("Finished initializing mods in " + MiscUtils.secondsSinceTime(snapshot));
