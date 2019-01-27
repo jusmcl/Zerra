@@ -18,7 +18,7 @@ public class ClientWorld extends World
 
 	public ClientWorld(String name, Long seed)
 	{
-		super(name, seed);
+		super(name, seed, false);
 		this.tileIndexes = new ArrayList<Pair<Integer, ResourceLocation>>();
 		this.tileMapper = new HashMap<ResourceLocation, Integer>();
 	}

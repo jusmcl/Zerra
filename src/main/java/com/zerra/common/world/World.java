@@ -17,6 +17,7 @@ import com.zerra.common.world.storage.plate.WorldLayer;
 
 public class World
 {
+	private boolean server;
 	private Logger logger;
 	private String name;
 	private Random random;
@@ -27,9 +28,10 @@ public class World
 
 	private long seed;
 
-	public World(String name, Long seed)
+	public World(String name, Long seed, boolean server)
 	{
-		this.logger = LogManager.getLogger("World-" + name);
+		this.server = server;
+		this.logger = LogManager.getLogger("World-" + name + "/" + (server ? "Server" : "Client"));
 		this.name = name;
 		this.random = new Random();
 
@@ -53,9 +55,9 @@ public class World
 		}
 	}
 
-	public World(String name)
+	public World(String name, boolean server)
 	{
-		this(name, null);
+		this(name, null, server);
 	}
 
 	public void schedule(Runnable command)
@@ -87,6 +89,11 @@ public class World
 			}
 		}
 		return null;
+	}
+	
+	public boolean isServer()
+	{
+		return server;
 	}
 
 	public Logger logger()

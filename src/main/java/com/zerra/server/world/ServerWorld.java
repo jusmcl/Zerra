@@ -32,7 +32,7 @@ public class ServerWorld extends World
 
 	public ServerWorld(String name)
 	{
-		super(name);
+		super(name, true);
 		this.storageManager = new WorldStorageManager(this);
 
 		// Create and load WorldData for world
