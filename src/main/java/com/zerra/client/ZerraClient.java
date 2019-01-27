@@ -18,7 +18,6 @@ import com.zerra.common.ZerraContentInit;
 import com.zerra.common.event.EventHandler;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.util.Timer;
-import com.zerra.common.world.World;
 import com.zerra.common.world.tile.Tiles;
 
 /**
@@ -116,7 +115,8 @@ public class ZerraClient extends Zerra
 	/**
 	 * Renders the game.
 	 * 
-	 * @param partialTicks - The partial ticks used in rendering.
+	 * @param partialTicks
+	 *            - The partial ticks used in rendering.
 	 */
 	private void render(float partialTicks)
 	{
@@ -140,8 +140,7 @@ public class ZerraClient extends Zerra
 	}
 
 	/**
-	 * Initializes the game, including setting up the display, renderers, and input
-	 * handlers.
+	 * Initializes the game, including setting up the display, renderers, and input handlers.
 	 */
 	@Override
 	protected void init()
@@ -185,7 +184,8 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a key is pressed.
 	 * 
-	 * @param keyCode - The key code given by the key pressed.
+	 * @param keyCode
+	 *            - The key code given by the key pressed.
 	 */
 	public void onKeyPressed(int keyCode)
 	{
@@ -195,7 +195,8 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a key is released.
 	 * 
-	 * @param keyCode - The key code given by the key released.
+	 * @param keyCode
+	 *            - The key code given by the key released.
 	 */
 	public void onKeyReleased(int keyCode)
 	{
@@ -205,11 +206,12 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a mouse button is pressed.
 	 * 
-	 * @param mouseX - The x position of the mouse on screen when a mouse button is
-	 *        pressed.
-	 * @param mouseY - The y position of the mouse on screen when a mouse button is
-	 *        pressed.
-	 * @param mouseButton - The mouse button pressed, given as an int.
+	 * @param mouseX
+	 *            - The x position of the mouse on screen when a mouse button is pressed.
+	 * @param mouseY
+	 *            - The y position of the mouse on screen when a mouse button is pressed.
+	 * @param mouseButton
+	 *            - The mouse button pressed, given as an int.
 	 */
 	public void onMousePressed(double mouseX, double mouseY, int mouseButton)
 	{
@@ -219,11 +221,12 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a mouse button is released.
 	 * 
-	 * @param mouseX - The x position of the mouse on screen when a mouse button is
-	 *        released.
-	 * @param mouseY - The y position of the mouse on screen when a mouse button is
-	 *        released.
-	 * @param mouseButton - The mouse button released, given as an int.
+	 * @param mouseX
+	 *            - The x position of the mouse on screen when a mouse button is released.
+	 * @param mouseY
+	 *            - The y position of the mouse on screen when a mouse button is released.
+	 * @param mouseButton
+	 *            - The mouse button released, given as an int.
 	 */
 	public void onMouseReleased(double mouseX, double mouseY, int mouseButton)
 	{
@@ -233,9 +236,12 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when the mouse scrolls.
 	 * 
-	 * @param mouseX - The x position of the mouse as it scrolls.
-	 * @param mouseY - The y position of the mouse as it scrolls.
-	 * @param yoffset - How much the mouse scrolled.
+	 * @param mouseX
+	 *            - The x position of the mouse as it scrolls.
+	 * @param mouseY
+	 *            - The y position of the mouse as it scrolls.
+	 * @param yoffset
+	 *            - How much the mouse scrolled.
 	 */
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset)
 	{
@@ -244,8 +250,10 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a joystick button is pressed.
 	 * 
-	 * @param jid - The id of the joystick.
-	 * @param button - The button pressed given as an int.
+	 * @param jid
+	 *            - The id of the joystick.
+	 * @param button
+	 *            - The button pressed given as an int.
 	 */
 	public void onJoystickButtonPressed(int jid, int button)
 	{
@@ -254,8 +262,10 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a joystick button is released.
 	 * 
-	 * @param jid - The id of the joystick.
-	 * @param button - The button released given as an int.
+	 * @param jid
+	 *            - The id of the joystick.
+	 * @param button
+	 *            - The button released given as an int.
 	 */
 	public void onJoystickButtonReleased(int jid, int button)
 	{
@@ -264,7 +274,8 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a joystick is connected.
 	 * 
-	 * @param jid - The id of the joystick.
+	 * @param jid
+	 *            - The id of the joystick.
 	 */
 	public void onJoystickConnected(int jid)
 	{
@@ -274,7 +285,8 @@ public class ZerraClient extends Zerra
 	/**
 	 * Fires when a joystick is disconnected.
 	 * 
-	 * @param jid - The id of the joystick.
+	 * @param jid
+	 *            - The id of the joystick.
 	 */
 	public void onJoystickDisconnected(int jid)
 	{
@@ -368,7 +380,7 @@ public class ZerraClient extends Zerra
 		return this.clientConnection;
 	}
 
-	public World createWorld(String name, long seed)
+	public ClientWorld createWorld(String name, long seed)
 	{
 		return this.world = new ClientWorld(name, seed);
 	}
