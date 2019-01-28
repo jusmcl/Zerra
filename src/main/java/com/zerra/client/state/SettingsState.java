@@ -23,7 +23,7 @@ public class SettingsState extends State
 			@Override
 			public void mousePressed(double mouseX, double mouseY, int mouseButton)
 			{
-				if (this.isHovered() && mouseButton == 1)
+				if (this.isHovered() && mouseButton == 0)
 				{
 					StateManager.setActiveState(new MenuState());
 				}
@@ -40,6 +40,18 @@ public class SettingsState extends State
 	@Override
 	public void render(double mouseX, double mouseY, float partialTicks)
 	{
-		back.render(mouseX, mouseY, partialTicks);
+		this.back.render(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public void onMousePressed(double mouseX, double mouseY, int mouseButton)
+	{
+		this.back.mousePressed(mouseX, mouseY, mouseButton);
+	}
+
+	@Override
+	public void onMouseReleased(double mouseX, double mouseY, int mouseButton)
+	{
+		this.back.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 }
