@@ -65,8 +65,6 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	@Override
 	public void createListeners()
 	{
-		// TODO: We need a way of adding to the clients map when we get a
-		// MessageConnect!
 		this.receiver.onConnect(client ->
 		{
 			ServerWorld world = ((ServerWorld) this.zerra.getWorld());
