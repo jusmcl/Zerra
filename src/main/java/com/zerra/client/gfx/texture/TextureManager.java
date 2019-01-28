@@ -11,8 +11,6 @@ import com.zerra.client.gfx.texture.map.TextureMap;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.LoadingUtils;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.common.world.tile.Tile;
-import com.zerra.common.world.tile.Tiles;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -42,8 +40,10 @@ public class TextureManager
 	/**
 	 * Loads a texture up from a resource location.
 	 * 
-	 * @param location The location to load the texture from.
-	 * @param texture The texture to load.
+	 * @param location
+	 *            The location to load the texture from.
+	 * @param texture
+	 *            The texture to load.
 	 */
 	public void loadTexture(ResourceLocation location, ITexture texture)
 	{
@@ -61,7 +61,8 @@ public class TextureManager
 	/**
 	 * Binds a texture to a resource location.
 	 * 
-	 * @param location The resource location to bind the texture to.
+	 * @param location
+	 *            The resource location to bind the texture to.
 	 */
 	public void bind(ResourceLocation location)
 	{
@@ -80,6 +81,7 @@ public class TextureManager
 	 */
 	public void dispose()
 	{
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		for (ResourceLocation location : this.textures.keySet())
 		{
 			ITexture texture = this.textures.get(location);
@@ -93,7 +95,8 @@ public class TextureManager
 	/**
 	 * Gets a texture from a resource location.
 	 * 
-	 * @param location The resource location to get the texture from.
+	 * @param location
+	 *            The resource location to get the texture from.
 	 * @return The texture retrieved from the resource location.
 	 */
 	public ITexture getTexture(ResourceLocation location)
