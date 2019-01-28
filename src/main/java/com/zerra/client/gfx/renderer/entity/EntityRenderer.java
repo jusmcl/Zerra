@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 import com.zerra.client.view.ICamera;
+import com.zerra.client.world.ClientWorld;
 import com.zerra.common.world.entity.Entity;
 
 public class EntityRenderer
@@ -52,7 +53,7 @@ public class EntityRenderer
 	}
 
 	@SuppressWarnings("unchecked")
-	public void renderEntities(int layer, ICamera camera, float partialTicks)
+	public void renderEntities(ClientWorld world, int layer, ICamera camera, float partialTicks)
 	{
 		Map<Class<? extends Entity>, List<Entity>> layerBatch = this.renderEntities.get(layer);
 		if (layerBatch != null)
@@ -64,19 +65,21 @@ public class EntityRenderer
 				{
 					if (ENTITY_RENDERS.containsKey(type))
 					{
-						((EntityRender<Entity>) ENTITY_RENDERS.get(type)).render(entity, 0.0f, partialTicks);
+						((EntityRender<Entity>) ENTITY_RENDERS.get(type)).render(entity, world, 0.0f, partialTicks);
 					}
 					else
 					{
+						// TODO have an alternate rendering perhaps
 					}
 				}
 			}
 		}
 		this.renderEntities.clear();
 	}
-	
-	public void dispose() {
-		
+
+	public void dispose()
+	{
+		// TODO dispose of said alternate renderer
 	}
 
 	public static void disposeRenders()

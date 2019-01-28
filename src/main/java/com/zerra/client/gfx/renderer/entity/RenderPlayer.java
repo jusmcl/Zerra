@@ -4,6 +4,7 @@ import com.zerra.client.RenderingManager;
 import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
 import com.zerra.client.util.ResourceLocation;
+import com.zerra.client.world.ClientWorld;
 import com.zerra.common.world.entity.EntityPlayer;
 
 public class RenderPlayer implements EntityRender<EntityPlayer>
@@ -18,8 +19,9 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 	}
 
 	@Override
-	public void render(EntityPlayer player, float depth, float partialTicks)
+	public void render(EntityPlayer player, ClientWorld world, float depth, float partialTicks)
 	{
+		this.renderManager.getGuiRenderer().renderTexturedQuad(player.getXEntityPos(), player.getXEntityPos(), 32, 32, this.sprite);
 	}
 
 	@Override

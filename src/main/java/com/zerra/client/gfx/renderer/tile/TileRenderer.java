@@ -44,9 +44,12 @@ public class TileRenderer
 	/**
 	 * Renders tiles to the world.
 	 * 
-	 * @param camera The camera to view the tiles.
-	 * @param world The world to render the tiles in.
-	 * @param layer The layer ID of the world to render the tiles in.
+	 * @param camera
+	 *            The camera to view the tiles.
+	 * @param world
+	 *            The world to render the tiles in.
+	 * @param layer
+	 *            The layer ID of the world to render the tiles in.
 	 */
 	public void renderTiles(ICamera camera, World world, int layer)
 	{
@@ -78,13 +81,14 @@ public class TileRenderer
 				}
 			}
 		}
-		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
-	
+
 	/**
 	 * Disposes of the shaders and other resources.
 	 */
-	public void dispose() {
+	public void dispose()
+	{
 		this.shader.cleanUp();
 	}
 }

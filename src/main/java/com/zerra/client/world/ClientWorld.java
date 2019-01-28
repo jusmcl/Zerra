@@ -3,7 +3,10 @@ package com.zerra.client.world;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector3i;
@@ -98,7 +101,8 @@ public class ClientWorld extends World
 		guiRenderer.setProjectionMatrix(GuiRenderer.FBO_MATRIX);
 		guiRenderer.renderTexturedQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
 		guiRenderer.restoreDefaultProjectionMatrix();
-		entityRenderer.renderEntities(0, renderManager.getCamera(), partialTicks);
+		entityRenderer.renderEntities(this, 0, renderManager.getCamera(), partialTicks);
+
 	}
 
 	public void setTileIndexes(List<Pair<Integer, ResourceLocation>> tileIndexes)
