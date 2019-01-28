@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.common.Reference;
 
 public class Registry<T extends RegistryNameable>
 {
@@ -79,7 +80,7 @@ public class Registry<T extends RegistryNameable>
 		// Validate domain
 		String domain = matcher.group(1);
 		// TODO: Should probably find easier access to the loaded mods
-		if (!ZerraClient.getInstance().getModManager().doesDomainExist(domain))
+		if (!domain.equals(Reference.DOMAIN) && !ZerraClient.getInstance().getModManager().doesDomainExist(domain))
 		{
 			throw new RuntimeException(String.format("The given %s has a domain that does not exist: %s", obj.getClass().getName(), domain));
 		}
