@@ -22,7 +22,7 @@ public class AnotherExampleDependency implements Mod
 	@Override
 	public ModInfo getModInfo()
 	{
-		return new ModInfoBuilder("anotherexampledependency", "Another Example Dependency", "1.0", "0.0.5").setAuthors("Arpaesis")
+		return new ModInfoBuilder("anotherexampledependency", "Another Example Dependency", "1.0", "0.0.6").setAuthors("Arpaesis")
 				.setCredits("Credits to the Zerra development team for making the game!").setModDescription("A simple example dependency.").setWebsiteURL("https://www.example.com").build();
 	}
 }

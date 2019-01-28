@@ -16,6 +16,8 @@ import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.common.network.msg.MessageUnknownRequest;
 import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.RegistryNameable;
+import com.zerra.common.world.data.WorldDataFactory;
+import com.zerra.common.world.data.ZerraWorldData;
 import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
@@ -38,7 +40,7 @@ public class ZerraContentInit
 		// TODO: Move all base game content initialisation into here
 
 		// World Data
-		// reg(new WorldDataFactory<>("worlddata", ZerraWorldData.class));
+		reg(new WorldDataFactory<>("worlddata", ZerraWorldData.class));
 
 		// Messages
 		regMessage(MessageBadRequest.class);

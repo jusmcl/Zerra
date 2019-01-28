@@ -10,6 +10,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.zerra.common.Reference;
+import com.zerra.common.world.data.ZerraWorldData;
+import org.joml.Vector2i;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -33,12 +36,17 @@ public class ServerWorld extends World
 
 	public ServerWorld(String name)
 	{
-		super(name, true);
-		this.storageManager = new WorldStorageManager(this);
+		super(name);
+		this.storageManager = new WorldStorageManager(name);
 
 		// Create and load WorldData for world
 		this.worldData = WorldDataHandler.getDataForWorld();
 		this.worldData.putAll(this.storageManager.readWorldDataSafe(null));
+
+		// Get game world data (seed, spawn point, etc)
+		ZerraWorldData zerraWorldData = (ZerraWorldData) this.worldData.get(Reference.prefixWithDomain("worlddata"));
+		this.setSeed(zerraWorldData.seed);
+		this.worldSpawnPoint = new Vector2i(zerraWorldData.spawnPoint);
 
 		// Create and load WorldData for layers
 		this.worldLayerData = new ArrayList<Map<String, WorldData>>();
@@ -71,11 +79,18 @@ public class ServerWorld extends World
 	public void update()
 	{
 		// TODO: Update server world here.
+
+		super.update();
 	}
 
 	@Override
 	public void stop()
 	{
+		// Write data to ZerraWorldData before saving
+		ZerraWorldData zerraWorldData = (ZerraWorldData) this.worldData.get(Reference.prefixWithDomain("worlddata"));
+		zerraWorldData.seed = this.getSeed();
+		zerraWorldData.spawnPoint = this.getWorldSpawnPoint();
+
 		this.storageManager.writeWorldDataSafe(null, this.worldData);
 		for (int i = 0; i < this.layers.length; i++)
 		{
@@ -83,6 +98,12 @@ public class ServerWorld extends World
 			this.pool.execute(() -> this.save(layerId));
 		}
 		super.stop();
+	}
+
+	@Override
+	public boolean isServer()
+	{
+		return true;
 	}
 
 	private void loadPlateWait(int layer, Vector3ic pos)
@@ -99,7 +120,7 @@ public class ServerWorld extends World
 				if (this.getStorageManager().isPlateGenerated(layer, platePos))
 				{
 					this.getStorageManager().readEntitiesSafe(layer, platePos).forEach((entity) -> worldLayer.getEntities().add(entity));
-					worldLayer.addPlate(platePos, this.getStorageManager().readPlateSafe(layer, platePos));
+					worldLayer.addPlate(platePos, this.getStorageManager().readPlateSafe(worldLayer, platePos));
 					loadingPlates.remove(platePos);
 					this.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + layer);
 				}
@@ -129,7 +150,7 @@ public class ServerWorld extends World
 					this.schedule(() ->
 					{
 						this.getStorageManager().readEntitiesSafe(layer, platePos).forEach((entity) -> worldLayer.getEntities().add(entity));
-						worldLayer.addPlate(platePos, this.getStorageManager().readPlateSafe(layer, platePos));
+						worldLayer.addPlate(platePos, this.getStorageManager().readPlateSafe(worldLayer, platePos));
 						loadingPlates.remove(platePos);
 						this.logger().info("Loaded plate at " + pos.x() + ", " + pos.y() + ", " + pos.z() + " in layer " + layer);
 					});

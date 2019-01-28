@@ -3,10 +3,7 @@ package com.zerra.client.world;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Vector3i;
@@ -31,9 +28,14 @@ public class ClientWorld extends World
 	private Map<ResourceLocation, Integer> tileMapper;
 	private List<byte[]> awaitingPlates;
 
+	public ClientWorld(String name)
+	{
+		this(name, null);
+	}
+
 	public ClientWorld(String name, Long seed)
 	{
-		super(name, seed, false);
+		super(name, seed);
 		this.tileIndexes = new ArrayList<Pair<Integer, ResourceLocation>>();
 		this.tileMapper = new HashMap<ResourceLocation, Integer>();
 		this.awaitingPlates = new ArrayList<byte[]>();
@@ -64,6 +66,14 @@ public class ClientWorld extends World
 				i--;
 			}
 		}
+
+		super.update();
+	}
+
+	@Override
+	public boolean isServer()
+	{
+		return false;
 	}
 
 	public void render(float partialTicks)

@@ -95,7 +95,6 @@ public class ZerraClient extends Zerra
 	@Override
 	public void run()
 	{
-
 		this.init();
 
 		while (this.running)
@@ -150,6 +149,8 @@ public class ZerraClient extends Zerra
 	{
 		super.init();
 
+		this.modManager = new ModManager();
+
 		ZerraContentInit.init();
 		// TODO: Move tiles registration into ZerraContentInit
 		Tiles.registerTiles();
@@ -160,7 +161,6 @@ public class ZerraClient extends Zerra
 		// TODO: Create the world and set the world in the ClientConnectionManager
 		// instance
 
-		this.modManager = new ModManager();
 		this.modManager.setupMods();
 		I18n.setLanguage(new Locale("en", "us"));
 

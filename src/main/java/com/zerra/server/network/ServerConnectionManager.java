@@ -1,14 +1,5 @@
 package com.zerra.server.network;
 
-import java.util.Deque;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-
-import javax.annotation.Nullable;
-
-import org.joml.Vector3i;
-
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
@@ -17,17 +8,23 @@ import com.zerra.common.network.msg.MessageReady;
 import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.server.ZerraServer;
 import com.zerra.server.world.ServerWorld;
-
+import org.joml.Vector3i;
 import simplenet.Client;
 import simplenet.Server;
 import simplenet.packet.Packet;
+
+import javax.annotation.Nullable;
+import java.util.Queue;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
 	public static final int MAX_BYTES = 10240;
 
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
-	private Deque<Client> queuedClients = new ConcurrentLinkedDeque<>();
+	private Queue<Client> queuedClients = new ConcurrentLinkedQueue<>();
 	private boolean doneLoading;
 
 	public ServerConnectionManager(ZerraServer zerra, @Nullable String address)
@@ -65,16 +62,20 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	@Override
 	public void createListeners()
 	{
-		// TODO: We need a way of adding to the clients map when we get a
-		// MessageConnect!
 		this.receiver.onConnect(client ->
 		{
-			ServerWorld world = ((ServerWorld) this.zerra.getWorld());
-			this.sendToClient(new MessageReady(), client);
-			this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), client);
-			this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+			if (this.doneLoading)
+			{
+				ServerWorld world = ((ServerWorld) this.zerra.getWorld());
+				this.sendToClient(new MessageReady(), client);
+				this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), client);
+				this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+			}
+			else
+			{
+				this.queuedClients.add(client);
+			}
 
-			this.queuedClients.add(client);
 			client.readIntAlways(id ->
 			{
 				if (this.doneLoading)
@@ -83,7 +84,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 				}
 				else
 				{
-					System.out.println("TEST");
+					LOGGER.debug("Server not finished loading yet! Won't handle message");
 				}
 			});
 		});
@@ -139,7 +140,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	public void closeClient(UUID uuid)
 	{
 		Client client = this.clients.remove(uuid);
-		if (this.queuedClients.contains(client))
+		if (!doneLoading)
 		{
 			this.queuedClients.remove(client);
 		}

@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2i;
 import org.joml.Vector3ic;
 
@@ -75,16 +77,19 @@ public class IOManager
 
 		private static final int VERSION = 2;
 
-		private final ServerWorld world;
-		private final File worldDir;
+		private final Logger logger = LogManager.getLogger(this);
+		private final String worldName;
+		private final File worldDir, versionFile, tilesFile;
 
 		private List<Pair<Integer, ResourceLocation>> tileIndexes;
 		private Map<ResourceLocation, Integer> tileMapper;
 
-		public WorldStorageManager(ServerWorld world)
+		public WorldStorageManager(String worldName)
 		{
-			this.world = world;
-			this.worldDir = new File(IOManager.saves, world.getName());
+			this.worldName = worldName;
+			this.worldDir = new File(IOManager.saves, worldName);
+			this.versionFile = new File(this.worldDir, "version.zsv");
+			this.tilesFile = new File(this.worldDir, "tiles.dat");
 			this.tileIndexes = new ArrayList<Pair<Integer, ResourceLocation>>();
 			this.tileMapper = new HashMap<ResourceLocation, Integer>();
 
@@ -104,7 +109,7 @@ public class IOManager
 					// TODO: Convert the world to the new version?
 					// But for now we'll ignore until we have converters or another solution in
 					// place
-					this.world.logger().warn("This world save is an old version! Save version: {}, Game version: {}", version, VERSION);
+					logger.warn("This world save is an old version! Save version: {}, Game version: {}", version, VERSION);
 				}
 			}
 
@@ -122,31 +127,29 @@ public class IOManager
 
 		private void writeVersion()
 		{
-			File file = this.getVersionFile();
 			try
 			{
 				// noinspection ResultOfMethodCallIgnored
-				file.createNewFile();
+				this.versionFile.createNewFile();
 			}
 			catch (IOException e)
 			{
-				this.world.logger().error("Couldn't create new version file", e);
+				logger.error("Couldn't create new version file", e);
 				return;
 			}
-			try (DataOutputStream is = new DataOutputStream(new FileOutputStream(file)))
+			try (DataOutputStream is = new DataOutputStream(new FileOutputStream(this.versionFile)))
 			{
 				is.writeInt(VERSION);
 			}
 			catch (IOException e)
 			{
-				this.world.logger().warn("Error writing to version file!", e);
+				logger.warn("Error writing to version file!", e);
 			}
 		}
 
 		private int readVersion()
 		{
-			File file = this.getVersionFile();
-			try (DataInputStream is = new DataInputStream(new FileInputStream(file)))
+			try (DataInputStream is = new DataInputStream(new FileInputStream(this.versionFile)))
 			{
 				return is.readInt();
 			}
@@ -169,7 +172,7 @@ public class IOManager
 		}
 
 		@Nullable
-		public Plate readPlateSafe(int layer, Vector3ic pos)
+		public Plate readPlateSafe(Layer layer, Vector3ic pos)
 		{
 			try
 			{
@@ -240,11 +243,10 @@ public class IOManager
 				try (DataInputStream is = new DataInputStream(new FileInputStream(tiles)))
 				{
 					pairs.addAll(readTileIndexes(is));
-					is.close();
 				}
 				catch (Exception e)
 				{
-					this.world.logger().warn("Could not load tile indexes from {}", tiles.getName());
+					logger.warn("Could not load tile indexes from {}", tiles.getName());
 				}
 				return pairs;
 			}
@@ -257,21 +259,18 @@ public class IOManager
 		private void readTileIndexes() throws IOException
 		{
 			// Read tile index from file
-			File tileLookupFile = new File(IOManager.saves, this.world.getName() + "/tiles.dat");
-			this.tileIndexes.addAll(this.loadTiles(tileLookupFile));
-			FileUtils.touch(tileLookupFile);
+			this.tileIndexes.addAll(this.loadTiles(this.tilesFile));
+			FileUtils.touch(this.tilesFile);
 		}
 
 		private void writeTileIndexes() throws IOException
 		{
 			// Write tile lookup
-			File tileLookupFile = new File(IOManager.saves, this.world.getName() + "/tiles.dat");
-			FileUtils.touch(tileLookupFile);
+			FileUtils.touch(this.tilesFile);
 
-			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(tileLookupFile)))
+			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(this.tilesFile)))
 			{
 				writeTileIndexes(os, this.tileIndexes);
-				os.close();
 			}
 		}
 
@@ -316,15 +315,14 @@ public class IOManager
 			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(plateFile)))
 			{
 				writePlate(os, plate, this.tileIndexes, this.tileMapper);
-				os.close();
 			}
 		}
 
 		@Nullable
-		public Plate readPlate(int layer, Vector3ic platePos) throws IOException
+		public Plate readPlate(Layer layer, Vector3ic platePos) throws IOException
 		{
 			// Create plate file
-			File plateFile = this.getPlateFile(layer, platePos);
+			File plateFile = this.getPlateFile(layer.getLayerId(), platePos);
 			if (!plateFile.exists())
 			{
 				return null;
@@ -332,7 +330,7 @@ public class IOManager
 
 			try (DataInputStream is = new DataInputStream(new FileInputStream(plateFile)))
 			{
-				Plate plate = readPlate(is, this.world.getLayer(layer), platePos, this.tileIndexes);
+				Plate plate = readPlate(is, layer, platePos, this.tileIndexes);
 				is.close();
 				return plate;
 			}
@@ -345,7 +343,7 @@ public class IOManager
 			{
 				if (file.exists() && !file.delete())
 				{
-					this.world.logger().warn("Couldn't delete the entity file {}", file.getAbsolutePath());
+					logger.warn("Couldn't delete the entity file {}", file.getAbsolutePath());
 				}
 				return;
 			}
@@ -380,7 +378,7 @@ public class IOManager
 			{
 				if (file.exists() && !file.delete())
 				{
-					this.world.logger().warn("Couldn't delete the world data file {}", file.getAbsolutePath());
+					logger.warn("Couldn't delete the world data file {}", file.getAbsolutePath());
 				}
 				return;
 			}
@@ -419,7 +417,7 @@ public class IOManager
 				File plateFile = this.getPlateFile(layer, pos);
 				if (plateFile.exists())
 				{
-					File backupPlateFile = new File(IOManager.saves, this.world.getName() + "/plates-" + layer + "-bak/" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
+					File backupPlateFile = new File(IOManager.saves, worldName + "/plates-" + layer + "-bak/" + pos.x() + "_" + pos.y() + "_" + pos.z() + ".zpl");
 					FileUtils.touch(backupPlateFile);
 					org.apache.commons.io.IOUtils.copy(new FileInputStream(plateFile), new FileOutputStream(backupPlateFile));
 				}
@@ -518,16 +516,6 @@ public class IOManager
 		{
 			File parent = layer == null ? this.worldDir : getLayerDir(layer);
 			return new File(parent, "world_data.ubj");
-		}
-
-		private File getVersionFile()
-		{
-			return new File(this.worldDir, "version.zsv");
-		}
-
-		public World getWorld()
-		{
-			return world;
 		}
 
 		public List<Pair<Integer, ResourceLocation>> getTileIndexes()

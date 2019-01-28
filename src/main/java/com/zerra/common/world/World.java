@@ -13,36 +13,25 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class World
+public abstract class World
 {
-	private boolean server;
-	private Logger logger;
-	private String name;
-	private Random random;
-	private Vector2i worldSpawnPoint;
+	protected Logger logger;
+	protected String name;
+	protected Random random;
+	protected Vector2i worldSpawnPoint;
 
 	protected ExecutorService pool;
 	protected Layer[] layers;
 
 	private long seed;
 
-	public World(String name, Long seed, boolean server)
+	protected World(String name, Long seed)
 	{
-		this.server = server;
-		this.logger = LogManager.getLogger("World-" + name + "/" + (server ? "Server" : "Client"));
+		this.logger = LogManager.getLogger("World-" + name + "/" + (isServer() ? "Server" : "Client"));
 		this.name = name;
 		this.random = new Random();
+		this.setSeed(seed);
 
-		if (seed == null)
-		{
-			this.seed = random.nextLong();
-			this.random.setSeed(this.seed);
-		}
-		else
-		{
-			this.random.setSeed(seed);
-			this.seed = seed;
-		}
 		this.worldSpawnPoint = new Vector2i(random.nextInt(1024) - 512, random.nextInt(1024) - 512);
 
 		this.pool = Executors.newCachedThreadPool(r -> new Thread(r, getClass().getSimpleName()));
@@ -53,9 +42,9 @@ public class World
 		}
 	}
 
-	public World(String name, boolean server)
+	protected World(String name)
 	{
-		this(name, null, server);
+		this(name, null);
 	}
 
 	public void schedule(Runnable command)
@@ -105,10 +94,7 @@ public class World
 		return null;
 	}
 
-	public boolean isServer()
-	{
-		return server;
-	}
+	public abstract boolean isServer();
 
 	public Logger logger()
 	{
@@ -140,6 +126,12 @@ public class World
 		if (layer < 0 || layer >= this.layers.length)
 			return null;
 		return this.layers[layer];
+	}
+
+	public void setSeed(Long seed)
+	{
+		this.seed = seed == null ? random.nextLong() : seed;
+		this.random.setSeed(this.seed);
 	}
 
 	public long getSeed()

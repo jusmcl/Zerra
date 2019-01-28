@@ -1,14 +1,15 @@
 package com.zerra.common.world.data;
 
-import javax.annotation.Nonnull;
-
-import com.zerra.client.ZerraClient;
 import com.zerra.common.util.UBObjectWrapper;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+
+import javax.annotation.Nonnull;
 
 public class ZerraWorldData extends WorldData
 {
-
-	// TODO: Store extra world data in ZerraWorldData
+	public Long seed;
+	public Vector2ic spawnPoint = new Vector2i();
 
 	public ZerraWorldData(String name)
 	{
@@ -19,13 +20,33 @@ public class ZerraWorldData extends WorldData
 	@Override
 	public UBObjectWrapper writeToUBO(@Nonnull UBObjectWrapper ubo)
 	{
-		ubo.setLong("seed", ZerraClient.getInstance().getWorld().getSeed());
-		return ubo;
+		if (this.seed != null)
+		{
+			ubo.setLong("seed", this.seed);
+		}
+
+		UBObjectWrapper spawnObject = new UBObjectWrapper();
+		spawnObject.setInt("x", spawnPoint.x());
+		spawnObject.setInt("y", spawnPoint.y());
+		ubo.setUBObject("spawn", spawnObject);
+		return super.writeToUBO(ubo);
 	}
 
 	@Override
 	public void readFromUBO(@Nonnull UBObjectWrapper ubo)
 	{
-		System.out.println(ubo.getLong("seed"));
+		this.seed = ubo.getLong("seed");
+
+		UBObjectWrapper spawnObject = ubo.getUBObjectWrapped("spawn");
+		int x = 0;
+		int y = 0;
+		if (spawnObject != null)
+		{
+			x = spawnObject.getInt("x");
+			y = spawnObject.getInt("y");
+		}
+		this.spawnPoint = new Vector2i(x, y);
+
+		super.readFromUBO(ubo);
 	}
 }
