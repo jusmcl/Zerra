@@ -67,12 +67,18 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	{
 		this.receiver.onConnect(client ->
 		{
-			ServerWorld world = ((ServerWorld) this.zerra.getWorld());
-			this.sendToClient(new MessageReady(), client);
-			this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), client);
-			this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+			if (this.doneLoading)
+			{
+				ServerWorld world = ((ServerWorld) this.zerra.getWorld());
+				this.sendToClient(new MessageReady(), client);
+				this.sendToClient(new MessageTileData(world.getStorageManager().getTileIndexes()), client);
+				this.sendToClient(new MessagePlateData(world.getLayer(0).getPlate(new Vector3i()), world.getStorageManager().getTileIndexes(), world.getStorageManager().getTileMapper()), client);
+			}
+			else
+			{
+				this.queuedClients.add(client);
+			}
 
-			this.queuedClients.add(client);
 			client.readIntAlways(id ->
 			{
 				if (this.doneLoading)
@@ -81,7 +87,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 				}
 				else
 				{
-					System.out.println("TEST");
+					LOGGER.debug("Server not finished loading yet! Won't handle message");
 				}
 			});
 		});
@@ -137,10 +143,7 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	public void closeClient(UUID uuid)
 	{
 		Client client = this.clients.remove(uuid);
-		if (this.queuedClients.contains(client))
-		{
-			this.queuedClients.remove(client);
-		}
+		this.queuedClients.remove(client);
 		if (client != null)
 		{
 			client.close();
