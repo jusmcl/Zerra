@@ -240,7 +240,6 @@ public class IOManager
 				try (DataInputStream is = new DataInputStream(new FileInputStream(tiles)))
 				{
 					pairs.addAll(readTileIndexes(is));
-					is.close();
 				}
 				catch (Exception e)
 				{
@@ -271,7 +270,6 @@ public class IOManager
 			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(tileLookupFile)))
 			{
 				writeTileIndexes(os, this.tileIndexes);
-				os.close();
 			}
 		}
 
@@ -316,7 +314,6 @@ public class IOManager
 			try (DataOutputStream os = new DataOutputStream(new FileOutputStream(plateFile)))
 			{
 				writePlate(os, plate, this.tileIndexes, this.tileMapper);
-				os.close();
 			}
 		}
 

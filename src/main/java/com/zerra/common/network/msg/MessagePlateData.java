@@ -56,7 +56,6 @@ public class MessagePlateData extends Message
 			os.writeInt(this.plate.getPlatePos().y());
 			os.writeInt(this.plate.getPlatePos().z());
 			WorldStorageManager.writePlate(os, this.plate, this.tileIndexes, this.tileMapper);
-			os.close();
 		}
 		catch (IOException e)
 		{
@@ -71,10 +70,7 @@ public class MessagePlateData extends Message
 	public void readFromClient(Client client)
 	{
 		int size = client.readInt();
-		client.readBytes(size, bytes ->
-		{
-			this.bytes = bytes;
-		});
+		client.readBytes(size, bytes -> this.bytes = bytes);
 	}
 
 	@Override
