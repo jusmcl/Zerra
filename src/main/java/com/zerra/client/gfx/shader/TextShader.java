@@ -4,32 +4,21 @@ import org.joml.Matrix4f;
 
 import com.zerra.common.Reference;
 
-/**
- * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
- * </br>
- * Used for shading in GUI rendering.
- *
- * @author Ocelot5836
- */
-//TODO: Document
-public class GuiShader extends ShaderProgram
+public class TextShader extends ShaderProgram
 {
-
 	private int location_projectionMatrix;
 	private int location_transformationMatrix;
 
-	private int location_textureData;
-	private int location_color;
-
-	public GuiShader()
+	public TextShader()
 	{
-		super(Reference.DOMAIN, "gui");
+		super(Reference.DOMAIN, "text");
 	}
 
 	@Override
 	protected void bindAttributes()
 	{
 		super.bindAttribute(0, "position");
+		super.bindAttribute(1, "texcoords");
 	}
 
 	@Override
@@ -37,9 +26,6 @@ public class GuiShader extends ShaderProgram
 	{
 		this.location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		this.location_transformationMatrix = super.getUniformLocation("transformationMatrix");
-
-		this.location_textureData = super.getUniformLocation("textureData");
-		this.location_color = super.getUniformLocation("color");
 	}
 
 	public void loadProjectionMatrix(Matrix4f projectionMatrix)
@@ -52,13 +38,4 @@ public class GuiShader extends ShaderProgram
 		super.loadMatrix(this.location_transformationMatrix, transformationMatrix);
 	}
 
-	public void setTextureCoords(float xMin, float yMin, float xMax, float yMax)
-	{
-		super.loadVector(this.location_textureData, xMin, yMin, xMax, yMax);
-	}
-
-	public void setColor(float red, float green, float blue, float alpha)
-	{
-		super.loadVector(this.location_color, red, green, blue, alpha);
-	}
 }

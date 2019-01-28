@@ -70,9 +70,11 @@ public class Loader
 	/**
 	 * Loads an image to a byte buffer. Used when loading textures.
 	 * 
-	 * @param image The image to load to a byte buffer
+	 * @param image
+	 *            The image to load to a byte buffer
 	 * @return The buffer created from the image or null if the image was null
-	 * @throws NullPointerException Throws this if the image was null
+	 * @throws NullPointerException
+	 *             Throws this if the image was null
 	 */
 	public static ByteBuffer loadToByteBuffer(BufferedImage image) throws NullPointerException
 	{
@@ -100,7 +102,8 @@ public class Loader
 	/**
 	 * Loads a texture to memory.
 	 *
-	 * @param location The location of said texture
+	 * @param location
+	 *            The location of said texture
 	 * @return The texture created
 	 */
 	public static ITexture loadTexture(ResourceLocation location)
@@ -108,7 +111,8 @@ public class Loader
 		try
 		{
 			return Loader.loadTexture(ImageIO.read(location.getInputStream()));
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			ZerraClient.logger().warn("Could not find image at \'" + location + "\'");
 			return Loader.loadTexture(LoadingUtils.createMissingImage(256, 256));
@@ -118,9 +122,11 @@ public class Loader
 	/**
 	 * Loads a buffered image to memory.
 	 *
-	 * @param image The image to load to memory
+	 * @param image
+	 *            The image to load to memory
 	 * @return The texture created
-	 * @throws NullPointerException Throws this if the image was null
+	 * @throws NullPointerException
+	 *             Throws this if the image was null
 	 */
 	public static ITexture loadTexture(BufferedImage image) throws NullPointerException
 	{
@@ -144,7 +150,8 @@ public class Loader
 	/**
 	 * Loads a font texture to memory.
 	 *
-	 * @param location The location of said texture
+	 * @param location
+	 *            The location of said texture
 	 * @return The texture created
 	 */
 	public static ITexture loadFontTexture(ResourceLocation location)
@@ -152,7 +159,8 @@ public class Loader
 		try
 		{
 			return Loader.loadFontTexture(ImageIO.read(location.getInputStream()));
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			ZerraClient.logger().warn("Could not find image at \'" + location + "\'");
 			return Loader.loadTexture(LoadingUtils.createMissingImage(256, 256));
@@ -162,9 +170,11 @@ public class Loader
 	/**
 	 * Loads a font buffered image to memory.
 	 *
-	 * @param image The image to load to memory
+	 * @param image
+	 *            The image to load to memory
 	 * @return The texture created
-	 * @throws NullPointerException Throws this if the image was null
+	 * @throws NullPointerException
+	 *             Throws this if the image was null
 	 */
 	public static ITexture loadFontTexture(BufferedImage image) throws NullPointerException
 	{
@@ -185,10 +195,10 @@ public class Loader
 	}
 
 	/**
-	 * Loads a cube map texture to memory using the supplied images in the folder
-	 * supplied.
+	 * Loads a cube map texture to memory using the supplied images in the folder supplied.
 	 *
-	 * @param folder The folder to get the images from
+	 * @param folder
+	 *            The folder to get the images from
 	 * @return The texture created
 	 */
 	public static ITexture loadCubemapTexture(ResourceLocation folder)
@@ -199,22 +209,27 @@ public class Loader
 		ResourceLocation bottom = new ResourceLocation(folder, "bottom.png");
 		ResourceLocation back = new ResourceLocation(folder, "back.png");
 		ResourceLocation front = new ResourceLocation(folder, "front.png");
-		return loadCubemapTexture(LoadingUtils.loadImage(right.toString(), right.getInputStream()), LoadingUtils.loadImage(left.toString(), left.getInputStream()),
-				LoadingUtils.loadImage(top.toString(), top.getInputStream()), LoadingUtils.loadImage(bottom.toString(), bottom.getInputStream()),
-				LoadingUtils.loadImage(back.toString(), back.getInputStream()), LoadingUtils.loadImage(front.toString(), front.getInputStream()));
+		return loadCubemapTexture(LoadingUtils.loadImage(right.toString(), right.getInputStream()), LoadingUtils.loadImage(left.toString(), left.getInputStream()), LoadingUtils.loadImage(top.toString(), top.getInputStream()), LoadingUtils.loadImage(bottom.toString(), bottom.getInputStream()), LoadingUtils.loadImage(back.toString(), back.getInputStream()), LoadingUtils.loadImage(front.toString(), front.getInputStream()));
 	}
 
 	/**
 	 * Loads a cube map texture to memory using all the images supplied.
 	 *
-	 * @param right The image to be applied to the right
-	 * @param left The image to be applied to the left
-	 * @param top The image to be applied to the top
-	 * @param bottom The image to be applied to the bottom
-	 * @param back The image to be applied to the back
-	 * @param front The image to be applied to the front
+	 * @param right
+	 *            The image to be applied to the right
+	 * @param left
+	 *            The image to be applied to the left
+	 * @param top
+	 *            The image to be applied to the top
+	 * @param bottom
+	 *            The image to be applied to the bottom
+	 * @param back
+	 *            The image to be applied to the back
+	 * @param front
+	 *            The image to be applied to the front
 	 * @return The texture created
-	 * @throws NullPointerException If any image was null
+	 * @throws NullPointerException
+	 *             If any image was null
 	 */
 	public static ITexture loadCubemapTexture(BufferedImage right, BufferedImage left, BufferedImage top, BufferedImage bottom, BufferedImage back, BufferedImage front) throws NullPointerException
 	{
@@ -248,11 +263,15 @@ public class Loader
 	/**
 	 * Loads a sound into memory.
 	 *
-	 * @param location The location of the sound
-	 * @param buffer The buffer that will hold the sound
+	 * @param location
+	 *            The location of the sound
+	 * @param buffer
+	 *            The buffer that will hold the sound
 	 * @return The length of the audio file
-	 * @throws UnsupportedAudioFileException If the type of audio is not supported
-	 * @throws IOException If the file could not be found
+	 * @throws UnsupportedAudioFileException
+	 *             If the type of audio is not supported
+	 * @throws IOException
+	 *             If the file could not be found
 	 */
 	public static long loadSound(ResourceLocation location, int buffer) throws UnsupportedAudioFileException, IOException
 	{
@@ -317,12 +336,28 @@ public class Loader
 	}
 
 	/**
+	 * Generates a new VBO.
+	 * 
+	 * @return The id of the VBO
+	 */
+	public static int generateVBO()
+	{
+		int vboID = GL15.glGenBuffers();
+		vbos.add(vboID);
+		return vboID;
+	}
+
+	/**
 	 * Loads the supplied data to a VAO.
 	 *
-	 * @param positions The positions to load
-	 * @param indices The indices to load
-	 * @param textureCoords The texture coords to load
-	 * @param normals The normals to load
+	 * @param positions
+	 *            The positions to load
+	 * @param indices
+	 *            The indices to load
+	 * @param textureCoords
+	 *            The texture coords to load
+	 * @param normals
+	 *            The normals to load
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, float[] textureCoords, float[] normals)
@@ -340,10 +375,12 @@ public class Loader
 	/**
 	 * Loads different dimensions of positions to memory.
 	 *
-	 * @param positions The positions to load
-	 * @param textureCoords The texture coords to load
-	 * @param dimensions The dimensions of plane. Ex 3d coords will be 3 and 2d
-	 *        coords are 2
+	 * @param positions
+	 *            The positions to load
+	 * @param textureCoords
+	 *            The texture coords to load
+	 * @param dimensions
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, float[] textureCoords, int dimensions)
@@ -359,11 +396,14 @@ public class Loader
 	/**
 	 * Loads different dimensions of positions to memory.
 	 *
-	 * @param positions The positions to load
-	 * @param indices The indices to load
-	 * @param textureCoords The texture coords to load
-	 * @param dimensions The dimensions of plane. Ex 3d coords will be 3 and 2d
-	 *        coords are 2
+	 * @param positions
+	 *            The positions to load
+	 * @param indices
+	 *            The indices to load
+	 * @param textureCoords
+	 *            The texture coords to load
+	 * @param dimensions
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, float[] textureCoords, int dimensions)
@@ -380,10 +420,12 @@ public class Loader
 	/**
 	 * Loads different dimensions of positions to memory.
 	 *
-	 * @param positions The positions to load
-	 * @param indices The indices to load
-	 * @param dimensions The dimensions of plane. Ex 3d coords will be 3 and 2d
-	 *        coords are 2
+	 * @param positions
+	 *            The positions to load
+	 * @param indices
+	 *            The indices to load
+	 * @param dimensions
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int[] indices, int dimensions)
@@ -399,9 +441,10 @@ public class Loader
 	/**
 	 * Loads different dimensions of positions to memory.
 	 *
-	 * @param positions The positions to load
-	 * @param dimensions The dimensions of plane. Ex 3d coords will be 3 and 2d
-	 *        coords are 2
+	 * @param positions
+	 *            The positions to load
+	 * @param dimensions
+	 *            The dimensions of plane. Ex 3d coords will be 3 and 2d coords are 2
 	 * @return The model created
 	 */
 	public static Model loadToVAO(float[] positions, int dimensions)
@@ -416,7 +459,8 @@ public class Loader
 	/**
 	 * Creates an empty VBO that can be used to dynamically update with.
 	 * 
-	 * @param floatCount The number of floats inside
+	 * @param floatCount
+	 *            The number of floats inside
 	 * @return The VBO created
 	 */
 	public static int createEmptyVBO(int floatCount)
@@ -432,12 +476,18 @@ public class Loader
 	/**
 	 * Stores an instanced attribute into the supplied VBO.
 	 * 
-	 * @param vao The VAO to load the VBO into
-	 * @param vbo The VBO that will hold the data
-	 * @param attributeNumber The position this will be held at
-	 * @param dataSize The size of the data
-	 * @param instancedDataLength The length of each point of data.
-	 * @param offset The offset of the data
+	 * @param vao
+	 *            The VAO to load the VBO into
+	 * @param vbo
+	 *            The VBO that will hold the data
+	 * @param attributeNumber
+	 *            The position this will be held at
+	 * @param dataSize
+	 *            The size of the data
+	 * @param instancedDataLength
+	 *            The length of each point of data.
+	 * @param offset
+	 *            The offset of the data
 	 */
 	public static void storeInstancedDataInAttributeList(int vao, int vbo, int attributeNumber, int dataSize, int instancedDataLength, int offset)
 	{
@@ -452,9 +502,12 @@ public class Loader
 	/**
 	 * Updates VBO data.
 	 * 
-	 * @param vbo The VBO that is being updated
-	 * @param data The data that is going to replace the old data
-	 * @param buffer The buffer to put the data into
+	 * @param vbo
+	 *            The VBO that is being updated
+	 * @param data
+	 *            The data that is going to replace the old data
+	 * @param buffer
+	 *            The buffer to put the data into
 	 */
 	public static void updateVboData(int vbo, float[] data, FloatBuffer buffer)
 	{
@@ -470,9 +523,12 @@ public class Loader
 	/**
 	 * Stores data in an attribute list. Uses the currently bound VAO.
 	 * 
-	 * @param attributeNumber The position this will be held at
-	 * @param dataSize The size of the data
-	 * @param data The data to put into the list
+	 * @param attributeNumber
+	 *            The position this will be held at
+	 * @param dataSize
+	 *            The size of the data
+	 * @param data
+	 *            The data to put into the list
 	 */
 	public static void storeDataInAttributeList(int attributeNumber, int dataSize, float[] data)
 	{
@@ -493,4 +549,5 @@ public class Loader
 		IntBuffer buffer = Buffers.storeDataInIntBuffer(indices);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
 	}
+
 }

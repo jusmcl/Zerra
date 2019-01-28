@@ -3,6 +3,7 @@ package com.zerra.client.state;
 import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.ui.Button;
+import com.zerra.client.gfx.ui.Text;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Display;
 
@@ -16,14 +17,17 @@ import com.zerra.client.view.Display;
 public class MenuState extends State
 {
 	public static final ResourceLocation BACKGROUND = new ResourceLocation("textures/gui/backgrounds/background.png");
-
+	public static final ResourceLocation FONT = new ResourceLocation("textures/gui/fonts/default.fnt");
 	private Button buttonPlay;
 	private Button buttonSettings;
 	private Button buttonExit;
+	private Text copyrights;
 
 	public MenuState()
 	{
 		super("menu");
+
+		this.copyrights = new Text(0, 0, "Hello, text!", 0, FONT, false);
 
 		this.buttonPlay = new Button(Display.getWidth() / 2 - 256, Display.getHeight() / 2 - 16 + 200, 512, 32, false)
 		{
@@ -78,6 +82,8 @@ public class MenuState extends State
 		this.buttonPlay.render(mouseX, mouseY, partialTicks);
 		this.buttonSettings.render(mouseX, mouseY, partialTicks);
 		this.buttonExit.render(mouseX, mouseY, partialTicks);
+
+		this.copyrights.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.zerra.client;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
+import com.zerra.client.gfx.ui.text.FontManager;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Camera;
@@ -13,6 +14,7 @@ public class RenderingManager
 {
 
 	private TextureManager textureManager;
+	protected FontManager fontManager;
 	protected TileRenderer tileRenderer;
 	protected GuiRenderer guiRenderer;
 	protected Camera camera;
@@ -24,6 +26,7 @@ public class RenderingManager
 		Display.setIcon(new ResourceLocation("icons/16.png"), new ResourceLocation("icons/32.png"));
 
 		this.textureManager = new TextureManager();
+		this.fontManager = new FontManager();
 		this.tileRenderer = new TileRenderer();
 		this.guiRenderer = new GuiRenderer();
 		this.camera = new Camera();
@@ -68,5 +71,13 @@ public class RenderingManager
 	public TileRenderer getTileRenderer()
 	{
 		return tileRenderer;
+	}
+
+	/**
+	 * @return The font manager for the client.
+	 */
+	public FontManager getFontManager()
+	{
+		return fontManager;
 	}
 }
