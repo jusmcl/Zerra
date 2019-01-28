@@ -34,7 +34,6 @@ public class TexturePreloader implements Runnable
 	public void run()
 	{
 		setState(LoadingState.Loading);
-		// TODO: Use log4j logger without errors
 		Zerra.logger().info("Started loading textures");
 		// TODO: Load textures
 		ZerraClient.getInstance().getRenderingManager().getTextureManager().registerTiles();

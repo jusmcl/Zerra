@@ -11,6 +11,7 @@ import com.zerra.client.gfx.shader.GuiShader;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.Maths;
+import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.view.Display;
 
 /**
@@ -157,6 +158,43 @@ public class GuiRenderer
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, QUAD.getVertexCount());
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
+		this.shader.stop();
+		GL11.glDisable(GL11.GL_BLEND);
+	}
+	
+	/**
+	 * Renders a quad with a specific color at x, y with size width, height, and the color using red, green, blue values.
+	 * 
+	 * @param x
+	 *            The x position of the quad
+	 * @param y
+	 *            The y position of the quad
+	 * @param width
+	 *            The x size of the quad
+	 * @param height
+	 *            The y size of the quad
+	 * @param red
+	 *            The amount of red (0-255)
+	 * @param green
+	 *            The amount of green (0-255)
+	 * @param blue
+	 *            The amount of blue (0-255)
+	 */
+	public void renderColoredQuad(float x, float y, float width, float height, float red, float green, float blue) 
+	{
+		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(new ResourceLocation("textures/blank.png"));
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		this.shader.start();
+		this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(x, y, 0, 0, width, height));
+		this.shader.setTextureCoords(0f, 0f, 1f, 1f);
+		this.shader.setColor(red / 255, green / 255, blue / 255, 1);
+		GL30.glBindVertexArray(QUAD.getVaoID());
+		GL20.glEnableVertexAttribArray(0);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, QUAD.getVertexCount());
+		GL20.glDisableVertexAttribArray(0);
+		GL30.glBindVertexArray(0);
+		this.shader.setColor(1, 1, 1, 1);
 		this.shader.stop();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
