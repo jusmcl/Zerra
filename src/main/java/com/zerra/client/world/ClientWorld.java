@@ -47,7 +47,6 @@ public class ClientWorld extends World
 	{
 		if (!this.tileIndexes.isEmpty() && !this.awaitingPlates.isEmpty())
 		{
-			System.out.println("s");
 			for (int i = 0; i < this.awaitingPlates.size(); i++)
 			{
 				List<Pair<Integer, ResourceLocation>> tileIndexes = this.getTileIndexes();
@@ -89,7 +88,6 @@ public class ClientWorld extends World
 		guiRenderer.setProjectionMatrix(GuiRenderer.FBO_MATRIX);
 		guiRenderer.renderTexturedQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
 		guiRenderer.restoreDefaultProjectionMatrix();
-
 		entityRenderer.renderEntities(0, renderManager.getCamera(), partialTicks);
 	}
 

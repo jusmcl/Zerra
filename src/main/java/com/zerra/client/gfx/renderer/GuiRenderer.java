@@ -46,7 +46,7 @@ public class GuiRenderer
 	}
 
 	/**
-	 * Renders a textured quad at x, y with size width, height, rotation as 0, 0, and textured with the specified sprite.
+	 * Renders a textured quad at x, y, 0 with size width, height, rotation as 0, 0, 0, and textured with the specified sprite.
 	 * 
 	 * @param x
 	 *            The x position of the quad
@@ -62,7 +62,29 @@ public class GuiRenderer
 	public void renderTexturedQuad(float x, float y, float width, float height, TextureMapSprite sprite)
 	{
 		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap().getLocation());
-		this.renderTexturedQuad(x, y, width, height, 0, 0, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
+		this.renderTexturedQuad(x, y, -1, width, height, 0, 0, 0, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
+	}
+
+	/**
+	 * Renders a textured quad at x, y, z with size width, height, rotation as 0, 0, 0, and textured with the specified sprite.
+	 * 
+	 * @param x
+	 *            The x position of the quad
+	 * @param y
+	 *            The y position of the quad
+	 * @param z
+	 *            The z position of the quad
+	 * @param width
+	 *            The x size of the quad
+	 * @param height
+	 *            The y size of the quad
+	 * @param sprite
+	 *            The sprite that will be used to texture the quad
+	 */
+	public void renderTexturedQuad(float x, float y, float z, float width, float height, TextureMapSprite sprite)
+	{
+		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap().getLocation());
+		this.renderTexturedQuad(x, y, z, width, height, 0, 0, 0, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
 	}
 
 	/**
@@ -83,9 +105,34 @@ public class GuiRenderer
 	 * @param sprite
 	 *            The sprite that will be used to texture the quad
 	 */
-	public void renderTexturedQuad(float x, float y, float width, float height, float rotationX, float rotationY, TextureMapSprite sprite)
+	public void renderTexturedQuad(float x, float y, float width, float height, float rotationX, float rotationY, float rotationZ, TextureMapSprite sprite)
 	{
-		this.renderTexturedQuad(x, y, width, height, rotationX, rotationY, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
+		this.renderTexturedQuad(x, y, -1, width, height, rotationX, rotationY, rotationZ, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
+	}
+
+	/**
+	 * Renders a textured quad at x, y, z with size width, height, rotation as rotationX, rotationY, rotationZ, and textured with the specified sprite.
+	 * 
+	 * @param x
+	 *            The x position of the quad
+	 * @param y
+	 *            The y position of the quad
+	 * @param z
+	 *            The z position of the quad
+	 * @param width
+	 *            The x size of the quad
+	 * @param height
+	 *            The y size of the quad
+	 * @param rotationX
+	 *            The amount in degrees that the quad will be rotated in the x axis
+	 * @param rotationY
+	 *            The amount in degrees that the quad will be rotated in the y axis
+	 * @param sprite
+	 *            The sprite that will be used to texture the quad
+	 */
+	public void renderTexturedQuad(float x, float y, float z, float width, float height, float rotationX, float rotationY, float rotationZ, TextureMapSprite sprite)
+	{
+		this.renderTexturedQuad(x, y, z, width, height, rotationX, rotationY, rotationZ, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), sprite.getAtlasWidth(), sprite.getAtlasHeight());
 	}
 
 	/**
@@ -114,24 +161,22 @@ public class GuiRenderer
 	 */
 	public void renderTexturedQuad(float x, float y, float width, float height, float u, float v, float uWidth, float vHeight, float textureWidth, float textureHeight)
 	{
-		this.renderTexturedQuad(x, y, width, height, 0, 0, u, v, uWidth, vHeight, textureWidth, textureHeight);
+		this.renderTexturedQuad(x, y, -1, width, height, 0, 0, 0, u, v, uWidth, vHeight, textureWidth, textureHeight);
 	}
 
 	/**
-	 * Renders a textured quad at x, y with size width, height, rotation as rotationX, rotationY, and textured with a custom texture. The custom texture uses u, v as x and y on the texture image, uWidth, uHeight as the width and height of the selection on the texture, and textureWidth, textureHeight to know the x and y size of the texture.
+	 * Renders a textured quad at x, y, z with size width, height, rotation as 0, 0, 0, and textured with a custom texture. The custom texture uses u, v as x and y on the texture image, uWidth, uHeight as the width and height of the selection on the texture, and textureWidth, textureHeight to know the x and y size of the texture.
 	 * 
 	 * @param x
 	 *            The x position of the quad
 	 * @param y
 	 *            The y position of the quad
+	 * @param z
+	 *            The z position of the quad
 	 * @param width
 	 *            The x size of the quad
 	 * @param height
 	 *            The y size of the quad
-	 * @param rotationX
-	 *            The amount in degrees that the quad will be rotated in the x axis
-	 * @param rotationY
-	 *            The amount in degrees that the quad will be rotated in the y axis
 	 * @param u
 	 *            The x on the texture to start selection
 	 * @param v
@@ -145,12 +190,49 @@ public class GuiRenderer
 	 * @param textureHeight
 	 *            The height of the actual texture
 	 */
-	public void renderTexturedQuad(float x, float y, float width, float height, float rotationX, float rotationY, float u, float v, float uWidth, float vHeight, float textureWidth, float textureHeight)
+	public void renderTexturedQuad(float x, float y, float z, float width, float height, float u, float v, float uWidth, float vHeight, float textureWidth, float textureHeight)
+	{
+		this.renderTexturedQuad(x, y, z, width, height, 0, 0, 0, u, v, uWidth, vHeight, textureWidth, textureHeight);
+	}
+
+	/**
+	 * Renders a textured quad at x, y, z with size width, height, rotation as rotationX, rotationY, rotationZ, and textured with a custom texture. The custom texture uses u, v as x and y on the texture image, uWidth, uHeight as the width and height of the selection on the texture, and textureWidth, textureHeight to know the x and y size of the texture.
+	 * 
+	 * @param x
+	 *            The x position of the quad
+	 * @param y
+	 *            The y position of the quad
+	 * @param z
+	 *            The z position of the quad
+	 * @param width
+	 *            The x size of the quad
+	 * @param height
+	 *            The y size of the quad
+	 * @param rotationX
+	 *            The amount in degrees that the quad will be rotated in the x axis
+	 * @param rotationY
+	 *            The amount in degrees that the quad will be rotated in the y axis
+	 * @param rotationZ
+	 *            The amount in degrees that the quad will be rotated in the z axis
+	 * @param u
+	 *            The x on the texture to start selection
+	 * @param v
+	 *            The v on the texture to start selection
+	 * @param uWidth
+	 *            The width of the selection on the texture
+	 * @param vHeight
+	 *            The height of the selection on the texture
+	 * @param textureWidth
+	 *            The width of the actual texture
+	 * @param textureHeight
+	 *            The height of the actual texture
+	 */
+	public void renderTexturedQuad(float x, float y, float z, float width, float height, float rotationX, float rotationY, float rotationZ, float u, float v, float uWidth, float vHeight, float textureWidth, float textureHeight)
 	{
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		this.shader.start();
-		this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(x, y, rotationX, rotationY, width, height));
+		this.shader.loadTransformationMatrix(Maths.createTransformationMatrix(x, y, z, rotationX, rotationY, rotationZ, width, height, 1));
 		this.shader.setTextureCoords(u / textureWidth, v / textureHeight, uWidth / textureWidth, vHeight / textureHeight);
 		GL30.glBindVertexArray(QUAD.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
@@ -160,11 +242,12 @@ public class GuiRenderer
 		this.shader.stop();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
-	
+
 	/**
 	 * Disposes of the shaders and other resources.
 	 */
-	public void dispose() {
+	public void dispose()
+	{
 		this.shader.cleanUp();
 	}
 

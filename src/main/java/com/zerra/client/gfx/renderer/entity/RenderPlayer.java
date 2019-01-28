@@ -20,8 +20,6 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 	@Override
 	public void render(EntityPlayer player, float depth, float partialTicks)
 	{
-		this.renderManager.getGuiRenderer().renderTexturedQuad(player.getXEntityPos(), player.getYEntityPos(), 500, 500, this.sprite);
-		System.out.println(player);
 	}
 
 	@Override
