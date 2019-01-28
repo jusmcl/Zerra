@@ -24,8 +24,8 @@ public class MenuState extends State
 	public MenuState()
 	{
 		super("menu");
-		
-		this.buttonPlay = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 232, 256, 32, true)
+
+		this.buttonPlay = new Button(Display.getWidth() / 2 - 256, Display.getHeight() / 2 - 16 + 200, 512, 32, false)
 		{
 			@Override
 			public void mousePressed(double mouseX, double mouseY, int mouseButton)
@@ -36,8 +36,8 @@ public class MenuState extends State
 				}
 			}
 		};
-		
-		this.buttonSettings = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 184, 256, 32, true)
+
+		this.buttonSettings = new Button(Display.getWidth() / 2 - 256, Display.getHeight() / 2 + 20 + 200, 512, 32, false)
 		{
 			@Override
 			public void mousePressed(double mouseX, double mouseY, int mouseButton)
@@ -48,8 +48,8 @@ public class MenuState extends State
 				}
 			}
 		};
-		
-		this.buttonExit = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 120, 256, 32, true)
+
+		this.buttonExit = new Button(Display.getWidth() / 2 - 256, Display.getHeight() / 2 + 56 + 200, 512, 32, false)
 		{
 			@Override
 			public void mousePressed(double mouseX, double mouseY, int mouseButton)
