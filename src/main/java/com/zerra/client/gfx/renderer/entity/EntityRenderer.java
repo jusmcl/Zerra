@@ -61,6 +61,7 @@ public class EntityRenderer
 				List<Entity> entities = layerBatch.get(type);
 				for (Entity entity : entities)
 				{
+					ENTITY_RENDERS.get(entity).render(entity, 0.0f, partialTicks);
 				}
 			}
 		}
