@@ -40,18 +40,6 @@ public class TextureManager
 	}
 
 	/**
-	 * Registers all tiles into the texture map
-	 */
-	public void registerTiles()
-	{
-		Tile[] tiles = Tiles.getTiles();
-		for (Tile tile : tiles)
-		{
-			this.textureMap.register(tile.getTexture());
-		}
-	}
-
-	/**
 	 * Loads a texture up from a resource location.
 	 * 
 	 * @param location The location to load the texture from.

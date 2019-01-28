@@ -1,5 +1,9 @@
 package com.zerra.common;
 
+import com.zerra.client.gfx.renderer.entity.EntityRenderer;
+import com.zerra.client.gfx.renderer.entity.RenderPlayer;
+import com.zerra.client.gfx.texture.map.TextureMap;
+import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.msg.MessageBadRequest;
 import com.zerra.common.network.msg.MessageConnect;
@@ -12,6 +16,9 @@ import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.common.network.msg.MessageUnknownRequest;
 import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.RegistryNameable;
+import com.zerra.common.world.entity.EntityPlayer;
+import com.zerra.common.world.tile.Tile;
+import com.zerra.common.world.tile.Tiles;
 
 public class ZerraContentInit
 {
@@ -43,5 +50,21 @@ public class ZerraContentInit
 		regMessage(MessageTileData.class);
 		regMessage(MessagePlateData.class);
 		regMessage(MessageUnknownRequest.class);
+	}
+
+	public static void initClient()
+	{
+		EntityRenderer.bindEntityRender(EntityPlayer.class, new RenderPlayer());
+	}
+
+	public static void registerTextureMapSprites(TextureMap textureMap)
+	{
+		Tile[] tiles = Tiles.getTiles();
+		for (Tile tile : tiles)
+		{
+			textureMap.register(tile.getTexture());
+		}
+
+		textureMap.register(new ResourceLocation("textures/entity/playerTest.png"));
 	}
 }

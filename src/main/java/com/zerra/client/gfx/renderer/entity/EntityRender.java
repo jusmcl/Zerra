@@ -4,7 +4,7 @@ import com.zerra.common.world.entity.Entity;
 
 public interface EntityRender<T extends Entity>
 {
-	<T extends Entity> void render(T entity, float depth, float partialTicks);
+	void render(T entity, float depth, float partialTicks);
 
 	void dispose();
 }

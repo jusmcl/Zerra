@@ -51,6 +51,7 @@ public class EntityRenderer
 		entityBatch.get(entity.getClass()).add(entity);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void renderEntities(int layer, ICamera camera, float partialTicks)
 	{
 		Map<Class<? extends Entity>, List<Entity>> layerBatch = this.renderEntities.get(layer);
@@ -61,7 +62,13 @@ public class EntityRenderer
 				List<Entity> entities = layerBatch.get(type);
 				for (Entity entity : entities)
 				{
-					ENTITY_RENDERS.get(entity).render(entity, 0.0f, partialTicks);
+					if (ENTITY_RENDERS.containsKey(type))
+					{
+						((EntityRender<Entity>) ENTITY_RENDERS.get(type)).render(entity, 0.0f, partialTicks);
+					}
+					else
+					{
+					}
 				}
 			}
 		}

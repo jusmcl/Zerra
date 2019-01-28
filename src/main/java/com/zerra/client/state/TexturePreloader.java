@@ -2,6 +2,7 @@ package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
 import com.zerra.common.Zerra;
+import com.zerra.common.ZerraContentInit;
 
 public class TexturePreloader implements Runnable
 {
@@ -37,8 +38,9 @@ public class TexturePreloader implements Runnable
 		// TODO: Use log4j logger without errors
 		Zerra.logger().info("Started loading textures");
 		// TODO: Load textures
-		ZerraClient.getInstance().getRenderingManager().getTextureManager().registerTiles();
+		ZerraContentInit.registerTextureMapSprites(ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap());
 		ZerraClient.getInstance().getRenderingManager().getTextureManager().getTextureMap().stitch();
+		ZerraContentInit.initClient();
 		Zerra.logger().info("Done loading textures");
 		setState(LoadingState.Done);
 	}
