@@ -16,13 +16,13 @@ public class GameLoadState extends State
 	{
 		if (TexturePreloader.getState() == LoadingState.Done)
 		{
-			StateManager.setActiveState(new WorldState());
+			StateManager.setActiveState(new MenuState());
 			TexturePreloader.setState(LoadingState.None);
 		}
 	}
 
 	@Override
-	public void render(float partialTicks)
+	public void render(double mouseX, double mouseY, float partialTicks)
 	{
 
 	}

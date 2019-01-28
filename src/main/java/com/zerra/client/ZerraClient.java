@@ -5,9 +5,11 @@ import java.util.Locale;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.api.mod.ModManager;
+import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
+import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
@@ -123,7 +125,7 @@ public class ZerraClient extends Zerra
 	{
 		if (StateManager.getActiveState() != null)
 		{
-			StateManager.getActiveState().render(this.getRenderPartialTicks());
+			StateManager.getActiveState().render(Display.getMouseX() / Renderer.SCALE, Display.getMouseY() / Renderer.SCALE, this.getRenderPartialTicks());
 		}
 	}
 
@@ -163,6 +165,7 @@ public class ZerraClient extends Zerra
 		I18n.setLanguage(new Locale("en", "us"));
 
 		this.clientConnection = new ClientConnectionManager(this);
+		StateManager.setActiveState(new GameLoadState());
 	}
 
 	@Override
@@ -191,6 +194,10 @@ public class ZerraClient extends Zerra
 	public void onKeyPressed(int keyCode)
 	{
 		this.inputHandler.setKeyPressed(keyCode, true);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onKeyPressed(keyCode);
+		}
 	}
 
 	/**
@@ -202,6 +209,10 @@ public class ZerraClient extends Zerra
 	public void onKeyReleased(int keyCode)
 	{
 		this.inputHandler.setKeyPressed(keyCode, false);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onKeyReleased(keyCode);
+		}
 	}
 
 	/**
@@ -217,6 +228,10 @@ public class ZerraClient extends Zerra
 	public void onMousePressed(double mouseX, double mouseY, int mouseButton)
 	{
 		this.inputHandler.setMouseButtonPressed(mouseButton, true);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onMousePressed(mouseX, mouseY, mouseButton);
+		}
 	}
 
 	/**
@@ -232,6 +247,10 @@ public class ZerraClient extends Zerra
 	public void onMouseReleased(double mouseX, double mouseY, int mouseButton)
 	{
 		this.inputHandler.setMouseButtonPressed(mouseButton, false);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onMouseReleased(mouseX, mouseY, mouseButton);
+		}
 	}
 
 	/**
