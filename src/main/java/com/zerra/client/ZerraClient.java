@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.api.mod.ModManager;
+import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.StateManager;
@@ -301,7 +302,8 @@ public class ZerraClient extends Zerra
 		long startTime = System.currentTimeMillis();
 		Display.destroy();
 		Loader.cleanUp();
-		this.renderingManager.getTextureManager().dispose();
+		EntityRenderer.disposeRenders();
+		this.renderingManager.dispose();
 		this.pool.shutdown();
 		instance = null;
 		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime));

@@ -160,6 +160,13 @@ public class GuiRenderer
 		this.shader.stop();
 		GL11.glDisable(GL11.GL_BLEND);
 	}
+	
+	/**
+	 * Disposes of the shaders and other resources.
+	 */
+	public void dispose() {
+		this.shader.cleanUp();
+	}
 
 	/**
 	 * Sets the projection matrix that will be used to render with.

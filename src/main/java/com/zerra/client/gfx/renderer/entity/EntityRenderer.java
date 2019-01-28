@@ -74,6 +74,19 @@ public class EntityRenderer
 		}
 		this.renderEntities.clear();
 	}
+	
+	public void dispose() {
+		
+	}
+
+	public static void disposeRenders()
+	{
+		for (Class<? extends Entity> entityClass : ENTITY_RENDERS.keySet())
+		{
+			ENTITY_RENDERS.get(entityClass).dispose();
+		}
+		ENTITY_RENDERS.clear();
+	}
 
 	public static void bindEntityRender(Class<? extends Entity> entityClass, EntityRender<? extends Entity> render)
 	{

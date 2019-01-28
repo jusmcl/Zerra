@@ -33,6 +33,18 @@ public class RenderingManager
 	}
 
 	/**
+	 * Disposes of the shaders and other resources.
+	 */
+	public void dispose()
+	{
+		this.textureManager.dispose();
+		this.tileRenderer.dispose();
+		this.entityRenderer.dispose();
+		this.guiRenderer.dispose();
+		this.fbo.dispose();
+	}
+
+	/**
 	 * @return The texture manager for the game.
 	 */
 	public TextureManager getTextureManager()

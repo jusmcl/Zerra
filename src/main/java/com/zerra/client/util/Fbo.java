@@ -77,7 +77,7 @@ public class Fbo
 	/**
 	 * Deletes the frame buffer and its attachments when the game closes.
 	 */
-	public void cleanUp()
+	public void dispose()
 	{
 		GL30.glDeleteFramebuffers(frameBuffer);
 		GL11.glDeleteTextures(colorTextures);

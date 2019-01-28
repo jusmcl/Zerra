@@ -80,4 +80,11 @@ public class TileRenderer
 		}
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
+	
+	/**
+	 * Disposes of the shaders and other resources.
+	 */
+	public void dispose() {
+		this.shader.cleanUp();
+	}
 }
