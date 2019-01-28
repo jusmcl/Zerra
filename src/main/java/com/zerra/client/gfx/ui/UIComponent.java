@@ -42,5 +42,9 @@ public abstract class UIComponent {
 		this.height = height / Renderer.SCALE;
 	}
 
-	public abstract void render();
+	public abstract void render(double mouseX, double mouseY, float partialTicks);
+	
+	public abstract void mousePressed(double mouseX, double mouseY, int mouseButton);
+	
+	public abstract void mouseReleased(double mouseX, double mouseY, int mouseButton);
 }

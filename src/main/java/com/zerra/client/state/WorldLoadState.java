@@ -15,8 +15,7 @@ public class WorldLoadState extends State
 	}
 
 	@Override
-	public void render(float partialTicks)
-	{
+	public void render(double mouseX, double mouseY, float partialTicks) {
 		// TODO: World loading screen.
 	}
 }

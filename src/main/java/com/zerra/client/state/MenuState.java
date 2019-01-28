@@ -13,46 +13,86 @@ import com.zerra.client.view.Display;
  * 
  * @author AndrewAlfazy
  */
-public class MenuState extends State {
-	ResourceLocation background = new ResourceLocation("zerra:gui/backgrounds/background.png");
-	Button play_button, settings_buttons, quit_button;
+public class MenuState extends State
+{
+	public static final ResourceLocation BACKGROUND = new ResourceLocation("textures/gui/backgrounds/background.png");
 
-	public MenuState() {
+	private Button buttonPlay;
+	private Button buttonSettings;
+	private Button buttonExit;
+
+	public MenuState()
+	{
 		super("menu");
-		play_button = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 232, 256, 32, true) {
+		
+		this.buttonPlay = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 232, 256, 32, true)
+		{
 			@Override
-			public void onClick() {
-				StateManager.setActiveState(new WorldState());
+			public void mousePressed(double mouseX, double mouseY, int mouseButton)
+			{
+				if (this.isHovered() && mouseButton == 0)
+				{
+					StateManager.setActiveState(new WorldState());
+				}
 			}
 		};
-		settings_buttons = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 184, 256, 32, true) {
+		
+		this.buttonSettings = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 184, 256, 32, true)
+		{
 			@Override
-			public void onClick() {
-				StateManager.setActiveState(new SettingsState());
+			public void mousePressed(double mouseX, double mouseY, int mouseButton)
+			{
+				if (this.isHovered() && mouseButton == 0)
+				{
+					StateManager.setActiveState(new SettingsState());
+				}
 			}
 		};
-		quit_button = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 120, 256, 32, true) {
+		
+		this.buttonExit = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 120, 256, 32, true)
+		{
 			@Override
-			public void onClick() {
-				Display.close();
+			public void mousePressed(double mouseX, double mouseY, int mouseButton)
+			{
+				if (this.isHovered() && mouseButton == 0)
+				{
+					ZerraClient.getInstance().stop();
+				}
 			}
 		};
 	}
 
 	@Override
-	public void update() {
+	public void update()
+	{
 		ZerraClient.getInstance().getRenderingManager().getCamera().update();
 		ZerraClient.getInstance().getInputHandler().updateGamepad();
 	}
 
 	@Override
-	public void render(float partialTicks) {
-		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(background);
-		ZerraClient.getInstance().getRenderingManager().getGuiRenderer().renderTexturedQuad(0, 0,
-				Display.getWidth() / Renderer.SCALE, Display.getHeight() / Renderer.SCALE, 0, 0, 1920, 1080, 1920,
-				1080);
-		play_button.render();
-		settings_buttons.render();
-		quit_button.render();
+	public void render(double mouseX, double mouseY, float partialTicks)
+	{
+		ZerraClient.getInstance().getRenderingManager().getTextureManager().bind(BACKGROUND);
+		ZerraClient.getInstance().getRenderingManager().getGuiRenderer().renderTexturedQuad(0, 0, Display.getWidth() / Renderer.SCALE, Display.getHeight() / Renderer.SCALE, 0, 0, 1920, 1080, 1920, 1080);
+
+		this.buttonPlay.render(mouseX, mouseY, partialTicks);
+		this.buttonSettings.render(mouseX, mouseY, partialTicks);
+		this.buttonExit.render(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public void onMousePressed(double mouseX, double mouseY, int mouseButton)
+	{
+		this.buttonPlay.mousePressed(mouseX, mouseY, mouseButton);
+		this.buttonSettings.mousePressed(mouseX, mouseY, mouseButton);
+		this.buttonExit.mousePressed(mouseX, mouseY, mouseButton);
+	}
+
+	@Override
+	public void onMouseReleased(double mouseX, double mouseY, int mouseButton)
+	{
+		this.buttonPlay.mouseReleased(mouseX, mouseY, mouseButton);
+		this.buttonSettings.mouseReleased(mouseX, mouseY, mouseButton);
+		this.buttonExit.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 }

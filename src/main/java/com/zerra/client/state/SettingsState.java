@@ -10,28 +10,36 @@ import com.zerra.client.view.Display;
  * 
  * @author AndrewAlfazy
  */
-public class SettingsState extends State {
+public class SettingsState extends State
+{
 
 	Button back;
 
-	public SettingsState() {
+	public SettingsState()
+	{
 		super("settings");
-		back = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 120, 256, 32, true) {
+		back = new Button(Display.getWidth() * 0.5f, Display.getHeight() - 120, 256, 32, true)
+		{
 			@Override
-			public void onClick() {
-				StateManager.setActiveState(new MenuState());
+			public void mousePressed(double mouseX, double mouseY, int mouseButton)
+			{
+				if (this.isHovered() && mouseButton == 1)
+				{
+					StateManager.setActiveState(new MenuState());
+				}
 			}
 		};
 	}
 
 	@Override
-	public void update() {
+	public void update()
+	{
 
 	}
 
 	@Override
-	public void render(float partialTicks) {
-		back.render();
+	public void render(double mouseX, double mouseY, float partialTicks)
+	{
+		back.render(mouseX, mouseY, partialTicks);
 	}
-
 }
