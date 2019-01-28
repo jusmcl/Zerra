@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.zerra.api.mod.ModManager;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
+import com.zerra.client.state.MenuState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
@@ -163,6 +164,7 @@ public class ZerraClient extends Zerra
 		I18n.setLanguage(new Locale("en", "us"));
 
 		this.clientConnection = new ClientConnectionManager(this);
+		StateManager.setActiveState(new MenuState());
 	}
 
 	@Override

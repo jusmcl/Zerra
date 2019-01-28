@@ -124,7 +124,7 @@ public class Camera implements ICamera
 		{
 			this.position.x += 1 + this.speedAdjust;
 		}
-		if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
+		/*if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_ESCAPE))
 		{
 			Zerra.logger().info("creating world state...");
 			if (StateManager.getActiveState() == null)
@@ -134,7 +134,7 @@ public class Camera implements ICamera
 			{
 				StateManager.setActiveState(null);
 			}
-		}
+		}*/
 
 		// Useful keys to adjust the movement speed of the camera when not locked to the
 		// player.
