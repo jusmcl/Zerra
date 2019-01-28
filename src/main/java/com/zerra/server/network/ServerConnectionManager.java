@@ -1,14 +1,5 @@
 package com.zerra.server.network;
 
-import java.util.Deque;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-
-import javax.annotation.Nullable;
-
-import org.joml.Vector3i;
-
 import com.zerra.common.network.ConnectionManager;
 import com.zerra.common.network.Message;
 import com.zerra.common.network.MessageSide;
@@ -17,17 +8,23 @@ import com.zerra.common.network.msg.MessageReady;
 import com.zerra.common.network.msg.MessageTileData;
 import com.zerra.server.ZerraServer;
 import com.zerra.server.world.ServerWorld;
-
+import org.joml.Vector3i;
 import simplenet.Client;
 import simplenet.Server;
 import simplenet.packet.Packet;
+
+import javax.annotation.Nullable;
+import java.util.Queue;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ServerConnectionManager extends ConnectionManager<Server>
 {
 	public static final int MAX_BYTES = 10240;
 
 	private ConcurrentHashMap<UUID, Client> clients = new ConcurrentHashMap<>();
-	private Deque<Client> queuedClients = new ConcurrentLinkedDeque<>();
+	private Queue<Client> queuedClients = new ConcurrentLinkedQueue<>();
 	private boolean doneLoading;
 
 	public ServerConnectionManager(ZerraServer zerra, @Nullable String address)
@@ -143,7 +140,10 @@ public class ServerConnectionManager extends ConnectionManager<Server>
 	public void closeClient(UUID uuid)
 	{
 		Client client = this.clients.remove(uuid);
-		this.queuedClients.remove(client);
+		if (!doneLoading)
+		{
+			this.queuedClients.remove(client);
+		}
 		if (client != null)
 		{
 			client.close();
