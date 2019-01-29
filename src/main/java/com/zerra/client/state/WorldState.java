@@ -11,17 +11,42 @@ import com.zerra.server.ZerraServer;
 public class WorldState extends State
 {
 
+	protected ZerraClient zerraClient;
+
 	public WorldState()
 	{
 		super("world");
+	}
+
+	@Override
+	public void init()
+	{
+		this.zerraClient = ZerraClient.getInstance();
 
 		new Thread(new ZerraServer(false), "Server").start();
 
+		// TODO: Pass in a seed here.
 		ZerraClient.getInstance().createWorld("world", 1298428958710234L);
 
-		reloadServerInstance();
-
+		try
+		{
+			Thread.sleep(1000);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		zerraClient.getConnectionManager().connect();
+	}
+
+	@Override
+	public void cleanState()
+	{
+		ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
+
+		if (ZerraClient.getInstance().getWorld() != null)
+		{
+			ZerraClient.getInstance().getWorld().stop();
+		}
 	}
 
 	@Override
@@ -44,16 +69,5 @@ public class WorldState extends State
 		zerraClient.getRenderingManager().getGuiRenderer().setProjectionMatrix(GuiRenderer.FBO_MATRIX);
 		zerraClient.getRenderingManager().getGuiRenderer().renderTexturedQuad(0, 0, Display.getWidth(), Display.getHeight(), 0, 0, 1, 1, 1, 1);
 		zerraClient.getRenderingManager().getGuiRenderer().restoreDefaultProjectionMatrix();
-	}
-
-	@Override
-	public void cleanState()
-	{
-		ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
-
-		if (ZerraClient.getInstance().getWorld() != null)
-		{
-			ZerraClient.getInstance().getWorld().stop();
-		}
 	}
 }
