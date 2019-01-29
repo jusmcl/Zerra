@@ -14,6 +14,7 @@ import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.OnlineRequest;
 import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Zerra;
@@ -307,6 +308,7 @@ public class ZerraClient extends Zerra
 	public void cleanupResources()
 	{
 		long startTime = System.currentTimeMillis();
+		OnlineRequest.shutdown();
 		Display.destroy();
 		Loader.cleanUp();
 		this.renderingManager.getTextureManager().dispose();
