@@ -1,4 +1,4 @@
-package com.zerra.client.view;
+package com.zerra.client.gfx;
 
 import org.joml.Vector3f;
 

@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.api.mod.ModManager;
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
@@ -14,7 +15,6 @@ import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.OnlineRequest;
-import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Zerra;
 import com.zerra.common.ZerraContentInit;

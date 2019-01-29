@@ -2,8 +2,8 @@ package com.zerra.client.gfx.renderer;
 
 import org.joml.Matrix4f;
 
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.model.Model;
-import com.zerra.client.view.Display;
 
 /**
  * <em><b>Copyright (c) 2018 The Zerra Team.</b></em> <br>

@@ -6,13 +6,13 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.model.Model;
 import com.zerra.client.gfx.shader.GuiShader;
 import com.zerra.client.gfx.texture.map.TextureMapSprite;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.Maths;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.client.view.Display;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>

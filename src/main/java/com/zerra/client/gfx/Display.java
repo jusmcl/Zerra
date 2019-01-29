@@ -1,4 +1,4 @@
-package com.zerra.client.view;
+package com.zerra.client.gfx;
 
 import static org.lwjgl.system.MemoryUtil.NULL;
 

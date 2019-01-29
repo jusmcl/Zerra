@@ -1,10 +1,10 @@
 package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.ui.Button;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.client.view.Display;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
