@@ -1,5 +1,6 @@
 package com.zerra.common;
 
+import com.zerra.client.entity.ClientEntityPlayer;
 import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.gfx.renderer.entity.RenderPlayer;
 import com.zerra.client.gfx.texture.map.TextureMap;
@@ -18,7 +19,6 @@ import com.zerra.common.registry.Registries;
 import com.zerra.common.registry.RegistryNameable;
 import com.zerra.common.world.data.WorldDataFactory;
 import com.zerra.common.world.data.ZerraWorldData;
-import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
 
@@ -56,7 +56,7 @@ public class ZerraContentInit
 
 	public static void initClient()
 	{
-		EntityRenderer.bindEntityRender(EntityPlayer.class, new RenderPlayer());
+		EntityRenderer.bindEntityRender(ClientEntityPlayer.class, new RenderPlayer());
 	}
 
 	public static void registerTextureMapSprites(TextureMap textureMap)

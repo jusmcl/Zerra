@@ -14,8 +14,9 @@ public class EntityPlayer extends Entity
 	{
 		super(world);
 		this.setRegistryName("player");
+		this.setAttribute(SPEED, 1f);
 	}
-	
+
 	@Override
 	protected void registerEntityAttributes(List<Attribute<?>> attributes)
 	{

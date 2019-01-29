@@ -53,14 +53,14 @@ public class ClientEntityPlayer extends EntityPlayer
 					{
 						if (!(joystick.getX() > -xOffset - 0.01f))
 						{
-							this.setX(this.getXEntityPos() + joystick.getX());
+							this.position.x += this.getXEntityPos() + joystick.getX();
 						}
 					}
 					else
 					{
 						if (!(joystick.getX() < xOffset + 0.01f))
 						{
-							this.setX(this.getXEntityPos() + joystick.getX());
+							this.position.x += this.getXEntityPos() + joystick.getX();
 						}
 					}
 
@@ -68,14 +68,14 @@ public class ClientEntityPlayer extends EntityPlayer
 					{
 						if (!(joystick.getY() > -yOffset - 0.01f))
 						{
-							this.setX(this.getYEntityPos() + joystick.getY());
+							this.position.z += this.getYEntityPos() + joystick.getY();
 						}
 					}
 					else
 					{
 						if (!(joystick.getY() < yOffset + 0.01f))
 						{
-							this.setX(this.getYEntityPos() + joystick.getY());
+							this.position.z += this.getYEntityPos() + joystick.getY();
 						}
 					}
 				}
@@ -83,19 +83,19 @@ public class ClientEntityPlayer extends EntityPlayer
 
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP))
 			{
-				this.setY(this.getYEntityPos() - this.getAttribute(SPEED).getValue());
+				this.position.z -= this.getAttribute(SPEED).getValue();
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN))
 			{
-				this.setY(this.getYEntityPos() + this.getAttribute(SPEED).getValue());
+				this.position.z += this.getAttribute(SPEED).getValue();
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT))
 			{
-				this.setX(this.getYEntityPos() - this.getAttribute(SPEED).getValue());
+				this.position.x -= this.getAttribute(SPEED).getValue();
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
 			{
-				this.setX(this.getYEntityPos() + this.getAttribute(SPEED).getValue());
+				this.position.x += this.getAttribute(SPEED).getValue();
 			}
 		}
 	}

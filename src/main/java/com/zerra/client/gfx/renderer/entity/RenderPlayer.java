@@ -13,14 +13,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zerra.client.RenderingManager;
 import com.zerra.client.ZerraClient;
+import com.zerra.client.entity.ClientEntityPlayer;
 import com.zerra.client.util.Loader;
 import com.zerra.client.util.OnlineRequest;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Zerra;
-import com.zerra.common.world.entity.EntityPlayer;
 
-public class RenderPlayer implements EntityRender<EntityPlayer>
+public class RenderPlayer implements EntityRender<ClientEntityPlayer>
 {
 	public static final ResourceLocation DEFAULT_SKIN = new ResourceLocation("textures/entity/player.png");
 	public static final String TEST_SKIN_URL = "https://raw.githubusercontent.com/Ocelot5836/storage/master/zerra/testPlayerSkin.png";
@@ -37,7 +37,7 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 	}
 
 	@Override
-	public void render(EntityPlayer player, ClientWorld world, float depth, float partialTicks)
+	public void render(ClientEntityPlayer player, ClientWorld world, float depth, float partialTicks)
 	{
 		for (UUID id : LOADED_IMAGES.keySet())
 		{
@@ -59,7 +59,7 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 
 		ResourceLocation location = TEXTURES.containsKey(player.getUUID()) ? TEXTURES.get(player.getUUID()) : DEFAULT_SKIN;
 		this.renderManager.getTextureManager().bind(location);
-		this.renderManager.getGuiRenderer().renderTexturedQuad(player.getXEntityPos(), player.getXEntityPos(), 32, 32, 0, 0, 32, 32, 256, 32);
+		this.renderManager.getGuiRenderer().renderTexturedQuad(player.getXEntityPos(), player.getZEntityPos(), 32, 32, 0, 0, 32, 32, 256, 32);
 	}
 
 	@Override

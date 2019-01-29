@@ -38,9 +38,9 @@ public abstract class Entity implements Storable
 	private int ticksExisted;
 
 	private int layer;
-	private Vector3f position;
-	private Vector3i tilePosition;
-	private Vector3f velocity;
+	protected Vector3f position;
+	protected Vector3i tilePosition;
+	protected Vector3f velocity;
 
 	private Vector2f entitySize;
 
@@ -162,10 +162,25 @@ public abstract class Entity implements Storable
 	}
 
 	/**
+	 * Checks the attributes for an attribute registered under the specified name and sets the value of it.
+	 * 
+	 * @param attribute
+	 *            The attribute to set the value of
+	 * @param value
+	 *            The new value of the attribute
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> void setAttribute(Attribute<T> attribute, T value)
+	{
+		// TODO send to client/server
+		((AttributeWrapper<T>) attributes.get(attribute)).setValue(value);
+	}
+
+	/**
 	 * Checks the attributes for an attribute registered under the specified name.
 	 * 
-	 * @param name
-	 *            The name of the attribute
+	 * @param attribute
+	 *            The attribute to get the value of
 	 * @return The attribute registered under that name or null if there is none.
 	 */
 	@SuppressWarnings("unchecked")
