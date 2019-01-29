@@ -77,6 +77,21 @@ public class TextureManager
 	}
 
 	/**
+	 * Deletes the texture bound to the specified location
+	 * 
+	 * @param location
+	 *            The location bound to the texture
+	 */
+	public void delete(ResourceLocation location)
+	{
+		ITexture texture = this.getTexture(location);
+		if (texture != null)
+		{
+			texture.delete();
+		}
+	}
+
+	/**
 	 * Deletes all textures that have been cached and uploaded into memory.
 	 */
 	public void dispose()
