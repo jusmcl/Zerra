@@ -34,7 +34,8 @@ public class WorldState extends State
 		this.world.render(partialTicks);
 	}
 
-	public static void cleanupWorldState()
+	@Override
+	public void cleanState()
 	{
 		ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
 

@@ -14,6 +14,7 @@ import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
 import com.zerra.client.util.Loader;
+import com.zerra.client.util.OnlineRequest;
 import com.zerra.client.view.Display;
 import com.zerra.client.world.ClientWorld;
 import com.zerra.common.Zerra;
@@ -83,7 +84,7 @@ public class ZerraClient extends Zerra
 		// Alert the server that we are disconnecting from it.
 		if (StateManager.getActiveState() instanceof WorldState)
 		{
-			WorldState.cleanupWorldState();
+			StateManager.getActiveState().cleanState();
 		}
 
 		this.running = false;
@@ -265,6 +266,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onMouseScrolled(mouseX, mouseY, yoffset);
+		}
 	}
 
 	/**
@@ -277,6 +282,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onJoystickButtonPressed(int jid, int button)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickButtonPressed(jid, button);
+		}
 	}
 
 	/**
@@ -289,6 +298,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onJoystickButtonReleased(int jid, int button)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickButtonReleased(jid, button);
+		}
 	}
 
 	/**
@@ -300,6 +313,10 @@ public class ZerraClient extends Zerra
 	public void onJoystickConnected(int jid)
 	{
 		this.inputHandler.onGamepadConnected(jid);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickConnected(jid);
+		}
 	}
 
 	/**
@@ -311,6 +328,10 @@ public class ZerraClient extends Zerra
 	public void onJoystickDisconnected(int jid)
 	{
 		this.inputHandler.onGamepadDisconnected(jid);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickDisconnected(jid);
+		}
 	}
 
 	/**
@@ -319,6 +340,7 @@ public class ZerraClient extends Zerra
 	public void cleanupResources()
 	{
 		long startTime = System.currentTimeMillis();
+		OnlineRequest.shutdown();
 		Display.destroy();
 		Loader.cleanUp();
 		EntityRenderer.disposeRenders();
