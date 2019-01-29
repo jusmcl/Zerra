@@ -46,7 +46,8 @@ public class WorldState extends State
 		zerraClient.getRenderingManager().getGuiRenderer().restoreDefaultProjectionMatrix();
 	}
 
-	public static void cleanupWorldState()
+	@Override
+	public void cleanState()
 	{
 		ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageDisconnect());
 
