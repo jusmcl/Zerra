@@ -4,7 +4,7 @@ import org.joml.Vector2i;
 
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.entity.Entity;
-import com.zerra.common.world.player.Player;
+import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.storage.Layer;
 
 public abstract class Tile
@@ -79,10 +79,10 @@ public abstract class Tile
 	}
 
 	/**
-	 * gets called when an neighbour get's updated, for example, when a tile gets
-	 * placed next to this tile.
+	 * gets called when an neighbour get's updated, for example, when a tile gets placed next to this tile.
 	 * 
-	 * @param ownPos position of this tile
+	 * @param ownPos
+	 *            position of this tile
 	 * @param neighbourPos
 	 * @param tileLayer
 	 */
@@ -92,11 +92,12 @@ public abstract class Tile
 	}
 
 	/**
-	 * Called when te blayer is about to place a tile, can cancel the event if
-	 * necessary
+	 * Called when te blayer is about to place a tile, can cancel the event if necessary
 	 *
-	 * @param pos the position of the tile
-	 * @param layer the layer in which the tile is placed
+	 * @param pos
+	 *            the position of the tile
+	 * @param layer
+	 *            the layer in which the tile is placed
 	 * @return whether the player can place the block, and if it should be or not
 	 */
 	public boolean canbePlaced(Vector2i pos, Layer layer)
@@ -105,27 +106,30 @@ public abstract class Tile
 	}
 
 	/**
-	 * Called when a tile is about to be broken, checking whether the player can get
-	 * drops from this tile or not returning false won't cancel the breaking, it
-	 * will only stop the player from getting drops
+	 * Called when a tile is about to be broken, checking whether the player can get drops from this tile or not returning false won't cancel the breaking, it will only stop the player from getting drops
 	 * 
-	 * @param layer the layer in which the tile is broken
-	 * @param pos the position of the to be broken tile
-	 * @param player the player that is about to break this tile
+	 * @param layer
+	 *            the layer in which the tile is broken
+	 * @param pos
+	 *            the position of the to be broken tile
+	 * @param player
+	 *            the player that is about to break this tile
 	 * @return whether the block's drops should be placed in the world
 	 */
-	public boolean canBeHarvestedBy(Layer layer, Vector2i pos, Player player)
+	public boolean canBeHarvestedBy(Layer layer, Vector2i pos, EntityPlayer player)
 	{
 		return true;
 	}
 
 	/**
-	 * Called when an entity is about to start breaking a block to check whether or
-	 * not the entity can break this tile Can cancel the event by returning false
+	 * Called when an entity is about to start breaking a block to check whether or not the entity can break this tile Can cancel the event by returning false
 	 * 
-	 * @param layer the layer in which the tile is
-	 * @param pos the position of the to be broken tile
-	 * @param entity the breaking entity
+	 * @param layer
+	 *            the layer in which the tile is
+	 * @param pos
+	 *            the position of the to be broken tile
+	 * @param entity
+	 *            the breaking entity
 	 * @return true if the entity can break the tile, otherwise false
 	 */
 	public boolean canBeBrokenBy(Layer layer, Vector2i pos, Entity entity)
