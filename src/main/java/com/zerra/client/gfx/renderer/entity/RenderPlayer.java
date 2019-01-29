@@ -11,6 +11,8 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 {
 	private RenderingManager renderManager;
 	private TextureMapSprite sprite;
+	
+	private static final String TEST_SKIN_URL = "https://raw.githubusercontent.com/Ocelot5836/storage/master/zerra/testPlayerSkin.png";
 
 	public RenderPlayer()
 	{
