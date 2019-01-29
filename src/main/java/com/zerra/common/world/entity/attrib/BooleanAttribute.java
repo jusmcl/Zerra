@@ -2,30 +2,24 @@ package com.zerra.common.world.entity.attrib;
 
 public class BooleanAttribute implements Attribute<Boolean>
 {
+	private String name;
 	private boolean defaultValue;
-	private boolean value;
 
-	protected BooleanAttribute(boolean defaultValue)
+	protected BooleanAttribute(String name, boolean defaultValue)
 	{
+		this.name = name;
 		this.defaultValue = defaultValue;
-		this.value = defaultValue;
+	}
+	
+	@Override
+	public String getName()
+	{
+		return name;
 	}
 
 	@Override
 	public Boolean getDefaultValue()
 	{
 		return defaultValue;
-	}
-
-	@Override
-	public Boolean getValue()
-	{
-		return value;
-	}
-
-	@Override
-	public void setValue(Boolean value)
-	{
-		this.value = value;
 	}
 }

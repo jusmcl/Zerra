@@ -16,20 +16,12 @@ package com.zerra.common.world.entity.attrib;
 public interface Attribute<T>
 {
 	/**
+	 * @return The name of this attribute
+	 */
+	String getName();
+	
+	/**
 	 * @return The default value of this attribute
 	 */
 	T getDefaultValue();
-
-	/**
-	 * @return The value this attribute is set to
-	 */
-	T getValue();
-
-	/**
-	 * Sets the value to the value specified.
-	 * 
-	 * @param value
-	 *            The new value
-	 */
-	void setValue(T value);
 }

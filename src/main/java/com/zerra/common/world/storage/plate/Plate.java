@@ -44,11 +44,12 @@ public class Plate
 		}
 	}
 
-	public boolean isInsidePlate(Vector2ic tilePos, int layer)
+	public boolean isInsidePlate(Vector3ic tilePos, int layer)
 	{
 		int x = tilePos.x() / SIZE;
-		int z = tilePos.y() / SIZE;
-		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == layer;
+		int y = tilePos.y() / SIZE;
+		int z = tilePos.z() / SIZE;
+		return this.platePos.x == x && this.platePos.y == y && this.platePos.z == z && this.layer.getLayerId() == layer;
 	}
 
 	public Tile getTileAt(Vector2ic position)
