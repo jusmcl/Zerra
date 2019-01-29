@@ -228,56 +228,6 @@ public abstract class Entity implements Storable
 	}
 
 	/**
-	 * Gets this entity's tile position X component
-	 *
-	 * @return Tile position X component
-	 */
-	public int getXTilePos()
-	{
-		return this.tilePosition.x();
-	}
-
-	/**
-	 * Gets this entity's tile position Y component
-	 *
-	 * @return Tile position Y component
-	 */
-	public int getYTilePos()
-	{
-		return this.tilePosition.y();
-	}
-
-	/**
-	 * Gets this entity's actual position X component
-	 *
-	 * @return Actual position X component
-	 */
-	public float getXEntityPos()
-	{
-		return this.position.x();
-	}
-
-	/**
-	 * Gets this entity's actual position Y component
-	 *
-	 * @return Actual position Y component
-	 */
-	public float getYEntityPos()
-	{
-		return this.position.y();
-	}
-
-	/**
-	 * Gets this entity's actual position Z component
-	 *
-	 * @return Actual position Z component
-	 */
-	public float getZEntityPos()
-	{
-		return this.position.z();
-	}
-
-	/**
 	 * Gets the tile position that this entity is currently at as a read-only object
 	 *
 	 * @return Tile position
@@ -292,7 +242,7 @@ public abstract class Entity implements Storable
 	 *
 	 * @return Actual position
 	 */
-	public Vector3fc getLastActualPosition()
+	public Vector3fc getLastPosition()
 	{
 		return this.lastPosition;
 	}
@@ -302,7 +252,7 @@ public abstract class Entity implements Storable
 	 *
 	 * @return Actual position
 	 */
-	public Vector3fc getActualPosition()
+	public Vector3fc getPosition()
 	{
 		return this.position;
 	}
@@ -362,7 +312,7 @@ public abstract class Entity implements Storable
 	 */
 	public void setVelocity(Vector3fc velocity)
 	{
-		this.velocity.set(velocity);
+		this.setVelocity(velocity.x(), velocity.y(),velocity.z());
 	}
 
 	/**
@@ -384,7 +334,7 @@ public abstract class Entity implements Storable
 	 */
 	public void addVelocity(Vector3fc velocity)
 	{
-		this.velocity.add(velocity);
+		this.addVelocity(velocity.x(), velocity.y(),velocity.z());
 	}
 
 	/**
@@ -417,7 +367,7 @@ public abstract class Entity implements Storable
 	 */
 	public float getDistanceTo(Entity entity)
 	{
-		return getDistanceTo(entity.getActualPosition());
+		return getDistanceTo(entity.getPosition());
 	}
 
 	/**
@@ -429,7 +379,7 @@ public abstract class Entity implements Storable
 	 */
 	public float getDistanceTo(Vector3fc pos)
 	{
-		return (float) Math.sqrt(Math.pow(pos.x() - this.getXEntityPos(), 2) + Math.pow(pos.y() - this.getYEntityPos(), 2) + Math.pow(pos.z() - this.getZEntityPos(), 2));
+		return (float) Math.sqrt(Math.pow(pos.x() - this.getPosition().x(), 2) + Math.pow(pos.y() - this.getPosition().y(), 2) + Math.pow(pos.z() - this.getPosition().z(), 2));
 	}
 
 	public void spawn()

@@ -35,7 +35,7 @@ public class ClientEntityPlayer extends EntityPlayer
 		this.handleInput();
 
 		Camera camera = ZerraClient.getInstance().getRenderingManager().getCamera();
-		camera.setPosition(this.getActualPosition().x() - (Display.getWidth() / Renderer.SCALE - 32) / 32, this.getActualPosition().y(), this.getActualPosition().z() - (Display.getHeight() / Renderer.SCALE - 32) / 32);
+		camera.setPosition(this.getPosition().x() - (Display.getWidth() / Renderer.SCALE - 32) / 32, this.getPosition().y(), this.getPosition().z() - (Display.getHeight() / Renderer.SCALE - 32) / 32);
 	}
 
 	private void handleInput()
@@ -83,7 +83,7 @@ public class ClientEntityPlayer extends EntityPlayer
 					{
 						if (!(joystick.getY() < yOffset + 0.01f))
 						{
-							this.addVelocity(this.getYEntityPos(), 0, 0);
+							this.addVelocity(joystick.getY(), 0, 0);
 						}
 					}
 				}

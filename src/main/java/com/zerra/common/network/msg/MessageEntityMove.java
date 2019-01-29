@@ -28,7 +28,7 @@ public class MessageEntityMove extends Message
 	public MessageEntityMove(Entity entity)
 	{
 		this.entityUUID = entity.getUUID();
-		this.entityPos = entity.getActualPosition();
+		this.entityPos = entity.getPosition();
 		this.entityVel = entity.getVelocity();
 	}
 

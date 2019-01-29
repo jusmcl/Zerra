@@ -60,7 +60,7 @@ public class RenderPlayer implements EntityRender<ClientEntityPlayer>
 
 		ResourceLocation location = TEXTURES.containsKey(player.getUUID()) ? TEXTURES.get(player.getUUID()) : DEFAULT_SKIN;
 		this.renderManager.getTextureManager().bind(location);
-		this.renderManager.getGuiRenderer().renderTexturedQuad((player.getLastActualPosition().x() + (player.getActualPosition().x() - player.getLastActualPosition().x()) * partialTicks - camera.getPosition().x) * 16f, (player.getLastActualPosition().z() + (player.getActualPosition().z() - player.getLastActualPosition().z()) * partialTicks - camera.getPosition().y) * 16f, 32, 32, 0, 0, 32, 32, 256, 32);
+		this.renderManager.getGuiRenderer().renderTexturedQuad((player.getLastPosition().x() + (player.getPosition().x() - player.getLastPosition().x()) * partialTicks - camera.getPosition().x) * 16f, (player.getLastPosition().z() + (player.getPosition().z() - player.getLastPosition().z()) * partialTicks - camera.getPosition().y) * 16f, 32, 32, 0, 0, 32, 32, 256, 32);
 	}
 
 	@Override
