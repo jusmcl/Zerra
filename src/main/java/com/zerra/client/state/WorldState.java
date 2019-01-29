@@ -3,8 +3,8 @@ package com.zerra.client.state;
 import org.lwjgl.opengl.GL11;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.GuiRenderer;
-import com.zerra.client.view.Display;
 import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.server.ZerraServer;
 
