@@ -83,19 +83,19 @@ public class ClientEntityPlayer extends EntityPlayer
 
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP))
 			{
-				this.setY(this.getYEntityPos() - 1);
+				this.setY(this.getYEntityPos() - this.getAttribute(SPEED).getValue());
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN))
 			{
-				this.setY(this.getYEntityPos() + 1);
+				this.setY(this.getYEntityPos() + this.getAttribute(SPEED).getValue());
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT))
 			{
-				this.setX(this.getYEntityPos() - 1);
+				this.setX(this.getYEntityPos() - this.getAttribute(SPEED).getValue());
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
 			{
-				this.setX(this.getYEntityPos() + 1);
+				this.setX(this.getYEntityPos() + this.getAttribute(SPEED).getValue());
 			}
 		}
 	}

@@ -55,7 +55,7 @@ public abstract class Entity implements Storable
 		this.attributes = new HashMap<Attribute<?>, AttributeWrapper<?>>();
 
 		List<Attribute<?>> list = new ArrayList<Attribute<?>>();
-		this.setEntityAttributes(list);
+		this.registerEntityAttributes(list);
 		for (Attribute<?> attribute : list)
 		{
 			this.attributes.put(attribute, new AttributeWrapper(attribute, attribute.getDefaultValue()));
@@ -150,7 +150,7 @@ public abstract class Entity implements Storable
 	 * @param attributes
 	 *            The attributes map
 	 */
-	protected void setEntityAttributes(List<Attribute<?>> attributes)
+	protected void registerEntityAttributes(List<Attribute<?>> attributes)
 	{
 	}
 
