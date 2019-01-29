@@ -9,7 +9,6 @@ import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
 import com.zerra.client.state.GameLoadState;
-import com.zerra.client.state.MenuState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
 import com.zerra.client.util.I18n;
@@ -84,7 +83,7 @@ public class ZerraClient extends Zerra
 		// Alert the server that we are disconnecting from it.
 		if (StateManager.getActiveState() instanceof WorldState)
 		{
-			WorldState.cleanupWorldState();
+			StateManager.getActiveState().cleanState();
 		}
 
 		this.running = false;

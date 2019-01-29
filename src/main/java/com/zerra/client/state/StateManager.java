@@ -37,13 +37,6 @@ public class StateManager
 
 	public static void stateSwitch(State prevState, State nextState)
 	{
-		// If we are leaving a world state... clean up the world.
-		if (prevState instanceof WorldState)
-		{
-			WorldState.cleanupWorldState();
-		} else if (nextState instanceof WorldLoadState)
-		{
-			// Prepare for world...
-		}
+		prevState.cleanState();
 	}
 }

@@ -38,7 +38,11 @@ public abstract class State
 	{
 		this.name = name;
 	}
-	
+
+	public void cleanState()
+	{
+	}
+
 	/**
 	 * Fires when a key is pressed.
 	 * 
