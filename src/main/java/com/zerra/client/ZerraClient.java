@@ -258,6 +258,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onMouseScrolled(double mouseX, double mouseY, double yoffset)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onMouseScrolled(mouseX, mouseY, yoffset);
+		}
 	}
 
 	/**
@@ -268,6 +272,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onJoystickButtonPressed(int jid, int button)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickButtonPressed(jid, button);
+		}
 	}
 
 	/**
@@ -278,6 +286,10 @@ public class ZerraClient extends Zerra
 	 */
 	public void onJoystickButtonReleased(int jid, int button)
 	{
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickButtonReleased(jid, button);
+		}
 	}
 
 	/**
@@ -288,6 +300,10 @@ public class ZerraClient extends Zerra
 	public void onJoystickConnected(int jid)
 	{
 		this.inputHandler.onGamepadConnected(jid);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickConnected(jid);
+		}
 	}
 
 	/**
@@ -298,6 +314,10 @@ public class ZerraClient extends Zerra
 	public void onJoystickDisconnected(int jid)
 	{
 		this.inputHandler.onGamepadDisconnected(jid);
+		if (StateManager.getActiveState() != null)
+		{
+			StateManager.getActiveState().onJoystickDisconnected(jid);
+		}
 	}
 
 	/**
