@@ -1,12 +1,7 @@
 package com.zerra.client.state;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class StateManager
 {
-
-	private List<State> states = new ArrayList<>();
 
 	private static State activeState;
 
@@ -28,11 +23,6 @@ public class StateManager
 		}
 
 		activeState = state;
-	}
-
-	public List<State> getStates()
-	{
-		return states;
 	}
 
 	public static void stateSwitch(State prevState, State nextState)
