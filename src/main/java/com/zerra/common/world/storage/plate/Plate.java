@@ -44,11 +44,12 @@ public class Plate
 		}
 	}
 
-	public boolean isInsidePlate(Vector2ic tilePos, int layer)
+	public boolean isInsidePlate(Vector3ic tilePos, int layer)
 	{
 		int x = tilePos.x() / SIZE;
-		int z = tilePos.y() / SIZE;
-		return this.platePos.x == x && this.platePos.y == z && this.platePos.y == layer;
+		int y = tilePos.y() / SIZE;
+		int z = tilePos.z() / SIZE;
+		return this.platePos.x == x && this.platePos.y == y && this.platePos.z == z && this.layer.getLayerId() == layer;
 	}
 
 	public Tile getTileAt(Vector2ic position)
@@ -132,65 +133,4 @@ public class Plate
 		}
 		return super.equals(obj);
 	}
-
-	// FIXME
-	// public byte[] toBytes()
-	// {
-	//
-	// ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	//
-	// List<Pair<Integer, ResourceLocation>> indexes = layer.getWorld().getStorageManager().getTileIndexes();
-	// Map<ResourceLocation, Integer> mapper = layer.getWorld().getStorageManager().getTileMapper();
-	//
-	// ObjectOutput out = null;
-	// try
-	// {
-	// out = new ObjectOutputStream(bos);
-	// } catch (IOException e1)
-	// {
-	// e1.printStackTrace();
-	// }
-	// for (int x = 0; x < Plate.SIZE; x++)
-	// {
-	// for (int z = 0; z < Plate.SIZE; z++)
-	// {
-	// Vector2i position = new Vector2i(x, z);
-	// try
-	// {
-	// out.writeShort(indexes.get(mapper.get(this.getTileAt(position).getRegistryID())).getLeft());
-	// } catch (IOException e)
-	// {
-	// e.printStackTrace();
-	// }
-	//
-	// }
-	// }
-	// return bos.toByteArray();
-	// }
-	//
-	// public Plate fromBytes(byte[] bytes)
-	// {
-	// List<Pair<Integer, ResourceLocation>> indexes = layer.getWorld().getStorageManager().getTileIndexes();
-	//
-	// DataInputStream is = new DataInputStream(new ByteArrayInputStream(bytes));
-	//
-	// Plate plate = new Plate(this.layer);
-	// for (int x = 0; x < Plate.SIZE; x++)
-	// {
-	// for (int z = 0; z < Plate.SIZE; z++)
-	// {
-	// Vector2i tilePos = new Vector2i(x, z);
-	// try
-	// {
-	// plate.setTileAt(tilePos, Tiles.byId(indexes.get(is.readShort()).getRight()));
-	// } catch (IOException e)
-	// {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// plate.setPlatePos(platePos);
-	//
-	// return plate;
-	// }
 }

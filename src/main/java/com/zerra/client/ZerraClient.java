@@ -165,6 +165,8 @@ public class ZerraClient extends Zerra
 		this.modManager.setupMods();
 		I18n.setLanguage(new Locale("en", "us"));
 
+		this.eventHandler = new EventHandler();
+
 		this.clientConnection = new ClientConnectionManager(this);
 		StateManager.setActiveState(new GameLoadState());
 	}
@@ -369,6 +371,7 @@ public class ZerraClient extends Zerra
 	/**
 	 * @return The event handler for the client.
 	 */
+	@Override
 	public EventHandler getEventHandler()
 	{
 		return eventHandler;

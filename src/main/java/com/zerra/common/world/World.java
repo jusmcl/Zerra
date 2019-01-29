@@ -1,17 +1,20 @@
 package com.zerra.common.world;
 
-import com.zerra.common.world.entity.Entity;
-import com.zerra.common.world.storage.Layer;
-import com.zerra.common.world.storage.plate.WorldLayer;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.annotation.Nullable;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Vector2i;
 
-import javax.annotation.Nullable;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.zerra.common.world.entity.Entity;
+import com.zerra.common.world.storage.Layer;
+import com.zerra.common.world.storage.plate.WorldLayer;
 
 public abstract class World
 {
@@ -54,6 +57,14 @@ public abstract class World
 
 	public void update()
 	{
+		for (int i = 0; i < this.layers.length; i++)
+		{
+			Set<Entity> entities = this.getLayer(i).getEntities();
+			for (Entity entity : entities)
+			{
+				entity.update();
+			}
+		}
 	}
 
 	/**

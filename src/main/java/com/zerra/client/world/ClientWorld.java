@@ -15,13 +15,13 @@ import org.lwjgl.opengl.GL11;
 
 import com.zerra.client.RenderingManager;
 import com.zerra.client.ZerraClient;
+import com.zerra.client.entity.ClientEntityPlayer;
 import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.world.World;
-import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 
@@ -44,7 +44,7 @@ public class ClientWorld extends World
 		this.awaitingPlates = new ArrayList<byte[]>();
 
 		// TODO remove this temp code and sync with server instead
-		this.addEntity(new EntityPlayer(this));
+		this.addEntity(new ClientEntityPlayer(this, ZerraClient.getInstance().getInputHandler()));
 	}
 
 	@Override
