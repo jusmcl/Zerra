@@ -2,10 +2,10 @@ package com.zerra.client.gfx.shader;
 
 import org.joml.Matrix4f;
 
-import com.zerra.client.gfx.Light;
+import com.zerra.client.gfx.ICamera;
+import com.zerra.client.gfx.light.Light;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.util.Maths;
-import com.zerra.client.view.ICamera;
 import com.zerra.common.Reference;
 
 /**

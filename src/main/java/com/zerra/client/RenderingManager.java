@@ -1,13 +1,13 @@
 package com.zerra.client;
 
+import com.zerra.client.gfx.Camera;
+import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.GuiRenderer;
 import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.gfx.renderer.tile.TileRenderer;
 import com.zerra.client.gfx.texture.TextureManager;
 import com.zerra.client.util.Fbo;
 import com.zerra.client.util.ResourceLocation;
-import com.zerra.client.view.Camera;
-import com.zerra.client.view.Display;
 import com.zerra.common.Reference;
 
 public class RenderingManager

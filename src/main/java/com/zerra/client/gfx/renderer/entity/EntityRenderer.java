@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-import com.zerra.client.view.ICamera;
+import com.zerra.client.gfx.ICamera;
 import com.zerra.client.world.ClientWorld;
 import com.zerra.common.world.entity.Entity;
 

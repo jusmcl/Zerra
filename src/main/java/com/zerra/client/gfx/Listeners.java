@@ -1,4 +1,4 @@
-package com.zerra.client.view;
+package com.zerra.client.gfx;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWJoystickCallback;

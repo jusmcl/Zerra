@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
-import com.zerra.client.view.Display;
+import com.zerra.client.gfx.Display;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
