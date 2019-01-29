@@ -2,6 +2,7 @@ package com.zerra.client.state;
 
 import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.ui.Button;
+import com.zerra.client.presence.PresenceBuilder;
 
 /**
  * <em><b>Copyright (c) 2019 The Zerra Team.</b></em> <br>
@@ -29,6 +30,12 @@ public class SettingsState extends State
 				}
 			}
 		};
+	}
+	
+	@Override
+	public PresenceBuilder setupPresence()
+	{
+		return new PresenceBuilder().setDetails("In Settings").setLargeImage("zerra");
 	}
 
 	@Override

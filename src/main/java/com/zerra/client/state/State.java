@@ -1,6 +1,7 @@
 package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
+import com.zerra.client.presence.PresenceBuilder;
 
 public abstract class State
 {
@@ -13,6 +14,7 @@ public abstract class State
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
 
 		init();
+		setupPresence().build();
 	}
 
 	// No rendering can ever be done in this method
@@ -38,6 +40,8 @@ public abstract class State
 	public void cleanState()
 	{
 	}
+	
+	public abstract PresenceBuilder setupPresence();
 
 	/**
 	 * Fires when a key is pressed.

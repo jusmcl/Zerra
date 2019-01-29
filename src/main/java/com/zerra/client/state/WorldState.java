@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.GuiRenderer;
+import com.zerra.client.presence.PresenceBuilder;
 import com.zerra.common.network.msg.MessageDisconnect;
 import com.zerra.server.ZerraServer;
 
@@ -16,6 +17,12 @@ public class WorldState extends State
 	public WorldState()
 	{
 		super("world");
+	}
+
+	@Override
+	public PresenceBuilder setupPresence()
+	{
+		return new PresenceBuilder().setDetails("Playing on World '" + ZerraClient.getInstance().getWorld().getName() + "'").setLargeImage("zerra");
 	}
 
 	@Override
