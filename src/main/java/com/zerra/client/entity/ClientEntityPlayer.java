@@ -61,14 +61,14 @@ public class ClientEntityPlayer extends EntityPlayer
 					{
 						if (!(joystick.getX() > -xOffset - 0.01f))
 						{
-							this.addVelocity(joystick.getX(), 0, 0);
+							this.move(joystick.getX(), 0, 0);
 						}
 					}
 					else
 					{
 						if (!(joystick.getX() < xOffset + 0.01f))
 						{
-							this.addVelocity(joystick.getX(), 0, 0);
+							this.move(joystick.getX(), 0, 0);
 						}
 					}
 
@@ -76,14 +76,14 @@ public class ClientEntityPlayer extends EntityPlayer
 					{
 						if (!(joystick.getY() > -yOffset - 0.01f))
 						{
-							this.addVelocity(joystick.getY(), 0, 0);
+							this.move(joystick.getY(), 0, 0);
 						}
 					}
 					else
 					{
 						if (!(joystick.getY() < yOffset + 0.01f))
 						{
-							this.addVelocity(joystick.getY(), 0, 0);
+							this.move(joystick.getY(), 0, 0);
 						}
 					}
 				}
@@ -91,19 +91,19 @@ public class ClientEntityPlayer extends EntityPlayer
 
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_W) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_UP))
 			{
-				this.addVelocity(0, 0, -this.getAttribute(SPEED).getValue());
+				this.move(0, 0, -this.getAttribute(SPEED).getValue());
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_S) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_DOWN))
 			{
-				this.addVelocity(0, 0, this.getAttribute(SPEED).getValue());
+				this.move(0, 0, this.getAttribute(SPEED).getValue());
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_A) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT))
 			{
-				this.addVelocity(-this.getAttribute(SPEED).getValue(), 0, 0);
+				this.move(-this.getAttribute(SPEED).getValue(), 0, 0);
 			}
 			if (inputHandler.isKeyPressed(GLFW.GLFW_KEY_D) || inputHandler.isKeyPressed(GLFW.GLFW_KEY_RIGHT))
 			{
-				this.addVelocity(this.getAttribute(SPEED).getValue(), 0, 0);
+				this.move(this.getAttribute(SPEED).getValue(), 0, 0);
 			}
 		}
 	}

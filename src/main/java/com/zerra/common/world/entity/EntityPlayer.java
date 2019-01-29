@@ -6,7 +6,7 @@ import com.zerra.common.world.World;
 import com.zerra.common.world.entity.attrib.Attribute;
 import com.zerra.common.world.entity.attrib.AttributeFactory;
 
-public class EntityPlayer extends Entity
+public abstract class EntityPlayer extends Entity
 {
 	public static final Attribute<Float> SPEED = AttributeFactory.createNumberAttribute("speed", 1.0f);
 

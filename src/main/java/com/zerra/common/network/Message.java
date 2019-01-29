@@ -1,15 +1,23 @@
 package com.zerra.common.network;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import com.devsmart.ubjson.UBObject;
+import com.devsmart.ubjson.UBReader;
+import com.devsmart.ubjson.UBWriter;
 import com.zerra.common.Zerra;
+import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
 
 import simplenet.Client;
@@ -156,5 +164,54 @@ public abstract class Message
 		float y = client.readFloat();
 		float z = client.readFloat();
 		return new Vector3f(x, y, z);
+	}
+
+	protected final Packet putUBOBject(Packet packet, UBObjectWrapper object)
+	{
+		return putUBOBject(packet, object.getWrappedUBObject());
+	}
+
+	protected final Packet putUBOBject(Packet packet, UBObject object)
+	{
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		UBWriter writer = new UBWriter(os);
+		byte[] bytes = null;
+		try
+		{
+			writer.write(object);
+			writer.close();
+			bytes = os.toByteArray();
+			os.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		if (bytes != null)
+		{
+			packet.putInt(bytes.length).putBytes(bytes);
+		}
+		return packet;
+	}
+
+	protected final void readUBObject(Client client, Consumer<UBObject> consumer)
+	{
+		int size = client.readInt();
+		client.readBytes(size, (bytes) ->
+		{
+			ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+			UBReader reader = new UBReader(is);
+			try
+			{
+				UBObject object = (UBObject) reader.read();
+				reader.close();
+				is.close();
+				consumer.accept(object);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		});
 	}
 }

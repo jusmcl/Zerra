@@ -15,8 +15,10 @@ import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import com.zerra.client.ZerraClient;
 import com.zerra.common.event.entity.EntityEvent;
 import com.zerra.common.event.entity.EntityUpdateEvent;
+import com.zerra.common.network.msg.MessageEntityMove;
 import com.zerra.common.util.UBObjectWrapper;
 import com.zerra.common.world.World;
 import com.zerra.common.world.entity.attrib.Attribute;
@@ -26,6 +28,7 @@ import com.zerra.common.world.entity.attrib.AttributeWrapper;
 import com.zerra.common.world.entity.facing.Direction;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.Storable;
+import com.zerra.server.ZerraServer;
 
 public abstract class Entity implements Storable
 {
@@ -132,6 +135,21 @@ public abstract class Entity implements Storable
 	public UUID getUUID()
 	{
 		return uuid;
+	}
+
+	/**
+	 * Syncs this position with either all the clients or the server
+	 */
+	public void synchronizePosition()
+	{
+		if (this.world.isServer())
+		{
+			ZerraServer.getInstance().getConnectionManager().sendToAllClients(new MessageEntityMove(this));
+		}
+		else
+		{
+			ZerraClient.getInstance().getConnectionManager().sendToServer(new MessageEntityMove(this));
+		}
 	}
 
 	/**
@@ -305,6 +323,22 @@ public abstract class Entity implements Storable
 	}
 
 	/**
+	 * Moves this entity in the direction specified and syncs it with the server.
+	 * 
+	 * @param x
+	 *            The x direction to move
+	 * @param y
+	 *            The y direction to move
+	 * @param z
+	 *            The z direction to move
+	 */
+	protected void move(float x, float y, float z)
+	{
+		this.addVelocity(x, y, z);
+		this.synchronizePosition();
+	}
+
+	/**
 	 * Sets the velocity of this entity
 	 *
 	 * @param velocity
@@ -312,7 +346,7 @@ public abstract class Entity implements Storable
 	 */
 	public void setVelocity(Vector3fc velocity)
 	{
-		this.setVelocity(velocity.x(), velocity.y(),velocity.z());
+		this.setVelocity(velocity.x(), velocity.y(), velocity.z());
 	}
 
 	/**
@@ -334,7 +368,7 @@ public abstract class Entity implements Storable
 	 */
 	public void addVelocity(Vector3fc velocity)
 	{
-		this.addVelocity(velocity.x(), velocity.y(),velocity.z());
+		this.addVelocity(velocity.x(), velocity.y(), velocity.z());
 	}
 
 	/**

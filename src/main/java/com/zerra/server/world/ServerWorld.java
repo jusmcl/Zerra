@@ -10,21 +10,24 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.zerra.common.Reference;
-import com.zerra.common.world.data.ZerraWorldData;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import com.zerra.common.Reference;
+import com.zerra.common.network.msg.MessageSpawnEntity;
 import com.zerra.common.util.MiscUtils;
 import com.zerra.common.world.World;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.data.WorldDataHandler;
+import com.zerra.common.world.data.ZerraWorldData;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.entity.EntityPlayer;
 import com.zerra.common.world.storage.IOManager.WorldStorageManager;
 import com.zerra.common.world.storage.Layer;
 import com.zerra.common.world.storage.plate.Plate;
+import com.zerra.server.ZerraServer;
+import com.zerra.server.entity.ServerEntityPlayer;
 
 public class ServerWorld extends World
 {
@@ -59,8 +62,9 @@ public class ServerWorld extends World
 			this.loadingPlates.put(i, new ArrayList<Vector3ic>());
 		}
 	}
-	
-	public void startup() {
+
+	public void startup()
+	{
 		// Load 3x3 in the first layer
 		for (int x = 0; x < 3; x++)
 		{
@@ -72,7 +76,7 @@ public class ServerWorld extends World
 		}
 
 		// TODO remove this temp code
-		this.addEntity(new EntityPlayer(this));
+		this.addEntity(new ServerEntityPlayer(this));
 	}
 
 	@Override
@@ -98,6 +102,13 @@ public class ServerWorld extends World
 			this.pool.execute(() -> this.save(layerId));
 		}
 		super.stop();
+	}
+
+	@Override
+	public void addEntity(Entity entity)
+	{
+		super.addEntity(entity);
+		ZerraServer.getInstance().getConnectionManager().sendToAllClients(new MessageSpawnEntity(entity));
 	}
 
 	@Override
