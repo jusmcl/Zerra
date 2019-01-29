@@ -5,21 +5,11 @@ public class NumberRangeAttribute<T extends Number> extends NumberAttribute<T> i
 	private T minimumValue;
 	private T maximumValue;
 
-	protected NumberRangeAttribute(T defaultValue, T minimumValue, T maximumValue)
+	protected NumberRangeAttribute(String name, T defaultValue, T minimumValue, T maximumValue)
 	{
-		super(defaultValue);
+		super(name, defaultValue);
 		this.minimumValue = minimumValue;
 		this.maximumValue = maximumValue;
-	}
-	
-	@Override
-	public void setValue(T value)
-	{
-		if(value.doubleValue() < this.minimumValue.doubleValue())
-			value = this.minimumValue;
-		if(value.doubleValue() > this.maximumValue.doubleValue())
-			value = this.maximumValue;
-		super.setValue(value);
 	}
 
 	@Override
@@ -32,17 +22,5 @@ public class NumberRangeAttribute<T extends Number> extends NumberAttribute<T> i
 	public T getMaximumValue()
 	{
 		return maximumValue;
-	}
-
-	@Override
-	public void setMinimumValue(T minimumValue)
-	{
-		this.minimumValue = minimumValue;
-	}
-
-	@Override
-	public void setMaximumValue(T maximumValue)
-	{
-		this.maximumValue = maximumValue;
 	}
 }

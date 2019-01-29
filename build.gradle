@@ -79,6 +79,8 @@ dependencies {
 	// SIMPLENET
 	compile 'com.github.jhg023:SimpleNet:1.3.6'
 	
+	// DISCORD RICH PRESENCE
+	compile 'club.minnced:java-discord-rpc:2.0.2'
 }
 
 jar {

@@ -37,13 +37,11 @@ import com.devsmart.ubjson.UBWriter;
 import com.zerra.client.util.ResourceLocation;
 import com.zerra.common.registry.Registries;
 import com.zerra.common.util.UBObjectWrapper;
-import com.zerra.common.world.World;
 import com.zerra.common.world.data.WorldData;
 import com.zerra.common.world.entity.Entity;
 import com.zerra.common.world.storage.plate.Plate;
 import com.zerra.common.world.tile.Tile;
 import com.zerra.common.world.tile.Tiles;
-import com.zerra.server.world.ServerWorld;
 
 public class IOManager
 {

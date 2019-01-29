@@ -10,6 +10,7 @@ import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.renderer.entity.EntityRenderer;
 import com.zerra.client.input.InputHandler;
 import com.zerra.client.network.ClientConnectionManager;
+import com.zerra.client.presence.PresenceManager;
 import com.zerra.client.state.GameLoadState;
 import com.zerra.client.state.StateManager;
 import com.zerra.client.state.WorldState;
@@ -45,6 +46,7 @@ public class ZerraClient extends Zerra
 	private EventHandler eventHandler;
 	private ModManager modManager;
 	private RenderingManager renderingManager;
+	private PresenceManager presenceManager;
 
 	private ClientConnectionManager clientConnection;
 	private ClientWorld world;
@@ -54,6 +56,7 @@ public class ZerraClient extends Zerra
 		super();
 		instance = this;
 
+		this.presenceManager = new PresenceManager();
 		this.renderingManager = new RenderingManager();
 	}
 
@@ -348,6 +351,7 @@ public class ZerraClient extends Zerra
 		EntityRenderer.disposeRenders();
 		this.renderingManager.dispose();
 		this.pool.shutdown();
+		this.presenceManager.stop();
 		instance = null;
 		logger().info("Cleaned up all resources in " + MiscUtils.secondsSinceTime(startTime));
 	}
@@ -435,5 +439,10 @@ public class ZerraClient extends Zerra
 	public ClientWorld getWorld()
 	{
 		return this.world;
+	}
+
+	public PresenceManager getPresenceManager()
+	{
+		return presenceManager;
 	}
 }

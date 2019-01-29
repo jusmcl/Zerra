@@ -24,20 +24,4 @@ public interface RangeAttribute<T> extends Attribute<T>
 	 * @return The maximum value of this attribute
 	 */
 	T getMaximumValue();
-
-	/**
-	 * Sets the minimum value of this attribute.
-	 * 
-	 * @param minimumValue
-	 *            The new minimum value
-	 */
-	void setMinimumValue(T minimumValue);
-
-	/**
-	 * Sets the maximum value of this attribute.
-	 * 
-	 * @param maximumValue
-	 *            The new maximum value
-	 */
-	void setMaximumValue(T maximumValue);
 }

@@ -4,6 +4,7 @@ import com.zerra.client.ZerraClient;
 import com.zerra.client.gfx.Display;
 import com.zerra.client.gfx.renderer.Renderer;
 import com.zerra.client.gfx.ui.Button;
+import com.zerra.client.presence.PresenceBuilder;
 import com.zerra.client.util.ResourceLocation;
 
 /**
@@ -60,6 +61,12 @@ public class MenuState extends State
 				}
 			}
 		};
+	}
+	
+	@Override
+	public PresenceBuilder setupPresence()
+	{
+		return new PresenceBuilder().setDetails("In Menu").setLargeImage("zerra");
 	}
 
 	@Override

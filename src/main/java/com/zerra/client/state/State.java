@@ -1,27 +1,20 @@
 package com.zerra.client.state;
 
 import com.zerra.client.ZerraClient;
-import com.zerra.server.ZerraServer;
+import com.zerra.client.presence.PresenceBuilder;
 
 public abstract class State
 {
 
 	private String name;
 
-	protected ZerraClient zerraClient;
-	protected ZerraServer zerraServer;
-
 	public State(String name)
 	{
 		this.name = name;
-		this.zerraClient = ZerraClient.getInstance();
-		reloadServerInstance();
 		ZerraClient.logger().info("Loading " + this.getName() + " state.");
-	}
 
-	public void reloadServerInstance()
-	{
-		this.zerraServer = ZerraServer.getInstance();
+		init();
+		setupPresence().build();
 	}
 
 	// No rendering can ever be done in this method
@@ -39,9 +32,16 @@ public abstract class State
 		this.name = name;
 	}
 
+	public void init()
+	{
+
+	}
+
 	public void cleanState()
 	{
 	}
+	
+	public abstract PresenceBuilder setupPresence();
 
 	/**
 	 * Fires when a key is pressed.
