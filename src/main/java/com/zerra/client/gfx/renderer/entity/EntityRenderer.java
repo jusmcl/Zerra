@@ -65,7 +65,7 @@ public class EntityRenderer
 				{
 					if (ENTITY_RENDERS.containsKey(type))
 					{
-						((EntityRender<Entity>) ENTITY_RENDERS.get(type)).render(entity, world, 0.0f, partialTicks);
+						((EntityRender<Entity>) ENTITY_RENDERS.get(type)).render(entity, world, camera, 0.0f, partialTicks);
 					}
 					else
 					{

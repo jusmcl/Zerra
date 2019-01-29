@@ -38,9 +38,10 @@ public abstract class Entity implements Storable
 	private int ticksExisted;
 
 	private int layer;
-	protected Vector3f position;
-	protected Vector3i tilePosition;
-	protected Vector3f velocity;
+	private Vector3f lastPosition;
+	private Vector3f position;
+	private Vector3i tilePosition;
+	private Vector3f velocity;
 
 	private Vector2f entitySize;
 
@@ -66,6 +67,7 @@ public abstract class Entity implements Storable
 		this.ticksExisted = 0;
 
 		this.layer = 0;
+		this.lastPosition = new Vector3f();
 		this.position = new Vector3f();
 		this.tilePosition = new Vector3i();
 		this.velocity = new Vector3f();
@@ -137,6 +139,8 @@ public abstract class Entity implements Storable
 	 */
 	public void update()
 	{
+		this.lastPosition.set(this.position);
+		this.position.add(this.velocity);
 		EntityUpdateEvent updateEvent = EntityEvent.onEntityUpdate(this);
 		updateEvent.call();
 		if (updateEvent.isCancelled())
@@ -211,28 +215,16 @@ public abstract class Entity implements Storable
 		this.direction = direction;
 	}
 
+	/**
+	 * Sets the position of this entity.
+	 * 
+	 * @param position
+	 *            The new position of this entity
+	 */
 	public void setPosition(Vector3fc position)
 	{
 		this.position.set(position);
-		this.tilePosition.set((int) Math.floor(position.x()), (int) Math.floor(position.y()), (int) Math.floor(position.z()));
-	}
-
-	public void setX(float x)
-	{
-		this.position.x = x;
-		this.tilePosition.x = (int) Math.floor(x);
-	}
-
-	public void setY(float y)
-	{
-		this.position.y = y;
-		this.tilePosition.y = (int) Math.floor(y);
-	}
-
-	public void setZ(float z)
-	{
-		this.position.z = z;
-		this.tilePosition.z = (int) Math.floor(z);
+		this.tilePosition.set((int) this.position.x(), (int) this.position.y(), (int) this.position.z());
 	}
 
 	/**
@@ -293,6 +285,16 @@ public abstract class Entity implements Storable
 	public Vector3ic getTilePosition()
 	{
 		return this.tilePosition;
+	}
+
+	/**
+	 * Gets the last position of this entity as a read-only object
+	 *
+	 * @return Actual position
+	 */
+	public Vector3fc getLastActualPosition()
+	{
+		return this.lastPosition;
 	}
 
 	/**
@@ -364,6 +366,17 @@ public abstract class Entity implements Storable
 	}
 
 	/**
+	 * Sets the velocity of this entity
+	 *
+	 * @param velocity
+	 *            Velocity
+	 */
+	public void setVelocity(float x, float y, float z)
+	{
+		this.velocity.set(x, y, z);
+	}
+
+	/**
 	 * Adds to the velocity of this entity
 	 *
 	 * @param velocity
@@ -372,6 +385,17 @@ public abstract class Entity implements Storable
 	public void addVelocity(Vector3fc velocity)
 	{
 		this.velocity.add(velocity);
+	}
+
+	/**
+	 * Adds to the velocity of this entity
+	 *
+	 * @param velocity
+	 *            Velocity to add
+	 */
+	public void addVelocity(float x, float y, float z)
+	{
+		this.velocity.add(x, y, z);
 	}
 
 	/**
