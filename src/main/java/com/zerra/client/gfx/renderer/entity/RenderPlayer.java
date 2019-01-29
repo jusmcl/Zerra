@@ -42,7 +42,11 @@ public class RenderPlayer implements EntityRender<EntityPlayer>
 		for (UUID id : LOADED_IMAGES.keySet())
 		{
 			ResourceLocation textureLocation = new ResourceLocation("skins/" + id);
-			this.renderManager.getTextureManager().loadTexture(textureLocation, Loader.loadTexture(LOADED_IMAGES.get(id)));
+			BufferedImage image = LOADED_IMAGES.get(id);
+			if (image.getWidth() == 256 && image.getHeight() == 32)
+				this.renderManager.getTextureManager().loadTexture(textureLocation, Loader.loadTexture(image));
+			else
+				textureLocation = DEFAULT_SKIN;
 			TEXTURES.put(id, textureLocation);
 			LOADED_IMAGES.remove(id);
 		}
